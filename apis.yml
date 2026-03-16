@@ -3,8 +3,8 @@ description: Everbridge is a global software company that provides enterprise so
 image: https://www.everbridge.com/wp-content/uploads/2021/01/everbridge-logo.svg
 url: https://www.everbridge.com
 created: 2024-01-09 00:00:00+00:00
-modified: 2026-03-04
-specificationVersion: '0.18'
+modified: '2026-03-16'
+specificationVersion: '0.19'
 tags:
 - Critical Event Management
 - Mass Notification
@@ -238,5 +238,5 @@ common:
 - type: OpenAPI
   url: https://api.everbridge.net/
 maintainers:
-- FN: Kin Lane
-  email: kin@apievangelist.com
+  - FN: Kin Lane
+    email: kin@apievangelist.com
