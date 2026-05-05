@@ -1,0 +1,13 @@
+{
+  "repo": "everbridge",
+  "feeds": [
+    {
+      "source": "https://www.everbridge.com/blog/",
+      "feed_url": "https://www.everbridge.com/feed/",
+      "saved": 10,
+      "title": "Everbridge"
+    }
+  ],
+  "post_count": 10,
+  "fetched": "2026-05-03T23:27:51Z"
+}
