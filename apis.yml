@@ -37,11 +37,11 @@ apis:
         url: https://api.everbridge.net/
       - type: Authentication
         url: https://developers.everbridge.net/home/docs/ebs-gs-guide-authentication-types
-      - type: Getting Started
+      - type: GettingStarted
         url: https://developers.everbridge.net/home/docs/ebs-gs-guide
-      - type: Rate Limits
+      - type: RateLimits
         url: https://developers.everbridge.net/home/docs/ebs-gs-guide-throttling-limits
-      - type: Change Log
+      - type: ChangeLog
         url: https://developers.everbridge.net/home/changelog
   - name: Everbridge Asset Management API
     description: >-
@@ -116,7 +116,7 @@ apis:
         url: https://developers.everbridge.net/home
       - type: Reference
         url: https://api.everbridge.net/
-      - type: Getting Started
+      - type: GettingStarted
         url: https://support.snapcomms.com/hc/en-us/articles/19361020051867-Integration-Through-API-Overview
   - name: Everbridge Digital Apps API
     description: >-
@@ -138,7 +138,7 @@ apis:
         url: https://developers.everbridge.net/home/docs/overview
       - type: Reference
         url: https://api.everbridge.net/
-      - type: Getting Started
+      - type: GettingStarted
         url: https://developers.everbridge.net/home/docs/notifications
   - name: Everbridge Communications API
     description: >-
@@ -205,33 +205,33 @@ common:
     url: https://developers.everbridge.net/home
   - type: Login
     url: https://manager.everbridge.net/login
-  - type: Sign Up
+  - type: SignUp
     url: https://www.everbridge.com/free-trial/
   - type: Blog
     url: https://www.everbridge.com/blog/
-  - type: Status
+  - type: StatusPage
     url: https://status.everbridge.com/
   - type: Contact
     url: https://www.everbridge.com/contact/
-  - type: Getting Started
+  - type: GettingStarted
     url: https://developers.everbridge.net/home/docs/ebs-gs-guide
   - type: Authentication
     url: https://developers.everbridge.net/home/docs/ebs-gs-guide-authentication-types
-  - type: Rate Limits
+  - type: RateLimits
     url: https://developers.everbridge.net/home/docs/ebs-gs-guide-throttling-limits
-  - type: Change Log
+  - type: ChangeLog
     url: https://developers.everbridge.net/home/changelog
   - type: Support
     url: https://www.everbridge.com/support/
   - type: Documentation
     url: https://supportcenter.everbridge.com/hc/en-us/categories/18141856301339-Documentation
-  - type: Terms of Service
+  - type: TermsOfService
     url: https://www.everbridge.com/company-policies/
-  - type: Privacy Policy
+  - type: PrivacyPolicy
     url: https://www.everbridge.com/about/legal/everbridge-global-privacy-notice/
   - type: Website
     url: https://www.everbridge.com
-  - type: GitHub Organization
+  - type: GitHubOrganization
     url: https://github.com/everbridge
   - type: Community
     url: https://supportcenter.everbridge.com/hc/en-us
