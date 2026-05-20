@@ -199,6 +199,8 @@ apis:
       - type: Reference
         url: https://api.everbridge.net/
 common:
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/everbridge
   - type: Portal
     url: https://manager.everbridge.net/
   - type: Developer Portal
