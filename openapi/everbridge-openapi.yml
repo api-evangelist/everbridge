@@ -1,0 +1,279 @@
+openapi: 3.1.0
+info:
+  title: Everbridge Suite API
+  description: >-
+    REST API for Everbridge's critical event management platform covering
+    contacts, groups, and mass notifications. Endpoints and authentication
+    summarized from the Everbridge developer portal at
+    https://developers.everbridge.net/home/docs/overview. Best-effort, partial.
+  version: "1.0.0"
+  contact:
+    name: API Evangelist
+    email: kin@apievangelist.com
+  license:
+    name: Proprietary
+servers:
+  - url: https://api.everbridge.net
+    description: Everbridge production API
+security:
+  - bearerAuth: []
+paths:
+  /authorization/v1/tokens:
+    post:
+      summary: Generate OAuth token
+      description: Exchange client credentials for an id_token used as a bearer token.
+      operationId: createToken
+      tags: [Authentication]
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                clientId: { type: string }
+                clientKey: { type: string }
+              required: [clientId, clientKey]
+      responses:
+        "200":
+          description: Token issued
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id_token: { type: string }
+                  expires_in: { type: integer }
+  /ebs/contacts:
+    get:
+      summary: List contacts
+      operationId: listContacts
+      tags: [Contacts]
+      parameters:
+        - { name: organizationId, in: query, schema: { type: string } }
+        - { name: pageNumber, in: query, schema: { type: integer } }
+        - { name: pageSize, in: query, schema: { type: integer } }
+      responses:
+        "200":
+          description: List of contacts
+    post:
+      summary: Create contact
+      operationId: createContact
+      tags: [Contacts]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/Contact" }
+      responses:
+        "201": { description: Contact created }
+  /ebs/contacts/{id}:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: string } }
+    get:
+      summary: Get contact
+      operationId: getContact
+      tags: [Contacts]
+      responses:
+        "200":
+          description: Contact
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Contact" }
+    put:
+      summary: Update contact
+      operationId: updateContact
+      tags: [Contacts]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/Contact" }
+      responses:
+        "200": { description: Updated }
+    patch:
+      summary: Partial update contact
+      operationId: patchContact
+      tags: [Contacts]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object, additionalProperties: true }
+      responses:
+        "200": { description: Patched }
+    delete:
+      summary: Delete contact
+      operationId: deleteContact
+      tags: [Contacts]
+      responses:
+        "204": { description: Deleted }
+  /ebs/contacts/batch:
+    post:
+      summary: Batch create, update, or delete contacts
+      operationId: batchContacts
+      tags: [Contacts]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items: { $ref: "#/components/schemas/Contact" }
+      responses:
+        "200": { description: Batch processed }
+  /ebs/groups:
+    get:
+      summary: List groups
+      operationId: listGroups
+      tags: [Groups]
+      responses:
+        "200": { description: List of groups }
+    post:
+      summary: Create group
+      operationId: createGroup
+      tags: [Groups]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/Group" }
+      responses:
+        "201": { description: Group created }
+  /ebs/groups/{id}:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: string } }
+    get:
+      summary: Get group
+      operationId: getGroup
+      tags: [Groups]
+      responses:
+        "200":
+          description: Group
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Group" }
+    put:
+      summary: Update group
+      operationId: updateGroup
+      tags: [Groups]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/Group" }
+      responses:
+        "200": { description: Updated }
+    delete:
+      summary: Delete group
+      operationId: deleteGroup
+      tags: [Groups]
+      responses:
+        "204": { description: Deleted }
+  /ebs/groups/{id}/contacts:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: string } }
+    post:
+      summary: Add contacts to group
+      operationId: addContactsToGroup
+      tags: [Groups]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items: { type: string, description: Contact ID }
+      responses:
+        "200": { description: Contacts added }
+  /ebs/notifications:
+    get:
+      summary: List notifications
+      operationId: listNotifications
+      tags: [Notifications]
+      responses:
+        "200": { description: List of notifications }
+    post:
+      summary: Launch mass notification
+      operationId: createNotification
+      tags: [Notifications]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/Notification" }
+      responses:
+        "201": { description: Notification launched }
+  /ebs/notifications/{id}:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: string } }
+    get:
+      summary: Get notification
+      operationId: getNotification
+      tags: [Notifications]
+      responses:
+        "200":
+          description: Notification
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Notification" }
+    put:
+      summary: Update notification
+      operationId: updateNotification
+      tags: [Notifications]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/Notification" }
+      responses:
+        "200": { description: Updated }
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: OAuth 2.0 id_token from /authorization/v1/tokens
+  schemas:
+    Contact:
+      type: object
+      properties:
+        id: { type: string }
+        firstName: { type: string }
+        lastName: { type: string }
+        externalId: { type: string }
+        recordTypeId: { type: integer }
+        paths:
+          type: array
+          items:
+            type: object
+            properties:
+              waitTime: { type: integer }
+              status: { type: integer }
+              pathId: { type: integer }
+              value: { type: string }
+    Group:
+      type: object
+      properties:
+        id: { type: string }
+        name: { type: string }
+        organizationId: { type: string }
+    Notification:
+      type: object
+      properties:
+        id: { type: string }
+        title: { type: string }
+        message: { type: string }
+        type: { type: string, enum: [Standard, Polling] }
+        priority: { type: string, enum: [Normal, High] }
+        contactIds:
+          type: array
+          items: { type: string }
+        groupIds:
+          type: array
+          items: { type: string }
+        deliveryMethods:
+          type: array
+          items: { type: string }
