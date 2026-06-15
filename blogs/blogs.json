@@ -2,10 +2,10 @@
   "repo": "everbridge",
   "feeds": [
     {
-      "source": "https://www.everbridge.com/blog/feed/",
-      "feed_url": "https://www.everbridge.com/blog/feed/",
+      "source": "https://www.everbridge.com/?feed=rss2&cat=blog",
+      "feed_url": "https://www.everbridge.com/?feed=rss2&cat=blog",
       "title": "",
-      "saved": 0,
+      "saved": 3,
       "method": "feed"
     },
     {
@@ -13,6 +13,6 @@
       "error": "HTTPError"
     }
   ],
-  "post_count": 10,
-  "fetched": "2026-06-01T23:35:02Z"
+  "post_count": 15,
+  "fetched": "2026-06-14T20:42:17Z"
 }
