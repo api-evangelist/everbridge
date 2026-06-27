@@ -205,11 +205,11 @@ common:
   url: https://www.linkedin.com/company/everbridge
 - type: Portal
   url: https://manager.everbridge.net/
-- type: Developer Portal
+- type: DeveloperPortal
   url: https://developers.everbridge.net/home
 - type: Login
   url: https://manager.everbridge.net/login
-- type: SignUp
+- type: Signup
   url: https://www.everbridge.com/free-trial/
 - type: Blog
   url: https://www.everbridge.com/blog/
