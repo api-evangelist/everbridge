@@ -201,6 +201,10 @@ apis:
   - type: Reference
     url: https://api.everbridge.net/
 common:
+- type: DomainSecurity
+  url: security/everbridge-domain-security.yml
+- type: Authentication
+  url: authentication/everbridge-authentication.yml
 - type: LinkedIn
   url: https://www.linkedin.com/company/everbridge
 - type: Portal

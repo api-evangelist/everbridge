@@ -1,0 +1,14 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/everbridge-openapi.yml
+summary:
+  types:
+  - http
+schemes:
+- name: bearerAuth
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  description: OAuth 2.0 id_token from /authorization/v1/tokens
+  sources:
+  - openapi/everbridge-openapi.yml
