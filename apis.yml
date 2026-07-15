@@ -201,6 +201,8 @@ apis:
   - type: Reference
     url: https://api.everbridge.net/
 common:
+- type: AgenticAccess
+  url: agentic-access/everbridge-agentic-access.yml
 - type: DomainSecurity
   url: security/everbridge-domain-security.yml
 - type: Authentication
