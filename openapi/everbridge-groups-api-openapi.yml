@@ -1,0 +1,123 @@
+openapi: 3.1.0
+info:
+  title: Everbridge Suite Authentication Groups API
+  description: REST API for Everbridge's critical event management platform covering contacts, groups, and mass notifications. Endpoints and authentication summarized from the Everbridge developer portal at https://developers.everbridge.net/home/docs/overview. Best-effort, partial.
+  version: 1.0.0
+  contact:
+    name: API Evangelist
+    email: kin@apievangelist.com
+  license:
+    name: Proprietary
+servers:
+- url: https://api.everbridge.net
+  description: Everbridge production API
+security:
+- bearerAuth: []
+tags:
+- name: Groups
+paths:
+  /ebs/groups:
+    get:
+      summary: List groups
+      operationId: listGroups
+      tags:
+      - Groups
+      responses:
+        '200':
+          description: List of groups
+    post:
+      summary: Create group
+      operationId: createGroup
+      tags:
+      - Groups
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Group'
+      responses:
+        '201':
+          description: Group created
+  /ebs/groups/{id}:
+    parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      summary: Get group
+      operationId: getGroup
+      tags:
+      - Groups
+      responses:
+        '200':
+          description: Group
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
+    put:
+      summary: Update group
+      operationId: updateGroup
+      tags:
+      - Groups
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Group'
+      responses:
+        '200':
+          description: Updated
+    delete:
+      summary: Delete group
+      operationId: deleteGroup
+      tags:
+      - Groups
+      responses:
+        '204':
+          description: Deleted
+  /ebs/groups/{id}/contacts:
+    parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+    post:
+      summary: Add contacts to group
+      operationId: addContactsToGroup
+      tags:
+      - Groups
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+                description: Contact ID
+      responses:
+        '200':
+          description: Contacts added
+components:
+  schemas:
+    Group:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        organizationId:
+          type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: OAuth 2.0 id_token from /authorization/v1/tokens

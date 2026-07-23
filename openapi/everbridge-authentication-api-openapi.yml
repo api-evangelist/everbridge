@@ -1,0 +1,59 @@
+openapi: 3.1.0
+info:
+  title: Everbridge Suite Authentication API
+  description: REST API for Everbridge's critical event management platform covering contacts, groups, and mass notifications. Endpoints and authentication summarized from the Everbridge developer portal at https://developers.everbridge.net/home/docs/overview. Best-effort, partial.
+  version: 1.0.0
+  contact:
+    name: API Evangelist
+    email: kin@apievangelist.com
+  license:
+    name: Proprietary
+servers:
+- url: https://api.everbridge.net
+  description: Everbridge production API
+security:
+- bearerAuth: []
+tags:
+- name: Authentication
+paths:
+  /authorization/v1/tokens:
+    post:
+      summary: Generate OAuth token
+      description: Exchange client credentials for an id_token used as a bearer token.
+      operationId: createToken
+      tags:
+      - Authentication
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                clientId:
+                  type: string
+                clientKey:
+                  type: string
+              required:
+              - clientId
+              - clientKey
+      responses:
+        '200':
+          description: Token issued
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id_token:
+                    type: string
+                  expires_in:
+                    type: integer
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: OAuth 2.0 id_token from /authorization/v1/tokens

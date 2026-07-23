@@ -1,0 +1,161 @@
+openapi: 3.1.0
+info:
+  title: Everbridge Suite Authentication Contacts API
+  description: REST API for Everbridge's critical event management platform covering contacts, groups, and mass notifications. Endpoints and authentication summarized from the Everbridge developer portal at https://developers.everbridge.net/home/docs/overview. Best-effort, partial.
+  version: 1.0.0
+  contact:
+    name: API Evangelist
+    email: kin@apievangelist.com
+  license:
+    name: Proprietary
+servers:
+- url: https://api.everbridge.net
+  description: Everbridge production API
+security:
+- bearerAuth: []
+tags:
+- name: Contacts
+paths:
+  /ebs/contacts:
+    get:
+      summary: List contacts
+      operationId: listContacts
+      tags:
+      - Contacts
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+      - name: pageNumber
+        in: query
+        schema:
+          type: integer
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: List of contacts
+    post:
+      summary: Create contact
+      operationId: createContact
+      tags:
+      - Contacts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Contact'
+      responses:
+        '201':
+          description: Contact created
+  /ebs/contacts/{id}:
+    parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      summary: Get contact
+      operationId: getContact
+      tags:
+      - Contacts
+      responses:
+        '200':
+          description: Contact
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+    put:
+      summary: Update contact
+      operationId: updateContact
+      tags:
+      - Contacts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Contact'
+      responses:
+        '200':
+          description: Updated
+    patch:
+      summary: Partial update contact
+      operationId: patchContact
+      tags:
+      - Contacts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200':
+          description: Patched
+    delete:
+      summary: Delete contact
+      operationId: deleteContact
+      tags:
+      - Contacts
+      responses:
+        '204':
+          description: Deleted
+  /ebs/contacts/batch:
+    post:
+      summary: Batch create, update, or delete contacts
+      operationId: batchContacts
+      tags:
+      - Contacts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Contact'
+      responses:
+        '200':
+          description: Batch processed
+components:
+  schemas:
+    Contact:
+      type: object
+      properties:
+        id:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        externalId:
+          type: string
+        recordTypeId:
+          type: integer
+        paths:
+          type: array
+          items:
+            type: object
+            properties:
+              waitTime:
+                type: integer
+              status:
+                type: integer
+              pathId:
+                type: integer
+              value:
+                type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: OAuth 2.0 id_token from /authorization/v1/tokens
