@@ -1,0 +1,39 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Everbridge Suite Authentication API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Authentication",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Generate OAuth token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.everbridge.net/authorization/v1/tokens",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Exchange client credentials for an id_token used as a bearer token."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

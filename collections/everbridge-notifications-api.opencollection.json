@@ -1,0 +1,90 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Everbridge Suite Authentication Notifications API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Notifications",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List notifications",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.everbridge.net/ebs/notifications"
+          },
+          "docs": "List notifications"
+        },
+        {
+          "info": {
+            "name": "Launch mass notification",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.everbridge.net/ebs/notifications",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Launch mass notification"
+        },
+        {
+          "info": {
+            "name": "Get notification",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.everbridge.net/ebs/notifications/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get notification"
+        },
+        {
+          "info": {
+            "name": "Update notification",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.everbridge.net/ebs/notifications/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update notification"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
