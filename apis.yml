@@ -17,7 +17,7 @@ image: https://www.everbridge.com/wp-content/uploads/2021/01/everbridge-logo.svg
 url: https://www.everbridge.com
 created: 2024-01-09 00:00:00+00:00
 modified: '2026-03-16'
-specificationVersion: '0.19'
+specificationVersion: '0.23'
 tags:
 - Critical Event Management
 - Emergency Management
