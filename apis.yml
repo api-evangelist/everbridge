@@ -52,6 +52,10 @@ apis:
   baseURL: https://api.everbridge.net/rest
   tags:
   - Assets
+  - Query
+  - Search
+  tags_raw:
+  - Assets
   - Queries
   - Search
   properties:
@@ -225,6 +229,8 @@ apis:
   humanURL: https://developers.everbridge.net/home
   baseURL: https://api.everbridge.net/rest
   tags:
+  - Group
+  tags_raw:
   - Groups
   properties:
   - type: OpenAPI
@@ -247,6 +253,8 @@ apis:
   humanURL: https://developers.everbridge.net/home
   baseURL: https://api.everbridge.net/rest
   tags:
+  - Notification
+  tags_raw:
   - Notifications
   properties:
   - type: OpenAPI
