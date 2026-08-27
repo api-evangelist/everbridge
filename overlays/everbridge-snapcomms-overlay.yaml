@@ -1,0 +1,41 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements — SnapComms API Reference
+  version: 1.0.0
+x-generated: '2026-08-27'
+x-method: generated
+x-extends: openapi/everbridge-snapcomms-openapi.json
+x-source: https://developers.everbridge.net/home/reference
+x-note: 'Captures API Evangelist''s recommended enhancements to Everbridge''s published contract. It is applied
+  to a COPY; the harvested document in openapi/ is never mutated. Actions marked x-status: recommendation describe
+  capability Everbridge does not ship today.'
+actions:
+- target: $.info
+  description: Add a machine-readable support contact. The published contract names no contact, so a consumer that
+    hits a defect has no address inside the artifact.
+  update:
+    contact:
+      name: Everbridge Developer Hub
+      url: https://developers.everbridge.net/home/discuss
+- target: $.info
+  description: Declare the contract's licence. Everbridge publishes these documents on a public developer hub under
+    its standard terms; stating it removes the ambiguity for downstream tooling.
+  update:
+    termsOfService: https://www.everbridge.com/company-policies/
+- target: $
+  description: Point the contract at the guides that carry the runtime semantics it does not encode — authentication
+    grants, throttling tiers and the error table.
+  update:
+    externalDocs:
+      description: Everbridge API Developer Hub — Getting Started Guide
+      url: https://developers.everbridge.net/home/docs/ebs-gs-guide
+- target: $.paths.*.*.responses.429.headers
+  description: Everbridge publishes no rate-limit response headers. Adding RateLimit-Limit, RateLimit-Remaining,
+    RateLimit-Reset and Retry-After would give an agent a runtime budget signal instead of forcing it to infer one
+    from a bare 429.
+  x-status: recommendation — Everbridge does not currently emit these
+- target: $.paths.*.post.parameters
+  description: No idempotency mechanism exists anywhere in the Everbridge surface. Launch Mass Notification and
+    Launch Incident have irreversible real-world side effects; an Idempotency-Key request header would let a client
+    retry a timed-out launch safely.
+  x-status: recommendation — Everbridge does not currently support this

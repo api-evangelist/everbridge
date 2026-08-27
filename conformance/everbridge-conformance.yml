@@ -1,0 +1,164 @@
+generated: '2026-08-27'
+method: derived
+source: >-
+  openapi/*.json (13 documents, 473 operations),
+  https://developers.everbridge.net/home/docs/ebs-gs-guide-authentication-types,
+  https://trust.everbridge.com/
+provider: Everbridge
+providerId: everbridge
+description: >-
+  Cross-cutting and domain-standard conformance for the Everbridge API surface, asserted from
+  the contracts themselves rather than from marketing prose. The headline finding is the
+  domain-standard signature: the Communications and EB Suite contracts carry a first-class
+  OASIS Common Alerting Protocol message model and FEMA IPAWS delivery wrappers, which is
+  exactly the interoperability a public-warning buyer needs and cannot get from a bespoke
+  connector.
+domain_standards:
+- id: oasis-cap
+  name: OASIS Common Alerting Protocol (CAP)
+  conforms: true
+  confidence: high
+  evidence:
+    spec: openapi/everbridge-communications-openapi.json
+    location: components.schemas.CapContent and components.schemas.CAPPublicMessage
+    detail: >-
+      CapContent declares the CAP element set as required fields — capCategory, capEventType,
+      capEventCode, capSeverity, capUrgency, capCertainty — and CAPPublicMessage carries a
+      paths[] enum of CAP delivery modalities (IPAWS, CAP_GOOGLE, CAP_RSS) with the rule that
+      a modality may be targeted by at most one CAP public message. This is the CAP alert
+      information block expressed natively in the request contract, not a proprietary
+      re-modelling of it.
+  market_relevance: >-
+    Public warning, emergency management and mass notification. An integrator that already
+    speaks CAP can populate an Everbridge public-safety communication from an existing CAP
+    feed without a translation layer.
+- id: fema-ipaws
+  name: FEMA Integrated Public Alert and Warning System (IPAWS)
+  conforms: true
+  confidence: high
+  evidence:
+    spec: openapi/everbridge-eb-suite-openapi.json
+    location: components.schemas.IPAWSMessageWrapper, components.schemas.IpawsMessageField
+    detail: >-
+      The EB Suite contract models IPAWS messages directly (IPAWSMessageWrapper,
+      IpawsMessageField, ipawsCap, publishOptionsIPAWSSettings, and multilingual
+      ipawsMessageEn360 / ipawsMessageEs360 / ipawsMessageEs90 character-limited variants
+      that mirror the IPAWS/WEA message-length constraints). IPAWS also appears as a CAP
+      delivery modality in the Communications contract.
+  market_relevance: US federal, state and local public alerting.
+- id: nixle-public-safety
+  name: Nixle community / region alerting model
+  conforms: true
+  confidence: medium
+  evidence:
+    spec: openapi/everbridge-eb-suite-openapi.json
+    location: /nixleEventGroups/{organizationId}, /nixleRegionIds/{organizationId}
+    detail: >-
+      Dedicated endpoints and schemas (NixleAlertMessageWrapper, NixleCommunityWrapper,
+      NixleEventSubscriptionWrapper, NixleRegion) for the Nixle public-safety alerting
+      network Everbridge operates.
+  market_relevance: US local government and law enforcement community notification.
+- id: rfc7946-geojson
+  name: GeoJSON (RFC 7946)
+  conforms: true
+  confidence: high
+  evidence:
+    spec: openapi/everbridge-asset-query-openapi.json
+    location: response-type parameter description and components.schemas.GeoJSON
+    detail: >-
+      The Asset Query API names RFC 7946 explicitly — a geojson response type can be
+      requested in place of the default inArea semantic-query response — and shape-library
+      schemas carry a GeoJSON representation of a map shape.
+  market_relevance: Geospatial risk, impact geometry and situational-awareness integration.
+standards:
+- id: oauth2
+  name: OAuth 2.0
+  conforms: true
+  evidence: >-
+    Token endpoint https://api.everbridge.net/authorization/v1/tokens with client_credentials
+    and password grants, x-www-form-urlencoded, documented at
+    https://developers.everbridge.net/home/docs/ebs-gs-guide-authentication-types. Tokens are
+    bearer, 28800s TTL.
+  caveat: >-
+    The OpenAPI documents declare the resulting credential as an apiKey-in-header scheme
+    named API_Authorizer ("oAuth Token") rather than as an oauth2 securityScheme with flows
+    and scopes, so the contract does not machine-describe the OAuth flow that the docs do.
+- id: oidc
+  name: OpenID Connect
+  conforms: partial
+  evidence: >-
+    The published scope strings include `openid` and the password grant returns an id_token
+    that must be used as the bearer credential. No /.well-known/openid-configuration is
+    served on any Everbridge host (all probed 404), so an OIDC client cannot discover the
+    issuer, JWKS or supported claims automatically.
+- id: http-basic
+  name: HTTP Basic authentication (RFC 7617)
+  conforms: true
+  evidence: >-
+    BasicAuth securityScheme declared in the EB Suite, Asset Management and Asset Query
+    contracts; documented at ebs-gs-guide-authentication-types.
+- id: rfc9457
+  name: RFC 9457 Problem Details for HTTP APIs
+  conforms: false
+  evidence: >-
+    No application/problem+json media type on any of 473 operations. Errors are plain
+    application/json with a free-text message property. See errors/everbridge-problem-types.yml.
+- id: pagination
+  name: Documented pagination
+  conforms: true
+  evidence: >-
+    Page-number pagination via pageNumber + pageSize across EB Suite (32/19 operations),
+    Communications (15/15), Asset Management (4/4) and Asset Query (3/3). Inconsistent
+    aliases exist — pageNo on 9 EB Suite operations, page on 2, and limit on Digital Apps —
+    so the convention is documented but not uniform.
+  caveat: No cursor-based pagination anywhere; deep paging over large contact sets is offset-bound.
+- id: idempotency
+  name: Idempotency keys
+  conforms: false
+  evidence: >-
+    No Idempotency-Key header, no idempotency parameter and no mention of idempotency in any
+    of the 13 contracts or on the developer hub. See conventions/everbridge-conventions.yml.
+- id: rfc8594
+  name: RFC 8594 Sunset header / deprecation signalling
+  conforms: false
+  evidence: >-
+    No Sunset or Deprecation response headers; no operation marked deprecated:true across
+    473 operations. Deprecation is announced only in changelog prose.
+- id: rate-limit-headers
+  name: IETF RateLimit header fields
+  conforms: false
+  evidence: >-
+    Documented Bronze/Silver/Gold throttling with 429 on exhaustion, but no X-RateLimit-*,
+    RateLimit-* or Retry-After headers documented or declared.
+- id: graphql
+  name: GraphQL
+  conforms: true
+  evidence: >-
+    POST /graphql on the CEM Alerts Query Public and Query Stream services, contract-declared
+    with worked query and subscription examples. Introspection is auth-gated (401 Unauthorized
+    to an anonymous POST).
+compliance:
+  published: true
+  source: https://trust.everbridge.com/
+  certifications:
+  - SOC 2
+  - SOC 3
+  - ISO/IEC 27001
+  - ISO/IEC 27701
+  - ISO 22301
+  - ISO/IEC 42001:2023
+  - FedRAMP Moderate
+  - TX-RAMP
+  - C5
+  - Cyber Essentials
+  - G-Cloud
+  - EU-US Data Privacy Framework
+  regulatory:
+  - HIPAA
+  - GDPR
+  - CCPA
+  - DORA
+  see_also: security/everbridge-trust-center.yml
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

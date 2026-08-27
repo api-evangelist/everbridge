@@ -1,0 +1,128 @@
+generated: '2026-08-27'
+method: searched
+docs: https://developers.everbridge.net/home/docs/ebs-gs-guide-common-error-messages
+source: >-
+  https://developers.everbridge.net/home/docs/ebs-gs-guide-common-error-messages (published
+  error table) cross-checked against the 4xx/5xx responses declared across the 13 OpenAPI
+  documents in openapi/
+provider: Everbridge
+providerId: everbridge
+format: http-status
+rfc9457: false
+description: >-
+  Everbridge publishes a single flat HTTP status-code table for the Suite REST API rather
+  than a typed problem catalogue. Responses are application/json; there is no
+  application/problem+json media type anywhere in the 13 harvested specs, no `type` URI, and
+  no machine-readable error code beyond the HTTP status. Debugging detail is returned in a
+  free-text `message` property. This is the weakest part of the Everbridge contract for an
+  agent: two different business-logic failures on the same endpoint are indistinguishable
+  without parsing English prose.
+envelope:
+  media_type: application/json
+  detail_field: message
+  code_field: null
+  note: >-
+    Everbridge states for HTTP 500 that "Debugging information will be provided in the
+    message property". No documented machine-readable error-code taxonomy exists.
+problem_types:
+- status: 400
+  title: Bad Request
+  description: >-
+    Some portion of the request is not allowed by the server — either the JSON supplied on a
+    PUT or POST is invalid, or part of the request violates a business-logic constraint.
+  remediation: >-
+    Validate the request body against the schema in the relevant OpenAPI document before
+    retrying; a retry of the identical payload will fail identically.
+  retryable: false
+  declared_in_spec: true
+  spec_occurrences: 230
+- status: 401
+  title: Unauthorized
+  description: The credentials provided are incorrect.
+  remediation: >-
+    Re-mint a token at https://api.everbridge.net/authorization/v1/tokens. Tokens are valid
+    for 28800 seconds (8 hours); a 401 after a long-running session usually means expiry.
+  retryable: true
+  retry_after_reauth: true
+  declared_in_spec: true
+  spec_occurrences: 176
+- status: 403
+  title: Forbidden
+  description: >-
+    The user does not have the required permissions, or is attempting to access an
+    organization to which they do not have access. Everbridge's own table labels this
+    "Unauthorized"; the distinction from 401 is permission versus credential.
+  remediation: >-
+    Check the service account's resource + action permissions in the Manager Portal, and
+    confirm the organizationId in the request path is one the account is entitled to. For a
+    multi-role user, set the roleId header when minting the token.
+  retryable: false
+  declared_in_spec: true
+  spec_occurrences: 16
+- status: 404
+  title: Not Found
+  description: The requested or specified object is not present in the data store.
+  remediation: >-
+    Confirm the identifier. Note the 25.11/26.0/26.1 behaviour change — /scheduling/shiftSchedules
+    GET, PUT and DELETE previously returned 500 for an invalid id and now correctly return 404.
+  retryable: false
+  declared_in_spec: true
+  spec_occurrences: 132
+- status: 409
+  title: Conflict
+  description: >-
+    Declared on the Communications API and the SnapComms API. Not present in Everbridge's
+    published error table; captured here from the specs.
+  remediation: Reconcile the conflicting resource state before retrying.
+  retryable: false
+  declared_in_spec: true
+  spec_occurrences: 6
+  source: openapi/everbridge-communications-openapi.json, openapi/everbridge-snapcomms-openapi.json
+- status: 415
+  title: Unsupported Media Type
+  description: Declared on three EB Suite operations. Not in Everbridge's published error table.
+  remediation: Send Content-Type application/json (or the multipart type the upload endpoint expects).
+  retryable: false
+  declared_in_spec: true
+  spec_occurrences: 3
+  source: openapi/everbridge-eb-suite-openapi.json
+- status: 424
+  title: Failed Dependency
+  description: Declared on the CEM Alerts Query Public GraphQL operation.
+  remediation: An upstream CEM Alerts dependency failed; retry with backoff.
+  retryable: true
+  declared_in_spec: true
+  spec_occurrences: 1
+  source: openapi/everbridge-cem-alerts-query-public-openapi.json
+- status: 429
+  title: Too Many Requests
+  description: >-
+    The organization has reached the maximum per-second or daily request limit described in
+    the Everbridge throttling policy.
+  remediation: >-
+    Retry with exponential backoff plus jitter — sleep = random_between(0, min(cap, base * 2 ** attempt)).
+    No rate-limit response headers are published, so the client must own the budget accounting.
+  retryable: true
+  declared_in_spec: true
+  spec_occurrences: 15
+  see_also: rate-limits/everbridge-rate-limits.yml
+- status: 500
+  title: Internal Error
+  description: >-
+    Business logic within the API experienced an error handling the request. Debugging
+    information is provided in the message property.
+  remediation: Retry with exponential backoff plus jitter, as for 429.
+  retryable: true
+  declared_in_spec: true
+  spec_occurrences: 192
+gaps:
+- >-
+  No application/problem+json (RFC 9457) representation on any of 473 operations.
+- >-
+  No stable machine-readable error code. An agent cannot branch on failure cause without
+  string-matching the message property.
+- >-
+  Everbridge's published table omits 409, 415 and 424, all of which its own specs declare.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

@@ -1,0 +1,1175 @@
+generated: '2026-08-27'
+method: derived
+source: openapi/*.json (13 documents, 473 operations, 762 component schemas)
+provider: Everbridge
+providerId: everbridge
+description: Entity graph derived from the Everbridge OpenAPI documents. Entities are the top-level REST
+  resources across all 13 contracts; relationships are derived from id-reference fields declared on component
+  schemas. Everbridge uses no id prefixes — every identifier is a bare numeric string — so an id carries
+  no type information and an agent must track which resource an id came from.
+id_convention:
+  style: opaque numeric string
+  prefixes: false
+  note: No sk_/cus_-style typed prefixes. organizationId is the tenancy key and appears in most EB Suite
+    paths.
+entity_count: 107
+entities:
+- name: scheduling
+  operations: 35
+  methods:
+  - DELETE
+  - GET
+  - POST
+  - PUT
+  specs:
+  - digital-apps
+  - eb-suite
+  path_count: 17
+- name: contacts
+  operations: 30
+  methods:
+  - DELETE
+  - GET
+  - PATCH
+  - POST
+  - PUT
+  specs:
+  - digital-apps
+  - eb-suite
+  path_count: 22
+- name: assets
+  operations: 22
+  methods:
+  - DELETE
+  - GET
+  - POST
+  - PUT
+  specs:
+  - asset-management
+  - asset-query
+  path_count: 15
+- name: comm
+  operations: 21
+  methods:
+  - GET
+  - PATCH
+  - POST
+  specs:
+  - communications
+  path_count: 18
+- name: templates
+  operations: 16
+  methods:
+  - DELETE
+  - GET
+  - PATCH
+  - POST
+  specs:
+  - communications
+  path_count: 10
+- name: secure-chats
+  operations: 14
+  methods:
+  - GET
+  - PATCH
+  - POST
+  - PUT
+  specs:
+  - digital-apps
+  path_count: 12
+- name: asset-types
+  operations: 11
+  methods:
+  - DELETE
+  - GET
+  - POST
+  - PUT
+  specs:
+  - asset-management
+  path_count: 8
+- name: notifications
+  operations: 11
+  methods:
+  - GET
+  - PATCH
+  - POST
+  - PUT
+  specs:
+  - digital-apps
+  - eb-suite
+  path_count: 7
+- name: roles
+  operations: 11
+  methods:
+  - DELETE
+  - GET
+  - PATCH
+  - POST
+  - PUT
+  specs:
+  - eb-suite
+  path_count: 4
+- name: organizations
+  operations: 9
+  methods:
+  - GET
+  - PATCH
+  - POST
+  specs:
+  - digital-apps
+  - eb-suite
+  path_count: 8
+- name: groups
+  operations: 9
+  methods:
+  - DELETE
+  - GET
+  - POST
+  - PUT
+  specs:
+  - eb-suite
+  path_count: 5
+- name: global-templates
+  operations: 8
+  methods:
+  - DELETE
+  - GET
+  - POST
+  specs:
+  - communications
+  path_count: 6
+- name: schedules
+  operations: 8
+  methods:
+  - DELETE
+  - GET
+  - PATCH
+  - POST
+  specs:
+  - communications
+  path_count: 5
+- name: contact-builder
+  operations: 8
+  methods:
+  - GET
+  - POST
+  - PUT
+  specs:
+  - communications
+  path_count: 7
+- name: incidents
+  operations: 8
+  methods:
+  - GET
+  - POST
+  - PUT
+  specs:
+  - digital-apps
+  - eb-suite
+  path_count: 6
+- name: users
+  operations: 8
+  methods:
+  - DELETE
+  - GET
+  - PATCH
+  - POST
+  - PUT
+  specs:
+  - eb-suite
+  path_count: 4
+- name: asset-association-definitions
+  operations: 7
+  methods:
+  - DELETE
+  - GET
+  - POST
+  - PUT
+  specs:
+  - asset-management
+  path_count: 4
+- name: content
+  operations: 7
+  methods:
+  - GET
+  - POST
+  - PUT
+  specs:
+  - communications
+  - snapcomms
+  path_count: 7
+- name: expectedLocations
+  operations: 7
+  methods:
+  - DELETE
+  - GET
+  - POST
+  - PUT
+  specs:
+  - eb-suite
+  path_count: 4
+- name: itineraries
+  operations: 7
+  methods:
+  - DELETE
+  - GET
+  - POST
+  - PUT
+  specs:
+  - eb-suite
+  path_count: 5
+- name: privacy-policy
+  operations: 7
+  methods:
+  - DELETE
+  - GET
+  - POST
+  - PUT
+  specs:
+  - eb-suite
+  path_count: 4
+- name: variables
+  operations: 6
+  methods:
+  - DELETE
+  - GET
+  - PATCH
+  - POST
+  specs:
+  - communications
+  path_count: 3
+- name: reports
+  operations: 6
+  methods:
+  - GET
+  specs:
+  - eb-suite
+  - snapcomms
+  path_count: 6
+- name: uploads
+  operations: 6
+  methods:
+  - GET
+  - POST
+  specs:
+  - eb-suite
+  path_count: 4
+- name: checks
+  operations: 6
+  methods:
+  - DELETE
+  - GET
+  - POST
+  - PUT
+  specs:
+  - pnr-check-service
+  path_count: 3
+- name: checktemplates
+  operations: 6
+  methods:
+  - DELETE
+  - GET
+  - POST
+  - PUT
+  specs:
+  - pnr-check-service
+  path_count: 3
+- name: column-mappings
+  operations: 5
+  methods:
+  - DELETE
+  - GET
+  - POST
+  - PUT
+  specs:
+  - asset-management
+  path_count: 2
+- name: plans
+  operations: 5
+  methods:
+  - DELETE
+  - GET
+  - PATCH
+  - POST
+  specs:
+  - communications
+  path_count: 2
+- name: authorizations
+  operations: 5
+  methods:
+  - DELETE
+  - GET
+  - POST
+  specs:
+  - digital-apps
+  path_count: 5
+- name: conferenceBridges
+  operations: 5
+  methods:
+  - DELETE
+  - GET
+  - POST
+  - PUT
+  specs:
+  - eb-suite
+  path_count: 2
+- name: contactAttributes
+  operations: 5
+  methods:
+  - DELETE
+  - GET
+  - POST
+  - PUT
+  specs:
+  - eb-suite
+  path_count: 2
+- name: contactFilters
+  operations: 5
+  methods:
+  - DELETE
+  - GET
+  - POST
+  - PUT
+  specs:
+  - eb-suite
+  path_count: 2
+- name: launchPolicies
+  operations: 5
+  methods:
+  - DELETE
+  - GET
+  - POST
+  - PUT
+  specs:
+  - eb-suite
+  path_count: 2
+- name: locationTypes
+  operations: 5
+  methods:
+  - DELETE
+  - GET
+  - POST
+  - PUT
+  specs:
+  - eb-suite
+  path_count: 2
+- name: notificationTemplates
+  operations: 5
+  methods:
+  - DELETE
+  - GET
+  - POST
+  - PUT
+  specs:
+  - eb-suite
+  path_count: 2
+- name: recordTypes
+  operations: 5
+  methods:
+  - DELETE
+  - GET
+  - POST
+  - PUT
+  specs:
+  - eb-suite
+  path_count: 2
+- name: asset-upload-batches
+  operations: 4
+  methods:
+  - GET
+  - POST
+  - PUT
+  specs:
+  - asset-management
+  path_count: 3
+- name: resources
+  operations: 4
+  methods:
+  - GET
+  - POST
+  specs:
+  - digital-apps
+  path_count: 4
+- name: incidentScenarios
+  operations: 4
+  methods:
+  - GET
+  - POST
+  - PUT
+  specs:
+  - eb-suite
+  path_count: 2
+- name: context
+  operations: 3
+  methods:
+  - GET
+  specs:
+  - communications
+  path_count: 3
+- name: notes
+  operations: 3
+  methods:
+  - GET
+  - POST
+  specs:
+  - communications
+  path_count: 2
+- name: travel
+  operations: 3
+  methods:
+  - GET
+  specs:
+  - digital-apps
+  path_count: 3
+- name: incidentNotifications
+  operations: 3
+  methods:
+  - GET
+  specs:
+  - eb-suite
+  path_count: 3
+- name: locationSource
+  operations: 3
+  methods:
+  - GET
+  - POST
+  specs:
+  - eb-suite
+  path_count: 3
+- name: notificationCategories
+  operations: 3
+  methods:
+  - GET
+  - POST
+  specs:
+  - eb-suite
+  path_count: 2
+- name: notificationEvents
+  operations: 3
+  methods:
+  - GET
+  - POST
+  specs:
+  - eb-suite
+  path_count: 2
+- name: uploadContacts
+  operations: 3
+  methods:
+  - GET
+  specs:
+  - eb-suite
+  path_count: 3
+- name: Machine
+  operations: 3
+  methods:
+  - GET
+  - POST
+  specs:
+  - snapcomms
+  path_count: 3
+- name: risk-intelligence
+  operations: 3
+  methods:
+  - GET
+  specs:
+  - travel
+  path_count: 3
+- name: asset-type-templates
+  operations: 2
+  methods:
+  - GET
+  specs:
+  - asset-management
+  path_count: 2
+- name: upload-assets
+  operations: 2
+  methods:
+  - GET
+  specs:
+  - asset-management
+  path_count: 2
+- name: schema
+  operations: 2
+  methods:
+  - GET
+  specs:
+  - cem-alerts-query-public
+  - cem-alerts-query-stream
+  path_count: 1
+- name: publish-options
+  operations: 2
+  methods:
+  - GET
+  - PATCH
+  specs:
+  - communications
+  path_count: 1
+- name: recipient-logs
+  operations: 2
+  methods:
+  - GET
+  - POST
+  specs:
+  - communications
+  path_count: 2
+- name: attachments
+  operations: 2
+  methods:
+  - GET
+  - POST
+  specs:
+  - eb-suite
+  path_count: 2
+- name: audio
+  operations: 2
+  methods:
+  - GET
+  - POST
+  specs:
+  - eb-suite
+  path_count: 2
+- name: cminternal
+  operations: 2
+  methods:
+  - GET
+  specs:
+  - eb-suite
+  path_count: 2
+- name: constants
+  operations: 2
+  methods:
+  - GET
+  specs:
+  - eb-suite
+  path_count: 2
+- name: contactPaths
+  operations: 2
+  methods:
+  - GET
+  specs:
+  - eb-suite
+  path_count: 2
+- name: dynamicGroups
+  operations: 2
+  methods:
+  - GET
+  specs:
+  - eb-suite
+  path_count: 2
+- name: dynamicLocations
+  operations: 2
+  methods:
+  - GET
+  - POST
+  specs:
+  - eb-suite
+  path_count: 2
+- name: incidentJournals
+  operations: 2
+  methods:
+  - GET
+  - POST
+  specs:
+  - eb-suite
+  path_count: 1
+- name: incidentTemplates
+  operations: 2
+  methods:
+  - GET
+  specs:
+  - eb-suite
+  path_count: 2
+- name: incidentVariableItems
+  operations: 2
+  methods:
+  - GET
+  specs:
+  - eb-suite
+  path_count: 2
+- name: profiles
+  operations: 2
+  methods:
+  - GET
+  specs:
+  - eb-suite
+  path_count: 2
+- name: shapeLibrary
+  operations: 2
+  methods:
+  - DELETE
+  - POST
+  specs:
+  - eb-suite
+  path_count: 1
+- name: targeting
+  operations: 2
+  methods:
+  - GET
+  specs:
+  - snapcomms
+  path_count: 2
+- name: user
+  operations: 2
+  methods:
+  - GET
+  - POST
+  specs:
+  - snapcomms
+  path_count: 2
+- name: Group
+  operations: 2
+  methods:
+  - GET
+  - POST
+  specs:
+  - snapcomms
+  path_count: 2
+- name: asset-license-limit-stats
+  operations: 1
+  methods:
+  - GET
+  specs:
+  - asset-management
+  path_count: 1
+- name: tokens
+  operations: 1
+  methods:
+  - POST
+  specs:
+  - authentication
+  path_count: 1
+- name: resend
+  operations: 1
+  methods:
+  - POST
+  specs:
+  - communications
+  path_count: 1
+- name: stop
+  operations: 1
+  methods:
+  - PATCH
+  specs:
+  - communications
+  path_count: 1
+- name: confirmation-result
+  operations: 1
+  methods:
+  - POST
+  specs:
+  - communications
+  path_count: 1
+- name: operator-confirmation
+  operations: 1
+  methods:
+  - POST
+  specs:
+  - communications
+  path_count: 1
+- name: geometry
+  operations: 1
+  methods:
+  - GET
+  specs:
+  - communications
+  path_count: 1
+- name: settings
+  operations: 1
+  methods:
+  - GET
+  specs:
+  - communications
+  path_count: 1
+- name: recipients
+  operations: 1
+  methods:
+  - GET
+  specs:
+  - communications
+  path_count: 1
+- name: summary
+  operations: 1
+  methods:
+  - GET
+  specs:
+  - communications
+  path_count: 1
+- name: activities
+  operations: 1
+  methods:
+  - GET
+  specs:
+  - communications
+  path_count: 1
+- name: activity-entry
+  operations: 1
+  methods:
+  - GET
+  specs:
+  - communications
+  path_count: 1
+- name: thread-recipients
+  operations: 1
+  methods:
+  - GET
+  specs:
+  - communications
+  path_count: 1
+- name: context-preview
+  operations: 1
+  methods:
+  - POST
+  specs:
+  - communications
+  path_count: 1
+- name: message-builder
+  operations: 1
+  methods:
+  - POST
+  specs:
+  - communications
+  path_count: 1
+- name: configuration-values
+  operations: 1
+  methods:
+  - GET
+  specs:
+  - digital-apps
+  path_count: 1
+- name: autoSignUp
+  operations: 1
+  methods:
+  - GET
+  specs:
+  - digital-apps
+  path_count: 1
+- name: organization-code-data
+  operations: 1
+  methods:
+  - GET
+  specs:
+  - digital-apps
+  path_count: 1
+- name: providers
+  operations: 1
+  methods:
+  - GET
+  specs:
+  - digital-apps
+  path_count: 1
+- name: ssoAuthorize
+  operations: 1
+  methods:
+  - POST
+  specs:
+  - digital-apps
+  path_count: 1
+- name: cm
+  operations: 1
+  methods:
+  - GET
+  specs:
+  - digital-apps
+  - eb-suite
+  path_count: 2
+- name: calendars
+  operations: 1
+  methods:
+  - GET
+  specs:
+  - eb-suite
+  path_count: 1
+- name: chatOps
+  operations: 1
+  methods:
+  - POST
+  specs:
+  - eb-suite
+  path_count: 1
+- name: lastknownlocations
+  operations: 1
+  methods:
+  - POST
+  specs:
+  - eb-suite
+  path_count: 1
+- name: lookup
+  operations: 1
+  methods:
+  - GET
+  specs:
+  - eb-suite
+  path_count: 1
+- name: nixleEventGroups
+  operations: 1
+  methods:
+  - GET
+  specs:
+  - eb-suite
+  path_count: 1
+- name: nixleRegionIds
+  operations: 1
+  methods:
+  - GET
+  specs:
+  - eb-suite
+  path_count: 1
+- name: notificationReports
+  operations: 1
+  methods:
+  - GET
+  specs:
+  - eb-suite
+  path_count: 1
+- name: registration
+  operations: 1
+  methods:
+  - POST
+  specs:
+  - eb-suite
+  path_count: 1
+- name: residents
+  operations: 1
+  methods:
+  - POST
+  specs:
+  - eb-suite
+  path_count: 1
+- name: staff
+  operations: 1
+  methods:
+  - GET
+  specs:
+  - eb-suite
+  path_count: 1
+- name: uploadDynamicLocations
+  operations: 1
+  methods:
+  - GET
+  specs:
+  - eb-suite
+  path_count: 1
+- name: export
+  operations: 1
+  methods:
+  - POST
+  specs:
+  - risk-intelligence
+  path_count: 1
+- name: devices
+  operations: 1
+  methods:
+  - POST
+  specs:
+  - safety-devices
+  path_count: 1
+- name: utility
+  operations: 1
+  methods:
+  - GET
+  specs:
+  - snapcomms
+  path_count: 1
+- name: template
+  operations: 1
+  methods:
+  - GET
+  specs:
+  - snapcomms
+  path_count: 1
+- name: auth
+  operations: 1
+  methods:
+  - POST
+  specs:
+  - snapcomms
+  path_count: 1
+- name: User
+  operations: 1
+  methods:
+  - POST
+  specs:
+  - snapcomms
+  path_count: 1
+relationships:
+- from: organization
+  to: attachments
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: audio
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: calendars
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: chatOps
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: cminternal
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: conferenceBridges
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: contactAttributes
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: contactFilters
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: contactPaths
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: contacts
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: dynamicGroups
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: dynamicLocations
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: expectedLocations
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: groups
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: incidentJournals
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: incidentNotifications
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: incidentScenarios
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: incidentTemplates
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: incidentVariableItems
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: incidents
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: itineraries
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: lastknownlocations
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: launchPolicies
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: locationSource
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: locationTypes
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: lookup
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: nixleEventGroups
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: nixleRegionIds
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: notificationCategories
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: notificationEvents
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: notificationReports
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: notificationTemplates
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: notifications
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: organizations
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: privacy-policy
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: profiles
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: recordTypes
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: registration
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: residents
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: roles
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: scheduling
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: shapeLibrary
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: staff
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: uploadContacts
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: uploadDynamicLocations
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+- from: organization
+  to: uploads
+  type: has_many
+  via: organizationId
+  evidence: path parameter {organizationId}
+most_referenced_id_fields:
+- field: organizationId
+  schemas_declaring_it: 67
+- field: createdId
+  schemas_declaring_it: 47
+- field: lastModifiedId
+  schemas_declaring_it: 47
+- field: accountId
+  schemas_declaring_it: 38
+- field: resourceBundleId
+  schemas_declaring_it: 35
+- field: externalId
+  schemas_declaring_it: 22
+- field: templateId
+  schemas_declaring_it: 14
+- field: contactId
+  schemas_declaring_it: 13
+- field: assetTypeId
+  schemas_declaring_it: 11
+- field: individualAccountId
+  schemas_declaring_it: 11
+- field: iconId
+  schemas_declaring_it: 10
+- field: scrollId
+  schemas_declaring_it: 9
+- field: timeZoneId
+  schemas_declaring_it: 8
+- field: sessionId
+  schemas_declaring_it: 7
+- field: sourceId
+  schemas_declaring_it: 7
+- field: notificationId
+  schemas_declaring_it: 6
+- field: buttonId
+  schemas_declaring_it: 6
+- field: pathId
+  schemas_declaring_it: 5
+- field: shortId
+  schemas_declaring_it: 5
+- field: fileId
+  schemas_declaring_it: 4
+- field: createdRoleId
+  schemas_declaring_it: 4
+- field: updatedRoleId
+  schemas_declaring_it: 4
+- field: groupId
+  schemas_declaring_it: 4
+- field: recordTypeId
+  schemas_declaring_it: 4
+- field: incidentId
+  schemas_declaring_it: 4

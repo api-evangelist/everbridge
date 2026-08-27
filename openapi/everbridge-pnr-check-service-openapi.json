@@ -1,0 +1,914 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "PNR Check Service",
+    "description": "Universal Travel Connector API to interface with MongoDB to perform CRUD actions for itinerary checks",
+    "version": "v1"
+  },
+  "servers": [
+    {
+      "url": "https://api.everbridge.net//travel-connector/v1/checks"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Checks",
+      "description": "API endpoints for PNR check rule management and validation"
+    },
+    {
+      "name": "CheckTemplates",
+      "description": "API endpoints for check template management"
+    }
+  ],
+  "paths": {
+    "/checks": {
+      "post": {
+        "tags": [
+          "Checks"
+        ],
+        "summary": "Create a new check rule",
+        "description": "Creates a new PNR check rule",
+        "requestBody": {
+          "description": "The check rule to create",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCheckRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "API_Authorizer": []
+          },
+          {
+            "api_key": []
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "type": "http_proxy",
+          "connectionId": "11ofco",
+          "httpMethod": "POST",
+          "uri": "http://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/utc/utc-pnr-check-service/checks",
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "passthroughBehavior": "when_no_match",
+          "connectionType": "VPC_LINK"
+        }
+      },
+      "get": {
+        "tags": [
+          "Checks"
+        ],
+        "summary": "Get all check rules",
+        "description": "Retrieves all check rules",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Check"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "API_Authorizer": []
+          },
+          {
+            "api_key": []
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "type": "http_proxy",
+          "connectionId": "11ofco",
+          "httpMethod": "GET",
+          "uri": "http://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/utc/utc-pnr-check-service/checks",
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "passthroughBehavior": "when_no_match",
+          "connectionType": "VPC_LINK"
+        }
+      }
+    },
+    "/checks/{id}": {
+      "get": {
+        "tags": [
+          "Checks"
+        ],
+        "summary": "Get a check rule by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Check"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "API_Authorizer": []
+          },
+          {
+            "api_key": []
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "type": "http_proxy",
+          "connectionId": "11ofco",
+          "httpMethod": "GET",
+          "uri": "http://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/utc/utc-pnr-check-service/checks/{id}",
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "passthroughBehavior": "when_no_match",
+          "connectionType": "VPC_LINK"
+        }
+      },
+      "put": {
+        "tags": [
+          "Checks"
+        ],
+        "summary": "Update an existing check rule",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "The check rule to update",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCheckRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "API_Authorizer": []
+          },
+          {
+            "api_key": []
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "type": "http_proxy",
+          "connectionId": "11ofco",
+          "httpMethod": "PUT",
+          "uri": "http://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/utc/utc-pnr-check-service/checks/{id}",
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "passthroughBehavior": "when_no_match",
+          "connectionType": "VPC_LINK"
+        }
+      },
+      "delete": {
+        "tags": [
+          "Checks"
+        ],
+        "summary": "Delete a check rule by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "API_Authorizer": []
+          },
+          {
+            "api_key": []
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "type": "http_proxy",
+          "connectionId": "11ofco",
+          "httpMethod": "DELETE",
+          "uri": "http://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/utc/utc-pnr-check-service/checks/{id}",
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "passthroughBehavior": "when_no_match",
+          "connectionType": "VPC_LINK"
+        }
+      }
+    },
+    "/checks/query": {
+      "get": {
+        "tags": [
+          "Checks"
+        ],
+        "summary": "Query check rules by scope",
+        "parameters": [
+          {
+            "name": "customerAccountId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sourceId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "agencyOfficeId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Check"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "API_Authorizer": []
+          },
+          {
+            "api_key": []
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "type": "http_proxy",
+          "connectionId": "11ofco",
+          "httpMethod": "GET",
+          "uri": "http://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/utc/utc-pnr-check-service/checks/query",
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "passthroughBehavior": "when_no_match",
+          "connectionType": "VPC_LINK"
+        }
+      }
+    },
+    "/checktemplates": {
+      "post": {
+        "tags": [
+          "CheckTemplates"
+        ],
+        "summary": "Create a new check template",
+        "requestBody": {
+          "description": "The check template to create",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCheckTemplateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "API_Authorizer": []
+          },
+          {
+            "api_key": []
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "type": "http_proxy",
+          "connectionId": "11ofco",
+          "httpMethod": "POST",
+          "uri": "http://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/utc/utc-pnr-check-service/checktemplates",
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "passthroughBehavior": "when_no_match",
+          "connectionType": "VPC_LINK"
+        }
+      },
+      "get": {
+        "tags": [
+          "CheckTemplates"
+        ],
+        "summary": "Get all check templates",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CheckTemplate"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "API_Authorizer": []
+          },
+          {
+            "api_key": []
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "type": "http_proxy",
+          "connectionId": "11ofco",
+          "httpMethod": "GET",
+          "uri": "http://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/utc/utc-pnr-check-service/checktemplates",
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "passthroughBehavior": "when_no_match",
+          "connectionType": "VPC_LINK"
+        }
+      }
+    },
+    "/checktemplates/{id}": {
+      "get": {
+        "tags": [
+          "CheckTemplates"
+        ],
+        "summary": "Get a check template by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckTemplate"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "API_Authorizer": []
+          },
+          {
+            "api_key": []
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "type": "http_proxy",
+          "connectionId": "11ofco",
+          "httpMethod": "GET",
+          "uri": "http://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/utc/utc-pnr-check-service/checktemplates/{id}",
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "passthroughBehavior": "when_no_match",
+          "connectionType": "VPC_LINK"
+        }
+      },
+      "put": {
+        "tags": [
+          "CheckTemplates"
+        ],
+        "summary": "Update an existing check template",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "The check template to update",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCheckTemplateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "API_Authorizer": []
+          },
+          {
+            "api_key": []
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "type": "http_proxy",
+          "connectionId": "11ofco",
+          "httpMethod": "PUT",
+          "uri": "http://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/utc/utc-pnr-check-service/checktemplates/{id}",
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "passthroughBehavior": "when_no_match",
+          "connectionType": "VPC_LINK"
+        }
+      },
+      "delete": {
+        "tags": [
+          "CheckTemplates"
+        ],
+        "summary": "Delete a check template by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "API_Authorizer": []
+          },
+          {
+            "api_key": []
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "type": "http_proxy",
+          "connectionId": "11ofco",
+          "httpMethod": "DELETE",
+          "uri": "http://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/utc/utc-pnr-check-service/checktemplates/{id}",
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "passthroughBehavior": "when_no_match",
+          "connectionType": "VPC_LINK"
+        }
+      }
+    },
+    "/checktemplates/source/{sourceId}": {
+      "get": {
+        "tags": [
+          "CheckTemplates"
+        ],
+        "summary": "Get check templates by source ID",
+        "parameters": [
+          {
+            "name": "sourceId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CheckTemplate"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "API_Authorizer": []
+          },
+          {
+            "api_key": []
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "type": "http_proxy",
+          "connectionId": "11ofco",
+          "httpMethod": "GET",
+          "uri": "http://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/utc/utc-pnr-check-service/checktemplates/source/{sourceId}",
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "passthroughBehavior": "when_no_match",
+          "connectionType": "VPC_LINK"
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Check": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "customerAccountId": {
+            "type": "string"
+          },
+          "sourceId": {
+            "type": "string"
+          },
+          "agencyOfficeId": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "expectedValues": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "contentType": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CreateCheckRequest": {
+        "type": "object",
+        "properties": {
+          "customerAccountId": {
+            "type": "string"
+          },
+          "sourceId": {
+            "type": "string"
+          },
+          "agencyOfficeId": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "expectedValues": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "contentType": {
+            "type": "string"
+          }
+        }
+      },
+      "CheckTemplate": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "sourceId": {
+            "type": "string"
+          },
+          "sourceName": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CreateCheckTemplateRequest": {
+        "type": "object",
+        "properties": {
+          "sourceId": {
+            "type": "string"
+          },
+          "sourceName": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          }
+        }
+      },
+      "UpdateCheckTemplateRequest": {
+        "type": "object",
+        "properties": {
+          "sourceId": {
+            "type": "string"
+          },
+          "sourceName": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          }
+        }
+      },
+      "ValidateCheckRequest": {
+        "type": "object",
+        "properties": {
+          "payload": {
+            "type": "string"
+          },
+          "contentType": {
+            "type": "string"
+          },
+          "customerAccountId": {
+            "type": "string"
+          },
+          "sourceId": {
+            "type": "string"
+          },
+          "agencyOfficeId": {
+            "type": "string"
+          }
+        }
+      },
+      "ValidateCheckResponse": {
+        "type": "object",
+        "properties": {
+          "isValid": {
+            "type": "boolean"
+          },
+          "checksRun": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "checksPassed": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "checksFailed": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "failedRulePath": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "failedChecks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FailedCheckDetail"
+            }
+          }
+        }
+      },
+      "FailedCheckDetail": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "extractedValue": {
+            "type": "string"
+          },
+          "expectedValues": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "API_Authorizer": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header",
+        "x-amazon-apigateway-authtype": "custom",
+        "x-amazon-apigateway-authorizer": {
+          "authorizerUri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations",
+          "authorizerCredentials": "arn:aws:iam::214792946631:role/utc-pnr-check-service-prod-us-us-east-1-0-us-east-1-gw",
+          "authorizerResultTtlInSeconds": 300,
+          "identitySource": "method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey",
+          "type": "request"
+        }
+      },
+      "api_key": {
+        "type": "apiKey",
+        "name": "x-api-key",
+        "in": "header"
+      }
+    }
+  },
+  "x-readme": {
+    "explorer-enabled": true,
+    "proxy-enabled": true
+  },
+  "_id": "6a734e1a6df3044a5503c690"
+}

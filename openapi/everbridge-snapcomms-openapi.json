@@ -1,0 +1,2801 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "SnapComms API Reference",
+    "description": "",
+    "version": "v1"
+  },
+  "servers": [
+    {
+      "description": "API Url",
+      "url": "https://api.snapcomms.com/v1"
+    },
+    {
+      "description": "API Sandbox Url",
+      "url": "https://api.snapcomms.com/mock"
+    }
+  ],
+  "paths": {
+    "/targeting/attribute": {
+      "get": {
+        "tags": [
+          "Targeting"
+        ],
+        "summary": "Attributes",
+        "description": "Get all the available targeting attributes",
+        "operationId": "targeting-attributes",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List of targeting attributes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TargetingAttributeResponse"
+                },
+                "example": [
+                  {
+                    "id": "28a0db3c-e075-4c05-8078-13a91fe2e6fb",
+                    "name": "Department",
+                    "type": "User"
+                  },
+                  {
+                    "id": "719aa2fa-2286-4d84-8a60-2d576875fb76",
+                    "name": "Machine Role",
+                    "type": "Machine"
+                  }
+                ]
+              }
+            }
+          },
+          "429": {
+            "description": "Failed - Rate limit is exceeded"
+          }
+        }
+      }
+    },
+    "/targeting/group": {
+      "get": {
+        "tags": [
+          "Targeting"
+        ],
+        "summary": "Targeting Groups",
+        "description": "Get all the available groups",
+        "operationId": "targeting-groups",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List of groups",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GroupResponse"
+                },
+                "example": [
+                  {
+                    "id": "28a0db3c-e075-4c05-8078-13a91fe2e6fb",
+                    "name": "Auckland-Office",
+                    "memberCount": 42,
+                    "description": "All Auckland users"
+                  },
+                  {
+                    "id": "719aa2fa-2286-4d84-8a60-2d576875fb76",
+                    "name": "Outlook-Users",
+                    "memberCount": 150,
+                    "description": "All users"
+                  }
+                ]
+              }
+            }
+          },
+          "429": {
+            "description": "Failed - Rate limit is exceeded"
+          }
+        }
+      }
+    },
+    "/utility/status": {
+      "get": {
+        "tags": [
+          "Utility"
+        ],
+        "summary": "Status",
+        "description": "Get the current status of snapcomms services",
+        "operationId": "status",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Current status of backend services",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusResponse"
+                },
+                "example": {
+                  "isOperational": true,
+                  "timestamp": "2021-05-20T23:29:59.156Z",
+                  "onlineServices": [
+                    "Database",
+                    "Login Services",
+                    "Push Notification Service"
+                  ],
+                  "offlineServices": [
+                    {
+                      "name": "CommService",
+                      "error": "Error: The operation has timed out"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Failed - Rate limit is exceeded"
+          }
+        }
+      }
+    },
+    "/template/tag": {
+      "get": {
+        "description": "Get all available tags for template",
+        "tags": [
+          "Template"
+        ],
+        "summary": "Template Tags",
+        "operationId": "template-tags",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List of template tags",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TagResponse"
+                },
+                "example": [
+                  {
+                    "id": "HumanResources",
+                    "name": "Human Resources",
+                    "parentId": null
+                  },
+                  {
+                    "id": "HumanResources.EmployeeEngagement",
+                    "name": "Employee Engagement",
+                    "parentId": "HumanResources"
+                  },
+                  {
+                    "id": "HumanResources.EmployeeWellness",
+                    "name": "Employee Wellness",
+                    "parentId": "HumanResources"
+                  },
+                  {
+                    "id": "ITCommunications",
+                    "name": "IT Communications",
+                    "parentId": null
+                  },
+                  {
+                    "id": "Emergency",
+                    "name": "Emergency",
+                    "parentId": null
+                  }
+                ]
+              }
+            }
+          },
+          "429": {
+            "description": "Failed - Rate limit is exceeded"
+          }
+        }
+      }
+    },
+    "/auth/token": {
+      "post": {
+        "tags": [
+          "SnapComms Authentication"
+        ],
+        "security": [],
+        "summary": "Token",
+        "description": "Gets an authentication token for the provided credentials\n",
+        "operationId": "token",
+        "parameters": [
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "description": "Format - uuid. the snapcomms organisation id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "description": "the snapcomms api key associated with the user",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Token"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - The provided x-tenant-id format is invalid"
+          },
+          "401": {
+            "description": "Unauthorized - the provided credentials are invalid"
+          },
+          "429": {
+            "description": "Failed - Rate limit is exceeded"
+          }
+        }
+      }
+    },
+    "/content/template": {
+      "get": {
+        "tags": [
+          "Content"
+        ],
+        "summary": "Templates",
+        "description": "Get a list of available content templates",
+        "operationId": "content-templates",
+        "responses": {
+          "200": {
+            "description": "List of templates",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ContentTemplates"
+                  },
+                  "example": [
+                    {
+                      "id": "a3f798a0-8e5c-4648-a1aa-5c2c7fb67153",
+                      "name": "Weather Warning",
+                      "status": "active",
+                      "description": "Weather Warning Emergency Alert",
+                      "type": "Emergency Alert",
+                      "tags": [
+                        "Emergency"
+                      ],
+                      "previewImageUrl": "https://test01.snapcomms.tech/SnapComms.API/v1/template/preview/c919d429-fb76-4210-8ee1-87828acda3d6/alert_preview.png"
+                    },
+                    {
+                      "id": "a3f798a0-8e5c-4648-a1aa-5c2a8fb67153",
+                      "name": "Unplanned Service Disruption",
+                      "status": "active",
+                      "description": "Current Unplanned IT outage ticker with message",
+                      "type": "Ticker with Message Window",
+                      "tags": [
+                        "ITCommunications"
+                      ],
+                      "previewImageUrl": "https://test01.content.snapcomms.tech/SnapComms.API/v1/template/preview/245a07e0-8576-46a5-b892-a7f28e39f465/alert_preview.png"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Failed - Rate limit is exceeded"
+          }
+        }
+      }
+    },
+    "/content/template/{templateId}": {
+      "get": {
+        "tags": [
+          "Content"
+        ],
+        "summary": "Template",
+        "description": "Get the details of a specified content template",
+        "operationId": "content-template",
+        "parameters": [
+          {
+            "name": "templateId",
+            "in": "path",
+            "description": "Format - uuid. the ID of the template",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "6e335920-2fe0-42b0-aee5-dfb866137d1a"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Template details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentTemplate"
+                },
+                "example": {
+                  "id": "6e335920-2fe0-42b0-aee5-dfb866137d1a",
+                  "name": "Weather Warning",
+                  "status": "active",
+                  "description": "Weather Warning Emergency Alert",
+                  "type": "Emergency Alert",
+                  "tags": [
+                    "Emergency"
+                  ],
+                  "previewImageUrl": "https://test01.snapcomms.tech/SnapComms.API/v1/template/preview/c919d429-fb76-4210-8ee1-87828acda3d6/alert_preview.png",
+                  "fields": [
+                    {
+                      "name": "title",
+                      "displayName": "Title",
+                      "description": "Emergency short title",
+                      "type": "text",
+                      "required": false
+                    },
+                    {
+                      "name": "description",
+                      "displayName": "Message",
+                      "description": "Emergency description",
+                      "type": "textarea",
+                      "required": false
+                    }
+                  ],
+                  "hasDefaultTargeting": true,
+                  "targetingSummary": "Developers (21 Users), Qa (12 Users), IT (15 Users), John Doe, Bob Dylan, nofullname@email.com",
+                  "targetedCount": 42
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Template ID is an invalid format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestTemplateId"
+                },
+                "example": {
+                  "message": "The request is invalid."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - TemplateId was not found"
+          },
+          "429": {
+            "description": "Failed - Rate limit is exceeded"
+          }
+        }
+      }
+    },
+    "/content/previewFromTemplate": {
+      "post": {
+        "tags": [
+          "Content"
+        ],
+        "summary": "Preview From Template",
+        "description": "Create and return a preview from a specified template",
+        "operationId": "preview-from-template",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PreviewFromTemplateRequest"
+              },
+              "example": {
+                "templateId": "6e335920-2fe0-42b0-aee5-dfb866137d1a",
+                "fields": [
+                  {
+                    "name": "title",
+                    "value": "Storm incoming"
+                  },
+                  {
+                    "name": "description",
+                    "value": "Do not go outside and stay safe."
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Preview",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PreviewFromTemplateResponse"
+                },
+                "example": {
+                  "previewUrl": "https://everbridge7.content.snapcomms.tech/SnapComms.API/v1/view/SharedPreview/P2SKbTJE[2bEI781BQAQaWhzYqOisRqpRuqTA9en0ZKJZM19ZyTW6u10yAuj0rmSKA"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentPublish400"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Failed - Rate limit is exceeded"
+          }
+        }
+      }
+    },
+    "/content/publishFromTemplate": {
+      "post": {
+        "tags": [
+          "Content"
+        ],
+        "summary": "Publish From Template",
+        "description": "Create and publish a new content from a specified template",
+        "operationId": "publish-from-template",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PublishFromTemplateRequest"
+              },
+              "example": {
+                "templateId": "6e335920-2fe0-42b0-aee5-dfb866137d1a",
+                "externalId": "UniqueExternalId",
+                "contentName": "Incoming Storm - 27/04/2022 08:00 am",
+                "durationInMinutes": 60,
+                "startTime": "2022-04-31T15:00:28+13:00",
+                "targets": [
+                  {
+                    "type": "group",
+                    "id": "d300f1ee-6c54-4b01-90e6-d701748f0843"
+                  }
+                ],
+                "fields": [
+                  {
+                    "name": "title",
+                    "value": "Storm incoming"
+                  },
+                  {
+                    "name": "description",
+                    "value": "Do not go outside and stay safe."
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created - content has been published",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublishFromTemplateResponse"
+                },
+                "example": {
+                  "contentId": "e1231960-da4d-4f30-aea8-742bf538d7f3",
+                  "status": "published",
+                  "targetedUsers": 1
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentPublish400"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Failed - Quota is exceeded"
+          },
+          "409": {
+            "description": "Failed - Duplicate Content Name"
+          },
+          "429": {
+            "description": "Failed - Rate limit is exceeded"
+          }
+        }
+      }
+    },
+    "/content/disable/{contentId}": {
+      "put": {
+        "tags": [
+          "Content"
+        ],
+        "summary": "Disable",
+        "description": "Disable a published content",
+        "operationId": "content-disable",
+        "parameters": [
+          {
+            "name": "contentId",
+            "in": "path",
+            "description": "Format - uuid. the id of the content",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "example": "e1231960-da4d-4f30-aea8-742bf538d7f3"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content - content has been disabled"
+          },
+          "400": {
+            "description": "Bad Request - ContentId is invalid format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestTemplateId"
+                },
+                "example": {
+                  "message": "The request is invalid."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - ContentId was not found"
+          },
+          "429": {
+            "description": "Failed - Rate limit is exceeded"
+          }
+        }
+      }
+    },
+    "/content/statistics/{contentId}": {
+      "get": {
+        "tags": [
+          "Content"
+        ],
+        "summary": "Statistics",
+        "description": "Get published content statistics (resulting statistics may have a delay of up to 10 minutes)",
+        "operationId": "content-statistics",
+        "parameters": [
+          {
+            "name": "contentId",
+            "in": "path",
+            "description": "Format - uuid. the id of the content",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "example": "e1231960-da4d-4f30-aea8-742bf538d7f3"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK - Content Statistics",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentStatistics"
+                },
+                "example": {
+                  "contentId": "e1231960-da4d-4f30-aea8-742bf538d7f3",
+                  "contentStatus": "published",
+                  "targetedCount": 42,
+                  "reachedCount": 38,
+                  "successCount": 30
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - ContentId is invalid format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestTemplateId"
+                },
+                "example": {
+                  "message": "The request is invalid."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Failed - Quota is exceeded"
+          },
+          "404": {
+            "description": "Not Found - ContentId was not found"
+          },
+          "429": {
+            "description": "Failed - Rate limit is exceeded"
+          }
+        }
+      }
+    },
+    "/reports/publishingstatistics": {
+      "get": {
+        "tags": [
+          "Reports"
+        ],
+        "summary": "Report - Publishing Statistics",
+        "description": "",
+        "operationId": "report-publishing-statistics",
+        "parameters": [
+          {
+            "name": "startDate",
+            "in": "query",
+            "description": "Defaults to UTC minus 7 days (e.g. 2023-05-08T04:24:56.463Z)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "description": "Defaults  to UTC (e.g. 2023-05-08T04:24:56.463Z)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportPublishingStatisticsResponse"
+                },
+                "example": {
+                  "content": [
+                    {
+                      "publishDate": "2023-05-08T04:24:56.4630000+00:00",
+                      "name": "CEO Update Video Alert",
+                      "version": "1",
+                      "channel": "Video Alert",
+                      "folder": "FolderName",
+                      "templateName": "Video Alert",
+                      "publisher": "publisher@company.com",
+                      "creator": "creator@company.com",
+                      "successPercentage": "100.00",
+                      "targetedCount": "1",
+                      "reachCount": "1",
+                      "totalReadCount": "1",
+                      "readCount": "1",
+                      "completedCount": "0",
+                      "totalReadLaterCount": "0",
+                      "totalDismissedCount": "0",
+                      "totalPopupCount": "1",
+                      "clientID": "bf732195-5825-4de1-ae8e-2d532ed5da54",
+                      "campaignID": "bf732195-5825-4de1-ae8e-2d532ed5da54",
+                      "assetTypeID": "101",
+                      "assetID": "bf732195-5825-4de1-ae8e-2d532ed5da54",
+                      "templateID": "bf732195-5825-4de1-ae8e-2d532ed5da54",
+                      "itemId": "bf732195-5825-4de1-ae8e-2d532ed5da54",
+                      "lastUpdated": "2023-05-08T04:25:50.1800000+00:00",
+                      "startDate": "2023-05-08T04:24:56.4630000+00:00",
+                      "startDateFormat": "UTC",
+                      "endDate": "2023-05-15T04:24:54.1800000+00:00",
+                      "endDateFormat": "UTC"
+                    }
+                  ],
+                  "successSummary": {
+                    "contentTypes": [
+                      {
+                        "label": "Video Alert",
+                        "value": "100.00"
+                      }
+                    ],
+                    "folders": [
+                      {
+                        "label": "Test",
+                        "value": "100.00"
+                      }
+                    ],
+                    "publishers": [
+                      {
+                        "label": "publisher@company.com",
+                        "value": "100.00"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Failed - Rate limit is exceeded"
+          }
+        }
+      }
+    },
+    "/reports/users": {
+      "get": {
+        "tags": [
+          "Reports"
+        ],
+        "summary": "Report - Users",
+        "operationId": "report-users",
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/reports/successreport/{assetid}": {
+      "get": {
+        "tags": [
+          "Reports"
+        ],
+        "summary": "Report - Success Report",
+        "description": "",
+        "operationId": "report-success-report",
+        "parameters": [
+          {
+            "name": "assetid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "description": "Defaults to UTC minus 2 years (e.g. 2023-05-08T04:24:56.463Z)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "description": "Defaults to UTC (e.g. 2023-05-08T04:24:56.463Z)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "description": "Defaults to -1 which is equivalent to \"consolidated\". -2 means all versions, any positive value limit the result to a specific content version",
+            "schema": {
+              "enum": [
+                "-1"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportSuccesReportResponse"
+                },
+                "example": {
+                  "details": [
+                    {
+                      "userName": "Demo.User",
+                      "contentVersion": "(consolidated)",
+                      "reached": "false",
+                      "success": "false",
+                      "totalSuccess": "0",
+                      "consumerId": "bf732195-5825-4de1-ae8e-2d532ed5da54",
+                      "domainName": "CORP",
+                      "itemID": "bf732195-5825-4de1-ae8e-2d532ed5da54",
+                      "lastConnectDate": "2023-05-16T04:05:57.0000000+00:00",
+                      "completedCount": "0",
+                      "dismissedCount": "0",
+                      "alertPopupCount": "0",
+                      "readLaterCount": "0",
+                      "timeOutCount": "0",
+                      "urgentDisplayCount": "0",
+                      "organizationalUnit": null,
+                      "popupOnScreenTime": "0",
+                      "alertOnScreenTime": "0",
+                      "urgentOnScreenTime": "0"
+                    }
+                  ],
+                  "summary": {
+                    "_AssetType": "101",
+                    "assetName": "Test Content",
+                    "_AssetTypeId": "101",
+                    "assetType": "Desktop Alert",
+                    "assetTypeName": "infoalert",
+                    "_AssetStatus": "P",
+                    "lastPublishDate": "2023-05-16T02:30:56.8200000+00:00",
+                    "publishCount": "1",
+                    "targetCount": "2",
+                    "publishDate": "2023-05-16T02:30:56.8200000+00:00",
+                    "campaignName": "FolderName"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Content not found"
+          },
+          "429": {
+            "description": "Failed - Rate limit is exceeded"
+          }
+        }
+      }
+    },
+    "/reports/QuestionnaireSummary/{assetid}": {
+      "get": {
+        "tags": [
+          "Reports"
+        ],
+        "summary": "Report - Questionnaire Summary",
+        "description": "",
+        "operationId": "report-questionnaire-summary",
+        "parameters": [
+          {
+            "name": "assetid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "description": "Defaults to UTC minus 2 years (e.g. 2023-05-08T04:24:56.463Z)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "description": "Defaults to UTC (e.g. 2023-05-08T04:24:56.463Z)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "description": "Defaults to 1, any positive value limit the result to a specific content version",
+            "schema": {
+              "enum": [
+                "1"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportQuestionnaireSummaryResponse"
+                },
+                "example": {
+                  "assetId": "bf732195-5825-4de1-ae8e-2d532ed5da54",
+                  "questions": [
+                    {
+                      "name": "Q1",
+                      "number": 1,
+                      "numberOfSubmissions": 1,
+                      "numberOfRespondents": 0,
+                      "numberOfNotAnswered": 0,
+                      "mandatory": false,
+                      "questionType": 6,
+                      "responses": [
+                        {
+                          "number": 1,
+                          "text": "A1",
+                          "count": 1,
+                          "percentage": 100,
+                          "isCorrect": null,
+                          "submissionTime": null
+                        },
+                        {
+                          "number": 2,
+                          "text": "A3",
+                          "count": 1,
+                          "percentage": 100,
+                          "isCorrect": null,
+                          "submissionTime": null
+                        }
+                      ]
+                    }
+                  ],
+                  "version": 2,
+                  "startDate": "2021-06-01T01:26:50.0000000+00:00",
+                  "endDate": "2023-06-01T01:26:50.0000000+00:00"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Content not found"
+          },
+          "429": {
+            "description": "Failed - Rate limit is exceeded"
+          }
+        }
+      }
+    },
+    "/reports/QuestionnaireResponses/{assetid}": {
+      "get": {
+        "tags": [
+          "Reports"
+        ],
+        "summary": "Report - Questionnaire Responses",
+        "description": "",
+        "operationId": "report-questionnaire-responses",
+        "parameters": [
+          {
+            "name": "assetid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "description": "Defaults to UTC minus 2 years (e.g. 2023-05-08T04:24:56.463Z)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "description": "Defaults to UTC (e.g. 2023-05-08T04:24:56.463Z)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "description": "Defaults to -2 which is equivalent to \"all content versions\", any positive value limit the result to a specific content version.",
+            "schema": {
+              "enum": [
+                "-2"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportQuestionnaireResponsesResponse"
+                },
+                "example": {
+                  "responses": [
+                    {
+                      "version": "2",
+                      "questionNo": "1",
+                      "questionText": "Q1",
+                      "submissionTime": "2023-06-01T00:56:04.8100000+00:00",
+                      "completionTime": "6.39",
+                      "consumerId": "5bca85dd-05f4-453e-8d40-e4e1d727aaa3",
+                      "userName": "user@company.com",
+                      "fullName": "FirstName LastName",
+                      "response": "A1, A3",
+                      "score": "0",
+                      "type": "6"
+                    }
+                  ],
+                  "version": "-2",
+                  "startDate": "2021-06-01T01:06:06.0000000+00:00",
+                  "endDate": "2023-06-01T01:06:06.0000000+00:00"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Content not found"
+          },
+          "429": {
+            "description": "Failed - Rate limit is exceeded"
+          }
+        }
+      }
+    },
+    "/Machine/Delete": {
+      "post": {
+        "tags": [
+          "User Management"
+        ],
+        "operationId": "user-management-delete-machines",
+        "summary": "Delete Machines",
+        "description": "Mark specified machines as deleted",
+        "requestBody": {
+          "x-name": "consumerIds",
+          "description": "A list of Consumer IDs. The Consumer ID for a machine can be retrieved with the [Machine](/reference/user-management-machines) endpoint",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "uuid",
+                  "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+                }
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/user/delete/": {
+      "post": {
+        "tags": [
+          "User Management"
+        ],
+        "summary": "Delete Users",
+        "description": "Mark specified users as deleted",
+        "operationId": "user-management-delete-users",
+        "requestBody": {
+          "description": "A list of Consumer IDs. The Consumer ID for a User can be retrieved with the [User](/reference/user-management-get-users) endpoint",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "uuid",
+                  "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+                }
+              },
+              "example": [
+                "5bca85dd-05f4-453e-8d40-e4e1d727aaa3"
+              ]
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/Machine/Disable": {
+      "post": {
+        "tags": [
+          "User Management"
+        ],
+        "operationId": "user-management-disable-machines",
+        "summary": "Disable Machines",
+        "description": "Mark specified machines as disabled",
+        "requestBody": {
+          "x-name": "consumerIds",
+          "description": "A list of Consumer IDs. The Consumer ID for a Machine can be retrieved with the [Machine](/reference/user-management-machines) endpoint",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "uuid",
+                  "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+                }
+              },
+              "example": [
+                "d290f1ee-6c54-4b01-90e6-d701748f0851"
+              ]
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/User/Disable": {
+      "post": {
+        "tags": [
+          "User Management"
+        ],
+        "operationId": "user-management-disable-users",
+        "summary": "Disable Users",
+        "description": "Mark specified users as disabled",
+        "requestBody": {
+          "x-name": "consumerIds",
+          "description": "A list of Consumer IDs. The Consumer ID for a User can be retrieved with the [User](/reference/user-management-get-users) endpoint",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "uuid",
+                  "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+                },
+                "example": [
+                  "d290f1ee-6c54-4b01-90e6-d701748f0851"
+                ]
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/Group/{groupId}/Members": {
+      "post": {
+        "tags": [
+          "User Management"
+        ],
+        "operationId": "user-management-group-members",
+        "summary": "Group Users and Machines",
+        "description": "Get all users and machines in a specified group",
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "d300f1ee-6c54-4b01-90e6-d701748f0843"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "getDataModel",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetDataModel"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetDataResponseModelOfGroupMemberModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Group": {
+      "get": {
+        "tags": [
+          "User Management"
+        ],
+        "operationId": "user-management-groups",
+        "summary": "Groups",
+        "description": "Get all groups",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GroupModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Machine": {
+      "get": {
+        "tags": [
+          "User Management"
+        ],
+        "operationId": "user-management-machines",
+        "summary": "Machines",
+        "description": "Get all machines",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MachineModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/": {
+      "get": {
+        "tags": [
+          "User Management"
+        ],
+        "summary": "Users",
+        "description": "Get all users",
+        "operationId": "user-management-get-users",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "Tag": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique Id of the tag",
+            "example": "ITCommunications"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the tag",
+            "example": "IT Communications"
+          },
+          "parentId": {
+            "type": "string",
+            "nullable": true,
+            "description": "Tag Id of the parent. Returns null value if there is not a parent tag"
+          }
+        }
+      },
+      "TagResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Tag"
+        }
+      },
+      "StatusResponse": {
+        "properties": {
+          "isOperational": {
+            "type": "boolean",
+            "description": "Value indicating whether the backend server is operational",
+            "example": "true"
+          },
+          "timeStamp": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2020-07-21T17:32:28Z"
+          },
+          "onlineServices": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "Login Services",
+              "Push Notification Service"
+            ]
+          },
+          "offlineServices": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OfflineService"
+            }
+          }
+        }
+      },
+      "OfflineService": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Value indicating whether the backend server is operational",
+            "example": "CommService"
+          },
+          "error": {
+            "type": "string",
+            "description": "Error message for the offline service",
+            "example": "Error: The operation has timed out"
+          }
+        }
+      },
+      "Group": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the group",
+            "example": "d300f1ee-6c54-4b01-90e6-d701748f0843"
+          },
+          "name": {
+            "type": "string",
+            "description": "Group Name",
+            "example": "NZ-Auckland"
+          },
+          "memberCount": {
+            "type": "integer",
+            "description": "Number of recipients.",
+            "example": 42
+          },
+          "description": {
+            "type": "string",
+            "description": "Group Description",
+            "example": "All Auckland users",
+            "nullable": true
+          }
+        }
+      },
+      "GroupResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Group"
+        }
+      },
+      "TargetingAttribute": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the attribute",
+            "example": "d300f1ee-6c54-4b01-90e6-d701748f0843"
+          },
+          "name": {
+            "type": "string",
+            "description": "Attribute Name",
+            "example": "Department"
+          },
+          "type": {
+            "type": "string",
+            "description": "Type of attribute",
+            "enum": [
+              "User",
+              "Machine"
+            ]
+          }
+        }
+      },
+      "TargetingAttributeResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TargetingAttribute"
+        }
+      },
+      "PublishingTarget": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Target type"
+          },
+          "id": {
+            "type": "string",
+            "nullable": true,
+            "description": "Target Id relevant to the target type (eg: GroupId). Null if irrelevant for the type"
+          }
+        }
+      },
+      "Token": {
+        "properties": {
+          "token": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXJ2ZXI6YWNjZXNzX3Rva2VuIjoia08tTHFyNm5Cd09vV1FrZTlLVU1zSS11aWpWYWVHaTA1TGFIZ3VscjZfelZ5eHV2MjEwa1plNFVXNnRKUUp6MXBiaDU1RVpKZDNaMlEtYlZsaFluSmNWcC1ZZjVkdGlQSm1SdklNNzVCS2I0SzVYeUhTdzAybmR2dnVEeGxIbG1HS2NyZjhqYUx3MG1nMjVEZ3V5ODdUU282SklnRUJMcnVQMVp5SFNHeWtCeWVnVVpRQmx1LTk1c0Uta0lKa0pYNEJSUWdWVTNkTDJXbDIwY3dBWjhVZ1JLbWNabTYwUUY1T1NteVJEQ0FvaXpwZXZabGdfZVdIMElFM2tvbmZtYjR1UU9XQk14OFpPLTVSa3RhbGJ6ZS1MUUl0TklVbkE2SFJEWXFlVFd1RHpMVmR6NzBPdTJDcEczSW90bnR3UUhFQ190NFVFMXRSLWZEQ2k4U25qb240R2YzckdDaUY4MzFtQ0hYeTlIaHJ4enRDNGRWdWdDOU4zUlVraHJNbzc5QWdUSHNnVnJzajdGNzB4ZnJRWWVsRWtTWnYweFh1b3oxNGRhRmF4RXRBLXVFX1dFOGNJaU9qWUpPR2RiZmppTm9Zc2ctX0k4Z2F6T2VFWTFEUXo4eXR0TXB6Z1dtUzRXaXpWVkxNeElFX204czYydlhJYjkyUGRVVHFxTlRRQlJQRjlZNTlXTjJMcmttZHh2Qnp0N0tQMmF1aXl0MEZZaHQ1U0lWS2hlWW1YSTczampUVXRNQUdMNmFIbjhKZXNFU0xsYkR6X1I1OVlyNmNza3paZ0hPaVFvUzFPdFVQV2dSR0pOSmtQTEhjMFlyTnZsXzY1eUNQNXBFemo3SGVlU19JWUJXZHA3ZWdqOFplakxpOE1uVVBxdUUwblNJY04xVUtwb2t3Q0c1SDRXOXN4eWZqYzJhV0pvRnowNHFOenl2eTJObHFUeDZyeHRGTlpsbjVvd1NvTVdUVWlQSUw0YmpORkJtMEZEVFRDQURYR2l2dTdYcENTWllnTHZQLXUtOFRDSDdfMjRIck9kUkhOazhadFhCQSIsInNlcnZlcjpyZWZyZXNoX3Rva2VuIjoiYzBmM2MxMmZiYjZlNGYxMTkzZWIzYzliMzI1MmQ2OWUiLCJzZXJ2ZXI6ZXhwaXJlc19pbiI6IjE3OTkiLCJzZXJ2ZXI6dXJsIjoiaHR0cHM6Ly9teW9yZy5zbmFwY29tbXMuY29tL1NuYXBDb21tcy5BUEkvIiwic2VydmVyOnRlbmFudF9pZCI6IjMxNmZmYmY5LWRjMDEtNDgxMC1hYmM1LWE0N2IzMGNjNjUwOCIsIm5iZiI6MTYxMjMxNDA2NywiZXhwIjoxNjEyMzE1ODY2LCJpYXQiOjE2MTIzMTQwNjcsImlzcyI6Imh0dHBzOi8vbG9naW4uc25hcGNvbW1zLmNvbSJ9.Z7ClfuVH5X84OBnXaiIF21I7xfTbub6VX8A0rbWTyfg"
+          }
+        }
+      },
+      "ContentTemplates": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "d300f1ee-6c54-4b01-90e6-d701748f0843"
+          },
+          "name": {
+            "type": "string",
+            "example": "Active Shooter!"
+          },
+          "status": {
+            "enum": [
+              "active"
+            ],
+            "type": "string",
+            "example": "active"
+          },
+          "type": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "description": {
+            "type": "string",
+            "example": "Use this for shooter alert"
+          },
+          "previewImageUrl": {
+            "type": "string",
+            "example": "Preview Image URL of a template"
+          }
+        }
+      },
+      "ContentTemplate": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "d300f1ee-6c54-4b01-90e6-d701748f0843"
+          },
+          "type": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "name": {
+            "type": "string",
+            "example": "Active Shooter!"
+          },
+          "status": {
+            "enum": [
+              "active"
+            ],
+            "type": "string",
+            "example": "active"
+          },
+          "description": {
+            "type": "string",
+            "example": "Use this for shooter alert"
+          },
+          "previewImageUrl": {
+            "type": "string",
+            "example": "Preview Image URL of a template"
+          },
+          "fields": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/TemplateField"
+            }
+          },
+          "hasDefaultTargeting": {
+            "type": "boolean",
+            "description": "True if the template has a valid default targeting, otherwise false",
+            "nullable": false,
+            "example": true
+          },
+          "targetingSummary": {
+            "type": "string",
+            "description": "Summary of the template default targeting",
+            "nullable": true,
+            "example": "Developers (21 Users), Qa (12 Users), IT (15 Users), John Doe, Bob Dylan, nofullname@email.com"
+          },
+          "targetedCount": {
+            "type": "integer",
+            "description": "Estimated total number of targeted users by the template default targeting",
+            "nullable": true,
+            "example": 42
+          }
+        }
+      },
+      "TemplateField": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "description": "Type of field as a guidance for building a UI. Enums values can be added in the future; therefore, the client should default to text if the value is unknown.",
+            "enum": [
+              "text",
+              "textarea"
+            ]
+          },
+          "required": {
+            "type": "boolean",
+            "description": "True if the field is required for publishing"
+          }
+        }
+      },
+      "PublishFromTemplateRequest": {
+        "required": [
+          "templateId",
+          "durationInMinutes"
+        ],
+        "type": "object",
+        "properties": {
+          "templateId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+          },
+          "externalId": {
+            "type": "string",
+            "nullable": true,
+            "example": "externalId1"
+          },
+          "contentName": {
+            "type": "string",
+            "nullable": true,
+            "example": "Incoming Storm - 27/04/2022 08:00 am",
+            "description": "Unique content name with a maximum number of 150 characters. This name must be unique and it is recommended to leave this field null to let the system automatically generate a unique name."
+          },
+          "durationInMinutes": {
+            "type": "integer",
+            "example": 60
+          },
+          "startTime": {
+            "nullable": true,
+            "type": "string",
+            "format": "date-time",
+            "example": "2020-07-21T17:32:28Z",
+            "description": "Optional date and time for the message to be publish to the targeted users. Null to publish the message immediately. Date format folowing https://en.wikipedia.org/wiki/ISO_8601 including date, time and timezone."
+          },
+          "targets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PublishingTarget"
+            },
+            "nullable": true,
+            "description": "Recipients of the content"
+          },
+          "fields": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/FieldValue"
+            }
+          }
+        }
+      },
+      "PublishFromTemplateResponse": {
+        "type": "object",
+        "properties": {
+          "contentId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "86854452-a1d9-4c44-9bbe-07c93a46021c"
+          },
+          "status": {
+            "type": "string",
+            "$ref": "#/components/schemas/ContentStatus",
+            "example": "published"
+          },
+          "targetedUsers": {
+            "type": "integer",
+            "example": 1
+          }
+        }
+      },
+      "PreviewFromTemplateRequest": {
+        "required": [
+          "templateId"
+        ],
+        "type": "object",
+        "properties": {
+          "templateId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+          },
+          "fields": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/FieldValue"
+            }
+          }
+        }
+      },
+      "PreviewFromTemplateResponse": {
+        "type": "object",
+        "properties": {
+          "previewUrl": {
+            "type": "string"
+          }
+        }
+      },
+      "FieldValue": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ContentStatistics": {
+        "type": "object",
+        "properties": {
+          "contentId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "e1231960-da4d-4f30-aea8-742bf538d7f3"
+          },
+          "contentStatus": {
+            "type": "string",
+            "$ref": "#/components/schemas/ContentStatus",
+            "example": "published"
+          },
+          "targetedCount": {
+            "type": "integer"
+          },
+          "reachedCount": {
+            "type": "integer"
+          },
+          "successCount": {
+            "type": "integer"
+          }
+        }
+      },
+      "ContentStatus": {
+        "type": "string",
+        "enum": [
+          "draft",
+          "published",
+          "disabled",
+          "deleted",
+          "expired"
+        ]
+      },
+      "BadRequestTemplateId": {
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "The request is invalid."
+          }
+        }
+      },
+      "ContentPublish400": {
+        "properties": {
+          "message": {
+            "enum": [
+              "TemplateId is invalid",
+              "TemplateId could not be found or is not available",
+              "BodyFormat is invalid",
+              "DurationInMinutes must be greater than 0",
+              "The end date must be in the future",
+              "ContentName must not exceed 150 charaters",
+              "Account does not have permissions to all targeted groups",
+              "Invalid targeting type",
+              "Invalid attribute ID",
+              "Account does not have permissions to target by attributes",
+              "Account does not have permissions to target groups"
+            ],
+            "type": "string",
+            "example": "TemplateId is invalid"
+          }
+        }
+      },
+      "ReportPublishingStatisticsResponse": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "required": [
+                "publishDate",
+                "name",
+                "version",
+                "channel",
+                "folder",
+                "templateName",
+                "publisher",
+                "creator",
+                "successPercentage",
+                "targetedCount",
+                "reachCount",
+                "totalReadCount",
+                "readCount",
+                "completedCount",
+                "totalReadLaterCount",
+                "totalDismissedCount",
+                "totalPopupCount",
+                "clientID",
+                "campaignID",
+                "assetTypeID",
+                "assetID",
+                "templateID",
+                "itemId",
+                "startDate",
+                "startDateFormat",
+                "endDate",
+                "endDateFormat"
+              ],
+              "type": "object",
+              "properties": {
+                "publishDate": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "version": {
+                  "type": "string"
+                },
+                "channel": {
+                  "type": "string"
+                },
+                "folder": {
+                  "type": "string"
+                },
+                "templateName": {
+                  "type": "string"
+                },
+                "publisher": {
+                  "type": "string"
+                },
+                "creator": {
+                  "type": "string"
+                },
+                "successPercentage": {
+                  "type": "string"
+                },
+                "targetedCount": {
+                  "type": "string"
+                },
+                "reachCount": {
+                  "type": "string"
+                },
+                "totalReadCount": {
+                  "type": "string"
+                },
+                "readCount": {
+                  "type": "string"
+                },
+                "completedCount": {
+                  "type": "string"
+                },
+                "totalReadLaterCount": {
+                  "type": "string"
+                },
+                "totalDismissedCount": {
+                  "type": "string"
+                },
+                "totalPopupCount": {
+                  "type": "string"
+                },
+                "clientID": {
+                  "type": "string"
+                },
+                "campaignID": {
+                  "type": "string"
+                },
+                "assetTypeID": {
+                  "type": "string"
+                },
+                "assetID": {
+                  "type": "string"
+                },
+                "templateID": {
+                  "type": "string"
+                },
+                "itemId": {
+                  "type": "string"
+                },
+                "lastUpdated": {
+                  "type": "string"
+                },
+                "startDate": {
+                  "type": "string"
+                },
+                "startDateFormat": {
+                  "type": "string"
+                },
+                "endDate": {
+                  "type": "string"
+                },
+                "endDateFormat": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "types": {
+            "type": "array",
+            "items": {
+              "required": [
+                "label",
+                "value"
+              ],
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "folders": {
+            "type": "array",
+            "items": {
+              "required": [
+                "label",
+                "value"
+              ],
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "admins": {
+            "type": "array",
+            "items": {
+              "required": [
+                "label",
+                "value"
+              ],
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ReportSuccesReportResponse": {
+        "type": "object",
+        "properties": {
+          "details": {
+            "type": "array",
+            "items": {
+              "required": [
+                "userName",
+                "contentVersion",
+                "reached",
+                "success",
+                "totalSuccess",
+                "consumerId",
+                "domainName",
+                "itemID",
+                "lastConnectDate",
+                "completedCount",
+                "dismissedCount",
+                "alertPopupCount",
+                "readLaterCount",
+                "timeOutCount",
+                "urgentDisplayCount",
+                "organizationalUnit",
+                "popupOnScreenTime",
+                "alertOnScreenTime",
+                "urgentOnScreenTime"
+              ],
+              "type": "object",
+              "properties": {
+                "userName": {
+                  "type": "string"
+                },
+                "contentVersion": {
+                  "type": "string"
+                },
+                "reached": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "string"
+                },
+                "totalSuccess": {
+                  "type": "string"
+                },
+                "consumerId": {
+                  "type": "string"
+                },
+                "domainName": {
+                  "type": "string"
+                },
+                "itemID": {
+                  "type": "string"
+                },
+                "lastConnectDate": {
+                  "type": "string"
+                },
+                "completedCount": {
+                  "type": "string"
+                },
+                "dismissedCount": {
+                  "type": "string"
+                },
+                "alertPopupCount": {
+                  "type": "string"
+                },
+                "readLaterCount": {
+                  "type": "string"
+                },
+                "timeOutCount": {
+                  "type": "string"
+                },
+                "urgentDisplayCount": {
+                  "type": "string"
+                },
+                "organizationalUnit": {},
+                "popupOnScreenTime": {
+                  "type": "string"
+                },
+                "alertOnScreenTime": {
+                  "type": "string"
+                },
+                "urgentOnScreenTime": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "summary": {
+            "type": "object",
+            "properties": {
+              "_AssetType": {
+                "type": "string"
+              },
+              "assetName": {
+                "type": "string"
+              },
+              "_AssetTypeId": {
+                "type": "string"
+              },
+              "assetType": {
+                "type": "string"
+              },
+              "assetTypeName": {
+                "type": "string"
+              },
+              "_AssetStatus": {
+                "type": "string"
+              },
+              "lastPublishDate": {
+                "type": "string"
+              },
+              "publishCount": {
+                "type": "string"
+              },
+              "targetCount": {
+                "type": "string"
+              },
+              "publishDate": {
+                "type": "string"
+              },
+              "campaignName": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "ReportQuestionnaireResponsesResponse": {
+        "type": "object",
+        "properties": {
+          "responses": {
+            "type": "array",
+            "items": {
+              "required": [
+                "version",
+                "questionNo",
+                "questionText",
+                "submissionTime",
+                "completionTime",
+                "consumerId",
+                "userName",
+                "fullName",
+                "response",
+                "score",
+                "type"
+              ],
+              "type": "object",
+              "properties": {
+                "version": {
+                  "type": "string"
+                },
+                "questionNo": {
+                  "type": "string"
+                },
+                "questionText": {
+                  "type": "string"
+                },
+                "submissionTime": {
+                  "type": "string"
+                },
+                "completionTime": {
+                  "type": "string"
+                },
+                "consumerId": {
+                  "type": "string"
+                },
+                "userName": {
+                  "type": "string"
+                },
+                "fullName": {
+                  "type": "string"
+                },
+                "response": {
+                  "type": "string"
+                },
+                "score": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "version": {
+            "type": "string"
+          },
+          "startDate": {
+            "type": "string"
+          },
+          "endDate": {
+            "type": "string"
+          }
+        }
+      },
+      "ReportQuestionnaireSummaryResponse": {
+        "type": "object",
+        "properties": {
+          "assetId": {
+            "type": "string"
+          },
+          "questions": {
+            "type": "array",
+            "items": {
+              "required": [
+                "name",
+                "number",
+                "numberOfSubmissions",
+                "numberOfRespondents",
+                "numberOfNotAnswered",
+                "mandatory",
+                "questionType",
+                "responses"
+              ],
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "number": {
+                  "type": "integer"
+                },
+                "numberOfSubmissions": {
+                  "type": "integer"
+                },
+                "numberOfRespondents": {
+                  "type": "integer"
+                },
+                "numberOfNotAnswered": {
+                  "type": "integer"
+                },
+                "mandatory": {
+                  "type": "boolean"
+                },
+                "questionType": {
+                  "type": "integer"
+                },
+                "responses": {
+                  "type": "array",
+                  "items": {
+                    "required": [
+                      "number",
+                      "text",
+                      "count",
+                      "percentage",
+                      "isCorrect",
+                      "submissionTime"
+                    ],
+                    "type": "object",
+                    "properties": {
+                      "number": {
+                        "type": "integer"
+                      },
+                      "text": {
+                        "type": "string"
+                      },
+                      "count": {
+                        "type": "integer"
+                      },
+                      "percentage": {
+                        "type": "integer"
+                      },
+                      "isCorrect": {},
+                      "submissionTime": {}
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "version": {
+            "type": "integer"
+          },
+          "startDate": {
+            "type": "string"
+          },
+          "endDate": {
+            "type": "string"
+          }
+        }
+      },
+      "ConsumerStatus": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "Active",
+          "Inactive",
+          "Deleted",
+          "Disabled"
+        ],
+        "enum": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      "ConsumerKind": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "User",
+          "Machine"
+        ],
+        "enum": [
+          0,
+          1
+        ]
+      },
+      "UserModel": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/UserBaseModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "userPrincipalName": {
+                "type": "string",
+                "nullable": true
+              },
+              "userNotes": {
+                "type": "string",
+                "nullable": true
+              },
+              "lastConnectedMachine": {
+                "type": "string",
+                "nullable": true
+              },
+              "lastConnectedPlatform": {
+                "type": "string",
+                "nullable": true
+              },
+              "lastOsVersion": {
+                "type": "string",
+                "nullable": true
+              },
+              "lastClientVersion": {
+                "type": "string",
+                "nullable": true
+              },
+              "status": {
+                "$ref": "#/components/schemas/ConsumerStatus"
+              },
+              "isVerified": {
+                "type": "boolean"
+              },
+              "organizationalUnit": {
+                "type": "string",
+                "nullable": true
+              },
+              "dataSourceName": {
+                "type": "string",
+                "nullable": true
+              },
+              "numberOfGroups": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "autoCreated": {
+                "type": "boolean"
+              },
+              "comment": {
+                "type": "string",
+                "nullable": true
+              },
+              "corporateConsumerKindId": {
+                "$ref": "#/components/schemas/ConsumerKind"
+              },
+              "corporateConsumerKind": {
+                "type": "string",
+                "nullable": true
+              },
+              "firstConnectDateUtc": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              "lastConnectDateUtc": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              "createdTimeUtc": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              "distinguishedName": {
+                "type": "string",
+                "nullable": true
+              },
+              "lastUpdateUtc": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              "mobileUsername": {
+                "type": "string",
+                "nullable": true
+              },
+              "sms": {
+                "type": "string",
+                "nullable": true
+              },
+              "machineId": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          }
+        ]
+      },
+      "UserBaseModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "consumerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "organisationId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "userName": {
+            "type": "string",
+            "nullable": true
+          },
+          "domainName": {
+            "type": "string",
+            "nullable": true
+          },
+          "fullName": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "GroupModel": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/GroupDetailModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "organizationalUnit": {
+                "type": "string",
+                "nullable": true
+              },
+              "corporateGroupKind": {
+                "type": "string",
+                "nullable": true
+              },
+              "distinguishedName": {
+                "type": "string",
+                "nullable": true
+              }
+            }
+          }
+        ]
+      },
+      "GroupDetailModel": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/GroupBaseModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "organisationId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "groupId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "domainName": {
+                "type": "string",
+                "nullable": true
+              },
+              "groupType": {
+                "type": "string",
+                "nullable": true
+              },
+              "autoCreated": {
+                "type": "boolean"
+              },
+              "active": {
+                "type": "boolean"
+              },
+              "createDateUtc": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              "numberOfMembers": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          }
+        ]
+      },
+      "GroupBaseModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "groupName": {
+            "type": "string",
+            "nullable": true
+          },
+          "comment": {
+            "type": "string",
+            "nullable": true
+          },
+          "corporateGroupKindId": {
+            "$ref": "#/components/schemas/ConsumerKind"
+          }
+        }
+      },
+      "GetDataResponseModelOfGroupModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "results": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/GroupModel"
+            }
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GetDataModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "filters": {
+            "type": "object",
+            "nullable": true,
+            "additionalProperties": {
+              "type": "array",
+              "items": {}
+            }
+          },
+          "searchTerm": {
+            "type": "string",
+            "nullable": true
+          },
+          "pagination": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/PaginationModel"
+              }
+            ]
+          },
+          "sorter": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SorterModel"
+              }
+            ]
+          }
+        }
+      },
+      "MachineModel": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/MachineBaseModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "firstConnectDateUtc": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              "lastConnectDateUtc": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              "appVersion": {
+                "type": "string",
+                "nullable": true
+              },
+              "osPlatform": {
+                "type": "string",
+                "nullable": true
+              },
+              "osVersion": {
+                "type": "string",
+                "nullable": true
+              },
+              "consumerKind": {
+                "type": "string",
+                "nullable": true
+              },
+              "dataSourceName": {
+                "type": "string",
+                "nullable": true
+              },
+              "lastConnectedConsumerId": {
+                "type": "string",
+                "format": "uuid",
+                "nullable": true
+              },
+              "lastConnectedDomainName": {
+                "type": "string",
+                "nullable": true
+              },
+              "lastConnectedFullName": {
+                "type": "string",
+                "nullable": true
+              },
+              "lastConnectedUserName": {
+                "type": "string",
+                "nullable": true
+              },
+              "comment": {
+                "type": "string",
+                "nullable": true
+              },
+              "organizationalUnit": {
+                "type": "string",
+                "nullable": true
+              },
+              "numberOfGroups": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "numberOfUsers": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          }
+        ]
+      },
+      "MachineBaseModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/ConsumerStatus"
+          },
+          "deleted": {
+            "type": "boolean"
+          },
+          "consumerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "machineName": {
+            "type": "string",
+            "nullable": true
+          },
+          "fullName": {
+            "type": "string",
+            "nullable": true
+          },
+          "organisationId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "domainName": {
+            "type": "string",
+            "nullable": true
+          },
+          "userNotes": {
+            "type": "string",
+            "nullable": true
+          },
+          "autoCreated": {
+            "type": "boolean"
+          }
+        }
+      },
+      "GetDataResponseModelOfMachineModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "results": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/MachineModel"
+            }
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GetDataResponseModelOfGroupMemberModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "results": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/GroupMemberModel"
+            }
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GroupMemberModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "consumerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "organisationId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "userName": {
+            "type": "string",
+            "nullable": true
+          },
+          "domainName": {
+            "type": "string",
+            "nullable": true
+          },
+          "fullName": {
+            "type": "string",
+            "nullable": true
+          },
+          "organizationalUnit": {
+            "type": "string",
+            "nullable": true
+          },
+          "comment": {
+            "type": "string",
+            "nullable": true
+          },
+          "appVersion": {
+            "type": "string",
+            "nullable": true
+          },
+          "corporateConsumerKind": {
+            "type": "string",
+            "nullable": true
+          },
+          "corporateConsumerKindId": {
+            "$ref": "#/components/schemas/ConsumerKind"
+          },
+          "osPlatform": {
+            "type": "string",
+            "nullable": true
+          },
+          "osVersion": {
+            "type": "string",
+            "nullable": true
+          },
+          "machineName": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "sms": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "$ref": "#/components/schemas/ConsumerStatus"
+          },
+          "lastConnectDateUtc": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "dataSourceName": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "PaginationModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "current": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "SorterModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "field": {
+            "type": "string",
+            "nullable": true
+          },
+          "order": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "SnapComms Authentication",
+      "description": "Authentication related API's"
+    },
+    {
+      "name": "Targeting",
+      "description": "Targeting related API's"
+    },
+    {
+      "name": "Template",
+      "description": "Template related API's"
+    },
+    {
+      "name": "Content",
+      "description": "Content related API's"
+    },
+    {
+      "name": "Utility",
+      "description": "Utility related API's"
+    },
+    {
+      "name": "User Management",
+      "description": "User, Group and Machine related API's"
+    }
+  ],
+  "x-readme": {
+    "explorer-enabled": true,
+    "proxy-enabled": true
+  },
+  "_id": "6310b5f68a3b6f0d7e0290a7"
+}

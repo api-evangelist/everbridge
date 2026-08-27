@@ -1,0 +1,66 @@
+generated: '2026-08-27'
+method: searched
+docs: https://developers.everbridge.net/home/docs/ebs-gs-guide-authentication-types
+source: https://developers.everbridge.net/home/docs/ebs-gs-guide-authentication-types
+provider: Everbridge
+providerId: everbridge
+description: >-
+  OAuth 2.0 scopes for the Everbridge Suite token endpoint. These are the scope values
+  Everbridge publishes verbatim in its authentication guide's request examples; Everbridge
+  does not publish a separate scope-reference page, and the OpenAPI documents declare their
+  security as an apiKey-shaped Authorization header (API_Authorizer) rather than an oauth2
+  securityScheme with a flows.scopes map, so this artifact could not be derived from the
+  specs — derive-oauth-scopes.py returns zero oauth2 schemes.
+token_endpoint: https://api.everbridge.net/authorization/v1/tokens
+grant_types:
+- client_credentials
+- password
+scopes:
+- name: openid
+  description: >-
+    Standard OpenID Connect scope. Required in both the client-credentials and password grant
+    scope strings; its presence is what makes the token endpoint return an id_token.
+  grants:
+  - client_credentials
+  - password
+  source: docs
+- name: user-profile
+  description: >-
+    Requests the API user's profile claims in the issued token. Present in both published
+    grant examples.
+  grants:
+  - client_credentials
+  - password
+  source: docs
+- name: role
+  description: >-
+    Requests the role claim. Works with the optional roleId request header, which selects
+    which of a multi-role user's roles the token is minted for.
+  grants:
+  - client_credentials
+  - password
+  source: docs
+- name: service-profile
+  description: >-
+    Requests the service-account profile claim. Published only in the client-credentials
+    example, which is the machine-to-machine service-account grant.
+  grants:
+  - client_credentials
+  source: docs
+permission_model:
+  style: resource + action (RBAC), configured per service account
+  configured_in: >-
+    Manager Portal Service Account workflow — Account level (Users -> Service Accounts) or
+    Organization level (Settings -> Access -> Service Accounts)
+  example: >-
+    A contact workflow can be scoped to List all contacts + Create a contact + Retrieve the
+    details of a contact while rejecting Delete contact.
+  note: >-
+    Everbridge states that most but NOT all EB Suite REST methods support resource + action
+    permissions, and directs customers to their account manager for prioritization of any
+    method that does not. The concrete per-resource permission list is only visible inside
+    the authenticated Manager Portal, so it is not enumerated here.
+  docs: https://developers.everbridge.net/home/docs/ebs-gs-guide
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

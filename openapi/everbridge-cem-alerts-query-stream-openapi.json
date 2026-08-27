@@ -1,0 +1,160 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "CEM ALERTS API - Query Stream",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.everbridge.net/cem-alerts/stream/v1/",
+      "variables": {
+        "basePath": {
+          "default": "/cem-alerts/stream/v1"
+        }
+      }
+    }
+  ],
+  "tags": [
+    {
+      "name": "CEMA Query Stream",
+      "description": "CEM Alerts APIs"
+    }
+  ],
+  "paths": {
+    "/graphql": {
+      "post": {
+        "tags": [
+          "CEMA Query Stream"
+        ],
+        "operationId": "GraphQL Query",
+        "summary": "GraphQL Query",
+        "description": "This is used to subscribe to a CEMA Query Stream",
+        "x-readme": {
+          "explorer-enabled": false
+        },
+        "requestBody": {
+          "description": "With an open websocket, you can use one of the example queries to subscribe to a CEMA query stream.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "title": "GraphQL Request Body",
+                "type": "object",
+                "description": "Alerts stream subscription example.",
+                "example": "query { subscription read { alertsStream { alertId organization status owner snoozedUntil isActive lastEvent { title correlations { impactGeometry } } alertActions { actionType extendedAttributes { key value } user userInfo { email firstName id lastName userName userStatus } } } } }"
+              },
+              "examples": {
+                "Subscribe to Alerts Stream": {
+                  "summary": "Alerts stream subscription example.",
+                  "value": {
+                    "query": "query { subscription read { alertsStream { alertId organization status owner snoozedUntil isActive lastEvent { title correlations { impactGeometry } } alertActions { actionType extendedAttributes { key value } user userInfo { email firstName id lastName userName userStatus } } } } }"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Empty"
+                }
+              }
+            }
+          }
+        },
+        "security": [],
+        "x-amazon-apigateway-integration": {
+          "type": "http_proxy",
+          "connectionId": "11ofco",
+          "httpMethod": "POST",
+          "uri": "https://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/cema/v1/api/stream/graphql",
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "passthroughBehavior": "when_no_match",
+          "connectionType": "VPC_LINK"
+        }
+      }
+    },
+    "/schema": {
+      "get": {
+        "tags": [
+          "CEMA Query Stream"
+        ],
+        "operationId": "GraphQL Schema",
+        "summary": "GraphQL Schema",
+        "description": "This is used to get the full GraphQL Schema for Query Stream.",
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Empty"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "CEMA_Authorizer": []
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "type": "http_proxy",
+          "connectionId": "11ofco",
+          "httpMethod": "GET",
+          "uri": "https://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/cema/v1/api/stream/schema",
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "passthroughBehavior": "when_no_match",
+          "connectionType": "VPC_LINK"
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Empty": {
+        "title": "Empty Schema",
+        "type": "object"
+      }
+    },
+    "securitySchemes": {
+      "CEMA_Authorizer": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header",
+        "description": "Enter your EB SUITE OAUTH AUTHENTICATION as 'Bearer YOUR_TOKEN_HERE'.",
+        "x-amazon-apigateway-authtype": "custom",
+        "x-amazon-apigateway-authorizer": {
+          "authorizerUri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations",
+          "authorizerCredentials": "arn:aws:iam::214792946631:role/cema-query-stream-prod-us-us-east-1-0-us-east-1-gw",
+          "authorizerResultTtlInSeconds": 300,
+          "identitySource": "method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey",
+          "type": "request"
+        }
+      },
+      "api_key": {
+        "type": "apiKey",
+        "name": "x-api-key",
+        "in": "header"
+      }
+    }
+  },
+  "x-readme": {
+    "explorer-enabled": true,
+    "proxy-enabled": true
+  },
+  "_id": "690cfa95b363389eee1b97a1"
+}

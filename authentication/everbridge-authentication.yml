@@ -1,14 +1,140 @@
-generated: '2026-07-11'
-method: derived
-source: openapi/everbridge-openapi.yml
+generated: '2026-08-27'
+method: searched
+docs: https://developers.everbridge.net/home/docs/ebs-gs-guide-authentication-types
+source: openapi/everbridge-asset-management-openapi.json, openapi/everbridge-asset-query-openapi.json,
+  openapi/everbridge-cem-alerts-query-public-openapi.json, openapi/everbridge-cem-alerts-query-stream-openapi.json,
+  openapi/everbridge-communications-openapi.json, openapi/everbridge-digital-apps-openapi.json,
+  openapi/everbridge-eb-suite-openapi.json, openapi/everbridge-pnr-check-service-openapi.json,
+  openapi/everbridge-risk-intelligence-openapi.json, openapi/everbridge-safety-devices-openapi.json,
+  openapi/everbridge-snapcomms-openapi.json, openapi/everbridge-travel-openapi.json
 summary:
   types:
+  - apiKey
   - http
+  api_key_in:
+  - header
 schemes:
+- name: BasicAuth
+  type: http
+  scheme: basic
+  description: Basic Authentication Token
+  sources:
+  - openapi/everbridge-asset-management-openapi.json
+  - openapi/everbridge-asset-query-openapi.json
+  - openapi/everbridge-eb-suite-openapi.json
+- name: API_Authorizer
+  type: apiKey
+  in: header
+  parameter: Authorization
+  description: oAuth Token
+  sources:
+  - openapi/everbridge-asset-management-openapi.json
+  - openapi/everbridge-asset-query-openapi.json
+  - openapi/everbridge-cem-alerts-query-public-openapi.json
+  - openapi/everbridge-cem-alerts-query-stream-openapi.json
+  - openapi/everbridge-communications-openapi.json
+  - openapi/everbridge-digital-apps-openapi.json
+  - openapi/everbridge-eb-suite-openapi.json
+  - openapi/everbridge-pnr-check-service-openapi.json
+  - openapi/everbridge-risk-intelligence-openapi.json
+  - openapi/everbridge-safety-devices-openapi.json
+  - openapi/everbridge-travel-openapi.json
+- name: api_key
+  type: apiKey
+  in: header
+  parameter: x-api-key
+  description: API Key - For System Use
+  sources:
+  - openapi/everbridge-asset-management-openapi.json
+  - openapi/everbridge-asset-query-openapi.json
+  - openapi/everbridge-cem-alerts-query-public-openapi.json
+  - openapi/everbridge-cem-alerts-query-stream-openapi.json
+  - openapi/everbridge-communications-openapi.json
+  - openapi/everbridge-eb-suite-openapi.json
+  - openapi/everbridge-pnr-check-service-openapi.json
+  - openapi/everbridge-risk-intelligence-openapi.json
 - name: bearerAuth
   type: http
   scheme: bearer
   bearerFormat: JWT
-  description: OAuth 2.0 id_token from /authorization/v1/tokens
   sources:
-  - openapi/everbridge-openapi.yml
+  - openapi/everbridge-snapcomms-openapi.json
+
+# --- SEARCHED enrichment, https://developers.everbridge.net/home/docs/ebs-gs-guide-authentication-types
+# and https://developers.everbridge.net/home/docs/ebs-gs-guide (fetched 2026-08-27, HTTP 200) ---
+documented_methods:
+- name: OAuth 2.0 — Client Credentials grant
+  status: current
+  token_endpoint: https://api.everbridge.net/authorization/v1/tokens
+  request_content_type: application/x-www-form-urlencoded
+  parameters:
+  - grant_type=client_credentials
+  - client_id
+  - client_secret
+  - scope
+  scope_string: openid user-profile role service-profile
+  token_used: access_token
+  token_ttl_seconds: 28800
+  header: 'Authorization: Bearer <token>'
+  credential_source: >-
+    Client ID and Client Secret are issued from the Manager Portal Service Account
+    self-service workflow (Account level: Users -> Service Accounts; Organization level:
+    Settings -> Access -> Service Accounts).
+  note: >-
+    Client-credentials service accounts support resource + action permissions (least-privilege
+    / zero-trust scoping). Everbridge notes that not all EB Suite REST methods support this
+    RBAC model yet.
+- name: OAuth 2.0 — Password (Resource Owner) grant
+  status: current
+  token_endpoint: https://api.everbridge.net/authorization/v1/tokens
+  request_content_type: application/x-www-form-urlencoded
+  parameters:
+  - grant_type=password
+  - client_id
+  - client_secret
+  - username
+  - password
+  - scope
+  scope_string: openid user-profile role
+  token_used: id_token
+  token_ttl_seconds: 28800
+  header: 'Authorization: Bearer <token>'
+  optional_headers:
+  - name: roleId
+    description: >-
+      When the API user holds multiple roles or is an account admin, roleId selects which role
+      the token is minted for. For an Account Admin user the roleId must be the Org Admin role,
+      not the Account Admin role.
+  note: >-
+    Recommended for complex multi-feature workflows where a user id_token is required. The API
+    user's password does not expire so long as that user never signs in to the UI.
+- name: Basic authentication
+  status: current
+  scheme: http basic over HTTPS
+  header: 'Authorization: Basic base64(username:password)'
+  note: The API user must have API Access enabled and a role suitable for the APIs being called.
+- name: Access Token authentication
+  status: legacy
+  docs: https://supportcenter.everbridge.com/hc/en-us/articles/19141469442843-API-Using-Access-Token-Authentication-in-REST-API
+  note: >-
+    Everbridge labels this a legacy authentication method; enabling it requires the support-site
+    procedure. Treat as deprecated for new integrations.
+- name: Bearer JWT (SnapComms)
+  status: current
+  applies_to: https://api.snapcomms.com/v1
+  scheme: http bearer / JWT
+  note: >-
+    The SnapComms API (an Everbridge company) authenticates separately from Everbridge Suite,
+    with its own bearer JWT scheme declared in openapi/everbridge-snapcomms-openapi.json.
+service_accounts:
+  levels:
+  - level: account
+    path: Users -> Service Accounts
+    applies_to:
+    - Users
+    - Audit logs
+    - Roles
+  - level: organization
+    path: Settings -> Access -> Service Accounts
+    applies_to: Most Everbridge Suite APIs
+  docs: https://developers.everbridge.net/home/docs/ebs-gs-guide

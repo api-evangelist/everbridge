@@ -1,34 +1,67 @@
-generated: '2026-07-11'
+generated: '2026-08-27'
 method: probed
 source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
 hosts:
+- host: www.everbridge.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Nov 18 16:57:15 2026 GMT
+  hsts: true
+  hsts_max_age: 63072000
+- host: developers.everbridge.net
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Oct 19 07:53:55 2026 GMT
+  hsts: true
+  hsts_max_age: 31536000
+- host: api.everbridge.net
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Dec 31 23:59:59 2026 GMT
+  hsts: true
+  hsts_max_age: 31536000
+- host: api.snapcomms.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Oct 23 23:09:56 2026 GMT
+  hsts: true
+  hsts_max_age: 31536000
+  hsts_include_subdomains: true
+  hsts_preload: true
+  note: >-
+    SnapComms is an Everbridge company; api.snapcomms.com is the baseURL of the SnapComms API
+    documented on the Everbridge developer hub. Probed by hand 2026-08-27 because
+    probe-domain-security.py resolves hosts from apis.yml and the primary OpenAPI servers only.
 - host: manager.everbridge.net
   https: true
   tls_version: TLSv1.3
   cert_expires: Jan 13 23:59:59 2027 GMT
   hsts: true
   hsts_max_age: 31536000
-- host: www.everbridge.com
-  https: true
-  tls_version: TLSv1.3
-  cert_expires: Dec  3 23:59:59 2026 GMT
-  hsts: true
-  hsts_max_age: 63072000
-- host: developers.everbridge.net
-  https: true
-  tls_version: TLSv1.3
-  cert_expires: Aug 21 01:48:29 2026 GMT
-  hsts: null
+  hsts_include_subdomains: true
+  note: >-
+    Everbridge Manager Portal. Returns 302 to authentication.everbridge.net/cas/login for an
+    unauthenticated request; this is where API service accounts are created.
 domains:
-- domain: everbridge.net
-  dnssec: true
-  caa: []
-  spf: true
-  dmarc: true
-  dmarc_policy: reject
 - domain: everbridge.com
   dnssec: true
   caa: []
   spf: true
   dmarc: true
   dmarc_policy: quarantine
+- domain: everbridge.net
+  dnssec: true
+  caa: []
+  spf: true
+  dmarc: true
+  dmarc_policy: reject
+- domain: snapcomms.com
+  dnssec: false
+  caa: []
+  spf: true
+  dmarc: true
+  dmarc_policy: quarantine
+  note: >-
+    Probed by hand 2026-08-27. No DS record, so DNSSEC is not enabled on snapcomms.com — unlike
+    everbridge.com and everbridge.net, which both have it. Neither everbridge.com,
+    everbridge.net nor snapcomms.com publishes a CAA record.

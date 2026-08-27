@@ -1,0 +1,273 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Everbridge Risk Intelligence",
+    "description": "Everbridge Risk Intelligence APIs",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.everbridge.net/riskevents/v1/riskevents"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Risk Events",
+      "description": "Risk Event APIs"
+    }
+  ],
+  "paths": {
+    "/export": {
+      "post": {
+        "description": "The Risk Event Export API provides external access to Everbridge risk events so that they can be used outside of the Everbridge platform.",
+        "operationId": "REI Export",
+        "summary": "Risk Event Export",
+        "tags": [
+          "Risk Events"
+        ],
+        "parameters": [
+          {
+            "name": "X-REI-GEOFORMAT",
+            "in": "header",
+            "description": "geometry format",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "GEOJSON",
+                "WKT"
+              ],
+              "default": "WKT"
+            },
+            "example": "GEOJSON"
+          },
+          {
+            "name": "X-REI-TIMEFROMNOW",
+            "in": "header",
+            "description": "time range calculation parameter",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "2d"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/exportRiskeventsResponse"
+                },
+                "examples": {
+                  "Default": {
+                    "summary": "Export response",
+                    "value": {
+                      "data": {
+                        "export": {
+                          "currentPageCount": 1,
+                          "currentPageNum": 1,
+                          "docs": [
+                            {
+                              "identifier": "72593a7c-c4ea-4f38-a55d-64c042565d11",
+                              "sender": "NC4",
+                              "source": "NC4",
+                              "sent": "2024-10-13T16:45:28.019+00:00",
+                              "status": "Actual",
+                              "msgType": "Cancel",
+                              "categories": [
+                                {
+                                  "category": "Utility/Infrastructure",
+                                  "subCategory": "Drinking Water"
+                                }
+                              ],
+                              "urgency": "Past",
+                              "severity": "Minor",
+                              "certainty": "Likely",
+                              "effective": "2024-07-26T17:49:38.077+00:00",
+                              "expires": "2024-10-13T16:45:28.816+00:00",
+                              "headline": "[LOCATION] - A boil water advisory has been issued due to ____. Event closed.",
+                              "description": "Media sources reported that protesters are holding a demonstration in the area of Atar. The size and duration of the demonstration have not been immediately reported. Associated disruptions may occur in the area.\n\nOn Sunday, June 30, there were reports of protests in the Basra area of Nouakchott, the capital of Mauritania, following the release of provisional election results. There were reports of burning tires in the area. On Monday, the French Embassy reported additional protests in Nouakchott, although specific details were not given. Protests also broke out in Kaédi, a town located along the Senegalese border approximately 200 miles southeast of Nouakchott. There were also reports of Monday protests in the northern cities of Nouadhibou and Zouérat, near the Western Sahara border, and the southern city of Rosso, also along the Senegalese border. On Tuesday, officials announced that during Monday’s protest in Kaédi, three demonstrators were killed, while two security personnel were injured. Officials in Mauritania on Tuesday reportedly halted internet services in response to the demonstrations.\n\nAssessment: Presidential elections were held in Mauritania on Saturday, June 29. According to preliminary results, incumbent President Mohamed Ould Ghazouani has been reelected with approximately 56 percent of the vote. The main opposition candidate, Biram Dah Abeid, gained approximately 22 percent of the overall vote. Abeid has contested the results, and reportedly called his supporters to protest them. There are reports that since the election took place, several of Abeid’s supporters have been arrested, including one of his campaign managers. In the coming days, tensions will likely remain high in Nouakchott and other areas of the country, particularly in Kaédi, Nouadhibou, Rosso, and Zouérat. Individuals in the country should avoid protest activity due to the potential for violence. It should be noted that information regarding protests is largely not being made public due to repressive media laws in Mauritania, as well as the ongoing internet outage. Therefore, it may be difficult to ascertain relevant information ahead of overland travel. Avoiding travel altogether may be the best option until the situation This event is closed.",
+                              "parameter": [
+                                {
+                                  "valueName": "autoPublished",
+                                  "value": "false"
+                                }
+                              ],
+                              "sources": [
+                                {
+                                  "classification": "Unconfirmed",
+                                  "subClassification": [
+                                    "Unconfirmed"
+                                  ]
+                                }
+                              ],
+                              "confidence": {
+                                "rating": 80,
+                                "label": "Very High"
+                              },
+                              "area": {
+                                "description": "Monterrey, Mexico",
+                                "radius": 0,
+                                "geometryWkt": "POINT (-100.3977 25.7321)",
+                                "geocode": {
+                                  "street": "Paseo de los Leones 3399",
+                                  "city": "Monterrey",
+                                  "country": "Mexico",
+                                  "region": "Central America",
+                                  "postal": "64340",
+                                  "latitude": "25.7320802",
+                                  "longitude": "-100.3977208",
+                                  "approximate": false
+                                }
+                              },
+                              "areas": [
+                                {
+                                  "description": "Monterrey, Mexico",
+                                  "radius": 0,
+                                  "geometryWkt": "POINT (-100.3977 25.7321)",
+                                  "geocode": {
+                                    "street": "Paseo de los Leones 3399",
+                                    "city": "Monterrey",
+                                    "country": "Mexico",
+                                    "region": "Central America",
+                                    "postal": "64340",
+                                    "latitude": "25.7320802",
+                                    "longitude": "-100.3977208",
+                                    "approximate": false
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/exportRiskeventsRequest"
+              },
+              "examples": {
+                "Default": {
+                  "summary": "Export NC4 Risk Events with category:\"Civil Unrest\", subcategory:\"Civil Service Strike\" with in the dateRange value",
+                  "value": {
+                    "query": "{export(dateRange:\"2024-10-10T23:55:50.437Z,2024-10-15T00:00:50.440Z\",feedName:\"NC4\",category:\"Utility/Infrastructure\")}"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "API_Authorizer": []
+          },
+          {
+            "api_key": []
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "type": "http_proxy",
+          "connectionId": "11ofco",
+          "httpMethod": "POST",
+          "uri": "http://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/riskevents/v1/riskevents/export",
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "passthroughBehavior": "when_no_match",
+          "connectionType": "VPC_LINK"
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "exportRiskeventsRequest": {
+        "description": "Schema for export riskevents request body",
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "Graphql based query in JSON format with the supported parameters. <br/> See the parameters section on this page for more information."
+          }
+        },
+        "required": [
+          "query"
+        ]
+      },
+      "exportRiskeventsResponse": {
+        "description": "Schema for export riskevents response",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "export": {
+                "type": "object",
+                "properties": {
+                  "currentPageCount": {
+                    "type": "integer"
+                  },
+                  "currentPageNum": {
+                    "type": "integer"
+                  },
+                  "docs": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "identifier": {
+                          "type": "string"
+                        },
+                        "sender": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "API_Authorizer": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header",
+        "x-amazon-apigateway-authtype": "custom",
+        "x-amazon-apigateway-authorizer": {
+          "authorizerUri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations",
+          "authorizerCredentials": "arn:aws:iam::214792946631:role/riskevents-export-prod-us-us-east-1-0-us-east-1-gw",
+          "authorizerResultTtlInSeconds": 300,
+          "identitySource": "method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey",
+          "type": "request"
+        }
+      },
+      "api_key": {
+        "type": "apiKey",
+        "name": "x-api-key",
+        "in": "header"
+      }
+    }
+  },
+  "x-readme": {
+    "explorer-enabled": true,
+    "proxy-enabled": true
+  },
+  "_id": "69723e3684b43a052480703f"
+}

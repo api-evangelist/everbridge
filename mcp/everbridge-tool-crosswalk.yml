@@ -1,0 +1,1468 @@
+generated: '2026-08-27'
+method: derived
+source: openapi/*.json + mcp/everbridge-mcp.yml + the GraphQL surfaces declared in openapi/everbridge-cem-alerts-query-*-openapi.json
+provider: Everbridge
+providerId: everbridge
+description: Crosswalk between Everbridge's agent surfaces and its REST contract. Everbridge serves a live MCP endpoint
+  at https://developers.everbridge.net/mcp, but tools/list returns 401 Authorization required, so the real tool
+  names and inputSchemas could not be read anonymously. NO tools are invented here. What is recorded instead is
+  the complete REST surface an authenticated MCP client would be binding against, the two GraphQL surfaces that
+  have no REST equivalent, and an honest coverage statement.
+surfaces:
+  openapi:
+    documents: 13
+    operations: 470
+    location: openapi/
+    gated: false
+    note: Published by Everbridge on its ReadMe developer hub and captured verbatim.
+  graphql:
+  - endpoint: https://api.everbridge.net/cem-alerts/query/v1/graphql
+    gated: true
+    introspection: 401 Unauthorized to an anonymous POST of {__schema{queryType{name}}}
+    known_root_fields:
+    - alert(id)
+    - alerts(filter, token)
+    source: openapi/everbridge-cem-alerts-query-public-openapi.json request examples
+  - endpoint: https://api.everbridge.net/cem-alerts/stream/v1/graphql
+    gated: true
+    introspection: 401 Unauthorized
+    known_root_fields:
+    - subscription read { alertsStream }
+    transport: WebSocket subscription
+    source: openapi/everbridge-cem-alerts-query-stream-openapi.json request examples
+  mcp:
+    endpoint: https://developers.everbridge.net/mcp
+    gated: true
+    probe: POST tools/list -> 401 {"code":-32001,"message":"Authorization required"}
+    tools_readable: false
+crosswalk: []
+mcp_only: []
+graphql_only:
+- capability: alert(id) / alerts(filter, token)
+  reason: CEM Alerts is GraphQL-native. The REST contract exposes exactly one operation — POST /graphql — so alert
+    query capability has no per-field REST equivalent.
+  endpoint: https://api.everbridge.net/cem-alerts/query/v1/graphql
+- capability: subscription read { alertsStream }
+  reason: Everbridge's only push/streaming surface. There is no REST polling equivalent and no webhook catalogue.
+  endpoint: https://api.everbridge.net/cem-alerts/stream/v1/graphql
+coverage:
+  rest_operations: 470
+  mcp_tools_known: 0
+  mapped: 0
+  unmapped_rest: 470
+  reason: MCP tools/list is authentication-gated; no tool names exist to map. Re-run this crosswalk with an authenticated
+    MCP introspection to fill crosswalk[].
+rest_only:
+- operationId: EBS AM Create Asset
+  spec: asset-management
+  summary: Create Asset
+- operationId: EBS AM List Assets
+  spec: asset-management
+  summary: List Assets
+- operationId: EBS AM Search Assets
+  spec: asset-management
+  summary: Search Assets
+- operationId: EBS AM Get Asset
+  spec: asset-management
+  summary: Get Asset
+- operationId: EBS AM Update Asset
+  spec: asset-management
+  summary: Update Asset
+- operationId: EBS AM Delete Asset
+  spec: asset-management
+  summary: Delete Asset
+- operationId: EBS AM Get Asset By ExternalId
+  spec: asset-management
+  summary: Get Asset By ExternalId
+- operationId: EBS AM Get Asset By ExternalId Path
+  spec: asset-management
+  summary: Get Asset By ExternalId (Path)
+- operationId: EBS AM Update Batch Assets
+  spec: asset-management
+  summary: Update Batch Assets
+- operationId: EBS AM Create Batch Assets
+  spec: asset-management
+  summary: Create Batch Assets
+- operationId: EBS AM Delete batch Assets
+  spec: asset-management
+  summary: Delete batch Assets
+- operationId: EBS AM List Upload Assets Batches
+  spec: asset-management
+  summary: List Upload Assets Batches
+- operationId: EBS AM Upload Asset Batches
+  spec: asset-management
+  summary: Upload Asset Batches
+- operationId: EBS AM Get Upload Asset Batch
+  spec: asset-management
+  summary: Get Upload Asset Batch
+- operationId: EBS AM Update Upload Asset Batch
+  spec: asset-management
+  summary: Update Upload Asset Batch
+- operationId: EBS AM List Asset Types
+  spec: asset-management
+  summary: List Asset Types
+- operationId: EBS AM Create Asset Type
+  spec: asset-management
+  summary: Create Asset Type
+- operationId: EBS AM Get Asset Type
+  spec: asset-management
+  summary: Get Asset Type
+- operationId: EBS AM Update Asset Type
+  spec: asset-management
+  summary: Update Asset Type
+- operationId: EBS AM Delete Asset Type
+  spec: asset-management
+  summary: Delete Asset Type
+- operationId: EBS AM Get SC Building Asset Type
+  spec: asset-management
+  summary: Get SC Building Asset Type
+- operationId: EBS AM Is Linked To Asset
+  spec: asset-management
+  summary: Is Linked To Asset
+- operationId: EBS AM List Asset Property Names
+  spec: asset-management
+  summary: List Asset Property Names
+- operationId: EBS AM List Asset Types By Name
+  spec: asset-management
+  summary: List Assets Type By Name
+- operationId: EBS AM Get Asset Type By Name
+  spec: asset-management
+  summary: Get Asset Type By Name
+- operationId: EBS AM Download Upload Template
+  spec: asset-management
+  summary: Download Upload Template
+- operationId: EBS AM List Asset Type Templates
+  spec: asset-management
+  summary: List Asset Type Templates
+- operationId: EBS AM Get Asset Type Template
+  spec: asset-management
+  summary: Get Asset Type Template
+- operationId: EBS AM Get Asset License Limit Stats
+  spec: asset-management
+  summary: Get Asset License Limit Stats
+- operationId: EB AM List Asset Association Definitions
+  spec: asset-management
+  summary: List Asset Association Definitions
+- operationId: EB AM Create Asset Association Definition
+  spec: asset-management
+  summary: Create Asset Association Definition
+- operationId: EB AM Get Asset Association Definitions
+  spec: asset-management
+  summary: Get Asset Association Definitions
+- operationId: EB AM Update Asset Association Definition By Id
+  spec: asset-management
+  summary: Update Asset Association Definition By Id
+- operationId: EB AM Delete Asset Association Definition By Id
+  spec: asset-management
+  summary: Delete Asset Association Definition By Id
+- operationId: EB AM Get Linked Asset
+  spec: asset-management
+  summary: Get Linked Asset
+- operationId: EB AM Get Asset Association Definition By Name
+  spec: asset-management
+  summary: Get Asset Association Definition By Name
+- operationId: EB AM List Column Mappings
+  spec: asset-management
+  summary: List Column Mappings
+- operationId: EB AM Create Column Mapping
+  spec: asset-management
+  summary: Create Column Mapping
+- operationId: EB AM Get Column Mapping
+  spec: asset-management
+  summary: Get Column Mapping
+- operationId: EB AM Update Column Mapping
+  spec: asset-management
+  summary: Update Column Mapping
+- operationId: EB AM Delete Column Mapping
+  spec: asset-management
+  summary: Delete Column Mapping
+- operationId: EB AM List Uploaded Asset Detail By Status
+  spec: asset-management
+  summary: List Uploaded Asset Detail By Status
+- operationId: EB AM Get Uploaded Asset Detail By Id
+  spec: asset-management
+  summary: Get Uploaded Asset Detail By Id
+- operationId: EBS AQ Assets Stream
+  spec: asset-query
+  summary: Assets Stream
+- operationId: EBS AQ List Assets
+  spec: asset-query
+  summary: List Assets
+- operationId: EBS AQ List Assets Across Asset Types
+  spec: asset-query
+  summary: List Assets Across Asset Types
+- operationId: EBS AQ Assets Polygon Aggregation
+  spec: asset-query
+  summary: Assets Polygon Aggregation
+- operationId: EBS AQ Assets Pagination
+  spec: asset-query
+  summary: Assets Pagination
+- operationId: EBS AQ Assets Geo Grid Aggregation
+  spec: asset-query
+  summary: Assets Geo Grid Aggregation
+- operationId: EBS AQ Assets Count
+  spec: asset-query
+  summary: Assets Count
+- operationId: EBS AQ Assets Geo Bounds Aggregation
+  spec: asset-query
+  summary: Assets Geo Bounds Aggregation
+- operationId: EBS AQ Assets Aggregate By Attribute Max And Min
+  spec: asset-query
+  summary: Assets Aggregate By Attribute Max And Min
+- operationId: EBS AQ Assets Aggregate By Attribute
+  spec: asset-query
+  summary: Assets Aggregate By Attribute
+- operationId: EBS AQ Get Asset
+  spec: asset-query
+  summary: Get Asset
+- operationId: Generate Token
+  spec: authentication
+  summary: Generate Token
+- operationId: GraphQL Query
+  spec: cem-alerts-query-public
+  summary: GraphQL Query
+- operationId: GraphQL Schema
+  spec: cem-alerts-query-public
+  summary: GraphQL Schema
+- operationId: GraphQL Query
+  spec: cem-alerts-query-stream
+  summary: GraphQL Query
+- operationId: GraphQL Schema
+  spec: cem-alerts-query-stream
+  summary: GraphQL Schema
+- operationId: cem-comms-launch
+  spec: communications
+  summary: Launch Communication
+- operationId: getCem-comms
+  spec: communications
+  summary: List Communications
+- operationId: patchCem-commsCommid
+  spec: communications
+  summary: Update communication description, title, eventType and active
+- operationId: getCem-commsCommid
+  spec: communications
+  summary: Get Communication
+- operationId: postResendCem-comms
+  spec: communications
+  summary: Resend Communication
+- operationId: patchStopCem-comms
+  spec: communications
+  summary: Stop Communication
+- operationId: deactivateCem-commsPublishOptionMessage
+  spec: communications
+  summary: Deactivate or expire a single communication publish option message
+- operationId: getCem-commsPublishOptionPathDetail
+  spec: communications
+  summary: Retrieve a single communication publish option path detail
+- operationId: postCem-commsConfirmationResult
+  spec: communications
+  summary: Generate a resultset based on communication confirmations
+- operationId: postCem-commsOperatorConfirmation
+  spec: communications
+  summary: Confirm operators for a communication
+- operationId: comm-launch
+  spec: communications
+  summary: Launch Communication
+- operationId: getComm-list
+  spec: communications
+  summary: List Communications
+- operationId: patchComm-commId
+  spec: communications
+  summary: Update communication description, title, eventType and active
+- operationId: getComm-detail
+  spec: communications
+  summary: Get Communication
+- operationId: postResendComm
+  spec: communications
+  summary: Resend Communication
+- operationId: patchStopComm
+  spec: communications
+  summary: Stop Communication
+- operationId: deactivateComm-publishOptionMessage
+  spec: communications
+  summary: Deactivate or expire a single communication publish option message
+- operationId: getComm-publishOptions
+  spec: communications
+  summary: Retrieve a single communication publish option path detail
+- operationId: postComm-confirmationResult
+  spec: communications
+  summary: Generate a resultset based on communication confirmations
+- operationId: postComm-operatorConfirmation
+  spec: communications
+  summary: Confirm operators for a communication
+- operationId: get-communication-geometry
+  spec: communications
+  summary: Get communication geometry
+- operationId: getCem-commsCommidSettings
+  spec: communications
+  summary: Get Communication Settings
+- operationId: getCem-commsCommidContext
+  spec: communications
+  summary: Get Communication Context Data
+- operationId: getCem-commsCommidBody
+  spec: communications
+  summary: Get Communication Body
+- operationId: getCem-recipeints
+  spec: communications
+  summary: Get Communication CEM Results
+- operationId: getCem-commsCommidrecipientLogs
+  spec: communications
+  summary: List Communication recipient logs
+- operationId: postCem-commsCommidRecipientLogsDownload
+  spec: communications
+  summary: Create Communication recipient log download
+- operationId: getCem-commsCommidSummary
+  spec: communications
+  summary: Get Communication Summary by Summary Type
+- operationId: getCem-commsCommidActivities
+  spec: communications
+  summary: List Communication Activities
+- operationId: getCem-commsCommidActivityEntry
+  spec: communications
+  summary: Retrieve a single communication activity entry
+- operationId: getCem-threadRecipients
+  spec: communications
+  summary: Retrieve a thread's CEM Results
+- operationId: getComm-geometry
+  spec: communications
+  summary: Get communication geometry
+- operationId: getComm-settings
+  spec: communications
+  summary: Get Communication Settings
+- operationId: getComm-context
+  spec: communications
+  summary: Get Communication Context Data
+- operationId: getComm-content
+  spec: communications
+  summary: Get Communication Body
+- operationId: getComm-recipients
+  spec: communications
+  summary: Get Communication CEM Results
+- operationId: getComm-recipientLogs
+  spec: communications
+  summary: List Communication recipient logs
+- operationId: postComm-recipientLogsDownload
+  spec: communications
+  summary: Create Communication recipient log download
+- operationId: getComm-summary
+  spec: communications
+  summary: Get Communication Summary by Summary Type
+- operationId: getComm-activities
+  spec: communications
+  summary: List Communication Activities
+- operationId: getComm-activityEntry
+  spec: communications
+  summary: Retrieve a single communication activity entry
+- operationId: getComm-threadRecipients
+  spec: communications
+  summary: Retrieve a thread's CEM Results
+- operationId: getTemplates
+  spec: communications
+  summary: List templates
+- operationId: createTemplate
+  spec: communications
+  summary: Create Template
+- operationId: getTemplate
+  spec: communications
+  summary: Get template
+- operationId: partial update Template
+  spec: communications
+  summary: Partial Update Template
+- operationId: deleteTemplate
+  spec: communications
+  summary: Delete Template
+- operationId: updateTemplateRepresentation
+  spec: communications
+  summary: Update template representation
+- operationId: getTemplateCategories
+  spec: communications
+  summary: List categories
+- operationId: addCategory
+  spec: communications
+  summary: Add Category
+- operationId: updateCategory
+  spec: communications
+  summary: Update Category
+- operationId: deleteCategory
+  spec: communications
+  summary: delete Category
+- operationId: convert legacyTemplate
+  spec: communications
+  summary: Convert legacyTemplate
+- operationId: post-template-reservation
+  spec: communications
+  summary: Create template reservation
+- operationId: get-template-reservations
+  spec: communications
+  summary: Get template reservations
+- operationId: delete-template-reservations
+  spec: communications
+  summary: Delete template reservations for a system.
+- operationId: get-template-plans
+  spec: communications
+  summary: Get template plans
+- operationId: lookupTemplates
+  spec: communications
+  summary: Lookup templates by IDs
+- operationId: getGlobalTemplates
+  spec: communications
+  summary: List global templates
+- operationId: createGlobalTemplate
+  spec: communications
+  summary: Publish a template to the Global Template Library
+- operationId: getGlobalTemplateCategories
+  spec: communications
+  summary: List global template categories
+- operationId: getGlobalTemplateEventTypes
+  spec: communications
+  summary: List global template event types
+- operationId: importGlobalTemplateToOrg
+  spec: communications
+  summary: Import a global template to the org
+- operationId: getGlobalTemplateById
+  spec: communications
+  summary: Get a global template by ID
+- operationId: deleteGlobalTemplate
+  spec: communications
+  summary: Delete a global template
+- operationId: getGlobalTemplateImportStatus
+  spec: communications
+  summary: Check import status of a global template
+- operationId: getContexts
+  spec: communications
+  summary: List contexts
+- operationId: getContext
+  spec: communications
+  summary: Get context metadata
+- operationId: getContextPreview
+  spec: communications
+  summary: Context Preview
+- operationId: GET /variables
+  spec: communications
+  summary: List variables
+- operationId: POST /variables
+  spec: communications
+  summary: Create variable
+- operationId: DELETE /variables
+  spec: communications
+  summary: Delete variables
+- operationId: GET /variables/{id}
+  spec: communications
+  summary: Get variable details
+- operationId: PATCH /variables/{id}
+  spec: communications
+  summary: Update variable
+- operationId: POST /variables/validation
+  spec: communications
+  summary: Validate variables
+- operationId: postCem-commsCommidNotes
+  spec: communications
+  summary: Create a communication note.
+- operationId: commsCommidNotes
+  spec: communications
+  summary: Retrieve a paginated list of communication nodes
+- operationId: getCem-commsCommidANotesNoteid
+  spec: communications
+  summary: Retrieve a single communication note
+- operationId: getSchedules
+  spec: communications
+  summary: List Schedules
+- operationId: createSchedule
+  spec: communications
+  summary: Create Schedule
+- operationId: getScheduleById
+  spec: communications
+  summary: Get schedule by ID
+- operationId: partial Update ScheduleById
+  spec: communications
+  summary: Update schedule by ID (partial)
+- operationId: Delete ScheduleById
+  spec: communications
+  summary: Delete by ID
+- operationId: triggerSchedule
+  spec: communications
+  summary: Trigger schedule by ID
+- operationId: getScheduleRunsById
+  spec: communications
+  summary: List schedule runs  by ID
+- operationId: validateScheduleConfig
+  spec: communications
+  summary: Validate schedule configuration
+- operationId: contactsFromCsv
+  spec: communications
+  summary: Upload a CSV of External IDs and get parsing results
+- operationId: startNewSession
+  spec: communications
+  summary: Start a New Session
+- operationId: getSession
+  spec: communications
+  summary: Retrieve the Current Session
+- operationId: modifySession
+  spec: communications
+  summary: Modify an Existing Session
+- operationId: getQuery
+  spec: communications
+  summary: Retrieve the Queries for a Session
+- operationId: getSummary
+  spec: communications
+  summary: Retrieve the Summary of Contact Totals for a Session
+- operationId: getContactPreview
+  spec: communications
+  summary: Retrieve the Individual Contacts for a Session
+- operationId: endSession
+  spec: communications
+  summary: End Session
+- operationId: getPlans
+  spec: communications
+  summary: List plans
+- operationId: createPlan
+  spec: communications
+  summary: Create Plan
+- operationId: getPlan
+  spec: communications
+  summary: Retrieve the plan associated with the specified identifier.
+- operationId: partial update plan
+  spec: communications
+  summary: Partial Update plan
+- operationId: deletePlan
+  spec: communications
+  summary: Delete plan
+- operationId: GenerateMessage
+  spec: communications
+  summary: Generate Message
+- operationId: ebs-daa-client-generate-token
+  spec: digital-apps
+  summary: Generate Token(client)
+- operationId: ebs-daa-password-generate-token
+  spec: digital-apps
+  summary: Generate Token(password)
+- operationId: ebs-daa-refresh-token
+  spec: digital-apps
+  summary: Refresh Token
+- operationId: ebs-daa-logout
+  spec: digital-apps
+  summary: Logout
+- operationId: ebs-daa-authorize-validate
+  spec: digital-apps
+  summary: Validate Token
+- operationId: ebs-daa-get-configuration-values
+  spec: digital-apps
+  summary: Get Configuration Values
+- operationId: ebs-daa-get-contact-info
+  spec: digital-apps
+  summary: Get Contact
+- operationId: ebs-daa-get-contacts-preferences
+  spec: digital-apps
+  summary: Get Contact Preferences
+- operationId: ebs-daa-update-contact-preferences
+  spec: digital-apps
+  summary: Update Contact Preferences
+- operationId: ebs-daa-register-device
+  spec: digital-apps
+  summary: Register device
+- operationId: ebs-daa-update-device-token
+  spec: digital-apps
+  summary: Update Device Token
+- operationId: ebs-daa-deregister-device
+  spec: digital-apps
+  summary: Deregister Device
+- operationId: ebs-daa-reset-device-badge
+  spec: digital-apps
+  summary: Reset Device Badge
+- operationId: ebs-daa-enable-push-notification
+  spec: digital-apps
+  summary: Enable Push Notification
+- operationId: ebs-daa-disable-push-notification
+  spec: digital-apps
+  summary: Disable Push Notification
+- operationId: ebs-daa-create-safe-corridor
+  spec: digital-apps
+  summary: Create SafeCorridor
+- operationId: ebs-daa-get-active-safe-corridor
+  spec: digital-apps
+  summary: Get Active SafeCorridor
+- operationId: ebs-daa-stop-safe-corridor
+  spec: digital-apps
+  summary: Stop SafeCorridor
+- operationId: ebs-daa-create-panic
+  spec: digital-apps
+  summary: Create Panic
+- operationId: ebs-daa-update-panic
+  spec: digital-apps
+  summary: Update Panic
+- operationId: ebs-daa-create-checkin
+  spec: digital-apps
+  summary: Create Checkin
+- operationId: ebs-daa-delete-last-checkin
+  spec: digital-apps
+  summary: Delete Checkin
+- operationId: ebs-daa-create-emergency-call
+  spec: digital-apps
+  summary: Create Emergency Call
+- operationId: ebs-daa-submit-custom-form
+  spec: digital-apps
+  summary: Create Custom Form
+- operationId: ebs-daa-remote-wipe-device
+  spec: digital-apps
+  summary: Remote Wipe Device
+- operationId: ebs-daa-device-registration
+  spec: digital-apps
+  summary: Device Registration
+- operationId: ebs-daa-upload-image
+  spec: digital-apps
+  summary: Upload Image
+- operationId: ebs-daa-get-image
+  spec: digital-apps
+  summary: Get Image
+- operationId: ebs-daa-get-audio
+  spec: digital-apps
+  summary: Get Audio
+- operationId: ebs-daa-get-attachment
+  spec: digital-apps
+  summary: Get Attachment
+- operationId: ebs-daa-get-incident
+  spec: digital-apps
+  summary: Get Incident
+- operationId: ebs-daa-list-messages
+  spec: digital-apps
+  summary: List Messages
+- operationId: ebs-daa-get-message
+  spec: digital-apps
+  summary: Get Message
+- operationId: ebs-daa-reply-message
+  spec: digital-apps
+  summary: Reply Message
+- operationId: ebs-daa-update-message
+  spec: digital-apps
+  summary: Update Message
+- operationId: ebs-daa-submit-survey-response
+  spec: digital-apps
+  summary: Submit Survey Response
+- operationId: ebs-daa-list-organizations
+  spec: digital-apps
+  summary: List Organizations
+- operationId: ebs-daa-get-organizations-information
+  spec: digital-apps
+  summary: Get Organization
+- operationId: ebs-daa-get-organizations-settings
+  spec: digital-apps
+  summary: Get Organizations Settings
+- operationId: ebs-daa-search-keyword
+  spec: digital-apps
+  summary: List Keyword response
+- operationId: ebs-daa-list-keyword-subscriptions
+  spec: digital-apps
+  summary: List Keyword Subscriptions
+- operationId: ebs-daa-get-keyword-image
+  spec: digital-apps
+  summary: Get Keyword Image
+- operationId: ebs-daa-update-keyword
+  spec: digital-apps
+  summary: Update Keyword
+- operationId: ebs-daa-get-organization-code
+  spec: digital-apps
+  summary: Get Organization Code
+- operationId: ebs-daa-list-service-providers
+  spec: digital-apps
+  summary: List Providers
+- operationId: ebs-daa-create-staff-substitutions
+  spec: digital-apps
+  summary: Create Staff Substitutions
+- operationId: ebs-daa-get-staff-substitutions
+  spec: digital-apps
+  summary: Get Staff Substitutions
+- operationId: ebs-daa-update-staff-substitutions
+  spec: digital-apps
+  summary: Update Staff Substitutions
+- operationId: ebs-daa-delete-staff-substitutions
+  spec: digital-apps
+  summary: Delete Staff Substitutions
+- operationId: ebs-daa-list-scheduling-events
+  spec: digital-apps
+  summary: List Events
+- operationId: ebs-daa-get-scheduling-calendars
+  spec: digital-apps
+  summary: Get Calendars
+- operationId: ebs-daa-list-chats-contacts
+  spec: digital-apps
+  summary: List Contacts
+- operationId: ebs-daa-get-chats-contact
+  spec: digital-apps
+  summary: Get Contact
+- operationId: ebs-daa-chats-register-device
+  spec: digital-apps
+  summary: Register device
+- operationId: ebs-daa-get-chats-unread-message
+  spec: digital-apps
+  summary: Get Unread Message
+- operationId: ebs-daa-list-chats
+  spec: digital-apps
+  summary: List Chats
+- operationId: ebs-daa-join-chat
+  spec: digital-apps
+  summary: Join Chat
+- operationId: ebs-daa-update-chat-name
+  spec: digital-apps
+  summary: Update Chat name
+- operationId: ebs-daa-chats-invite-to-chat
+  spec: digital-apps
+  summary: Invite Chat
+- operationId: ebs-daa-chats-invite-to-voip-chat
+  spec: digital-apps
+  summary: Invite Voip Chat
+- operationId: ebs-daa-chats-update-invitation
+  spec: digital-apps
+  summary: Update Invitation
+- operationId: ebs-daa-chats-leave-chat
+  spec: digital-apps
+  summary: Leave Chat
+- operationId: ebs-daa-chats-create-attachment
+  spec: digital-apps
+  summary: Create Attachment
+- operationId: ebs-daa-chats-get-attachment
+  spec: digital-apps
+  summary: Get attachment
+- operationId: ebs-daa-chats-list-receipts
+  spec: digital-apps
+  summary: List Receipts
+- operationId: ebs-daa-sso-authorize
+  spec: digital-apps
+  summary: SSO Authorize
+- operationId: ebs-daa-list-travel-itineraries
+  spec: digital-apps
+  summary: List Itineraries
+- operationId: ebs-daa-list-travel-segments
+  spec: digital-apps
+  summary: List Segments
+- operationId: ebs-daa-get-travel-itineraries-count
+  spec: digital-apps
+  summary: Get Count
+- operationId: EBS Upload Attachment
+  spec: eb-suite
+  summary: Upload Attachment
+- operationId: EBS Get Attachment
+  spec: eb-suite
+  summary: Get Attachment
+- operationId: EBS Upload Audio
+  spec: eb-suite
+  summary: Upload Audio
+- operationId: EBS Get Audio
+  spec: eb-suite
+  summary: Get Audio
+- operationId: EBS Query Calendars
+  spec: eb-suite
+  summary: Query Calendars
+- operationId: EBS Create Chat Channel
+  spec: eb-suite
+  summary: Create Chat Channel
+- operationId: EBS List Critical Events
+  spec: eb-suite
+  summary: List Critical Events
+- operationId: EBS Get Active Account Admin
+  spec: eb-suite
+  summary: Get Active Account Admin
+- operationId: EBS Get Organization Admins
+  spec: eb-suite
+  summary: Get Organization Admins
+- operationId: EBS List Conference Bridges
+  spec: eb-suite
+  summary: List Conference Bridges
+- operationId: EBS Create Conference Bridge
+  spec: eb-suite
+  summary: Create Conference Bridge
+- operationId: EBS Delete Conference Bridge
+  spec: eb-suite
+  summary: Delete Conference Bridge
+- operationId: EBS Get Conference Bridge
+  spec: eb-suite
+  summary: Get Conference Bridge
+- operationId: EBS Update Conference Bridge
+  spec: eb-suite
+  summary: Update Conference Bridge
+- operationId: EBS Get Constants
+  spec: eb-suite
+  summary: Get Constants
+- operationId: EBS Query Constants
+  spec: eb-suite
+  summary: Query Constants
+- operationId: EBS List Contact Attributes
+  spec: eb-suite
+  summary: List Contact Attributes
+- operationId: EBS Create Contact Attribute
+  spec: eb-suite
+  summary: Create Contact Attribute
+- operationId: EBS Delete Contact Attribute
+  spec: eb-suite
+  summary: Delete Contact Attribute
+- operationId: EBS Get Contact Attribute
+  spec: eb-suite
+  summary: Get Contact Attribute
+- operationId: EBS Update Contact Attribute
+  spec: eb-suite
+  summary: Update Contact Attribute
+- operationId: EBS List Contact Filters
+  spec: eb-suite
+  summary: List Contact Filters
+- operationId: EBS Create Contact Filter
+  spec: eb-suite
+  summary: Create Contact Filter
+- operationId: EBS Delete Contact Filter
+  spec: eb-suite
+  summary: Delete Contact Filter
+- operationId: EBS Get Contact Filter
+  spec: eb-suite
+  summary: Get Contact Filter
+- operationId: EBS Update Contact Filter
+  spec: eb-suite
+  summary: Update Contact Filter
+- operationId: EBS List Contact Paths
+  spec: eb-suite
+  summary: List Contact Paths
+- operationId: EBS Get Contact Path
+  spec: eb-suite
+  summary: Get Contact Path
+- operationId: EBS List Group Contacts
+  spec: eb-suite
+  summary: List Group Contacts
+- operationId: EBS List Contacts
+  spec: eb-suite
+  summary: List Contacts
+- operationId: EBS Create Contact
+  spec: eb-suite
+  summary: Create Contact
+- operationId: EBS Delete Contacts Batch
+  spec: eb-suite
+  summary: Delete Contacts (Batch)
+- operationId: EBS Create Contacts Batch
+  spec: eb-suite
+  summary: Create Contacts (Batch)
+- operationId: EBS Update Contacts Batch
+  spec: eb-suite
+  summary: Update Contacts (Batch)
+- operationId: EBS Query Contacts Batch
+  spec: eb-suite
+  summary: Query Contacts (Batch)
+- operationId: EBS Delete Contact
+  spec: eb-suite
+  summary: Delete Contact
+- operationId: EBS Get Contact
+  spec: eb-suite
+  summary: Get Contact
+- operationId: EBS Update Contact Partial
+  spec: eb-suite
+  summary: Update Contact (Partial)
+- operationId: EBS Update Contact
+  spec: eb-suite
+  summary: Update Contact
+- operationId: EBS List Dynamic Groups
+  spec: eb-suite
+  summary: List Dynamic Groups
+- operationId: EBS Get Dynamic Groups Details
+  spec: eb-suite
+  summary: Get Dynamic Groups Details
+- operationId: EBS Upload Dynamic Locations
+  spec: eb-suite
+  summary: Upload Dynamic Locations
+- operationId: EBS Get Dynamic Locations Details
+  spec: eb-suite
+  summary: Get Upload Dynamic Locations Details
+- operationId: EBS Add Expected Locations
+  spec: eb-suite
+  summary: Add Expected Locations
+- operationId: EBS Delete Batch Expected Locations
+  spec: eb-suite
+  summary: Delete Batch
+- operationId: EBS List Expected Location For Contact
+  spec: eb-suite
+  summary: List Expected Location For Contact
+- operationId: EBS Create Expected Location For Contact
+  spec: eb-suite
+  summary: Create Expected Location For Contact
+- operationId: EBS Delete Expected Location For Contact
+  spec: eb-suite
+  summary: Delete Expected Location For Contact
+- operationId: EBS Get Expected Location For Contact
+  spec: eb-suite
+  summary: Get Expected Location For Contact
+- operationId: EBS Update Expected Location For Contact
+  spec: eb-suite
+  summary: Update Expected Location For Contact
+- operationId: EBS List Groups
+  spec: eb-suite
+  summary: List Groups
+- operationId: EBS Create Group
+  spec: eb-suite
+  summary: Create Group
+- operationId: EBS Delete Contacts Group
+  spec: eb-suite
+  summary: Delete Contacts Group
+- operationId: EBS Add Contacts Group
+  spec: eb-suite
+  summary: Add Contacts Group
+- operationId: EBS Replace Contacts SeqGroup
+  spec: eb-suite
+  summary: Replace Contacts Sequenced Group
+- operationId: EBS List Groups By Page
+  spec: eb-suite
+  summary: List Groups By Page
+- operationId: EBS Delete Group
+  spec: eb-suite
+  summary: Delete Group
+- operationId: EBS Get Group
+  spec: eb-suite
+  summary: Get Group
+- operationId: EBS Update Group
+  spec: eb-suite
+  summary: Update Group
+- operationId: EBS Get Journals
+  spec: eb-suite
+  summary: Get Journals
+- operationId: EBS Add Incident Journal
+  spec: eb-suite
+  summary: Add Incident Journal
+- operationId: EBS List Incident Notifications
+  spec: eb-suite
+  summary: List Incident Notifications
+- operationId: EBS Get Notifications By Incident
+  spec: eb-suite
+  summary: Get Notifications By Incident
+- operationId: EBS Get Incident Notification
+  spec: eb-suite
+  summary: Get Incident Notification
+- operationId: EBS List Incident Scenarios
+  spec: eb-suite
+  summary: List Incident Scenarios
+- operationId: EBS Launch Incident Scenario
+  spec: eb-suite
+  summary: Launch Incident Scenario
+- operationId: EBS Get Incident Scenario
+  spec: eb-suite
+  summary: Get Incident Scenario
+- operationId: EBS Update Incident Scenario
+  spec: eb-suite
+  summary: Update Incident Scenario
+- operationId: EBS List Templates
+  spec: eb-suite
+  summary: List Templates
+- operationId: EBS Get Template
+  spec: eb-suite
+  summary: Get Template
+- operationId: EBS List Incident Variable Items
+  spec: eb-suite
+  summary: List Incident Variable Items
+- operationId: EBS Get Incident Variables Proxy
+  spec: eb-suite
+  summary: Get Incident Variables Proxy
+- operationId: EBS List Incidents
+  spec: eb-suite
+  summary: List Incidents
+- operationId: EBS Launch Incident
+  spec: eb-suite
+  summary: Launch Incident
+- operationId: EBS Get Incident Dynamic Info Query
+  spec: eb-suite
+  summary: Get Incident Dynamic Info Query
+- operationId: EBS Preview Incident
+  spec: eb-suite
+  summary: Preview Incident
+- operationId: EBS Incident Verify Pin
+  spec: eb-suite
+  summary: Incident Verify Pin
+- operationId: EBS Get Incident
+  spec: eb-suite
+  summary: Get Incident
+- operationId: EBS Update Incident
+  spec: eb-suite
+  summary: Update Incident
+- operationId: EBS Get Expected Locations By Itinerary ID
+  spec: eb-suite
+  summary: Get Expected Locations By Itinerary ID
+- operationId: EBS Query Itineraries By Parameters
+  spec: eb-suite
+  summary: Query Itineraries By Parameters
+- operationId: EBS Add Itinerary
+  spec: eb-suite
+  summary: Add Itinerary
+- operationId: EBS Delete Batch Itinerary
+  spec: eb-suite
+  summary: Delete Batch Itinerary
+- operationId: EBS Add Batch Itinerary
+  spec: eb-suite
+  summary: Add Batch Itinerary
+- operationId: EBS Delete Itinerary
+  spec: eb-suite
+  summary: Delete Itinerary
+- operationId: EBS Update Itinerary
+  spec: eb-suite
+  summary: Update Itinerary
+- operationId: EBS Create Dynamic Location For Contact
+  spec: eb-suite
+  summary: Create Dynamic Location For Contact
+- operationId: EBS List Launch Policies
+  spec: eb-suite
+  summary: List Launch Policies
+- operationId: EBS Create Launch Policy
+  spec: eb-suite
+  summary: Create Launch Policy
+- operationId: EBS Delete Launch Policy
+  spec: eb-suite
+  summary: Delete Launch Policy
+- operationId: EBS Get Launch Policy
+  spec: eb-suite
+  summary: Get Launch Policy
+- operationId: EBS Update Launch Policy
+  spec: eb-suite
+  summary: Update Launch Policy
+- operationId: EBS List Location Source Data
+  spec: eb-suite
+  summary: List Location Source Data
+- operationId: EBS List BatchLocation Source Data
+  spec: eb-suite
+  summary: List BatchLocation Source Data
+- operationId: EBS Get Location Source Data
+  spec: eb-suite
+  summary: Get Location Source Data
+- operationId: EBS List Location Types
+  spec: eb-suite
+  summary: List Location Types
+- operationId: EBS Create Location Type
+  spec: eb-suite
+  summary: Create Location Type
+- operationId: EBS Delete Location Type
+  spec: eb-suite
+  summary: Delete Location Type
+- operationId: EBS Get Location Type
+  spec: eb-suite
+  summary: Get Location Type
+- operationId: EBS Update Location Type
+  spec: eb-suite
+  summary: Update Location Type
+- operationId: EBS Get Attributes
+  spec: eb-suite
+  summary: Get Attributes
+- operationId: EBS List Nixle Event Groups
+  spec: eb-suite
+  summary: List Nixle Event Groups
+- operationId: EBS List Nixle Region Ids
+  spec: eb-suite
+  summary: List Nixle Region Ids
+- operationId: EBS List Notification Categories
+  spec: eb-suite
+  summary: List Notification Categories
+- operationId: EBS Create Notification Categories
+  spec: eb-suite
+  summary: Create Notification Categories
+- operationId: EBS Get Notification Category
+  spec: eb-suite
+  summary: Get Notification Category
+- operationId: List Notification Events
+  spec: eb-suite
+  summary: List Notification Events
+- operationId: Create Notification Event
+  spec: eb-suite
+  summary: Create Notification Event
+- operationId: Get Notification Event
+  spec: eb-suite
+  summary: Get Notification Event
+- operationId: EBS Get Notification Report
+  spec: eb-suite
+  summary: Get Notification Report
+- operationId: EBS List Notification Templates
+  spec: eb-suite
+  summary: List Notification Templates
+- operationId: EBS Create Notification Template
+  spec: eb-suite
+  summary: Create Notification Template
+- operationId: EBS Delete Notification Template
+  spec: eb-suite
+  summary: Delete Notification Template
+- operationId: EBS Get Notification Template
+  spec: eb-suite
+  summary: Get Notification Template
+- operationId: EBS Update Notification Template
+  spec: eb-suite
+  summary: Update Notification Template
+- operationId: EBS Launch Push Notification
+  spec: eb-suite
+  summary: Launch Push Notification
+- operationId: EBS List Mass Notifications
+  spec: eb-suite
+  summary: List Mass Notifications
+- operationId: EBS Launch Mass Notification
+  spec: eb-suite
+  summary: Launch Mass Notification
+- operationId: EBS Mass Notification Report
+  spec: eb-suite
+  summary: Mass Notification Report
+- operationId: EBS Get Notification
+  spec: eb-suite
+  summary: Get Notification
+- operationId: EBS Update Notification
+  spec: eb-suite
+  summary: Update Notification
+- operationId: EBS List Organizations
+  spec: eb-suite
+  summary: List Organizations
+- operationId: EBS Get Organization
+  spec: eb-suite
+  summary: Get Organization
+- operationId: EBS List Privacy Policies
+  spec: eb-suite
+  summary: List Privacy Policies
+- operationId: EBS Create Privacy Policy
+  spec: eb-suite
+  summary: Create Privacy Policy
+- operationId: EBS Delete Privacy Policy
+  spec: eb-suite
+  summary: Delete Privacy Policy
+- operationId: EBS Get Privacy Policy
+  spec: eb-suite
+  summary: Get Privacy Policy
+- operationId: EBS Update Privacy Policy
+  spec: eb-suite
+  summary: Update Privacy Policy
+- operationId: EBS assign or un-assign Privacy Policy
+  spec: eb-suite
+  summary: assign or un-assign Privacy Policy
+- operationId: EBS Get Privacy Policy Assigment
+  spec: eb-suite
+  summary: Get Privacy Policy Assigment
+- operationId: EBS List Profiles
+  spec: eb-suite
+  summary: List Profiles
+- operationId: EBS Get Profiles
+  spec: eb-suite
+  summary: Get Profiles
+- operationId: EBS List Record Types
+  spec: eb-suite
+  summary: List Record Types
+- operationId: EBS Create Record Type
+  spec: eb-suite
+  summary: Create Record Type
+- operationId: EBS Delete Record Type
+  spec: eb-suite
+  summary: Delete Record Type
+- operationId: EBS Get Record Type
+  spec: eb-suite
+  summary: Get Record Type
+- operationId: EBS Update Record Type
+  spec: eb-suite
+  summary: Update Record Type
+- operationId: EBS Send Registration Email
+  spec: eb-suite
+  summary: Send Registration Email
+- operationId: EBS Get Audit Log
+  spec: eb-suite
+  summary: Get Audit Log
+- operationId: EBS Query Residents By Filters
+  spec: eb-suite
+  summary: Query Residents By Filters
+- operationId: EBS List Roles
+  spec: eb-suite
+  summary: List Roles
+- operationId: EBS Create Role
+  spec: eb-suite
+  summary: Create Role
+- operationId: EBS Delete Role
+  spec: eb-suite
+  summary: Delete Role
+- operationId: EBS Get Role
+  spec: eb-suite
+  summary: Get Role
+- operationId: EBS Update Role
+  spec: eb-suite
+  summary: Update Role
+- operationId: EBS List Scheduling Audits
+  spec: eb-suite
+  summary: List Scheduling Audits
+- operationId: EBS List Calendar Events
+  spec: eb-suite
+  summary: List Calendar Events
+- operationId: EBS List Calendars
+  spec: eb-suite
+  summary: List Calendars
+- operationId: EBS Create Calendar
+  spec: eb-suite
+  summary: Create Calendar
+- operationId: EBS Delete Calendars
+  spec: eb-suite
+  summary: Delete Calendars
+- operationId: EBS Get Calendars
+  spec: eb-suite
+  summary: Get Calendars
+- operationId: EBS Update calendars
+  spec: eb-suite
+  summary: Update calendars
+- operationId: EBS Scheduling Oncall Reminder Staff
+  spec: eb-suite
+  summary: Scheduling Oncall Reminder Staff
+- operationId: EBS Scheduling Oncall Staff
+  spec: eb-suite
+  summary: Scheduling Oncall Staff
+- operationId: EBS List Shift Schedules
+  spec: eb-suite
+  summary: List Shift Schedules
+- operationId: EBS Create Shift Schedules
+  spec: eb-suite
+  summary: Create Shift Schedules
+- operationId: EBS Delete Shift Schedules
+  spec: eb-suite
+  summary: Delete Shift Schedules
+- operationId: EBS Get Shift Schedules
+  spec: eb-suite
+  summary: Get Shift Schedules
+- operationId: EBS Update Shift Schedules
+  spec: eb-suite
+  summary: Update Shift Schedules
+- operationId: EBS List Shift Substitutions
+  spec: eb-suite
+  summary: List Shift Substitutions
+- operationId: EBS Create Shift Substitutions
+  spec: eb-suite
+  summary: Create Shift Substitutions (Override)
+- operationId: EBS Delete Shift Substitutions
+  spec: eb-suite
+  summary: Delete Shift Substitutions
+- operationId: EBS Get Shift Substitutions
+  spec: eb-suite
+  summary: Get Shift Substitutions
+- operationId: EBS Update Shift Substitutions
+  spec: eb-suite
+  summary: Update Shift Substitutions
+- operationId: EBS List Staff Schedules
+  spec: eb-suite
+  summary: List Staff Schedules
+- operationId: EBS Create Staff Schedule
+  spec: eb-suite
+  summary: Create Staff Schedule
+- operationId: EBS Delete Staff Schedules
+  spec: eb-suite
+  summary: Delete Staff Schedules
+- operationId: EBS Get Staff Schedules
+  spec: eb-suite
+  summary: Get Staff Schedules
+- operationId: EBS Update Staff Schedules
+  spec: eb-suite
+  summary: Update Staff Schedules
+- operationId: EBS List Scheduling Substitutions
+  spec: eb-suite
+  summary: List Scheduling Substitutions
+- operationId: EBS Create Scheduling Substitutions
+  spec: eb-suite
+  summary: Create Scheduling Substitutions
+- operationId: EBS Delete Scheduling Substitutions
+  spec: eb-suite
+  summary: Delete Scheduling Substitutions
+- operationId: EBS Get Scheduling Substitutions
+  spec: eb-suite
+  summary: Get Scheduling Substitutions
+- operationId: EBS Update Scheduling Substitutions
+  spec: eb-suite
+  summary: Update Scheduling Substitutions
+- operationId: EBS Delete Shape File
+  spec: eb-suite
+  summary: Delete Shape File
+- operationId: EBS Upload Shape File
+  spec: eb-suite
+  summary: Upload Shape File
+- operationId: EBS Get Staff Assigned By Calendar ExternalId
+  spec: eb-suite
+  summary: Get Staff Assigned By Calendar ExternalId
+- operationId: EBS Get Email List
+  spec: eb-suite
+  summary: Get Email List For Contact Upload
+- operationId: EBS Get Contacts Group Upload Details
+  spec: eb-suite
+  summary: Get Contacts Group Upload Details
+- operationId: EBS Get Contacts Upload Details
+  spec: eb-suite
+  summary: Get Contacts Upload Details
+- operationId: EBS Get Upload Dynamic Locations Details
+  spec: eb-suite
+  summary: Get Upload Dynamic Locations Details
+- operationId: EBS List Upload Contacts
+  spec: eb-suite
+  summary: List Upload Contacts
+- operationId: EBS Upload Contacts
+  spec: eb-suite
+  summary: Upload Contacts
+- operationId: EBS List Upload Contacts Groups
+  spec: eb-suite
+  summary: ' List Upload Contacts Groups'
+- operationId: EBS Upload Contacts Groups
+  spec: eb-suite
+  summary: Upload Contacts Groups
+- operationId: EBS Get Contacts Groups Upload Status
+  spec: eb-suite
+  summary: Get Contacts Groups Upload Status
+- operationId: EBS Get Contacts Upload Status
+  spec: eb-suite
+  summary: Get Contacts Upload Status
+- operationId: EBS List Users
+  spec: eb-suite
+  summary: List Users
+- operationId: EBS Create User
+  spec: eb-suite
+  summary: Create User
+- operationId: EBS List Users Basic
+  spec: eb-suite
+  summary: List basic users with pagination.
+- operationId: EBS Delete user
+  spec: eb-suite
+  summary: Delete user
+- operationId: EBS Get User
+  spec: eb-suite
+  summary: Get User
+- operationId: EBS Update User Partial
+  spec: eb-suite
+  summary: Update User (Partial)
+- operationId: EBS Update User
+  spec: eb-suite
+  summary: Update User
+- operationId: EBS Send registration email
+  spec: eb-suite
+  summary: Send registration email
+- operationId: EBS Get Custom Roles In Organization
+  spec: eb-suite
+  summary: List Custom Roles
+- operationId: EBS Create Custom Role
+  spec: eb-suite
+  summary: Create Custom Role
+- operationId: EBS Delete Custom Role
+  spec: eb-suite
+  summary: Delete Custom Role
+- operationId: EBS Get Custom Role
+  spec: eb-suite
+  summary: Get Custom Role
+- operationId: EBS Patch Custom Role
+  spec: eb-suite
+  summary: Patch Custom Role
+- operationId: EBS Update Custom Role
+  spec: eb-suite
+  summary: Update Custom Role
+- operationId: POST /checks
+  spec: pnr-check-service
+  summary: Create a new check rule
+- operationId: GET /checks
+  spec: pnr-check-service
+  summary: Get all check rules
+- operationId: GET /checks/{id}
+  spec: pnr-check-service
+  summary: Get a check rule by ID
+- operationId: PUT /checks/{id}
+  spec: pnr-check-service
+  summary: Update an existing check rule
+- operationId: DELETE /checks/{id}
+  spec: pnr-check-service
+  summary: Delete a check rule by ID
+- operationId: GET /checks/query
+  spec: pnr-check-service
+  summary: Query check rules by scope
+- operationId: POST /checktemplates
+  spec: pnr-check-service
+  summary: Create a new check template
+- operationId: GET /checktemplates
+  spec: pnr-check-service
+  summary: Get all check templates
+- operationId: GET /checktemplates/{id}
+  spec: pnr-check-service
+  summary: Get a check template by ID
+- operationId: PUT /checktemplates/{id}
+  spec: pnr-check-service
+  summary: Update an existing check template
+- operationId: DELETE /checktemplates/{id}
+  spec: pnr-check-service
+  summary: Delete a check template by ID
+- operationId: GET /checktemplates/source/{sourceId}
+  spec: pnr-check-service
+  summary: Get check templates by source ID
+- operationId: REI Export
+  spec: risk-intelligence
+  summary: Risk Event Export
+- operationId: Push a safety device event
+  spec: safety-devices
+  summary: Push a safety device event
+- operationId: targeting-attributes
+  spec: snapcomms
+  summary: Attributes
+- operationId: targeting-groups
+  spec: snapcomms
+  summary: Targeting Groups
+- operationId: status
+  spec: snapcomms
+  summary: Status
+- operationId: template-tags
+  spec: snapcomms
+  summary: Template Tags
+- operationId: token
+  spec: snapcomms
+  summary: Token
+- operationId: content-templates
+  spec: snapcomms
+  summary: Templates
+- operationId: content-template
+  spec: snapcomms
+  summary: Template
+- operationId: preview-from-template
+  spec: snapcomms
+  summary: Preview From Template
+- operationId: publish-from-template
+  spec: snapcomms
+  summary: Publish From Template
+- operationId: content-disable
+  spec: snapcomms
+  summary: Disable
+- operationId: content-statistics
+  spec: snapcomms
+  summary: Statistics
+- operationId: report-publishing-statistics
+  spec: snapcomms
+  summary: Report - Publishing Statistics
+- operationId: report-users
+  spec: snapcomms
+  summary: Report - Users
+- operationId: report-success-report
+  spec: snapcomms
+  summary: Report - Success Report
+- operationId: report-questionnaire-summary
+  spec: snapcomms
+  summary: Report - Questionnaire Summary
+- operationId: report-questionnaire-responses
+  spec: snapcomms
+  summary: Report - Questionnaire Responses
+- operationId: user-management-delete-machines
+  spec: snapcomms
+  summary: Delete Machines
+- operationId: user-management-delete-users
+  spec: snapcomms
+  summary: Delete Users
+- operationId: user-management-disable-machines
+  spec: snapcomms
+  summary: Disable Machines
+- operationId: user-management-disable-users
+  spec: snapcomms
+  summary: Disable Users
+- operationId: user-management-group-members
+  spec: snapcomms
+  summary: Group Users and Machines
+- operationId: user-management-groups
+  spec: snapcomms
+  summary: Groups
+- operationId: user-management-machines
+  spec: snapcomms
+  summary: Machines
+- operationId: user-management-get-users
+  spec: snapcomms
+  summary: Users
+- operationId: travel-risk-intelligence-list-country-ratings
+  spec: travel
+  summary: List All Country Risk Ratings
+- operationId: travel-risk-intelligence-get-country-rating
+  spec: travel
+  summary: Retrieve A Risk Rating For A Specific Country
+- operationId: travel-risk-intelligence-list-city-ratings-by-country
+  spec: travel
+  summary: List City Risk Ratings For A Country
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

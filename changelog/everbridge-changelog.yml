@@ -1,0 +1,123 @@
+generated: '2026-08-27'
+method: searched
+docs: https://developers.everbridge.net/home/changelog
+source: https://developers.everbridge.net/home/changelog
+provider: Everbridge
+providerId: everbridge
+description: >-
+  Everbridge maintains a dated, API-specific changelog on its developer hub, deliberately
+  scoped to API-affecting changes ("Non-API updates (UI, workflow, or client-facing
+  configuration-only changes) have been excluded"). Entries are batched by platform release
+  train rather than published per-change, so a single entry can cover three releases.
+versioning:
+  scheme: platform release train
+  format: CEM <year>.<release>  (for example 25.6, 25.11, 26.0, 26.3)
+  current_release_referenced: '26.3'
+  cadence: roughly monthly platform releases, batched into quarterly changelog entries
+  api_path_versioning: >-
+    Independent per service — /authorization/v1, /rest (unversioned) and /rest/v2/asset-management,
+    /digitalapps/v2, /cem-alerts/query/v1, /managerapps/communications/v1, /travel/v1,
+    /travel-connector/v1, /safety-connection/v1, /riskevents/v1, api.snapcomms.com/v1.
+    There is no single platform-wide API version.
+entry_count: 9
+entries:
+- date: '2026-05-13'
+  title: Everbridge API Changelog (26.1, 26.2, 26.3)
+  releases:
+  - '26.1'
+  - '26.2'
+  - '26.3'
+  url: https://developers.everbridge.net/home/changelog/everbridge-api-changelog
+  additions:
+  - Custom Role Management API set (List/Create/Get/Update/Patch/Delete Custom Role) — full API parity with the UI, free for all API customers
+  - Country Risk Level API (Travel Risk Intelligence) — current and historical country risk ratings by ISO-2 country code
+  - User PATCH enable/disable support (26.2) — removes the need for PUT to change user status
+  - API service accounts with resource + action permissions
+  - Multiple polling responses in Communications
+  breaking: false
+  behaviour_changes:
+  - endpoint: /scheduling/shiftSchedules
+    methods: [GET, PUT, DELETE]
+    change: Invalid IDs now return 404 Not Found instead of 500 Internal Server Error
+    impact: Clients must update error-handling logic
+  - endpoint: /contact (Create, Update, Create Batch, Update Batch)
+    change: Validation now prevents duplicate Location Name + Location Type combinations
+    impact: Previously-accepted duplicate static locations are now rejected
+    status: planned for the May release
+  fixes:
+  - Contact API response formatting — removed unnecessary extra spaces (case 771974)
+- date: '2026-02-03'
+  title: Everbridge API Changelog (CEM 25.10 to 25.11 to 26.0)
+  releases:
+  - '25.10'
+  - '25.11'
+  - '26.0'
+  url: https://developers.everbridge.net/home/changelog/everbridge-api-changelog-cem-2510-2511-260
+  additions:
+  - CMDB Group Lookup partial-update endpoints — PUT /lookup/{organizationId}/attributes/updateByName/{attributeName} and PUT /lookup/{organizationId}/attributes/append/{attributeName}, free for all customers
+  - Contact search relative-timeframe (date-range) filtering
+  - Risk Events Export payload gains Geopolitical and Cybersecurity categories
+  breaking: false
+  behaviour_changes:
+  - endpoint: /scheduling/shiftSchedules
+    change: 500 to 404 error-code standardization for invalid IDs
+  - endpoint: POST /export/riskevents/v1/riskevents/export
+    change: New risk-event categories in the export payload
+    impact: Clients consuming exported risk events should update category handling
+  fixes:
+  - GET /scheduling/calendars — pageSize now correctly returns 100 results instead of defaulting to 10
+  - PATCH /contact — server tokens now work with PATCH, enabling service-to-service contact updates
+- date: '2025-10-22'
+  title: Everbridge API Changelog, versions 25.6 to 25.9 (July-October 2025)
+  releases:
+  - '25.6'
+  - '25.7'
+  - '25.8'
+  - '25.9'
+  url: https://developers.everbridge.net/home/changelog/everbridge-api-changelog-versions-256-259-julyoctober-2025
+  additions:
+  - Everbridge Risk Intelligence Feed API — standalone risk-intelligence consumption outside the platform, up to 1,000 results per invocation and 1 year of history (requires subscription)
+  - CMDB Group Lookup API new PUT methods, backward compatible
+  - Incident Subscription Management APIs — GET/POST /incidentSubscriptions for bulk upload and download
+  - Contact integration with SAP SuccessFactors
+  - Email bounce filtering on Contacts (emailStatus=bounced)
+  - latestResponseTime added to notification detail and polling response data
+  - Entra ID contact sync gains the Manager attribute
+  breaking: false
+  behaviour_changes:
+  - change: SSO user ID matching is now case-insensitive in the API layer
+    impact: No integration changes required
+- date: '2025-04-01'
+  type: added
+  title: New Partial User Update API
+  highlights:
+  - PATCH on the Users API enables sparse add/replace/remove without retrieving and resending the full user object
+- date: '2025-02-27'
+  type: added
+  title: Service Accounts Now Available
+  highlights:
+  - General availability of OAuth service accounts
+  - Password grant type supported for all EB Suite REST APIs
+  - Client credential grant type in limited UAT at the time of publication
+- date: '2024-12-11'
+  type: improved
+  title: Long Awaited User API Enhancement
+  highlights:
+  - List Users can now request up to 1000 results
+  - Default page size remains 10 to avoid breaking changes
+- date: '2024-11-07'
+  type: added
+  title: Everbridge Suite API Documentation Enhancements
+- date: '2023-06-02'
+  type: improved
+  title: Planned Certificate Update to api.everbridge.net
+  highlights:
+  - Periodic TLS certificate rotation on api.everbridge.net; relevant to clients that pin or install the Everbridge certificate
+- date: '2023-06-01'
+  type: added
+  title: Everbridge API Announcements
+  highlights:
+  - Launch of the Everbridge Developer Portal with getting-started guides, API collections with working samples, a developer community, and release announcements
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

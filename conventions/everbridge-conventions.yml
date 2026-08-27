@@ -1,0 +1,229 @@
+generated: '2026-08-27'
+method: derived
+source: >-
+  openapi/*.json (13 documents, 473 operations) cross-checked against
+  https://developers.everbridge.net/home/docs/ebs-gs-guide,
+  .../ebs-gs-guide-authentication-types, .../ebs-gs-guide-throttling-limits and
+  .../ebs-gs-guide-common-error-messages
+provider: Everbridge
+providerId: everbridge
+description: >-
+  Cross-cutting runtime semantics an agent needs before it calls Everbridge: how to
+  authenticate, how to page, what a failure looks like, whether a call can be replayed
+  safely, and — the part that matters most for a platform whose write operations send real
+  alerts to real people — whether an action can be taken back.
+authentication:
+  style: OAuth 2.0 bearer token (client_credentials or password grant), HTTP Basic, or a
+    system x-api-key header
+  header: 'Authorization: Bearer <id_token|access_token>'
+  token_endpoint: https://api.everbridge.net/authorization/v1/tokens
+  token_ttl_seconds: 28800
+  scoping: per-service-account resource + action permissions
+  see_also: authentication/everbridge-authentication.yml, scopes/everbridge-scopes.yml
+tenancy:
+  model: organizationId in the path
+  note: >-
+    Most EB Suite operations are organization-scoped and carry {organizationId} as the first
+    path segment after the resource. A handful (Users, Audit logs, Roles) are account-level.
+    A 403 is returned when the token's account may not access the organization named in the
+    path. An agent must therefore bind an organizationId before it can call almost anything.
+  account_level_resources:
+  - Users
+  - Audit logs
+  - Roles
+pagination:
+  style: page-number
+  params:
+    page: pageNumber
+    size: pageSize
+  defaults:
+    page_size: 10
+  maximums:
+    list_users: 1000
+    list_calendars: 100
+  response_fields:
+    note: >-
+      Collection responses carry a page object alongside the result array; there is no
+      Link header and no cursor.
+  inconsistencies:
+  - param: pageNo
+    where: 9 EB Suite operations
+  - param: page
+    where: 2 EB Suite operations, 1 Digital Apps operation
+  - param: limit
+    where: 1 Digital Apps operation
+  - note: >-
+      GET /scheduling/calendars ignored pageSize and defaulted to 10 until the 25.11 fix.
+      Treat page-size honouring as per-endpoint, not platform-wide.
+  cursor_support: false
+idempotency:
+  supported: false
+  header: null
+  scope: null
+  retention: null
+  evidence: >-
+    No Idempotency-Key header, no idempotency request parameter, and no occurrence of the
+    string "idempoten" anywhere in the 13 OpenAPI documents or on the developer hub.
+  consequence: >-
+    This is the highest-stakes gap in the Everbridge contract. POST
+    /notifications/{organizationId} (Launch Mass Notification) and POST
+    /incidents/{organizationId} (Launch Incident) have real-world side effects — phone calls,
+    SMS, push, public warning. A client that retries after a network timeout has no way to
+    know whether the first attempt landed, and Everbridge offers no key to deduplicate on.
+    An agent must implement its own at-most-once guard outside the API.
+  no_pointer_note: >-
+    Because idempotency is genuinely absent, NO `type: Idempotency` pointer is wired into
+    apis.yml. Emitting one would assert a capability Everbridge does not ship.
+dry_run_mode:
+  supported: partial
+  operations:
+  - operationId: EBS Preview Incident
+    method: POST
+    path: /incidents/{organizationId}/preview
+    spec: openapi/everbridge-eb-suite-openapi.json
+    description: >-
+      Renders an incident from its template and variables without launching it — the only
+      genuine rehearse-before-you-act surface in the platform.
+  gap: >-
+    There is no equivalent preview for Launch Mass Notification, Launch Push Notification or
+    Launch Incident Scenario.
+reversibility:
+  grade: documented
+  rationale: >-
+    Reversal operations exist and are named in the contract, but Everbridge publishes no
+    window for any of them — no docs page states how long after launch a communication can be
+    stopped, how long a cancelled upload batch stays cancellable, or whether a deleted contact
+    can be recovered. Under the 0.12.0 rubric a reversal path without a stated window is
+    `documented` (0.4), not `verified` (1.0). No window is asserted here, because inventing
+    one for a platform that sends emergency alerts could cost a user far more than a score.
+  write_surfaces:
+  - surface: Launch Mass Notification
+    operationId: EBS Launch Mass Notification
+    method: POST
+    path: /notifications/{organizationId}
+    spec: openapi/everbridge-eb-suite-openapi.json
+    reversal: none-in-contract
+    reversal_operation: null
+    window: null
+    note: >-
+      The EB Suite contract exposes no stop/cancel/recall operation for a launched mass
+      notification. PUT /notifications/{organizationId}/{notificationId} (Update Notification)
+      is the only post-launch write, and the contract does not document it as a stop. This is
+      the single highest-consequence irreversible action in the Everbridge API surface.
+  - surface: Launch Communication (Communications API)
+    operationId: Launch Communication
+    method: POST
+    path: /
+    spec: openapi/everbridge-communications-openapi.json
+    reversal: documented
+    reversal_operation:
+      operationId: patchStopCem-comms
+      method: PATCH
+      path: /{commId}/stop
+      summary: Stop Communication
+    alternate_reversal:
+      operationId: deactivateCem-commsPublishOptionMessage
+      method: PATCH
+      path: /{commId}/publish-options
+      summary: Deactivate or expire a single communication publish-option message
+    window: null
+    window_source: null
+  - surface: Launch Communication (comm alias route)
+    reversal: documented
+    reversal_operation:
+      operationId: patchStopComm
+      method: PATCH
+      path: /comm/{commId}/stop
+      summary: Stop Communication
+    window: null
+  - surface: Asset upload batch
+    reversal: documented
+    reversal_operation:
+      operationId: EBS AM Update Upload Asset Batch
+      method: PUT
+      path: /asset-upload-batches/cancel/{id}
+      summary: Cancel an in-flight asset upload batch
+    window: null
+    note: Cancellation presumably only applies while the batch is still processing; the contract does not say so.
+  - surface: SafeCorridor (Digital Apps)
+    reversal: documented
+    reversal_operation:
+      operationId: ebs-daa-stop-safe-corridor
+      method: PUT
+      path: /contacts/safe-corridors/{safe-corridor-id}
+      summary: Stop SafeCorridor
+    window: null
+  - surface: Contact check-in (Digital Apps)
+    reversal: documented
+    reversal_operation:
+      operationId: ebs-daa-delete-last-checkin
+      method: DELETE
+      path: /contacts/checkins/last
+      summary: Delete Checkin
+    window: null
+    note: Only the LAST check-in can be deleted; earlier ones cannot.
+  - surface: Contacts, Groups, Users, Roles, Templates, Schedules, Calendars, Locations
+    reversal: destructive-delete
+    reversal_operation: null
+    window: null
+    note: >-
+      Roughly 30 DELETE operations across the surface. None has a matching restore, undelete
+      or trash endpoint, and no retention window is published. Treat every DELETE as
+      permanent.
+  - surface: Launch Incident / Launch Incident Scenario
+    reversal: none-in-contract
+    window: null
+    note: >-
+      POST /incidents/{organizationId} and POST /incidentScenarios/{organizationId} have no
+      cancel operation. PUT Update Incident can change incident state but is not documented
+      as a rollback. Mitigated only by POST /incidents/{organizationId}/preview beforehand.
+error_semantics:
+  envelope: application/json with a free-text `message` property
+  problem_json: false
+  statuses:
+  - 400
+  - 401
+  - 403
+  - 404
+  - 409
+  - 415
+  - 424
+  - 429
+  - 500
+  see_also: errors/everbridge-problem-types.yml
+rate_limit_signalling:
+  documented_limits: true
+  response_headers: false
+  exhaustion_status: 429
+  retry_guidance: exponential backoff with jitter
+  see_also: rate-limits/everbridge-rate-limits.yml
+request_tracing:
+  request_id_header: null
+  note: No correlation or request-id header is documented or declared in any contract.
+versioning:
+  style: per-service URL version plus a platform release train
+  see_also: lifecycle/everbridge-lifecycle.yml
+field_expansion:
+  supported: false
+  note: >-
+    No expand/fields/include sparse-fieldset parameter. Several EB Suite list endpoints accept
+    a record-type or filter query instead.
+partial_update:
+  supported: true
+  note: >-
+    PATCH is supported on Users (sparse add/replace/remove, 2025-04), Contacts, Custom Roles
+    (26.1) and Communications. Everbridge added PATCH specifically so clients would stop
+    round-tripping whole objects through PUT.
+streaming:
+  supported: true
+  surface: GraphQL subscription over WebSocket
+  endpoint: https://api.everbridge.net/cem-alerts/stream/v1/graphql
+  example: >-
+    query { subscription read { alertsStream { alertId organization status owner snoozedUntil
+    isActive lastEvent { title correlations { impactGeometry } } } } }
+  note: >-
+    This is Everbridge's only push/event surface. There is no webhook catalogue and no
+    AsyncAPI document, so no AsyncAPI or Webhooks artifact is emitted.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

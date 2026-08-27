@@ -3,193 +3,61 @@ specificationVersion: '0.1'
 schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
 provider: Everbridge
 providerId: everbridge
-created: '2026-05-04'
-# Provenance stamped 2026-08-11: this artifact was written by the API Evangelist
-# bulk sweep dated 2026-05-04, not harvested from the provider. See roadmap#35.
-method: generated
-modified: '2026-05-04'
+generated: '2026-08-27'
+method: searched
+source: https://www.everbridge.com/demo/
+modified: '2026-08-27'
+# REPLACES the 2026-05-04 bulk-sweep scaffold, which invented three priced tiers
+# (Free / Professional / Enterprise) with a 1,000-request free quota and TBD overage
+# pricing. Everbridge publishes NO pricing at all. Nothing below is inferred.
 tags:
-  - Critical Event Management
-  - Emergency Management
-  - Incident Management
-  - IT Alerting
-  - Mass Notification
-description: Machine-readable plans and pricing scaffold for this API provider. Conforms to the API Commons
-  Plans schema. Tier limits and prices are scaffold defaults; replace with provider-published values.
-plans:
-  - id: everbridge-free
-    name: Free
-    type: freemium
-    description: Free entry tier for the Everbridge API surface. Intended for evaluation, prototyping,
-      and low-volume integrations. Real limits and pricing must be reconciled with the provider's published
-      plan documentation.
-    entries:
-      - label: API Requests
-        description: Monthly API request quota across all included endpoints
-        name: api_requests
-        type: quota
-        metric: requests
-        limit: 1000
-        timeFrame: month
-        geo: global
-        domains:
-          - https://api.everbridge.net/rest
-          - https://api.everbridge.net
-          - https://api.snapcomms.com
-          - https://ipaas-ingestion.everbridge.net
-        unit: 1
-        price: '0.00'
-        userMultiplied: false
-      - label: Rate Limit
-        description: Maximum requests per minute on the free tier
-        name: rate_limit
-        type: rate
-        metric: requests_per_minute
-        limit: 10
-        timeFrame: minute
-        geo: global
-        domains:
-          - https://api.everbridge.net/rest
-          - https://api.everbridge.net
-          - https://api.snapcomms.com
-          - https://ipaas-ingestion.everbridge.net
-        unit: 1
-        price: '0.00'
-        userMultiplied: false
-    elements:
-      - name: Public Documentation
-      - name: Community Support
-      - name: Sandbox Access
-      - name: Everbridge Suite API
-      - name: Everbridge Asset Management API
-      - name: Everbridge Asset Query API
-      - name: Everbridge CEM Alerts API
-      - name: Everbridge SnapComms API
-      - name: Everbridge Digital Apps API
-      - name: Everbridge Communications API
-      - name: Everbridge iPaaS API
-  - id: everbridge-pro
-    name: Professional
-    type: paid
-    description: Production tier for Everbridge. Provides higher quotas, priority support, and access
-      to the broader API portfolio. Pricing placeholder; align with the provider's pricing page.
-    entries:
-      - label: API Requests
-        description: Monthly API request quota
-        name: api_requests
-        type: quota
-        metric: requests
-        limit: 100000
-        timeFrame: month
-        geo: global
-        domains:
-          - https://api.everbridge.net/rest
-          - https://api.everbridge.net
-          - https://api.snapcomms.com
-          - https://ipaas-ingestion.everbridge.net
-        unit: 1
-        price: TBD
-        userMultiplied: false
-      - label: Rate Limit
-        description: Maximum requests per minute on the professional tier
-        name: rate_limit
-        type: rate
-        metric: requests_per_minute
-        limit: 100
-        timeFrame: minute
-        geo: global
-        domains:
-          - https://api.everbridge.net/rest
-          - https://api.everbridge.net
-          - https://api.snapcomms.com
-          - https://ipaas-ingestion.everbridge.net
-        unit: 1
-        price: '0.00'
-        userMultiplied: false
-      - label: Overage
-        description: Per-request price after monthly quota is exceeded
-        name: overage
-        type: metered
-        metric: requests
-        limit: -1
-        timeFrame: month
-        geo: global
-        domains:
-          - https://api.everbridge.net/rest
-          - https://api.everbridge.net
-          - https://api.snapcomms.com
-          - https://ipaas-ingestion.everbridge.net
-        unit: 1000
-        price: TBD
-        userMultiplied: false
-    elements:
-      - name: All Production Endpoints
-      - name: Email Support
-      - name: SLA Targets
-      - name: Webhook Subscriptions
-      - name: Everbridge Suite API
-      - name: Everbridge Asset Management API
-      - name: Everbridge Asset Query API
-      - name: Everbridge CEM Alerts API
-      - name: Everbridge SnapComms API
-      - name: Everbridge Digital Apps API
-      - name: Everbridge Communications API
-      - name: Everbridge iPaaS API
-      - name: Everbridge Safety Devices API
-  - id: everbridge-enterprise
-    name: Enterprise
-    type: enterprise
-    description: Custom-negotiated tier for Everbridge. Includes dedicated capacity, contractual SLAs,
-      security review, data residency options, and named technical account management.
-    entries:
-      - label: API Requests
-        description: Negotiated request volume; -1 indicates uncapped subject to fair use
-        name: api_requests
-        type: quota
-        metric: requests
-        limit: -1
-        timeFrame: month
-        geo: configurable
-        domains:
-          - https://api.everbridge.net/rest
-          - https://api.everbridge.net
-          - https://api.snapcomms.com
-          - https://ipaas-ingestion.everbridge.net
-        unit: 1
-        price: custom
-        userMultiplied: false
-      - label: Rate Limit
-        description: Negotiated burst and steady-state rate
-        name: rate_limit
-        type: rate
-        metric: requests_per_minute
-        limit: 1000
-        timeFrame: minute
-        geo: configurable
-        domains:
-          - https://api.everbridge.net/rest
-          - https://api.everbridge.net
-          - https://api.snapcomms.com
-          - https://ipaas-ingestion.everbridge.net
-        unit: 1
-        price: custom
-        userMultiplied: false
-    elements:
-      - name: Unlimited / Negotiated Volume
-      - name: 24/7 Dedicated Support
-      - name: Contractual SLA
-      - name: Security & Compliance Review
-      - name: Dedicated Account Manager
-      - name: Custom Data Residency
-      - name: Everbridge Suite API
-      - name: Everbridge Asset Management API
-      - name: Everbridge Asset Query API
-      - name: Everbridge CEM Alerts API
-      - name: Everbridge SnapComms API
-      - name: Everbridge Digital Apps API
-      - name: Everbridge Communications API
-      - name: Everbridge iPaaS API
-      - name: Everbridge Safety Devices API
+- Critical Event Management
+- Emergency Management
+- Pricing
+description: >-
+  Everbridge publishes no public pricing, no plan comparison and no self-serve signup for
+  the Everbridge 360 platform or its APIs. https://www.everbridge.com/pricing/ returns 404,
+  as does https://www.everbridge.com/free-trial/; the site's only commercial entry point is
+  a demo request form. API access is not sold separately — it is included with an Everbridge
+  Suite subscription and provisioned through the authenticated Manager Portal by creating a
+  service account. The only tiering Everbridge documents publicly is the Bronze/Silver/Gold
+  API throttling ladder, which is explicitly free of charge at every level and is captured
+  in rate-limits/everbridge-rate-limits.yml, not here.
+plan_count: 0
+pricing_model: enterprise-quote
+self_serve_signup: false
+free_trial: false
+plans: []
+api_entitlement:
+  included_with: Everbridge Suite / Everbridge 360 subscription
+  provisioned_via: >-
+    Manager Portal service-account workflow (Users -> Service Accounts at account level,
+    Settings -> Access -> Service Accounts at organization level)
+  paid_add_ons_observed:
+  - name: Everbridge Risk Intelligence Feed API
+    note: >-
+      The 25.6 changelog entry for the Risk Intelligence Feed API is marked "Requires
+      subscription", so at least one API surface is a separately licensed add-on. No price
+      is published.
+    source: https://developers.everbridge.net/home/changelog
+  free_api_features_observed:
+  - name: Custom Role Management APIs
+    note: Changelog 26.1 states availability is free for all API customers.
+  - name: User PATCH enable/disable
+    note: Changelog 26.2 states availability is free for all API customers.
+  - name: CMDB Group Lookup APIs
+    note: Changelog 25.11 states availability is free for all customers.
+evidence:
+- url: https://www.everbridge.com/pricing/
+  status: 404
+  checked: '2026-08-27'
+- url: https://www.everbridge.com/free-trial/
+  status: 404
+  checked: '2026-08-27'
+- url: https://www.everbridge.com/demo/
+  status: 200
+  checked: '2026-08-27'
+  note: The demo request form is the only published commercial entry point.
 maintainers:
-  - FN: Kin Lane
-    email: kin@apievangelist.com
+- FN: Kin Lane
+  email: kin@apievangelist.com

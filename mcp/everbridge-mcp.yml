@@ -1,0 +1,68 @@
+generated: '2026-08-27'
+method: probed
+source: https://developers.everbridge.net/mcp
+name: Everbridge API Developer Hub MCP Server
+provider: Everbridge
+providerId: everbridge
+status: live-gated
+description: >-
+  Everbridge serves a Model Context Protocol endpoint from its own developer hub host,
+  developers.everbridge.net/mcp. A JSON-RPC POST of tools/list and of initialize both return
+  HTTP 401 with {"jsonrpc":"2.0","error":{"code":-32001,"message":"Authorization required"}},
+  so the endpoint is live and MCP-shaped but the tool set is authentication-gated. The
+  response carries ReadMe's CORS allow-list (x-readme-conversation-id, x-readme-project-id,
+  x-readme-ai-metadata), which identifies this as the MCP surface ReadMe exposes for the
+  Everbridge API Developer Hub's own API reference.
+deployment:
+  mode: remote
+  endpoint: https://developers.everbridge.net/mcp
+  install: null
+  package: null
+  auth: unknown
+  verified: probed
+x-evidence:
+- url: https://developers.everbridge.net/mcp
+  method: POST
+  body: '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+  http_status: 401
+  response: '{"jsonrpc":"2.0","error":{"code":-32001,"message":"Authorization required"},"id":null}'
+  fetched: '2026-08-27'
+- url: https://developers.everbridge.net/mcp
+  method: POST
+  body: '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{...}}'
+  http_status: 401
+  response: '{"jsonrpc":"2.0","error":{"code":-32001,"message":"Authorization required"},"id":null}'
+  fetched: '2026-08-27'
+- url: https://developers.everbridge.net/home/mcp
+  method: POST
+  http_status: 404
+  note: probed to rule out a catch-all — only /mcp is routed, so the 401 is a real endpoint
+  fetched: '2026-08-27'
+- url: https://api.everbridge.net/mcp
+  method: POST
+  http_status: 404
+  fetched: '2026-08-27'
+- url: https://mcp.everbridge.com/mcp
+  method: POST
+  http_status: 000
+  note: host does not resolve
+  fetched: '2026-08-27'
+tools:
+  status: gated
+  note: >-
+    tools/list requires authorization, so the real tool names and inputSchemas could not be
+    read anonymously. No tool list is asserted here. The backing surface is the API reference
+    published on the same hub — 13 OpenAPI documents / 473 operations, captured in openapi/ —
+    and mcp/everbridge-tool-crosswalk.yml maps the REST surface an authenticated client
+    would find behind these tools.
+  discovered: []
+authentication:
+  oauth_authorization_server: null
+  oauth_protected_resource: null
+  note: >-
+    Neither /.well-known/oauth-authorization-server nor /.well-known/oauth-protected-resource
+    is served on developers.everbridge.net (both 404), and the 401 carries no WWW-Authenticate
+    header, so the authorization scheme could not be determined anonymously.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

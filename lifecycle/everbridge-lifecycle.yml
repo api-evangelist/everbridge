@@ -1,0 +1,137 @@
+generated: '2026-08-27'
+method: searched
+source: >-
+  https://developers.everbridge.net/home/changelog,
+  https://developers.everbridge.net/home/docs/ebs-gs-guide-authentication-types,
+  live probe of https://status.everbridge.com/ and https://everbridge.statuspage.io/
+provider: Everbridge
+providerId: everbridge
+description: >-
+  Versioning, deprecation and operational-transparency posture for the Everbridge API
+  surface, read from the developer hub and from live probes.
+versioning:
+  scheme: platform release train (CEM 25.x / 26.x), with independent per-service URL versions
+  documented: true
+  source: https://developers.everbridge.net/home/changelog
+  service_versions:
+  - service: EB Suite REST
+    base: https://api.everbridge.net/rest
+    version: unversioned path, with a /v1 segment on newer Custom Roles endpoints
+  - service: Authorization / token
+    base: https://api.everbridge.net/authorization/v1
+    version: v1
+  - service: Asset Management
+    base: https://api.everbridge.net/rest/v2/asset-management
+    version: v2
+  - service: Asset Query
+    base: https://api.everbridge.net/rest/v2/asset-query
+    version: v2
+  - service: Digital Apps
+    base: https://api.everbridge.net/digitalapps/v2
+    version: v2
+  - service: CEM Alerts Query
+    base: https://api.everbridge.net/cem-alerts/query/v1/
+    version: v1
+  - service: CEM Alerts Stream
+    base: https://api.everbridge.net/cem-alerts/stream/v1/
+    version: v1
+  - service: Communications
+    base: https://api.everbridge.net/managerapps/communications/v1
+    version: v1
+  - service: Travel Risk Intelligence
+    base: https://api.everbridge.net/travel/v1
+    version: v1
+  - service: PNR Check (travel connector)
+    base: https://api.everbridge.net/travel-connector/v1/checks
+    version: v1
+  - service: Safety Devices
+    base: https://api.everbridge.net/safety-connection/v1
+    version: v1
+  - service: Risk Events
+    base: https://api.everbridge.net/riskevents/v1/riskevents
+    version: v1
+  - service: SnapComms
+    base: https://api.snapcomms.com/v1
+    version: v1
+  regional_variants:
+  - https://api.everbridge.eu/rest
+  - https://api.everbridge.eu/travel/v1
+deprecation:
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  note: >-
+    Everbridge publishes no formal deprecation or sunset policy, sets no Deprecation or
+    Sunset response headers, and marks no operation `deprecated: true` in any of the 13
+    OpenAPI documents (473 operations checked). Deprecation is communicated only in prose in
+    the changelog. This is a real gap: an agent cannot detect a retiring endpoint from the
+    contract or from a response header.
+  deprecated_features:
+  - name: Access Token authentication
+    status: legacy
+    stated_as: >-
+      "Access Token is a legacy authentication method" — Everbridge directs organizations
+      that still require it to a support-site enablement article.
+    replacement: OAuth 2.0 client-credentials or password grant
+    sunset_date: null
+    source: https://developers.everbridge.net/home/docs/ebs-gs-guide-authentication-types
+  behaviour_changes_announced:
+  - release: '25.11 / 26.0 / 26.1'
+    endpoint: /scheduling/shiftSchedules
+    change: invalid ID response changed from 500 to 404
+    breaking_for: clients branching on 500
+  - release: '26.3'
+    endpoint: /contact and its batch variants
+    change: duplicate Location Name + Location Type combinations now rejected
+    breaking_for: clients that relied on duplicates being accepted
+status_page:
+  published: false
+  probed:
+  - url: https://status.everbridge.com/
+    status: 000
+    result: >-
+      Host does not resolve (NXDOMAIN). This URL was carried as a StatusPage pointer in
+      apis.yml until this pass and has been removed as confirmed dead.
+    checked: '2026-08-27'
+  - url: https://everbridge.statuspage.io/
+    status: 200
+    result: >-
+      Redirects to /inactive and renders "Everbridge old Status - Page Inactive". The legacy
+      Statuspage instance has been retired and not replaced.
+    checked: '2026-08-27'
+  - url: https://status.everbridge.net/
+    status: 000
+    result: Host does not resolve.
+    checked: '2026-08-27'
+  sibling_brands_with_status_pages:
+  - brand: xMatters
+    url: https://status.xmatters.com/
+    status: 200
+  - brand: SnapComms
+    url: https://status.snapcomms.com/
+    status: 200
+  note: >-
+    Two Everbridge-owned brands publish live status pages while the core Everbridge 360 /
+    Everbridge Suite platform publishes none. For a critical-event-management vendor whose
+    entire value proposition is operating during disruption, an absent platform status page
+    is the most conspicuous operational-transparency gap in this profile. No StatusPage
+    pointer is emitted for Everbridge, because pointing at a subsidiary's status page would
+    misstate what Everbridge itself serves.
+sla:
+  published: false
+  note: >-
+    No public SLA document. Availability commitments are contractual; the Trust Center
+    (https://trust.everbridge.com/) is where business-continuity and DR documentation is
+    requested under NDA.
+support:
+  channels:
+  - url: https://www.everbridge.com/support/
+    type: support
+  - url: https://supportcenter.everbridge.com/hc/en-us
+    type: community/knowledge base
+  - url: https://developers.everbridge.net/home/discuss
+    type: developer discussion
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

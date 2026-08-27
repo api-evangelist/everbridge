@@ -1,0 +1,111 @@
+# Everbridge
+
+> Everbridge provides High Velocity Critical Event Management (CEM), powered by Purpose-built AI, to help organizations know earlier, respond faster, and improve continuously. The platform unifies risk intelligence, communications, and coordinated response across people, assets, operations, and public safety environments to support organizational resilience at enterprise scale.
+
+Last updated: July 29, 2026  
+Maintained by: Shaun Bolak, Web Platform Development Manager
+
+**Key differentiators**
+
+- Trusted by over 6,500 customers worldwide.
+- Extends beyond traditional IT alerting and incident management to support physical security, business continuity, public safety, and organizational resilience.
+- Combines risk intelligence, real-time communications, and coordinated incident response in a unified platform.
+- Supports autonomous and human-guided response workflows to improve operational speed, coordination, and continuous resilience improvement.
+
+## Core Platform
+
+- [Everbridge](https://www.everbridge.com/): Homepage and primary entry point to Everbridge's Critical Event Management platform, products, solutions, and resources.
+- [Everbridge 360 High Velocity Critical Event Management](https://www.everbridge.com/platform/critical-event-management/): Platform overview for identifying threats, understanding impact, coordinating response, communicating with the right people, and improving continuously across the full lifecycle of disruption.
+- [Everbridge Purpose-built AI](https://www.everbridge.com/platform/purpose-built-ai/): AI capabilities within Everbridge High Velocity CEM that support earlier risk detection, faster decision-making, coordinated response, workflow automation, and continuous improvement while preserving human oversight.
+
+## Key Products
+
+- [Everbridge 360 High Velocity Critical Event Management](https://www.everbridge.com/platform/critical-event-management/): Critical Event Management platform for anticipating, managing, and responding to crises by combining risk intelligence, communications, and coordinated response across the organization.
+- [BC in the Cloud](https://www.everbridge.com/products/bc-in-the-cloud-everbridge/): Business continuity and disaster recovery platform that unifies planning, risk management, and response with automation, real-time insights, and compliance-ready workflows.
+- [xMatters](https://www.xmatters.com/): AI-powered incident management and automation platform in the Everbridge suite that integrates monitoring and DevOps tools, orchestrates on-call response, triggers remediation, and supports continuous improvement.
+- [Everbridge Travel Protector](https://www.everbridge.com/products/travel-protector/): Travel risk management product that protects traveling and remote employees with real-time risk intelligence, location-based alerts, and two-way communication.
+- [Everbridge Control Center](https://www.everbridge.com/products/control-center/): Physical security and control room platform that unifies disparate safety and security systems into a single operating picture with real-time situational awareness and automated response workflows.
+- [Everbridge Response Management](https://www.everbridge.com/products/response-management/): Guided incident workflows that connect planning, communications, response execution, and reporting to help teams coordinate consistent, efficient, and accountable action.
+- [Everbridge Personal Safety Device](https://www.everbridge.com/products/personal-safety-device/): Wearable personal safety device that provides employees with immediate access to assistance through SOS alerts, fall detection, and real-time location tracking.
+- [SnapComms](https://www.snapcomms.com/): Internal communications platform from an Everbridge company that delivers high-visibility, multi-channel messaging to employees across desktop and mobile.
+- [RedSky Technologies](https://www.redskytech.com/): Cloud-native E911 and emergency communications platform within the Everbridge suite that helps organizations find callers, route emergency calls, notify internal teams, and support safety compliance.
+- [Everbridge Public Warning](https://www.everbridge.com/products/public-warning/): Population alerting and public safety platform that enables governments and authorities to deliver targeted, multi-channel emergency notifications and real-time information to communities.
+- [Everbridge Insurance Services](https://www.everbridge.com/products/insurance-services/): Parametric severe-weather insurance services available exclusively to Everbridge 360 customers, designed to align coverage with operational response needs when qualifying conditions are met, subject to policy terms and availability.
+
+## Product Demos (Interactive)
+
+- [Everbridge Demo Center](https://www.everbridge.com/resources/product-demo-center/): Interactive demo hub showcasing Everbridge products through video walkthroughs and personalized tours based on operational and resilience needs.
+
+## Solutions by Industry
+
+- [Business Services](https://www.everbridge.com/industries/business-services/): Solutions for business services organizations that support crisis communication, risk management, operational continuity, and protection of employees, clients, and critical operations.
+- [Energy and Utilities](https://www.everbridge.com/industries/energy-and-utilities/): Solutions for energy and utilities organizations that enhance operational resilience, protect critical infrastructure, and support rapid response to disruptions.
+- [Government and Federal Agencies](https://www.everbridge.com/industries/federal/): Solutions for federal government agencies that support emergency communication, situational awareness, coordinated response, personnel protection, mission continuity, security, and compliance.
+- [Healthcare](https://www.everbridge.com/industries/healthcare/): Solutions for healthcare organizations that support patient care, clinical and operational workflows, rapid communication, regulatory compliance, and staff coordination during critical events.
+- [Legal Organizations](https://www.everbridge.com/industries/legal-organizations/): Solutions for legal organizations that support emergency communication, protection of sensitive data and assets, and business continuity during critical events.
+- [Media and Publishing](https://www.everbridge.com/industries/everbridge-software-for-media-and-publishing/): Solutions for media and publishing organizations that support continuous content production and distribution across digital platforms and distributed teams.
+- [Retail](https://www.everbridge.com/industries/retail/): Solutions for retail organizations that protect employees and customers and support continuity across physical stores, digital operations, and supply chains.
+- [Technology](https://www.everbridge.com/industries/high-technology/): Solutions for technology organizations that protect digital and physical assets and support continuous service delivery across global and distributed environments.
+- [Commercial Real Estate](https://www.everbridge.com/industries/commercial-real-estate/): Solutions for commercial real estate organizations that protect tenants and assets and support continuity across property portfolios.
+- [Financial Services](https://www.everbridge.com/industries/financial-services/): Solutions for financial services organizations that strengthen operational resilience, protect employees and client data, and support continuity of critical services.
+- [Higher Education](https://www.everbridge.com/industries/higher-education/): Solutions for higher education institutions that enhance campus safety, enable rapid emergency communication, and support continuity of academic and operational activities.
+- [Insurance](https://www.everbridge.com/industries/enterprise-solutions-for-insurance/): Solutions for insurance organizations that strengthen operational resilience, protect employees and client data, and support business continuity and regulatory compliance.
+- [Manufacturing](https://www.everbridge.com/industries/manufacturing/): Solutions for manufacturing organizations that enhance workplace safety, support continuous production, and protect employees and facilities from operational disruptions.
+- [Pharmaceutical](https://www.everbridge.com/industries/pharmaceutical-companies/): Solutions for pharmaceutical organizations that protect employees, secure supply chains, support regulatory compliance, and monitor global operations.
+- [States and Local Governments](https://www.everbridge.com/industries/states-and-local-governments/): Solutions for state and local governments that enable emergency communication, protect communities, and support continuity of essential public services.
+- [Transportation](https://www.everbridge.com/industries/transportation/): Solutions for transportation organizations that protect employees and assets and support continuity of supply chains and services during disruptions.
+
+## Use Cases
+
+- [DORA Compliance](https://www.everbridge.com/use-cases/dora-compliance/): Achieving Digital Operational Resilience Act compliance through continuous risk monitoring, incident response, and coordinated communication across critical operations.
+- [Organizational Resilience](https://www.everbridge.com/use-cases/organizational-resilience-solutions/): Strengthening organizational resilience by integrating risk intelligence, communications, and coordinated response to maintain operations during disruptions.
+- [AI-Powered Resilience](https://www.everbridge.com/use-cases/ai-powered-resilience/): Using Purpose-built AI to reduce signal fatigue, personalize risk intelligence, accelerate response, connect events to organizational context, and keep human judgment at the center of critical event management.
+- [Active Assailant](https://www.everbridge.com/use-cases/active-assailant/): Protecting people during active assailant incidents through rapid alerting, situational awareness, and coordinated emergency response.
+- [Cybersecurity](https://www.everbridge.com/use-cases/cyber-security/): Managing cybersecurity threats through real-time threat intelligence, automated incident response, and coordinated communication across security and IT teams.
+- [Travel Risk Management](https://www.everbridge.com/use-cases/travel-risk-management/): Protecting traveling employees with real-time risk intelligence, location awareness, and two-way communication to respond quickly to global threats.
+- [Civil Unrest](https://www.everbridge.com/use-cases/civil-unrest/): Monitoring and responding to civil unrest through real-time risk intelligence, targeted alerts, and coordinated response to protect people and operations.
+- [Inclement Weather](https://www.everbridge.com/use-cases/inclement-weather-solutions/): Preparing for and responding to severe weather through early warning, automated alerts, and coordinated response to minimize disruption.
+- [Event Risk Management](https://www.everbridge.com/use-cases/event-risk-management-solutions/): Managing risks associated with planned events through situational awareness, communication, and coordinated response.
+- [Business Continuity](https://www.everbridge.com/use-cases/business-continuity/): Maintaining business continuity through proactive planning, real-time communication, and coordinated response to operational disruptions.
+- [Workplace Safety](https://www.everbridge.com/use-cases/workplace-safety/): Enhancing workplace safety through rapid communication, employee monitoring, and coordinated response to incidents affecting staff.
+- [Executive Protection](https://www.everbridge.com/use-cases/executive-protection/): Protecting executives and high-risk individuals through real-time threat intelligence, location awareness, and coordinated security response.
+- [Crisis Communication and Alerting](https://www.everbridge.com/use-cases/crisis-communication-and-alerting/): Delivering multi-channel crisis communications and alerts to help ensure timely, effective communication during critical events.
+- [Natural Disaster Management](https://www.everbridge.com/use-cases/disaster-management-solutions-everbridge/): Managing natural disasters through early detection, mass notification, and coordinated response to protect people and maintain operations.
+- [Counter Terrorism](https://www.everbridge.com/use-cases/terror-alert-system/): Supporting counter-terrorism preparedness through threat monitoring, alerting, and coordinated response to protect people and assets.
+- [Operational Resilience](https://www.everbridge.com/use-cases/operational-resilience/): Supporting operational resilience through continuous risk monitoring, automated workflows, and coordinated response across business operations.
+- [Critical Entities Resilience](https://www.everbridge.com/use-cases/critical-entities-resilience/): Supporting the resilience of critical entities through compliance, risk visibility, and coordinated response for essential services and infrastructure.
+- [Crisis Management](https://www.everbridge.com/use-cases/crisis-management/): Managing crises through centralized visibility, structured workflows, and coordinated communication across response teams.
+- [Mass Notification](https://www.everbridge.com/use-cases/mass-notification-and-incident-communications/): Delivering scalable, multi-channel mass notifications and incident communications to reach large audiences during emergencies.
+- [Risk Intelligence](https://www.everbridge.com/use-cases/risk-intelligence/): Using risk intelligence to identify, assess, contextualize, and respond to threats in real time across global operations.
+
+## Key Pages (Start Here)
+
+- [Everbridge 360 High Velocity Critical Event Management](https://www.everbridge.com/platform/critical-event-management/): Best overview of the Everbridge platform and its core Critical Event Management capabilities.
+- [Everbridge Purpose-built AI](https://www.everbridge.com/platform/purpose-built-ai/): Overview of the AI foundation within Everbridge High Velocity CEM, including machine learning, generative AI, computer vision, knowledge graphs, governance, and human oversight.
+- [Operational Resilience](https://www.everbridge.com/use-cases/operational-resilience/): Representative use case showing how organizations maintain continuity through risk intelligence, communications, automation, and coordinated response.
+- [Everbridge Demo Center](https://www.everbridge.com/resources/product-demo-center/): Interactive product tours demonstrating how Everbridge products work in operational scenarios.
+
+## Documentation, Support, and Training
+
+- [Everbridge Support](https://www.everbridge.com/support/): Official access point for technical support, case management, release notes, knowledge-base resources, service advisories, security bulletins, and customer portals.
+- [Everbridge API Developer Hub](https://developers.everbridge.net/home): Official API guides and reference documentation for authentication, communications, alerting, assets, risk intelligence, travel, digital applications, and integrations.
+- [Everbridge University](https://www.everbridge.com/everbridge-university/): Role-based training, certifications, product education, and more than 250 self-service resources for Everbridge customers.
+
+## Trust, Security, and Compliance
+
+- [Everbridge Trust Center](https://trust.everbridge.com/): Authoritative security, privacy, compliance, sustainability, questionnaire, certification, and product-specific documentation for customer due diligence.
+- [Everbridge Legal, Privacy, and Security](https://www.everbridge.com/about/legal/): Central directory for Everbridge legal terms, privacy notices, security information, compliance resources, subprocessor information, and related policies.
+- [Everbridge Global Privacy Notice](https://www.everbridge.com/about/legal/everbridge-global-privacy-notice/): Overview of Everbridge's data privacy practices, including data collection, use, sharing, protection, retention, international transfers, and individual rights.
+
+## Resources
+
+- [Everbridge Resource Center](https://www.everbridge.com/resources/): Curated reports, guides, and educational materials on risk, resilience, safety, and Critical Event Management.
+- [Everbridge Blog](https://www.everbridge.com/blog/): Insights on critical events, organizational resilience, emerging threats, product strategy, and operational best practices.
+- [Everbridge Customer Stories](https://www.everbridge.com/resources/customer-stories/): Customer examples showing how organizations use Everbridge to manage critical events and improve resilience.
+- [Everbridge Webinars](https://www.everbridge.com/resources/webinars/): On-demand webinars covering use cases, product capabilities, industry challenges, and best practices.
+
+## About Everbridge
+
+- [Why Everbridge](https://www.everbridge.com/about/why-everbridge/): Overview of Everbridge's value proposition, platform capabilities, scale, customer outcomes, and differentiators.
+- [Everbridge Leadership](https://www.everbridge.com/about/leadership/): Leadership team and executive structure guiding Everbridge's strategy and platform development.
+- [Everbridge History](https://www.everbridge.com/about/history/): Background and evolution of Everbridge as a provider of Critical Event Management solutions.

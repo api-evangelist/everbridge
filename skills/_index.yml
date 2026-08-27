@@ -1,0 +1,51 @@
+generated: '2026-08-27'
+method: generated
+source: >-
+  openapi/*.json (real operationIds grepped from the harvested contracts) plus
+  conventions/everbridge-conventions.yml, errors/everbridge-problem-types.yml and
+  rate-limits/everbridge-rate-limits.yml
+provider: Everbridge
+providerId: everbridge
+description: >-
+  Packaged Agent Skills for the Everbridge API surface. Every operationId referenced in these
+  skills was read out of a harvested Everbridge OpenAPI document — none is invented. Everbridge
+  publishes no skills or AGENTS.md of its own; these are API Evangelist's.
+skill_count: 5
+skills:
+- name: everbridge-authenticate
+  file: everbridge-authenticate.md
+  api: Everbridge Suite Authentication API
+  summary: Mint a bearer token with the right OAuth grant, and the runtime rules every other call inherits.
+  prerequisite_for: all
+- name: everbridge-launch-mass-notification
+  file: everbridge-launch-mass-notification.md
+  api: Everbridge Suite API
+  summary: Launch a mass notification and read its report — with an explicit warning that the action is irreversible and non-idempotent.
+  risk: high
+  reversible: false
+- name: everbridge-manage-contacts
+  file: everbridge-manage-contacts.md
+  api: Everbridge Suite API
+  summary: Find, create, partially update and bulk-load contacts and groups; deletion is permanent.
+  risk: medium
+  reversible: false
+- name: everbridge-launch-and-stop-communication
+  file: everbridge-launch-and-stop-communication.md
+  api: Everbridge Communications API
+  summary: The reversible alternative to a mass notification, including CAP/IPAWS public-warning delivery.
+  risk: high
+  reversible: partial
+- name: everbridge-query-cem-alerts
+  file: everbridge-query-cem-alerts.md
+  api: Everbridge CEM Alerts API
+  summary: GraphQL query and the alerts subscription stream — Everbridge's only push surface.
+  risk: low
+  reversible: na
+provider_published_skills:
+  found: false
+  probed:
+  - https://developers.everbridge.net/home (no AGENTS.md, no skills directory)
+  - https://www.everbridge.com/llms.txt (200 — a link index, no tool or skill definitions)
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

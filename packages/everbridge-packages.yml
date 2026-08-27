@@ -1,0 +1,109 @@
+specification: API Evangelist Packages
+generated: '2026-08-27'
+method: searched
+source: >-
+  registry.npmjs.org search, pypi.org/pypi/*/json, rubygems.org/api/v1/search.json,
+  azuresearch-usnc.nuget.org, proxy.golang.org, api.github.com/orgs/Everbridge
+provider: Everbridge
+providerId: everbridge
+description: >-
+  Client-library census for the Everbridge API surface. FINDING: Everbridge publishes no
+  first-party SDK to any public package registry. npm returns zero results for "everbridge"
+  and zero for "snapcomms"; RubyGems and NuGet return zero; the only PyPI package named
+  "everbridge" is a community project by an unaffiliated author. The Everbridge GitHub
+  organization ships integration utilities and an unrelated ops tool, not API client
+  libraries. Integrators are expected to call the REST APIs directly, or to import the
+  OpenAPI documents published on the developer hub into Postman/Insomnia — the path the
+  Getting Started Guide itself recommends.
+summary:
+  official_count: 0
+  community_count: 2
+  registries_searched:
+  - npm
+  - PyPI
+  - RubyGems
+  - NuGet
+  - pkg.go.dev / proxy.golang.org
+  - GitHub (Everbridge org)
+packages:
+- name: everbridge-sdk-go
+  language: Go
+  registry: pkg.go.dev
+  module: github.com/grokify/everbridge-sdk-go
+  url: https://github.com/grokify/everbridge-sdk-go
+  official: false
+  version: v0.2.4
+  published: '2025-02-10'
+  license: MIT
+  note: >-
+    Community Go SDK over the Everbridge REST API by John Wang (grokify), not Everbridge.
+    Version and date read from proxy.golang.org/github.com/grokify/everbridge-sdk-go/@latest;
+    the repository itself was last pushed 2026-06-18, so the module is maintained but the
+    latest tagged release predates the 25.6-26.3 API additions recorded in changelog/.
+- name: everbridge
+  language: Python
+  registry: pypi
+  url: https://pypi.org/project/everbridge/
+  official: false
+  version: 0.2.1
+  published: '2025-07-12'
+  license: null
+  author: Nate Shoffner
+  note: >-
+    Community Python client (homepage github.com/NateShoffner/everbridge). Not published by
+    Everbridge; no Everbridge-owned PyPI namespace exists.
+first_party_repositories:
+- name: Expected-Location-Importer
+  url: https://github.com/Everbridge/Expected-Location-Importer
+  language: JavaScript
+  last_push: '2026-08-25'
+  official: true
+  is_sdk: false
+  note: >-
+    First-party utility that imports expected-location records into Everbridge. It consumes
+    the API but is a tool, not a distributable client library, and is not published to npm.
+- name: Travel-Itinerary-Importer-Web
+  url: https://github.com/Everbridge/Travel-Itinerary-Importer-Web
+  language: HTML
+  last_push: '2026-05-28'
+  official: true
+  is_sdk: false
+- name: Travel-Itinerary-Importer
+  url: https://github.com/Everbridge/Travel-Itinerary-Importer
+  language: HTML
+  last_push: '2024-05-30'
+  official: true
+  is_sdk: false
+- name: generate-secure-pillar
+  url: https://github.com/Everbridge/generate-secure-pillar
+  language: Go
+  version: v2.0.3
+  published: '2026-07-10'
+  license: MIT
+  official: true
+  is_sdk: false
+  note: SaltStack secure-pillar tool. Unrelated to the Everbridge API surface.
+negative_results:
+- registry: npm
+  query: everbridge
+  results: 0
+  checked: '2026-08-27'
+- registry: npm
+  query: snapcomms
+  results: 0
+  checked: '2026-08-27'
+- registry: rubygems
+  query: everbridge
+  results: 0
+  checked: '2026-08-27'
+- registry: nuget
+  query: everbridge
+  results: 0
+  checked: '2026-08-27'
+- registry: pypi
+  query: everbridge-api, pyeverbridge
+  results: 404
+  checked: '2026-08-27'
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

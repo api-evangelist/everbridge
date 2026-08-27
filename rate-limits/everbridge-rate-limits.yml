@@ -3,130 +3,116 @@ specificationVersion: '0.1'
 schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
 provider: Everbridge
 providerId: everbridge
-created: '2026-05-04'
-# Provenance stamped 2026-08-11: this artifact was written by the API Evangelist
-# bulk sweep dated 2026-05-04, not harvested from the provider. See roadmap#35.
-method: generated
-modified: '2026-05-04'
+generated: '2026-08-27'
+method: searched
+source: https://developers.everbridge.net/home/docs/ebs-gs-guide-throttling-limits
+modified: '2026-08-27'
+# REPLACES the 2026-05-04 bulk-sweep scaffold, which asserted invented free/professional/
+# enterprise tiers at 10/100/1000 requests per MINUTE. Everbridge's published limits are
+# Bronze/Silver/Gold, expressed in requests per SECOND, with separate read and write rates
+# and a daily quota. Nothing below is inferred.
 tags:
-  - Critical Event Management
-  - Emergency Management
-  - Incident Management
-  - IT Alerting
-  - Mass Notification
-  - Rate Limiting
-  - Quotas
-  - Throttling
-description: Machine-readable rate limit definitions for the Everbridge API surface. Captures per-tier
-  quotas, burst behavior, response signaling, and recovery semantics. Defaults are scaffold values to
-  be replaced with published provider limits.
-headers:
-  limit: X-RateLimit-Limit
-  remaining: X-RateLimit-Remaining
-  reset: X-RateLimit-Reset
-  retryAfter: Retry-After
-  policy: RateLimit-Policy
+- Critical Event Management
+- Rate Limiting
+- Throttling
+- Quotas
+description: >-
+  Published Everbridge REST API throttling limits. Everbridge assigns every customer to a
+  tier; all three tiers are free and moving up requires product-management approval rather
+  than payment. All rate dimensions are requests per second. Exceeding a tier limit returns
+  HTTP 429.
+limit_count: 3
+policy_statement: >-
+  Everbridge reserves the right to limit excessive API requests to protect its infrastructure
+  and maintain customer continuity against potential bad actors or incorrectly configured
+  integrations.
+tier_assignment:
+  default_tier: Bronze
+  upgrade_cost: none
+  upgrade_process: >-
+    Requests to move to a higher tier must be reviewed and approved by Everbridge product
+    management.
+  exclusions:
+  - endpoints:
+    - List /Incidents
+    - /incidentNotification
+    note: These requests are not eligible to move to a higher plan tier.
+limits:
+- tier: Bronze
+  name: Bronze (default)
+  scope: per-organization
+  window: second
+  read_limit: 10
+  read_methods:
+  - GET
+  - DELETE
+  write_limit: 20
+  write_methods:
+  - POST
+  - PUT
+  - PATCH
+  burst_read: 25
+  burst_write: 35
+  daily_quota: 50000
+  metric: requests_per_second
+- tier: Silver
+  name: Silver
+  scope: per-organization
+  window: second
+  read_limit: 20
+  read_methods:
+  - GET
+  - DELETE
+  write_limit: 35
+  write_methods:
+  - POST
+  - PUT
+  - PATCH
+  burst_read: 35
+  burst_write: 50
+  daily_quota: 100000
+  metric: requests_per_second
+- tier: Gold
+  name: Gold
+  scope: per-organization
+  window: second
+  read_limit: 35
+  read_methods:
+  - GET
+  - DELETE
+  write_limit: 50
+  write_methods:
+  - POST
+  - PUT
+  - PATCH
+  burst_read: 50
+  burst_write: 75
+  daily_quota: 500000
+  metric: requests_per_second
 responseCodes:
   throttled: 429
   quotaExceeded: 429
-  serviceUnavailable: 503
-limits:
-  - tier: free
-    name: Free Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 10
-    burst: 20
-    timeFrame: minute
-    applies:
-      - Everbridge Suite API
-      - Everbridge Asset Management API
-      - Everbridge Asset Query API
-      - Everbridge CEM Alerts API
-      - Everbridge SnapComms API
-      - Everbridge Digital Apps API
-      - Everbridge Communications API
-      - Everbridge iPaaS API
-      - Everbridge Safety Devices API
-  - tier: free
-    name: Free Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 1000
-    timeFrame: month
-    applies:
-      - Everbridge Suite API
-      - Everbridge Asset Management API
-      - Everbridge Asset Query API
-      - Everbridge CEM Alerts API
-      - Everbridge SnapComms API
-      - Everbridge Digital Apps API
-      - Everbridge Communications API
-      - Everbridge iPaaS API
-      - Everbridge Safety Devices API
-  - tier: professional
-    name: Professional Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 100
-    burst: 200
-    timeFrame: minute
-    applies:
-      - Everbridge Suite API
-      - Everbridge Asset Management API
-      - Everbridge Asset Query API
-      - Everbridge CEM Alerts API
-      - Everbridge SnapComms API
-      - Everbridge Digital Apps API
-      - Everbridge Communications API
-      - Everbridge iPaaS API
-      - Everbridge Safety Devices API
-  - tier: professional
-    name: Professional Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 100000
-    timeFrame: month
-    applies:
-      - Everbridge Suite API
-      - Everbridge Asset Management API
-      - Everbridge Asset Query API
-      - Everbridge CEM Alerts API
-      - Everbridge SnapComms API
-      - Everbridge Digital Apps API
-      - Everbridge Communications API
-      - Everbridge iPaaS API
-      - Everbridge Safety Devices API
-  - tier: enterprise
-    name: Enterprise Negotiated Limit
-    scope: contract
-    metric: requests_per_minute
-    limit: 1000
-    burst: 5000
-    timeFrame: minute
-    applies:
-      - Everbridge Suite API
-      - Everbridge Asset Management API
-      - Everbridge Asset Query API
-      - Everbridge CEM Alerts API
-      - Everbridge SnapComms API
-      - Everbridge Digital Apps API
-      - Everbridge Communications API
-      - Everbridge iPaaS API
-      - Everbridge Safety Devices API
+headers:
+  limit: null
+  remaining: null
+  reset: null
+  retryAfter: null
+  policy: null
+  note: >-
+    GAP — Everbridge documents no rate-limit response headers. Neither the throttling page
+    nor any of the 13 harvested OpenAPI documents declares X-RateLimit-*, RateLimit-* or
+    Retry-After on a 429 response, so an agent has no runtime signal for how much budget
+    remains and must infer it from the 429 alone. The SnapComms API (api.snapcomms.com)
+    declares a 429 "Failed - Rate limit is exceeded" response on 15 operations, also with
+    no headers. This is the single most valuable rate-limit improvement Everbridge could make.
 policies:
-  - name: Backoff Strategy
-    description: Clients should implement exponential backoff with jitter, honoring the Retry-After header
-      when present.
-  - name: Burst Handling
-    description: Short bursts above the steady-state limit are tolerated up to the documented burst ceiling
-      before throttling engages.
-  - name: Quota Reset
-    description: Monthly quotas reset at the start of each calendar month in UTC. Per-minute and per-second
-      windows reset on a sliding-window basis.
-  - name: Fair Use
-    description: Even on uncapped enterprise tiers, sustained usage that materially impacts shared infrastructure
-      may be subject to fair-use throttling.
+- name: Retry on 429
+  description: >-
+    Everbridge recommends retrying after 429 or any 5xx using exponential backoff with random
+    jitter — sleep = random_between(0, min(cap, base * 2 ** attempt)) — continuing successive
+    backoff for as long as calls fail, and resetting to the normal backoff threshold on the
+    first 2xx.
+  source: https://developers.everbridge.net/home/docs/ebs-gs-guide-throttling-limits
 maintainers:
-  - FN: Kin Lane
-    email: kin@apievangelist.com
+- FN: Kin Lane
+  email: kin@apievangelist.com

@@ -1,0 +1,56 @@
+generated: '2026-08-27'
+method: searched
+source: >-
+  openapi/everbridge-snapcomms-openapi.json servers[],
+  https://developers.everbridge.net/home/reference (ReadMe API Explorer),
+  https://developers.everbridge.net/home/docs/ebs-gs-guide
+provider: Everbridge
+providerId: everbridge
+description: >-
+  Everbridge publishes no test/sandbox environment for the Everbridge Suite REST API. There
+  are no test-mode credentials, no test key prefix, no fixture data and no time simulation —
+  a developer exercises the API against their real production organization, which for a
+  platform that places phone calls and sends emergency SMS is a materially higher-stakes
+  first call than most APIs. The two sandbox-adjacent surfaces that DO exist are listed below.
+suite_sandbox:
+  available: false
+  test_credentials: false
+  test_mode_key_prefix: null
+  time_simulation: false
+  fixtures: false
+  note: >-
+    Credentials come from the Manager Portal service-account workflow against a real
+    organization. Nothing in the developer hub distinguishes a test credential from a live
+    one. The nearest safe rehearsal mechanism is POST /incidents/{organizationId}/preview,
+    which renders an incident without launching it — recorded as dry_run_mode in
+    conventions/everbridge-conventions.yml.
+surfaces:
+- name: SnapComms mock server
+  type: mock
+  url: https://api.snapcomms.com/mock
+  declared_in: openapi/everbridge-snapcomms-openapi.json
+  declared_as: 'servers[1], description "API Sandbox Url"'
+  official: true
+  note: >-
+    The SnapComms API (an Everbridge company) is the only Everbridge-family contract that
+    declares a sandbox server alongside its production server. It is a mock endpoint, so
+    responses are canned rather than stateful.
+- name: ReadMe API Explorer
+  type: interactive console
+  url: https://developers.everbridge.net/home/reference
+  official: true
+  note: >-
+    The developer hub embeds ReadMe's Try It console on every reference page, with a
+    Credentials panel that accepts a bearer token or plain-text Basic credentials (which it
+    Base64-encodes). Requests execute against PRODUCTION — this is a console, not a sandbox.
+    The CEM Alerts Query Stream operation sets x-readme.explorer-enabled false and cannot be
+    executed from the console at all.
+- name: OpenAPI import into Postman / Insomnia
+  type: local
+  note: >-
+    The Getting Started Guide directs developers to download the OAS document for the API
+    they want from the hub and import it into Postman or Insomnia. The 13 documents are
+    captured verbatim in openapi/, so a local collection can be built without visiting the hub.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
