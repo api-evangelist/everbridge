@@ -4487,6 +4487,9 @@ apis:
     url: >-
       https://support.snapcomms.com/hc/en-us/articles/19361020051867-Integration-Through-API-Overview
 common:
+- type: CapabilityMap
+  url: capabilities/everbridge-capability-edges.yml
+  name: Everbridge Business Capability Map
 - type: Overlay
   url: overlays/everbridge-eb-suite-overlay.yaml
 - type: Overlay

@@ -1,0 +1,68 @@
+slug: everbridge
+provider: Everbridge
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 5
+edges:
+- tag: Crisis Management
+  spec_file: everbridge-crisis-management-api-openapi.yml
+  capability_id: BC-160.30
+  capability_id_l1: BC-160
+  capability_name: Crisis Management
+  confidence: 0.78
+  evidence: GET /cm/v1/crisisEvent  EBS List Critical Events  List Critical Events
+  reason: Endpoint lists crisis/critical events for the CEM platform, aligning with crisis response management.
+    Only one operation, so confidence is not maximal.
+- tag: Notifications
+  spec_file: everbridge-notifications-api-openapi.yml
+  capability_id: BC-850.50
+  capability_id_l1: BC-850
+  capability_name: Crisis Communications Management
+  confidence: 0.75
+  evidence: POST /notifications/{organizationId} 'EBS Launch Mass Notification'; 'Create Notification
+    Event'; 'EBS Launch Push Notification'
+  reason: Launching and managing mass notifications and notification events is the core emergency/critical-event
+    communication motion of this CEM platform, best matched by Crisis Communications Management under
+    Corporate Communications.
+- tag: Comms APIs
+  spec_file: everbridge-comms-apis-api-openapi.yml
+  capability_id: BC-850
+  capability_id_l1: BC-850
+  capability_name: Corporate Communications Management
+  confidence: 0.7
+  evidence: cem-comms-launch  Launch Communication ... Stop Communication ... Generate a resultset based
+    on communication confirmations
+  reason: Operations launch, stop, resend and confirm mass communications to recipients across delivery
+    paths (voice, social, bulletin board) — an organisational communications capability. Which L2 (crisis
+    vs stakeholder comms) is not determinable from the generic surface, so L1 only.
+- tag: Notification Templates
+  spec_file: everbridge-notification-templates-api-openapi.yml
+  capability_id: BC-850.50
+  capability_id_l1: BC-850
+  capability_name: Crisis Communications Management
+  confidence: 0.7
+  evidence: '''EBS Create Notification Template''; schemas BroadcastTemplateWrapper, IPAWSMessageWrapper,
+    EscalationConditionWrapper, ContactFilterWrapper'
+  reason: Templates for broadcast/emergency messages including IPAWS public-warning fields and escalation
+    conditions — the authoring side of crisis/mass notification communications. Mapped to Crisis Communications
+    Management, with residual chance it is better read as generic stakeholder communications.
+- tag: Privacy Policy
+  spec_file: everbridge-privacy-policy-api-openapi.yml
+  capability_id: BC-130.50
+  capability_id_l1: BC-130
+  capability_name: Privacy & Data Protection Management
+  confidence: 0.7
+  evidence: POST /privacy-policy/organizations/{organizationId}/policies 'EBS Create Privacy Policy';
+    'EBS assign or un-assign Privacy Policy'; schema privacyAssignment
+  reason: Defines and assigns privacy policies governing handling of contact personal data, which is privacy
+    & data protection management. Some chance it is better classed as generic Policy Management, hence
+    0.7.
