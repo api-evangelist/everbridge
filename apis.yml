@@ -12,6 +12,18 @@ description: >-
   Protocol and FEMA IPAWS delivery, a GraphQL CEM Alerts query and subscription stream, asset
   management and query, digital apps for mobile and desktop notification, travel risk
   intelligence, safety devices, risk events, and the SnapComms internal-communications API.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: enterprise
   onboarding: sales-gated
