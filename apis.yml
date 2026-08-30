@@ -1697,6 +1697,8 @@ apis:
   humanURL: https://developers.everbridge.net/home/reference
   baseURL: https://api.everbridge.net/rest
   tags:
+  - Group
+  tags_raw:
   - Groups
   properties:
   - type: OpenAPI
@@ -2922,6 +2924,8 @@ apis:
   humanURL: https://developers.everbridge.net/home/reference
   baseURL: https://api.everbridge.net/rest
   tags:
+  - Notification
+  tags_raw:
   - Notifications
   properties:
   - type: OpenAPI
@@ -2971,6 +2975,8 @@ apis:
   humanURL: https://developers.everbridge.net/home/reference
   baseURL: https://api.everbridge.net/rest
   tags:
+  - Organization
+  tags_raw:
   - Organizations
   properties:
   - type: OpenAPI
@@ -4345,6 +4351,8 @@ apis:
   humanURL: https://developers.everbridge.net/home/reference
   baseURL: https://api.everbridge.net/rest
   tags:
+  - User
+  tags_raw:
   - Users
   properties:
   - type: OpenAPI
