@@ -1,0 +1,769 @@
+openapi: 3.2.0
+info:
+  title: Digital Apps Notification messages API
+  description: 'Digital Apps APIs bring Everbridge notification functionality to your company''s mobile, desktop or web applications. '
+  version: v1
+servers:
+- url: https://api.everbridge.net/digitalapps/v2
+tags:
+- name: Notification messages
+  description: Notification Message Operations
+paths:
+  /notifications/messages:
+    get:
+      tags:
+      - Notification messages
+      summary: List Messages
+      description: Retrieve the list of messages sent to the contact
+      operationId: ebs-daa-list-messages
+      parameters:
+      - name: operation
+        in: query
+        description: 'The default value is FIND_BY_DEFAULT.
+
+          If the ''operation'' parameter is provided then the value must be one of the following values: [FIND_BY_DEFAULT, FIND_NEWER_BY_TIME, FIND_OLDER_BY_TIME].'
+        required: true
+        schema:
+          type: string
+          description: FIND_BY_DEFAULT
+          enum:
+          - FIND_BY_DEFAULT
+          - FIND_NEWER_BY_TIME
+          - FIND_OLDER_BY_TIME
+      - name: time
+        in: query
+        description: "UTC milliseconds from the epoch of 1970-01-01T00:00:00Z.\n The 'time' parameter will be ignored if the operation is FIND_BY_DEFAULT.\n The 'time' parameter is required if the operation is FIND_NEWER_BY_TIME or FIND_OLDER_BY_TIME."
+        required: false
+        schema:
+          type: integer
+          format: int64
+        example: 1653598340083
+      - name: Client-Id
+        in: header
+        description: Custom app client id
+        required: true
+        schema:
+          type: string
+        example: 3efb35a2-fdee-44bb-b476-2a45cada8b00
+      - name: Authorization
+        in: header
+        description: Access token
+        required: true
+        schema:
+          type: string
+        example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyLXRlc3QiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MDAwMDAwMDAsImV4cCI6MjAwMDAwMDAwMH0.MEUCIQDRrT_U-WXmq9sdlqZQw4y1GiI4Pp2tJSrKzWSi8vBslgIgQzRSce6h7RkF70ZcQnFX6Zry8FSX8U5CggV2-3OyuVE
+      responses:
+        '200':
+          description: Retrieve the list of messages sent to the device
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MessageResponseForQuery'
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        httpMethod: get
+        uri: https://mobilemember.everbridge.net/api/v2/notifications/messages
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        passthroughBehavior: when_no_match
+  /notifications/messages/{messageId}:
+    get:
+      tags:
+      - Notification messages
+      summary: Get Message
+      description: 'Returns a single Message for the specified identifier.
+
+
+        Notifications sent with an RTF body will have the content available as an attachment in the ''attachments'' section of the response. The attachment content should be downloaded with the [Download attachment](/reference/ebs-daa-get-attachment) endpoint.'
+      operationId: ebs-daa-get-message
+      parameters:
+      - name: messageId
+        in: path
+        description: "The ID of the Message. The identifier can take one of two formats: \n1. The 'messageId' returned on a message object when retrieved via the API.\n2. A concatenated ID from the push notification payload.\n\n**Important Note:** The 'messageId' from the push notification payload will take the form '[contactID]_[notificationID]'. When using this concatenated ID, you must pass through the entire string value. The response will return the underlying message ID, which should then be used for future operations on the message resource."
+        required: true
+        schema:
+          type: string
+        example: '1554298735427807_282853661212695'
+      - name: Client-Id
+        in: header
+        description: Custom app client id
+        required: true
+        schema:
+          type: string
+        example: 3efb35a2-fdee-44bb-b476-2a45cada8b00
+      - name: Authorization
+        in: header
+        description: Access token
+        required: true
+        schema:
+          type: string
+        example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyLXRlc3QiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MDAwMDAwMDAsImV4cCI6MjAwMDAwMDAwMH0.MEUCIQDRrT_U-WXmq9sdlqZQw4y1GiI4Pp2tJSrKzWSi8vBslgIgQzRSce6h7RkF70ZcQnFX6Zry8FSX8U5CggV2-3OyuVE
+      responses:
+        '200':
+          description: Retrieves the message matching the provided Message ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        httpMethod: get
+        uri: https://mobilemember.everbridge.net/api/v2/notifications/messages/{messageId}
+        requestParameters:
+          integration.request.path.messageId: method.request.path.messageId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        passthroughBehavior: when_no_match
+    post:
+      tags:
+      - Notification messages
+      summary: Reply Message
+      description: Reply to a Message
+      operationId: ebs-daa-reply-message
+      parameters:
+      - name: messageId
+        in: path
+        description: The ID of the Message
+        required: true
+        schema:
+          type: string
+        example: 1626319431402172
+      - name: Client-Id
+        in: header
+        description: Custom app client id
+        required: true
+        schema:
+          type: string
+        example: 3efb35a2-fdee-44bb-b476-2a45cada8b00
+      - name: Authorization
+        in: header
+        description: Access token
+        required: true
+        schema:
+          type: string
+        example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyLXRlc3QiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MDAwMDAwMDAsImV4cCI6MjAwMDAwMDAwMH0.MEUCIQDRrT_U-WXmq9sdlqZQw4y1GiI4Pp2tJSrKzWSi8vBslgIgQzRSce6h7RkF70ZcQnFX6Zry8FSX8U5CggV2-3OyuVE
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReplyMessageRequest'
+        required: true
+      responses:
+        '200':
+          description: Return message reply information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReplyMessageResponse'
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        httpMethod: post
+        uri: https://mobilemember.everbridge.net/api/v2/notifications/messages/{messageId}
+        requestParameters:
+          integration.request.path.messageId: method.request.path.messageId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        passthroughBehavior: when_no_match
+    patch:
+      tags:
+      - Notification messages
+      summary: Update Message
+      description: Update Message State
+      operationId: ebs-daa-update-message
+      parameters:
+      - name: messageId
+        in: path
+        description: The ID of the Message
+        required: true
+        schema:
+          type: string
+        example: 1626319431402172
+      - name: operation
+        in: query
+        description: 'The value must be one of the following: [MARK_AS_READ, MARK_AS_CONFIRMED, MARK_AS_SHARED].'
+        required: true
+        schema:
+          type: string
+          enum:
+          - MARK_AS_READ
+          - MARK_AS_CONFIRMED
+          - MARK_AS_SHARED
+        example: MARK_AS_READ
+      - name: Client-Id
+        in: header
+        description: Custom app client id
+        required: true
+        schema:
+          type: string
+        example: 3efb35a2-fdee-44bb-b476-2a45cada8b00
+      - name: Authorization
+        in: header
+        description: Access token
+        required: true
+        schema:
+          type: string
+        example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyLXRlc3QiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MDAwMDAwMDAsImV4cCI6MjAwMDAwMDAwMH0.MEUCIQDRrT_U-WXmq9sdlqZQw4y1GiI4Pp2tJSrKzWSi8vBslgIgQzRSce6h7RkF70ZcQnFX6Zry8FSX8U5CggV2-3OyuVE
+      responses:
+        '200':
+          description: Return message state response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarkMessageResponse'
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        httpMethod: patch
+        uri: https://mobilemember.everbridge.net/api/v2/notifications/messages/{messageId}
+        requestParameters:
+          integration.request.path.messageId: method.request.path.messageId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        passthroughBehavior: when_no_match
+  /notifications/messages/{messageId}/surveys:
+    post:
+      tags:
+      - Notification messages
+      summary: Submit Survey Response
+      description: Respond to a message's poll.
+      operationId: ebs-daa-submit-survey-response
+      parameters:
+      - name: messageId
+        in: path
+        description: The ID of the Message
+        required: true
+        schema:
+          type: string
+        example: 1626319431402172
+      - name: Client-Id
+        in: header
+        description: Custom app client id
+        required: true
+        schema:
+          type: string
+        example: 3efb35a2-fdee-44bb-b476-2a45cada8b00
+      - name: Authorization
+        in: header
+        description: Access token
+        required: true
+        schema:
+          type: string
+        example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyLXRlc3QiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MDAwMDAwMDAsImV4cCI6MjAwMDAwMDAwMH0.MEUCIQDRrT_U-WXmq9sdlqZQw4y1GiI4Pp2tJSrKzWSi8vBslgIgQzRSce6h7RkF70ZcQnFX6Zry8FSX8U5CggV2-3OyuVE
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SurveyRequest'
+        required: true
+      responses:
+        '200':
+          description: Returns survey info
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SurveyResponse'
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        httpMethod: post
+        uri: https://mobilemember.everbridge.net/api/v2/notifications/messages/{messageId}/surveys
+        requestParameters:
+          integration.request.path.messageId: method.request.path.messageId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        passthroughBehavior: when_no_match
+components:
+  schemas:
+    MessageSetting:
+      required:
+      - allowShare
+      - requestComment
+      - requestImage
+      - requestLocation
+      - requireConfirm
+      type: object
+      properties:
+        requestImage:
+          type: boolean
+          description: Indicates if an image upload has been requested by the message sender.
+        requestLocation:
+          type: boolean
+          description: Indicates if a location has been requested by the message sender.
+        requestComment:
+          type: boolean
+          description: Indicates if comments are requested by the message sender.
+        allowShare:
+          type: boolean
+          description: Indicates if the message is allowed to be shared.
+        requireConfirm:
+          type: boolean
+          description: Indicates if the the message sender has requested confirmation.
+      description: Additional message settings.
+    Attachment:
+      required:
+      - id
+      - metadata
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+          description: Attachment ID.
+        name:
+          type: string
+          description: Attachment name
+        metadata:
+          $ref: '#/components/schemas/AttachmentMetadata'
+      description: Message attachments.
+    Sender:
+      required:
+      - firstName
+      - id
+      - lastName
+      type: object
+      properties:
+        id:
+          type: string
+          description: Sender ID.
+        firstName:
+          type: string
+          description: The Sender's first name.
+        lastName:
+          type: string
+          description: The Sender's last name.
+      description: Message sender.
+    SurveyResult:
+      required:
+      - respondedTime
+      - selectedOption
+      type: object
+      properties:
+        selectedOption:
+          $ref: '#/components/schemas/SurveyOption'
+        respondedTime:
+          type: integer
+          description: The time that the Contact's survey response was sent.
+          format: int64
+      description: Message survey results.
+    AttachmentMetadata:
+      required:
+      - contentType
+      type: object
+      properties:
+        contentType:
+          type: string
+          description: File type.
+          example: image/png
+      description: Attachment metadata.
+    ImageMetadata:
+      required:
+      - contentType
+      type: object
+      properties:
+        contentType:
+          type: string
+          description: File type.
+          example: image/png
+      description: Image metadata.
+    MarkMessageResponse:
+      required:
+      - id
+      - state
+      type: object
+      properties:
+        id:
+          type: string
+          description: Message ID.
+        state:
+          $ref: '#/components/schemas/MessageState'
+    Survey:
+      required:
+      - id
+      - inputOptionAllowable
+      - options
+      - question
+      type: object
+      properties:
+        id:
+          type: string
+          description: Survey ID
+        question:
+          type: string
+          description: Survey question
+        options:
+          type: array
+          description: Survey question options
+          items:
+            $ref: '#/components/schemas/SurveyOption'
+        inputOptionAllowable:
+          type: boolean
+          description: Indicates whether new options are allowed to be entered by the Contact.
+        inputOptionType:
+          type: string
+          description: The new input option type.
+      description: Message surveys.
+    MessageState:
+      required:
+      - active
+      - confirmed
+      - read
+      - shared
+      type: object
+      properties:
+        read:
+          type: boolean
+          description: Indicates whether the message has been marked as read for the Contact.
+        shared:
+          type: boolean
+          description: Indicates whether the message has been marked as shared for the Contact.
+        confirmed:
+          type: boolean
+          description: Indicates whether the message has been marked as confirmed for the Contact.
+        confirmedAt:
+          type: integer
+          description: The time the message was marked as confirmed for the Contact.
+          format: int64
+        readAt:
+          type: integer
+          description: The time the message was marked as read for the Contact.
+          format: int64
+        active:
+          type: boolean
+          description: Indicates whether the message is still active.
+      description: Message state.
+    ImageResponse:
+      required:
+      - id
+      - metadata
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+          description: Image ID.
+        name:
+          type: string
+          description: Image name
+        metadata:
+          $ref: '#/components/schemas/ImageMetadata'
+      description: Message images.
+    MessageReply:
+      required:
+      - body
+      type: object
+      properties:
+        body:
+          type: string
+          description: Message content.
+        location:
+          $ref: '#/components/schemas/LocationResponse'
+        images:
+          type: array
+          description: Message images.
+          items:
+            $ref: '#/components/schemas/ImageResponse'
+        attachments:
+          type: array
+          description: Message attachments.
+          items:
+            $ref: '#/components/schemas/Attachment'
+        audios:
+          type: array
+          description: Message audio resources.
+          items:
+            $ref: '#/components/schemas/Audio'
+      description: Message replies.
+    ConferenceInfo:
+      required:
+      - accessCode
+      - phoneNumber
+      type: object
+      properties:
+        phoneNumber:
+          type: string
+          description: Conference phone number.
+        accessCode:
+          type: string
+          description: Conference access code.
+      description: Conference information.
+    ReplyMessageResponse:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          description: Message ID.
+    Audio:
+      required:
+      - id
+      - metadata
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+          description: Audio ID.
+        name:
+          type: string
+          description: Audio name
+        metadata:
+          $ref: '#/components/schemas/AudioMetadata'
+      description: Message audio resources.
+    ReplyMessageRequest:
+      required:
+      - body
+      type: object
+      properties:
+        body:
+          maxLength: 1000
+          minLength: 1
+          type: string
+          description: Text to include as the message reply.
+        location:
+          $ref: '#/components/schemas/LocationRequest'
+        images:
+          type: array
+          description: Message images. If a reply is made with images, the images must be uploaded first (using Image Upload API) to generate the required IDs.
+          items:
+            $ref: '#/components/schemas/ImageRequest'
+    AudioMetadata:
+      required:
+      - contentType
+      type: object
+      properties:
+        contentType:
+          type: string
+          description: File type.
+          example: image/png
+      description: Audio metadata.
+    MessageResponse:
+      required:
+      - body
+      - id
+      - priority
+      - sender
+      - setting
+      - source
+      - state
+      - title
+      type: object
+      properties:
+        id:
+          type: string
+          description: Message ID.
+        title:
+          type: string
+          description: Message title.
+        body:
+          type: string
+          description: Message content.
+        priority:
+          type: boolean
+          description: Message priority.
+        sender:
+          $ref: '#/components/schemas/Sender'
+        source:
+          type: string
+          description: Message source.
+        setting:
+          $ref: '#/components/schemas/MessageSetting'
+        state:
+          $ref: '#/components/schemas/MessageState'
+        incidentName:
+          type: string
+          description: Incident name. Only available if the message was triggered from an incident.
+        createdAt:
+          type: integer
+          description: Message created time.
+          format: int64
+        conferenceInfo:
+          $ref: '#/components/schemas/ConferenceInfo'
+        location:
+          $ref: '#/components/schemas/LocationResponse'
+        images:
+          type: array
+          description: Message images.
+          items:
+            $ref: '#/components/schemas/ImageResponse'
+        attachments:
+          type: array
+          description: Message attachments.
+          items:
+            $ref: '#/components/schemas/Attachment'
+        audios:
+          type: array
+          description: Message audio resources.
+          items:
+            $ref: '#/components/schemas/Audio'
+        surveys:
+          type: array
+          description: Message surveys.
+          items:
+            $ref: '#/components/schemas/Survey'
+        surveyResults:
+          type: array
+          description: Message survey results.
+          items:
+            $ref: '#/components/schemas/SurveyResult'
+        replies:
+          type: array
+          description: Message replies.
+          items:
+            $ref: '#/components/schemas/MessageReply'
+    SurveyRequest:
+      required:
+      - surveyId
+      - surveyOptionId
+      type: object
+      properties:
+        surveyId:
+          type: string
+          description: Survey ID.
+        surveyOptionId:
+          type: string
+          description: Selected Survey Option ID.
+    SurveyOption:
+      required:
+      - id
+      - text
+      type: object
+      properties:
+        id:
+          type: string
+          description: Question option ID
+        text:
+          type: string
+          description: Question option value
+      description: Selected option.
+    LocationResponse:
+      required:
+      - latitude
+      - longitude
+      type: object
+      properties:
+        latitude:
+          type: number
+          description: Location latitude
+          format: double
+          example: 44.999326
+        longitude:
+          type: number
+          description: Location longitude
+          format: double
+          example: -123.126128
+      description: Location info.
+    SurveyResponse:
+      required:
+      - surveyId
+      - surveyOptionId
+      type: object
+      properties:
+        surveyId:
+          type: string
+          description: Survey ID.
+        surveyOptionId:
+          type: string
+          description: Selected Survey Option ID.
+    MessageResponseForQuery:
+      required:
+      - body
+      - id
+      - priority
+      - sender
+      - setting
+      - source
+      - state
+      - title
+      type: object
+      properties:
+        id:
+          type: string
+          description: Message ID.
+        title:
+          type: string
+          description: Message title.
+        body:
+          type: string
+          description: Message content.
+        priority:
+          type: boolean
+          description: Message priority.
+        sender:
+          $ref: '#/components/schemas/Sender'
+        source:
+          type: string
+          description: Message source.
+        setting:
+          $ref: '#/components/schemas/MessageSetting'
+        state:
+          $ref: '#/components/schemas/MessageState'
+        incidentName:
+          type: string
+          description: Incident name. Only available if the message was triggered from an incident.
+        createdAt:
+          type: integer
+          description: Message created time.
+          format: int64
+    ImageRequest:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          description: Image ID.
+          example: 629a233923b4b6410329fc84
+      description: Message images. If a reply is made with images, the images must be uploaded first (using Image Upload API) to generate the required IDs.
+    LocationRequest:
+      required:
+      - latitude
+      - longitude
+      type: object
+      properties:
+        latitude:
+          maximum: 90
+          minimum: -90
+          type: number
+          description: Location latitude, range [-90, 90]
+          format: double
+          example: 44.999326
+        longitude:
+          maximum: 180
+          minimum: -180
+          type: number
+          description: Location longitude, range [-180, 180]
+          format: double
+          example: -123.126128
+      description: Location to include with the reply.
+  securitySchemes:
+    API_Authorizer:
+      type: apiKey
+      name: Authorization
+      in: header
+      x-amazon-apigateway-authtype: custom
+      x-amazon-apigateway-authorizer:
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        authorizerCredentials: arn:aws:iam::214792946631:role/ebs-mobile-member-api-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true
+  samples-enabled: true

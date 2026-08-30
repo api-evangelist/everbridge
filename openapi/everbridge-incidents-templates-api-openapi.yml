@@ -1,0 +1,924 @@
+openapi: 3.2.0
+info:
+  description: EB Suite APIs.
+  title: EB Suite Incidents Templates API
+  version: '1.0'
+servers:
+- url: https://api.everbridge.net/rest
+- url: https://api.everbridge.eu/rest
+tags:
+- description: EB Suites - Incident Management
+  name: Incidents Templates
+paths:
+  /incidentTemplates/{organizationId}:
+    get:
+      description: Returns all _active_ incident templates for a given org.  Basic properties like name, id and status are returned.  To get template details, use [Get Template](https://developers.everbridge.net/home/reference/ebs-get-template).
+      operationId: EBS List Templates
+      parameters:
+      - in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: The page number of templates to return.
+        in: query
+        name: pageNumber
+        required: false
+        schema:
+          default: 1
+          format: int32
+          type: integer
+      - description: Whether or not to skip pagination.
+        in: query
+        name: skipPaging
+        required: false
+        schema:
+          default: 'false'
+          enum:
+          - 'false'
+          - 'true'
+          type: string
+      - description: Load templates in specified category.
+        in: query
+        name: categoryName
+        required: false
+        schema:
+          default: ''
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Success:
+                  summary: Success
+                  value:
+                    firstPageUri: https://api.everbridge.net/rest/incidentTemplates/892807736728255/?pageNumber=1
+                    lastPageUri: https://api.everbridge.net/rest/incidentTemplates/892807736728255/?pageNumber=6
+                    message: OK
+                    nextPageUri: https://api.everbridge.net/rest/incidentTemplates/892807736728255/?pageNumber=2
+                    page:
+                      currentPageNo: 1
+                      data:
+                      - accountId: 453003085614350
+                        category:
+                          id: 8110002061443244
+                          name: ITA
+                        createdDate: 1511878838543
+                        createdId: 8118798154465522
+                        createdName: Ajay Goel
+                        id: 1536984111644674
+                        lastModifiedDate: 1658287061406
+                        lastModifiedId: 505642204790883
+                        lastModifiedName: Ajay Goel
+                        name: 1 - Readme API doc testing
+                        organizationId: 892807736728255
+                        resourceBundleId: 892807736730016
+                        status: A
+                        templateStatus: Live
+                      - comment: Removed additional repeating nodes for brevity.
+                      pageSize: 10
+                      start: 0
+                      totalCount: 55
+                      totalPageCount: 6
+              schema:
+                properties:
+                  message:
+                    description: Request status
+                    enum:
+                    - OK
+                    type: string
+                  result:
+                    type: object
+                type: object
+          description: Accepted
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: List Templates
+      tags:
+      - Incidents Templates
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/incidentTemplates/{organizationId}
+  /incidentTemplates/{organizationId}/{incidentTemplateId}:
+    get:
+      description: Returns details of a given incident template.
+      operationId: EBS Get Template
+      parameters:
+      - in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - in: path
+        name: incidentTemplateId
+        required: true
+        schema:
+          maxLength: 16
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Success:
+                  summary: Default
+                  value:
+                    message: OK
+                    result:
+                      accountId: 453003085614350
+                      category:
+                        id: 8110002061443244
+                        name: ITA
+                      createdDate: 1511878838543
+                      createdId: 8118798154465522
+                      createdName: Ajay Goel
+                      id: 1536984111644674
+                      lastModifiedDate: 1658287061406
+                      lastModifiedId: 505642204790883
+                      lastModifiedName: Ajay Goel
+                      name: 1 - Readme API doc testing
+                      organizationId: 892807736728255
+                      phaseTemplates:
+                      - broadcastTemplate:
+                          accountId: 0
+                          broadcastContacts:
+                            answerNeeded: Yes, I acknowledge
+                            contactIds:
+                            - 8110019241316207
+                            - 1550195431055048
+                            contactSearchType: AllOr
+                            defaultSeqGroupQuota: 0
+                            enableGroupCalendar: false
+                            enableSendToSubscribers: false
+                            filterIds:
+                            - 333585814913313
+                            sequenceGroupEnabled: false
+                          broadcastSettings:
+                            bookConference: false
+                            confirm: true
+                            contactCycles: 1
+                            cycleInterval: 0
+                            deliverPaths:
+                            - accountId: 0
+                              awarePathId: 0
+                              createdId: 0
+                              default: false
+                              displayFlag: false
+                              editable: false
+                              expose: false
+                              extRequired: false
+                              id: 8105604014932725
+                              isDefault: false
+                              lastModifiedId: 0
+                              mandatory: false
+                              organizationId: 0
+                              pathId: 219910915489799
+                              prompt: Phone 4
+                              resourceBundleId: 0
+                              seq: 0
+                            deliveryMethodInterval: 0
+                            deliveryPathOrder: Contact
+                            duration: 1
+                            durationTimeUnit: HOURS
+                            enableBeep: true
+                            enableRecord: false
+                            enableSecureNotification: false
+                            enableSmartConferenceConfirmationText: true
+                            language: en_US
+                            mobileSettings:
+                              allowShare: false
+                              pushAlertEnabled: false
+                              requestComment: false
+                              requestImage: false
+                              requestLocation: false
+                              requireConfirm: false
+                            quietTimeOverride: false
+                            recipientApp: false
+                            requirePinForMessage: false
+                            senderCallerInfos:
+                            - accountId: 0
+                              callerId: '7813735000'
+                              countryCode: US
+                              countryName: United States
+                              createdId: 0
+                              id: 0
+                              isDefault: true
+                              lastModifiedId: 0
+                              organizationId: 0
+                              resourceBundleId: 0
+                            senderEmail: 5th 3rd Notification
+                            smsCallBack: false
+                            throttlDefaultAmount: 0
+                            throttle: false
+                            validateContacts: true
+                            validateContactsByOrganization: false
+                            voiceMailOption: MESSAGE_WITH_CONFIRMATION
+                          createdId: 0
+                          enableLifeSafety: false
+                          id: 0
+                          lastModifiedId: 0
+                          message:
+                            accountId: 0
+                            conferenceBridgeId: 0
+                            contentType: Text
+                            createdId: 0
+                            id: 0
+                            lastModifiedId: 0
+                            organizationId: 0
+                            questionaire:
+                              answers:
+                              - name: Yes, I acknowledge
+                                quotaNum: 0
+                              - name: No, I can't join
+                                quotaNum: 0
+                              inputOptionAllowable: false
+                              multipleSelected: false
+                              required: false
+                            resourceBundleId: 0
+                            rtfContent: '<p align="center"><strong><span style="color: #990000; font-size: x-large;">Service Ops Notification</span></strong></p>
+
+                              <hr id="null">
+
+                              <table border="1" cellspacing="2" cellpadding="2">
+
+                              <tbody>
+
+                              <tr>
+
+                              <td><strong>Priority:</strong>&nbsp;</td>
+
+                              <td>{Priority}&nbsp;</td>
+
+                              </tr>
+
+                              <tr>
+
+                              <td><strong>Summary:</strong></td>
+
+                              <td>{Summary}&nbsp;</td>
+
+                              </tr>
+
+                              <tr>
+
+                              <td><b>BU:</b></td>
+
+                              <td>{Business Unit}</td>
+
+                              </tr>
+
+                              </tbody>
+
+                              </table>
+
+                              <p align="left"><span style="font-weight: bold; color: #990000; font-size: large;">Do you acknowledge this notification?</span></p>'
+                            textMessage: '{reference to notification.message.textMessage}'
+                            title: API  Doc Testing- {Priority}
+                            useCustomEmail: false
+                            useCustomSms: false
+                          organizationId: 0
+                          priority: Priority
+                          publicMessages: {}
+                          resourceBundleId: 0
+                          type: Polling
+                          useEscalation: false
+                        contactsFlag: 3
+                        evaluateAll: false
+                        formTemplate:
+                          formVariableItems:
+                          - isRequired: false
+                            seq: 1
+                            variableId: 8110002061444228
+                            variableName: Priority
+                          - isRequired: false
+                            seq: 2
+                            variableId: 8110002061444229
+                            variableName: Summary
+                          - isRequired: false
+                            seq: 3
+                            variableId: 8110002061447337
+                            variableName: Business Unit
+                          subject: API  Doc Testing- {Priority}
+                          sysVarCurrentTimeFormat: HH:mm:ss
+                          sysVarTodayDateFormat: mm-dd-yyyy
+                        ignoreVariable: false
+                        incidentNotificationPropertyBag:
+                          enableExerciseMode: 'false'
+                        messageFlag: 3
+                        name: Created
+                        phaseDefinitions:
+                        - id: 1001
+                          isDefault: false
+                          name: New
+                          seq: 0
+                          status: A
+                        publishOptionsFlag:
+                          abb: 1
+                          alertUs: 1
+                          desktopAlerts: 1
+                          ipawsCap: 1
+                          memberPortal: 1
+                          network: 1
+                          nixleChannel: 1
+                          socialMedia: 1
+                          webPosting: 1
+                          webWidget: 0
+                        settingsFlag: 3
+                        templateId: 0
+                      - broadcastTemplate:
+                          accountId: 0
+                          broadcastContacts:
+                            answerNeeded: Yes, I acknowledge
+                            contactIds:
+                            - 8110019241316207
+                            - 1550195431055048
+                            contactSearchType: AllOr
+                            defaultSeqGroupQuota: 0
+                            enableGroupCalendar: false
+                            enableSendToSubscribers: false
+                            filterIds:
+                            - 333585814913313
+                            sequenceGroupEnabled: false
+                          broadcastSettings:
+                            bookConference: false
+                            confirm: true
+                            contactCycles: 1
+                            cycleInterval: 0
+                            deliverPaths:
+                            - accountId: 0
+                              awarePathId: 0
+                              createdId: 0
+                              default: false
+                              displayFlag: false
+                              editable: false
+                              expose: false
+                              extRequired: false
+                              id: 8105604014932720
+                              isDefault: false
+                              lastModifiedId: 0
+                              mandatory: false
+                              organizationId: 0
+                              pathId: 241901148045316
+                              prompt: Work Email
+                              resourceBundleId: 0
+                              seq: 0
+                            - accountId: 0
+                              awarePathId: 0
+                              createdId: 0
+                              default: false
+                              displayFlag: false
+                              editable: false
+                              expose: false
+                              extRequired: false
+                              id: 8105604014932721
+                              isDefault: false
+                              lastModifiedId: 0
+                              mandatory: false
+                              organizationId: 0
+                              pathId: 241901148045317
+                              prompt: Home Email
+                              resourceBundleId: 0
+                              seq: 0
+                            - accountId: 0
+                              awarePathId: 0
+                              createdId: 0
+                              default: false
+                              displayFlag: false
+                              editable: false
+                              expose: false
+                              extRequired: false
+                              id: 8105604014932726
+                              isDefault: false
+                              lastModifiedId: 0
+                              mandatory: false
+                              organizationId: 0
+                              pathId: 241901148045324
+                              prompt: SMS 1
+                              resourceBundleId: 0
+                              seq: 0
+                            - accountId: 0
+                              awarePathId: 0
+                              createdId: 0
+                              default: false
+                              displayFlag: false
+                              editable: false
+                              expose: false
+                              extRequired: false
+                              id: 8118798154467546
+                              isDefault: false
+                              lastModifiedId: 0
+                              mandatory: false
+                              organizationId: 0
+                              pathId: 241901148045325
+                              prompt: Secure Push
+                              resourceBundleId: 0
+                              seq: 0
+                            - accountId: 0
+                              awarePathId: 0
+                              createdId: 0
+                              default: false
+                              displayFlag: false
+                              editable: false
+                              expose: false
+                              extRequired: false
+                              id: 481727826886733
+                              isDefault: false
+                              lastModifiedId: 0
+                              mandatory: false
+                              organizationId: 0
+                              pathId: 241901148045318
+                              prompt: Slack
+                              resourceBundleId: 0
+                              seq: 0
+                            deliveryMethodInterval: 0
+                            deliveryPathOrder: Contact
+                            duration: 1
+                            durationTimeUnit: HOURS
+                            enableBeep: true
+                            enableRecord: false
+                            enableSecureNotification: false
+                            enableSmartConferenceConfirmationText: true
+                            language: en_US
+                            mobileSettings:
+                              allowShare: false
+                              pushAlertEnabled: false
+                              requestComment: false
+                              requestImage: false
+                              requestLocation: false
+                              requireConfirm: false
+                            quietTimeOverride: false
+                            recipientApp: true
+                            requirePinForMessage: false
+                            senderCallerInfos:
+                            - accountId: 0
+                              callerId: '7813735000'
+                              countryCode: US
+                              countryName: United States
+                              createdId: 0
+                              id: 0
+                              isDefault: true
+                              lastModifiedId: 0
+                              organizationId: 0
+                              resourceBundleId: 0
+                            senderEmail: 5th 3rd Notification
+                            smsCallBack: false
+                            throttlDefaultAmount: 0
+                            throttle: false
+                            validateContacts: true
+                            validateContactsByOrganization: false
+                            voiceMailOption: MESSAGE_WITH_CONFIRMATION
+                          createdId: 0
+                          enableLifeSafety: false
+                          id: 0
+                          lastModifiedId: 0
+                          message:
+                            accountId: 0
+                            conferenceBridgeId: 0
+                            contentType: Text
+                            createdId: 0
+                            id: 0
+                            lastModifiedId: 0
+                            organizationId: 0
+                            questionaire:
+                              answers:
+                              - name: Yes, I acknowledge
+                                quotaNum: 0
+                              - name: No, I can't join
+                                quotaNum: 0
+                              inputOptionAllowable: false
+                              multipleSelected: false
+                              required: false
+                            resourceBundleId: 0
+                            rtfContent: '<p align="center"><strong><span style="color: #990000; font-size: x-large;">Service Ops Notification</span></strong></p>
+
+                              <hr id="null">
+
+                              <table border="1" cellspacing="2" cellpadding="2">
+
+                              <tbody>
+
+                              <tr>
+
+                              <td><strong>Priority:</strong>&nbsp;</td>
+
+                              <td>{Priority}&nbsp;</td>
+
+                              </tr>
+
+                              <tr>
+
+                              <td><strong>Summary:</strong></td>
+
+                              <td>{Summary}&nbsp;</td>
+
+                              </tr>
+
+                              <tr>
+
+                              <td><b>BU:</b></td>
+
+                              <td>{Business Unit}</td>
+
+                              </tr>
+
+                              </tbody>
+
+                              </table>
+
+                              <p align="left"><span style="font-weight: bold; color: #990000; font-size: large;">Do you acknowledge this notification?</span></p>'
+                            textMessage: '{reference to notification.message.textMessage}'
+                            title: API  Doc Testing- {Priority}
+                            useCustomEmail: true
+                            useCustomSms: false
+                          organizationId: 0
+                          priority: Priority
+                          publicMessages: {}
+                          resourceBundleId: 0
+                          type: Polling
+                          useEscalation: false
+                        contactsFlag: 3
+                        evaluateAll: false
+                        formTemplate:
+                          formVariableItems:
+                          - isRequired: false
+                            seq: 1
+                            variableId: 8110002061444228
+                            variableName: Priority
+                          - isRequired: false
+                            seq: 2
+                            variableId: 8110002061444229
+                            variableName: Summary
+                          - isRequired: false
+                            seq: 3
+                            val:
+                            - Accounting & Finance
+                            variableId: 8110002061447337
+                            variableName: Business Unit
+                          preMessage: 'Priority: {Priority}
+
+                            Summary:{Summary}'
+                          subject: API  Doc Testing- {Priority}
+                          sysVarCurrentTimeFormat: HH:mm:ss
+                          sysVarTodayDateFormat: mm-dd-yyyy
+                        ignoreVariable: true
+                        incidentNotificationPropertyBag:
+                          enableExerciseMode: 'false'
+                        messageFlag: 3
+                        name: Updated
+                        phaseDefinitions:
+                        - id: 1002
+                          isDefault: false
+                          name: Updated
+                          seq: 0
+                          status: A
+                        publishOptionsFlag:
+                          abb: 1
+                          alertUs: 1
+                          desktopAlerts: 1
+                          ipawsCap: 1
+                          memberPortal: 1
+                          network: 1
+                          nixleChannel: 1
+                          socialMedia: 1
+                          webPosting: 1
+                          webWidget: 0
+                        settingsFlag: 3
+                        templateId: 0
+                      - broadcastTemplate:
+                          accountId: 0
+                          broadcastContacts:
+                            answerNeeded: Yes, I acknowledge
+                            contactIds:
+                            - 8110019241316207
+                            - 1550195431055048
+                            contactSearchType: AllOr
+                            defaultSeqGroupQuota: 0
+                            enableGroupCalendar: false
+                            enableSendToSubscribers: false
+                            filterIds:
+                            - 333585814913313
+                            sequenceGroupEnabled: false
+                          broadcastSettings:
+                            bookConference: false
+                            confirm: true
+                            contactCycles: 1
+                            cycleInterval: 0
+                            deliverPaths:
+                            - accountId: 0
+                              awarePathId: 0
+                              createdId: 0
+                              default: false
+                              displayFlag: false
+                              editable: false
+                              expose: false
+                              extRequired: false
+                              id: 8105604014932720
+                              isDefault: false
+                              lastModifiedId: 0
+                              mandatory: false
+                              organizationId: 0
+                              pathId: 241901148045316
+                              prompt: Work Email
+                              resourceBundleId: 0
+                              seq: 0
+                            - accountId: 0
+                              awarePathId: 0
+                              createdId: 0
+                              default: false
+                              displayFlag: false
+                              editable: false
+                              expose: false
+                              extRequired: false
+                              id: 8105604014932721
+                              isDefault: false
+                              lastModifiedId: 0
+                              mandatory: false
+                              organizationId: 0
+                              pathId: 241901148045317
+                              prompt: Home Email
+                              resourceBundleId: 0
+                              seq: 0
+                            - accountId: 0
+                              awarePathId: 0
+                              createdId: 0
+                              default: false
+                              displayFlag: false
+                              editable: false
+                              expose: false
+                              extRequired: false
+                              id: 8105604014932726
+                              isDefault: false
+                              lastModifiedId: 0
+                              mandatory: false
+                              organizationId: 0
+                              pathId: 241901148045324
+                              prompt: SMS 1
+                              resourceBundleId: 0
+                              seq: 0
+                            - accountId: 0
+                              awarePathId: 0
+                              createdId: 0
+                              default: false
+                              displayFlag: false
+                              editable: false
+                              expose: false
+                              extRequired: false
+                              id: 8118798154467546
+                              isDefault: false
+                              lastModifiedId: 0
+                              mandatory: false
+                              organizationId: 0
+                              pathId: 241901148045325
+                              prompt: Secure Push
+                              resourceBundleId: 0
+                              seq: 0
+                            - accountId: 0
+                              awarePathId: 0
+                              createdId: 0
+                              default: false
+                              displayFlag: false
+                              editable: false
+                              expose: false
+                              extRequired: false
+                              id: 481727826886733
+                              isDefault: false
+                              lastModifiedId: 0
+                              mandatory: false
+                              organizationId: 0
+                              pathId: 241901148045318
+                              prompt: Slack
+                              resourceBundleId: 0
+                              seq: 0
+                            deliveryMethodInterval: 0
+                            deliveryPathOrder: Contact
+                            duration: 1
+                            durationTimeUnit: HOURS
+                            enableBeep: true
+                            enableRecord: false
+                            enableSecureNotification: false
+                            enableSmartConferenceConfirmationText: true
+                            language: en_US
+                            mobileSettings:
+                              allowShare: false
+                              pushAlertEnabled: false
+                              requestComment: false
+                              requestImage: false
+                              requestLocation: false
+                              requireConfirm: false
+                            quietTimeOverride: false
+                            recipientApp: true
+                            requirePinForMessage: false
+                            senderCallerInfos:
+                            - accountId: 0
+                              callerId: '7813735000'
+                              countryCode: US
+                              countryName: United States
+                              createdId: 0
+                              id: 0
+                              isDefault: true
+                              lastModifiedId: 0
+                              organizationId: 0
+                              resourceBundleId: 0
+                            senderEmail: 5th 3rd Notification
+                            smsCallBack: false
+                            throttlDefaultAmount: 0
+                            throttle: false
+                            validateContacts: true
+                            validateContactsByOrganization: false
+                            voiceMailOption: MESSAGE_WITH_CONFIRMATION
+                          createdId: 0
+                          enableLifeSafety: false
+                          id: 0
+                          lastModifiedId: 0
+                          message:
+                            accountId: 0
+                            conferenceBridgeId: 0
+                            contentType: Text
+                            createdId: 0
+                            id: 0
+                            lastModifiedId: 0
+                            organizationId: 0
+                            questionaire:
+                              answers:
+                              - name: Yes, I acknowledge
+                                quotaNum: 0
+                              - name: No, I can't join
+                                quotaNum: 0
+                              inputOptionAllowable: false
+                              multipleSelected: false
+                              required: false
+                            resourceBundleId: 0
+                            rtfContent: '<p align="center"><strong><span style="color: #990000; font-size: x-large;">Service Ops Notification</span></strong></p>
+
+                              <hr id="null">
+
+                              <table border="1" cellspacing="2" cellpadding="2">
+
+                              <tbody>
+
+                              <tr>
+
+                              <td><strong>Priority:</strong>&nbsp;</td>
+
+                              <td>{Priority}&nbsp;</td>
+
+                              </tr>
+
+                              <tr>
+
+                              <td><strong>Summary:</strong></td>
+
+                              <td>{Summary}&nbsp;</td>
+
+                              </tr>
+
+                              <tr>
+
+                              <td><b>BU:</b></td>
+
+                              <td>{Business Unit}</td>
+
+                              </tr>
+
+                              </tbody>
+
+                              </table>
+
+                              <p align="left"><span style="font-weight: bold; color: #990000; font-size: large;">Do you acknowledge this notification?</span></p>'
+                            textMessage: '{reference to notification.message.textMessage}'
+                            title: API  Doc Testing- {Priority}
+                            useCustomEmail: true
+                            useCustomSms: false
+                          organizationId: 0
+                          priority: Priority
+                          publicMessages: {}
+                          resourceBundleId: 0
+                          type: Polling
+                          useEscalation: false
+                        contactsFlag: 3
+                        evaluateAll: false
+                        formTemplate:
+                          formVariableItems:
+                          - isRequired: false
+                            seq: 1
+                            variableId: 8110002061444228
+                            variableName: Priority
+                          - isRequired: false
+                            seq: 2
+                            variableId: 8110002061444229
+                            variableName: Summary
+                          - isRequired: false
+                            seq: 3
+                            val:
+                            - Accounting & Finance
+                            variableId: 8110002061447337
+                            variableName: Business Unit
+                          preMessage: 'Priority: {Priority}
+
+                            Summary:{Summary}'
+                          subject: API  Doc Testing- {Priority}
+                          sysVarCurrentTimeFormat: HH:mm:ss
+                          sysVarTodayDateFormat: mm-dd-yyyy
+                        ignoreVariable: true
+                        incidentNotificationPropertyBag:
+                          enableExerciseMode: 'false'
+                        messageFlag: 3
+                        name: Resolved
+                        phaseDefinitions:
+                        - id: 1003
+                          isDefault: false
+                          name: Closed
+                          seq: 0
+                          status: A
+                        publishOptionsFlag:
+                          abb: 1
+                          alertUs: 1
+                          desktopAlerts: 1
+                          ipawsCap: 1
+                          memberPortal: 1
+                          network: 1
+                          nixleChannel: 1
+                          socialMedia: 1
+                          webPosting: 1
+                          webWidget: 0
+                        settingsFlag: 3
+                        templateId: 0
+                      resourceBundleId: 892807736730016
+                      status: A
+                      templateStatus: Live
+              schema:
+                properties:
+                  message:
+                    description: Request status
+                    enum:
+                    - OK
+                    type: string
+                  result:
+                    type: object
+                type: object
+          description: Accepted
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Get Template
+      tags:
+      - Incidents Templates
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.incidentTemplateId: method.request.path.incidentTemplateId
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/incidentTemplates/{organizationId}/{incidentTemplateId}
+components:
+  schemas:
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
+  securitySchemes:
+    API_Authorizer:
+      description: oAuth Token
+      in: header
+      name: Authorization
+      type: apiKey
+      x-amazon-apigateway-authorizer:
+        authorizerCredentials: arn:aws:iam::214792946631:role/oas-rest-api-gw-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+      x-amazon-apigateway-authtype: custom
+    BasicAuth:
+      description: Basic Authentication Token
+      scheme: basic
+      type: http
+    api_key:
+      description: API Key - For System Use
+      in: header
+      name: x-api-key
+      type: apiKey
+x-amazon-apigateway-binary-media-types:
+- audio/wav
+- audio/x-wav
+- application/octet-stream
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

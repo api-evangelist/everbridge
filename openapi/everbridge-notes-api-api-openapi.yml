@@ -1,0 +1,482 @@
+openapi: 3.2.0
+info:
+  title: Communications Notes API
+  description: Unified Communications APIs
+  version: '1.0'
+servers:
+- url: https://api.everbridge.net/managerapps/communications/v1
+tags:
+- name: Notes API
+paths:
+  /{commId}/notes:
+    post:
+      tags:
+      - Notes API
+      summary: Create a communication note.
+      description: Create a communication note.
+      operationId: postCem-commsCommidNotes
+      parameters:
+      - name: commId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The ID of the communication for which to create a note.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommNoteRequest'
+        required: true
+      responses:
+        '201':
+          description: The communication note has been created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommNote'
+        '400':
+          description: The request failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+        '401':
+          description: The token provided does not have permission to create a communication note.
+        '404':
+          description: The communication could not be found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
+          description: An internal error has occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        connectionId: 11ofco
+        httpMethod: POST
+        uri: https://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/cem-comms/communications/{commId}/notes
+        responses:
+          default:
+            statusCode: '201'
+        requestParameters:
+          integration.request.path.commId: method.request.path.commId
+        passthroughBehavior: when_no_match
+        connectionType: VPC_LINK
+    get:
+      tags:
+      - Notes API
+      operationId: commsCommidNotes
+      summary: Retrieve a paginated list of communication nodes
+      description: Retrieve a paginated list of communication nodes, with notes sorted by their creation date.
+      parameters:
+      - name: commId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The ID of the communication for which to retrieve the notes.
+      - in: query
+        name: note
+        required: false
+        schema:
+          type: string
+        description: The parameter allows for a case-insensitive substring search within the note’s content, excluding any HTML tags.
+      - name: pageNumber
+        in: query
+        schema:
+          type: integer
+          format: int32
+          minimum: 1
+        description: The requested page number out of the total number of pages. Defaults to the first page, which is page number 1.
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 100
+        description: The size of each page of search results. Defaults to ten records.
+      - in: query
+        name: sortDirection
+        schema:
+          type: string
+          enum:
+          - ASC
+          - ASCENDING
+          - DESC
+          - DESCENDING
+        description: 'The order by which to sort the result set by. `ASC` and `ASCENDING` have the same effect of ordering the values in ascending order; additionally, `DESC` and `DESCENDING` also have the same effect of ordering the values in descending order. See `sortBy` for details on changing which field is used in sorting.
+
+          Defaults to `DESCENDING`.'
+      responses:
+        '200':
+          description: The query was executed successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotePaginatedResponse'
+        '400':
+          description: The `commId` provided was not in the correct format.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+        '404':
+          description: The requested communication could not be found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+        '500':
+          description: An internal error has occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        passthroughBehavior: when_no_match
+        connectionId: 11ofco
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters:
+          integration.request.path.commId: method.request.path.commId
+        type: http_proxy
+        httpMethod: GET
+        uri: https://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/cem-comms/communications/{commId}/notes
+        connectionType: VPC_LINK
+  /{commId}/notes/{noteId}:
+    get:
+      tags:
+      - Notes API
+      operationId: getCem-commsCommidANotesNoteid
+      summary: Retrieve a single communication note
+      description: Retrieve a single communication note.
+      parameters:
+      - name: commId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The ID of the communication for which to retrieve the note.
+      - name: noteId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The ID of the note to retrieve.
+      responses:
+        '200':
+          description: The communication note.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommNote'
+              examples:
+                Retrieving a note:
+                  summary: Retrieving a note
+                  value:
+                    id: 40ad7521-6820-4795-9c7c-cd0d6a9dd99b
+                    note: <body>This is a <strong>test</strong> note.</body>
+                    communication:
+                      id: ebd15980-4183-4fb7-a037-bc4f1e42b990
+                    createdBy:
+                      id: '2389927572537369'
+                      firstName: summer
+                      lastName: dong
+                      fullName: summer dong
+                    createdAt: '2024-10-17T01:17:39.558055Z'
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        passthroughBehavior: when_no_match
+        connectionId: 11ofco
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters:
+          integration.request.path.commId: method.request.path.commId
+          integration.request.path.noteId: method.request.path.noteId
+        type: http_proxy
+        httpMethod: GET
+        uri: https://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/cem-comms/communications/{commId}/notes/{noteId}
+        connectionType: VPC_LINK
+components:
+  schemas:
+    CommData:
+      type: object
+      properties:
+        organizationId:
+          type: string
+          description: The Everbridge organization ID that owns the communication.
+        commId:
+          type: string
+          description: The ID of the communication.
+        status:
+          type: string
+          enum:
+          - CANCELLED
+          - FAILED
+          - PROCESSING
+          - READY
+          - SCHEDULED
+          - SENT
+          description: "The current status of the communication:\n * `CANCELLED`: The communication was stopped before it could complete its entire lifecycle.\n * `FAILED`: The communication failed to send.\n * `PROCESSING`: The communication is currently being compiled and has not yet been sent.\n * `READY`: The communication has been compiled but has not yet been sent.\n * `SENT`: The communication has been sent and will begin notifying shortly."
+        title:
+          type: string
+          description: The title of the communication.
+        mode:
+          type: string
+          enum:
+          - Live
+          - Simulation
+          - Preview
+          description: "Describes the behavior of the communication:\n * `Live`: Launch the communication and send notifications to all recipients.\n * `Simulation`: Launch the communication but do not send notifications; useful for determining the impact of a communication before sending it with `Live`.\n * `Preview`: Render the template and its fields for preview but does not launch the communication nor send any notifications."
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+          description: A list of tags assigned to the communication.
+        notifications:
+          type: array
+          items:
+            type: object
+            properties:
+              notificationId:
+                type: string
+                description: The ID of the notification.
+              status:
+                type: string
+                enum:
+                - CANCELLED
+                - FAILED
+                - PROCESSING
+                - READY
+                - SENT
+                description: "The current status of the notification:\n * `CANCELLED`: The notification was stopped before it could complete its entire lifecycle.\n * `FAILED`: The notification failed to send.\n * `PROCESSING`: The notification is currently being compiled and has not yet been sent.\n * `READY`: The notification has been compiled but has not yet been sent.\n * `SENT`: The notification has been sent and will begin notifying shortly."
+        priority:
+          description: Priority of the communication
+          example: NORMAL
+          type: string
+          enum:
+          - NORMAL
+          - HIGHPRIORITY
+          - LIFETHREATENING
+        name:
+          description: Name of the communication.
+          example: Test Communication
+          type: string
+        eventType:
+          description: Type of event
+          example: TODO
+          type: string
+        launchedBy:
+          type: string
+          description: The full name of the user who launched this communication
+        publicSafety:
+          type: boolean
+          description: Communication is being sent as a Public Safety message
+        launchedFrom:
+          type: string
+          description: The source of the communication launch. This is used for tracking purposes and does not affect the behavior of the communication. Public should use API.
+          enum:
+          - API
+          - UI
+          - ORCHESTRATION
+          - CRITICALEVENT
+          - SAFETYMESSAGE
+          - COMMSSCHEDULE
+          - RESPONSEMGMT
+        sent:
+          description: Time the communication was sent.
+          example: Test Communication
+          type: string
+          format: date-time
+        confirmationStatus:
+          $ref: '#/components/schemas/ConfirmationSummary'
+        threadStatus:
+          description: Communication thread is active or inactive
+          example: INACTIVE
+          type: string
+          enum:
+          - ACTIVE
+          - INACTIVE
+        planId:
+          type: string
+          description: The ID of the plan that launched the with communication, if any.
+    Tag:
+      type: string
+      description: A value used to contain a simple categorization.
+      example: eventType:hurricane
+    UserReference:
+      description: The person who launched the communication and thus created the activity.
+      type: object
+      properties:
+        id:
+          description: The ID of the person.
+          type: string
+          example: '2389927572537387'
+        username:
+          description: The username of the person.
+          type: string
+          example: yunlong.an-vcc
+        firstName:
+          description: The first name of the person.
+          type: string
+          example: ethan-role
+        lastName:
+          description: The last name of the person.
+          type: string
+          example: an
+        fullName:
+          description: The full name of the person.
+          type: string
+          example: ethan-role an
+    CommNoteRequest:
+      type: object
+      properties:
+        note:
+          type: string
+          description: The note may include HTML tags. The maximum length is limited to 1000 characters, excluding the HTML tags.
+          example: <body>a <strong>test</strong> note</body>
+      required:
+      - note
+    CommNote:
+      type: object
+      properties:
+        id:
+          description: The ID of the note.
+          type: string
+          example: 3617cd9d-1815-4e35-9bfe-2a8def879956
+        communication:
+          type: object
+          properties:
+            id:
+              description: The ID of the communication.
+              type: string
+              example: f57daa3c-cdd4-4fca-8817-5ad9d8f358f1
+        note:
+          description: The note.
+          type: string
+          example: <body>a <strong>test</strong> note</body>
+        createdBy:
+          $ref: '#/components/schemas/UserReference'
+        createdAt:
+          description: ISO 8601-compliant value for when the communication is created
+          type: string
+          example: '2024-10-17T01:51:39.721617Z'
+    AbstractApiPaginatedResponse:
+      type: object
+      description: A page of data from an endpoint.
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommData'
+        pages:
+          type: object
+          properties:
+            currentPage:
+              type: number
+              description: The requested page number.
+            pageSize:
+              type: number
+              description: The requested page size.
+            pageCount:
+              type: number
+              description: The number of elements in the current page.
+            totalPages:
+              type: number
+              description: The total number of pages available for request.
+            maxSize:
+              type: number
+              description: The maximum size of a single page that is allowed by the API.
+            totalCount:
+              type: number
+              description: The total number of elements across all pages.
+    ProblemDetail:
+      type: object
+      description: An RFC-7807 compliant model for error details.
+      properties:
+        type:
+          type: string
+          description: A URI that identifies the problem type.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem type.
+        status:
+          type: integer
+          description: The HTTP response status code describing the error.
+        detail:
+          type: string
+          description: A human-readable explanation of the specific problem.
+        instance:
+          type: string
+          description: A URI that identifies the specific problem.
+    NotePaginatedResponse:
+      allOf:
+      - $ref: '#/components/schemas/AbstractApiPaginatedResponse'
+      - type: object
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/CommNote'
+        required:
+        - data
+    ConfirmationSummary:
+      description: A list of summaries associated with the communication. - STILL IN DEVELOPMENT
+      type: object
+      properties:
+        totalCount:
+          description: Total count of notifications sent
+          type: integer
+          example: '8'
+        totalPublicCount:
+          description: Total count of public users sent
+          type: integer
+          example: '3'
+        confirmedCount:
+          description: Count of confirmations received
+          type: integer
+          example: '3'
+        pendingConfirmedCount:
+          description: Count of confirmations pending
+          type: integer
+          example: '4'
+        unreachableCount:
+          description: Count of unreachable contacts
+          type: integer
+          example: '1'
+        confirmedLateCount:
+          description: Confirmations received after the expiration time
+          type: integer
+          example: '0'
+  securitySchemes:
+    API_Authorizer:
+      type: apiKey
+      name: Authorization
+      in: header
+      x-amazon-apigateway-authtype: custom
+      x-amazon-apigateway-authorizer:
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        authorizerCredentials: arn:aws:iam::214792946631:role/comms-unified-gateway-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+    api_key:
+      type: apiKey
+      name: x-api-key
+      in: header
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

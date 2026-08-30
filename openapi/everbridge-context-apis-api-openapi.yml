@@ -1,0 +1,456 @@
+openapi: 3.2.0
+info:
+  title: Communications Context APIs API
+  description: Unified Communications APIs
+  version: '1.0'
+servers:
+- url: https://api.everbridge.net/managerapps/communications/v1
+tags:
+- name: Context APIs
+paths:
+  /context/:
+    get:
+      tags:
+      - Context APIs
+      operationId: getContexts
+      summary: List contexts
+      description: List available Comms contexts.
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ContextPaginatedResponse'
+        '400':
+          description: 'Invalid value for: header Authorization, Invalid value for: body'
+          content:
+            text/plain:
+              schema:
+                type: string
+      parameters:
+      - in: query
+        name: pageSize
+        schema:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 100
+          default: 10
+        description: The size of each page of search results. Defaults to ten records.
+      - in: query
+        name: pageNumber
+        schema:
+          type: integer
+          format: int32
+          minimum: 1
+          default: 1
+        description: The requested page number out of the total number of pages. Defaults to the first page, which is page number 1.
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        connectionId: 11ofco
+        httpMethod: GET
+        uri: https://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/cem-comms/context
+        responses:
+          default:
+            statusCode: '200'
+        passthroughBehavior: when_no_match
+        connectionType: VPC_LINK
+  /context/{contextId}:
+    get:
+      tags:
+      - Context APIs
+      operationId: getContext
+      summary: Get context metadata
+      description: Retrieves the details of an existing Comms context schema
+      parameters:
+      - name: contextId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Context'
+        '400':
+          description: 'Invalid value for: header Authorization, Invalid value for: query parameter action'
+          content:
+            text/plain:
+              schema:
+                type: string
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        connectionId: 11ofco
+        httpMethod: GET
+        uri: https://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/cem-comms/context/{contextId}
+        responses:
+          default:
+            statusCode: '202'
+        requestParameters:
+          integration.request.path.contextId: method.request.path.contextId
+        passthroughBehavior: when_no_match
+        connectionType: VPC_LINK
+  /context-preview:
+    post:
+      tags:
+      - Context APIs
+      operationId: getContextPreview
+      summary: Context Preview
+      description: Preview how context variables will render in a Handlebars template given a context.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PreviewRequest'
+      responses:
+        '200':
+          description: Rendering of the provided values was successful.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PreviewResponse'
+        '400':
+          description: The request failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              examples:
+                Validation error:
+                  summary: Single validation error
+                  value:
+                    type: /client-error/invalid-parameter
+                    title: Bad Request
+                    status: 400
+                    detail: 'The "Field Name #1" field must not be empty.'
+                    instance: req://requestId
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        connectionId: 11ofco
+        httpMethod: POST
+        uri: https://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/cem-comms/context-preview
+        responses:
+          default:
+            statusCode: '200'
+        passthroughBehavior: when_no_match
+        connectionType: VPC_LINK
+components:
+  schemas:
+    CtxHandlebarsTemplateVariableProperty:
+      type: object
+      description: Provides the recommended Handlebars template for rendering this variable.
+      properties:
+        type:
+          type: string
+          description: Must be set to exactly `HandlebarsTemplate`.
+          enum:
+          - HandlebarsTemplate
+        value:
+          type: string
+          description: A small Handlebars template that may be directly inserted into another template to render the variable.
+          example: '{{{ printList context.cema.lastEvent.categories }}}'
+    ContextPaginatedResponse:
+      type: object
+      description: A page of data from an endpoint.
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Context'
+        pages:
+          type: object
+          properties:
+            currentPage:
+              type: number
+              description: The requested page number.
+            pageSize:
+              type: number
+              description: The requested page size.
+            pageCount:
+              type: number
+              description: The number of elements in the current page.
+            totalPages:
+              type: number
+              description: The total number of pages available for request.
+            maxSize:
+              type: number
+              description: The maximum size of a single page that is allowed by the API.
+            totalCount:
+              type: number
+              description: The total number of elements across all pages.
+    Context:
+      type: object
+      description: A context object holding the schema and metadata regarding a particular context
+      required:
+      - name
+      properties:
+        id:
+          type: string
+          minLength: 36
+          maxLength: 36
+          format: uuid
+        name:
+          type: string
+          maxLength: 100
+          minLength: 3
+        shortName:
+          type: string
+          maxLength: 20
+          minLength: 3
+        lastModifiedId:
+          type: string
+        lastModifiedDt:
+          type: string
+          format: date-time
+        organizationId:
+          type: string
+          maxLength: 30
+          minLength: 3
+        schema:
+          type: object
+          additionalProperties: true
+        variables:
+          type: array
+          description: Notable values of the context source.
+          items:
+            $ref: '#/components/schemas/CtxVariable'
+    CtxPartialArgument:
+      type: object
+      properties:
+        key:
+          type: string
+          description: The key of the argument, which can be used to reference the argument within the Handlebars partial.
+        description:
+          type: string
+          description: A description of the argument and how it can be used within the Handlebars partial.
+        required:
+          type: boolean
+          description: Whether the argument is required when using the Handlebars partial.
+          default: true
+        readOnly:
+          type: boolean
+          description: Whether the argument's value may be changed by an end user.
+          default: true
+        defaultValue:
+          type:
+          - string
+          - 'null'
+          description: The default value of the argument. The type of this field should match the `valueType` field.
+          oneOf:
+          - type: string
+          - type: number
+          - type: boolean
+          - type: object
+            description: A JSON object representing a Handlebars path expression, which can be used to reference a value within the context.
+            properties:
+              type:
+                type: string
+                description: Must be set to exactly `Path`.
+                enum:
+                - Path
+              value:
+                type: string
+                description: The Handlebars path expression to the value within the context.
+        valueType:
+          type: string
+          description: The type of the argument's value, which can be used to enforce type checking when using the Handlebars partial.
+          enum:
+          - String
+          - Number
+          - Boolean
+          - 'Null'
+          - Path
+    CtxSinglePartialArgument:
+      allOf:
+      - $ref: '#/components/schemas/CtxPartialArgument'
+      - type: object
+        description: A hash argument for a Handlebars partial that accepts an arbitrary value of the given type.
+        properties:
+          type:
+            type: string
+            description: The type of the argument.
+            enum:
+            - Single
+    CtxDateTimeVariableProperty:
+      type: object
+      description: Provides date-time formatting information.
+      properties:
+        type:
+          type: string
+          description: Must be set to exactly `DatetimeFormatter`.
+          enum:
+          - DatetimeFormatter
+        value:
+          type: string
+          description: The date-time formatting string that describes the format of the context data.
+          example: yyyy-MM-dd'T'HH:mm:ss.SSSXXX
+    PreviewResponse:
+      type: object
+      description: Contains information about the rendered values.
+      properties:
+        variables:
+          type: array
+          description: The set of variables that were rendered using the information provided in the request.
+          items:
+            type: object
+            description: An individually rendered variable.
+            properties:
+              variableId:
+                type: string
+              result:
+                type: string
+                description: The rendered variable value.
+              template:
+                type: string
+                description: The Handlebars template used to render `result`.
+              name:
+                type: string
+                description: The human-friendly name of the variable.
+    ProblemDetail:
+      type: object
+      description: An RFC-7807 compliant model for error details.
+      properties:
+        type:
+          type: string
+          description: A URI that identifies the problem type.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem type.
+        status:
+          type: integer
+          description: The HTTP response status code describing the error.
+        detail:
+          type: string
+          description: A human-readable explanation of the specific problem.
+        instance:
+          type: string
+          description: A URI that identifies the specific problem.
+    CtxEnumerationPartialArgument:
+      allOf:
+      - $ref: '#/components/schemas/CtxPartialArgument'
+      - type: object
+        description: A hash argument for a Handlebars partial that accepts a value, specified in its `options`, of the given type.
+        properties:
+          type:
+            type: string
+            description: The type of the argument.
+            enum:
+            - Enumeration
+          options:
+            type: array
+            description: An array of possible values for the argument. The type of each value should match the `valueType` field.
+            items:
+              type: object
+              properties:
+                value:
+                  oneOf:
+                  - type: string
+                  - type: number
+                  - type: boolean
+                  - type: object
+                    description: A JSON object representing a Handlebars path expression, which can be used to reference a value within the context.
+                    properties:
+                      type:
+                        type: string
+                        description: Must be set to exactly `Path`.
+                        enum:
+                        - Path
+                      value:
+                        type: string
+                        description: The Handlebars path expression to the value within the context.
+    CtxVariable:
+      type: object
+      description: A value within a context object.
+      properties:
+        id:
+          type: string
+          description: An identifier for the variable.
+        name:
+          type: string
+          description: The user-friendly name of the variable.
+        variableType:
+          type: string
+          enum:
+          - Single
+          - Multiple
+          - Date
+          - Textbox
+          - Textarea
+          description: A description of the data within the variable. Corresponds to data types within the Everbridge Communications interface.
+        tooltip:
+          type: string
+          description: A concise and user-friendly description of the variable.
+        ownerType:
+          type: string
+          description: Set to `CONTEXT`.
+        properties:
+          description: Additional properties containing metadata regarding the variable.
+          anyOf:
+          - $ref: '#/components/schemas/CtxDateTimeVariableProperty'
+          - $ref: '#/components/schemas/CtxHandlebarsTemplateVariableProperty'
+        partial:
+          type: object
+          description: Metadata to use this variable's value in a Handlebars partial. This is a read-only property.
+          properties:
+            name:
+              type: string
+              description: The unique name of the Handlebars partial to use.
+            context:
+              type: string
+              description: The Handlebars path expression to the variable's value(s) within the context.
+            arguments:
+              type: array
+              description: A set of key-value (hash) arguments to pass to the Handlebars partial, which can be used to provide additional context or parameters for rendering the variable's value.
+              items:
+                anyOf:
+                - $ref: '#/components/schemas/CtxSinglePartialArgument'
+                - $ref: '#/components/schemas/CtxEnumerationPartialArgument'
+    PreviewRequest:
+      type: object
+      description: Parameters for requesting a preview of various context variables.
+      required:
+      - templateId
+      properties:
+        templateId:
+          type: string
+          description: An ID of a template, retrieved from the Template APIs.
+          example: commsTemplate://f533519a-3475-4ec9-9f4a-58345cd78544
+        contextIds:
+          type: array
+          description: An array of context IDs. See List Context for more information.
+          items:
+            type: string
+            example: cema://cd01f9d6-1e60-42ac-b1a6-bca9644d90c4
+  securitySchemes:
+    API_Authorizer:
+      type: apiKey
+      name: Authorization
+      in: header
+      x-amazon-apigateway-authtype: custom
+      x-amazon-apigateway-authorizer:
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        authorizerCredentials: arn:aws:iam::214792946631:role/comms-unified-gateway-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+    api_key:
+      type: apiKey
+      name: x-api-key
+      in: header
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

@@ -1,0 +1,113 @@
+openapi: 3.2.0
+info:
+  title: Digital Apps Device Registration API
+  description: 'Digital Apps APIs bring Everbridge notification functionality to your company''s mobile, desktop or web applications. '
+  version: v1
+servers:
+- url: https://api.everbridge.net/digitalapps/v2
+tags:
+- name: Device Registration
+  description: Device Registration operations
+paths:
+  /autoSignUp:
+    get:
+      tags:
+      - Device Registration
+      summary: Device Registration
+      description: Get authentication from device registration.
+      operationId: ebs-daa-device-registration
+      parameters:
+      - name: organizationId
+        in: query
+        description: The ID of organization
+        required: true
+        schema:
+          type: string
+      - name: contactId
+        in: query
+        description: The ID of contact
+        required: true
+        schema:
+          type: string
+      - name: time
+        in: query
+        description: Time validation
+        required: true
+        schema:
+          type: string
+      - name: key
+        in: query
+        description: The decryption Key
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Return authorization from device registration.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthorizeV2Response'
+      security:
+      - {}
+      x-amazon-apigateway-integration:
+        httpMethod: get
+        uri: https://mobilemember.everbridge.net/api/v2/autoSignUp
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        passthroughBehavior: when_no_match
+components:
+  schemas:
+    ResponseToken:
+      required:
+      - expireDate
+      - grantDate
+      - value
+      type: object
+      properties:
+        grantDate:
+          type: string
+          format: date-time
+        expireDate:
+          type: string
+          format: date-time
+        value:
+          type: string
+    AuthorizeV2Response:
+      required:
+      - accessToken
+      - clientId
+      - individualAccountId
+      - refreshToken
+      type: object
+      properties:
+        clientId:
+          type: string
+        accessToken:
+          $ref: '#/components/schemas/ResponseToken'
+        refreshToken:
+          $ref: '#/components/schemas/ResponseToken'
+        individualAccountId:
+          type: string
+        organizationId:
+          type: string
+          description: Organization id
+          example: '295910361798625'
+  securitySchemes:
+    API_Authorizer:
+      type: apiKey
+      name: Authorization
+      in: header
+      x-amazon-apigateway-authtype: custom
+      x-amazon-apigateway-authorizer:
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        authorizerCredentials: arn:aws:iam::214792946631:role/ebs-mobile-member-api-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true
+  samples-enabled: true

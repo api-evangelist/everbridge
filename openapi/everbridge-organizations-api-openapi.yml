@@ -1,0 +1,860 @@
+openapi: 3.2.0
+info:
+  description: EB Suite APIs.
+  title: EB Suite Organizations API
+  version: '1.0'
+servers:
+- url: https://api.everbridge.net/rest
+- url: https://api.everbridge.eu/rest
+tags:
+- description: EB Suites - Organization Management
+  name: Organizations
+paths:
+  /organizations:
+    get:
+      description: Retrieve all organizations accessible by this user
+      operationId: EBS List Organizations
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: success
+                  value:
+                    firstPageUri: https://api-dev3.everbridge.net/rest/organizations?pageNumber=1
+                    lastPageUri: https://api-dev3.everbridge.net/rest/organizations?pageNumber=1
+                    message: OK
+                    page:
+                      currentPageNo: 1
+                      data:
+                      - accountDisabled: false
+                        accountId: 1536846672691202
+                        accountName: Partner Engineering
+                        address:
+                          country: US
+                        adminPhone: '7818646213'
+                        allowSendMessage: false
+                        allowShareMessage: false
+                        awareOrgId: 0
+                        conferenceBridgePermission: false
+                        contactCount: 50
+                        createdDate: 1637777081071
+                        createdId: 565290710597634
+                        createdName: Ajay Goel
+                        dataCenterId: 241901148045313
+                        dirty: false
+                        email: Internal Training (Dev3)
+                        emailFromDisplay: Internal Training (Dev3)
+                        featureIds:
+                        - 127547643789313
+                        gisSetting:
+                          baseMap: 1
+                          latitude: 34.146331787109375
+                          longitude: -118.24835968017578
+                          mapCenter: Glendale, CA
+                          mapZoomLevel: 573
+                          projection: 571
+                        id: 1536984111644674
+                        language: 21
+                        lastModifiedDate: 1746716745295
+                        lastModifiedId: 285602440282217
+                        lastModifiedMsgBy: 0
+                        lastModifiedName: Vishal Agrawal
+                        lastModifiedTime: 1763079405647
+                        lastSynchronizedTime: 1763079405647
+                        name: Internal Training
+                        organizationBroadcastSetting:
+                          attachmentLinkDurationDays: 7
+                          confirmFlag: false
+                          cycleInterval: 0
+                          defaultCycles: 1
+                          duplicatePathsFlag: false
+                          emergencyDuration: 1
+                          emergencyPriority: 0
+                          enableImminentThreatToLife: true
+                          enableUpdatePollingResponse: false
+                          enableVerifyPin: false
+                          exposeSenderID: false
+                          launchByPhoneFlag: 0
+                          maxCycles: 10
+                          pathInterval: 0
+                          requireSecurityCodeFlag: false
+                          simulationMode: false
+                          standardDuration: 1
+                          standardPriority: 0
+                          useExternalIdFlag: false
+                          vmPreference: MESSAGE_ONLY
+                        organizationId: 1536984111644674
+                        organizationStatus: Active
+                        passwordRefreshDays: 0
+                        productIds:
+                        - 8800387989506
+                        - 241901148045315
+                        - 241901148045314
+                        - 8800387989505
+                        - 241901148045313
+                        - 233109349990401
+                        reply2EmailPermission: false
+                        resourceBundleId: 233109349990401
+                        roleIds:
+                        - 1536984111644675
+                        - 1775025694703617
+                        - 2702291954040833
+                        senderCallerIdPermission: false
+                        senderEmailInfoPermission: false
+                        senderInfoPermission: true
+                        shareMessageStatus: false
+                        showMessage: false
+                        status: A
+                        twitterThresholdCount: 0
+                        type: Internal
+                        weatherProvider: WDT
+                      pageSize: 101
+                      start: 1
+                      totalCount: 1
+                      totalPageCount: 1
+              schema:
+                $ref: '#/components/schemas/OrganizationWrapperInstanceResult'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '500':
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: List Organizations
+      tags:
+      - Organizations
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters: {}
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/organizations
+  /organizations/{organizationId}:
+    get:
+      description: Retrieve a specific organization
+      operationId: EBS Get Organization
+      parameters:
+      - description: The ID of the organization
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          format: int64
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: success
+                  value:
+                    message: OK
+                    result:
+                      accountDisabled: false
+                      accountId: 1536846672691202
+                      accountName: Partner Engineering
+                      address:
+                        country: US
+                      adminPhone: '7818646213'
+                      allowSendMessage: false
+                      allowShareMessage: false
+                      awareOrgId: 0
+                      conferenceBridgePermission: false
+                      contactCount: 50
+                      createdDate: 1637777081071
+                      createdId: 565290710597634
+                      createdName: Ajay Goel
+                      dataCenterId: 241901148045313
+                      dirty: false
+                      email: Internal Training (Dev3)
+                      emailFromDisplay: Internal Training (Dev3)
+                      featureIds:
+                      - 127547643789313
+                      gisSetting:
+                        baseMap: 1
+                        latitude: 34.146331787109375
+                        longitude: -118.24835968017578
+                        mapCenter: Glendale, CA
+                        mapZoomLevel: 573
+                        projection: 571
+                      id: 1536984111644674
+                      language: 21
+                      lastModifiedDate: 1746716745295
+                      lastModifiedId: 285602440282217
+                      lastModifiedMsgBy: 0
+                      lastModifiedName: Vishal Agrawal
+                      lastModifiedTime: 1763079405647
+                      lastSynchronizedTime: 1763079405647
+                      name: Internal Training
+                      organizationBroadcastSetting:
+                        attachmentLinkDurationDays: 7
+                        confirmFlag: false
+                        cycleInterval: 0
+                        defaultCycles: 1
+                        duplicatePathsFlag: false
+                        emergencyDuration: 1
+                        emergencyPriority: 0
+                        enableImminentThreatToLife: true
+                        enableUpdatePollingResponse: false
+                        enableVerifyPin: false
+                        exposeSenderID: false
+                        launchByPhoneFlag: 0
+                        maxCycles: 10
+                        pathInterval: 0
+                        requireSecurityCodeFlag: false
+                        simulationMode: false
+                        standardDuration: 1
+                        standardPriority: 0
+                        useExternalIdFlag: false
+                        vmPreference: MESSAGE_ONLY
+                      organizationId: 1536984111644674
+                      organizationStatus: Active
+                      passwordRefreshDays: 0
+                      productIds:
+                      - 8800387989506
+                      - 241901148045315
+                      - 241901148045314
+                      - 8800387989505
+                      - 241901148045313
+                      - 233109349990401
+                      reply2EmailPermission: false
+                      resourceBundleId: 233109349990401
+                      roleIds:
+                      - 1536984111644675
+                      - 1775025694703617
+                      - 2702291954040833
+                      senderCallerIdPermission: false
+                      senderEmailInfoPermission: false
+                      senderInfoPermission: true
+                      shareMessageStatus: false
+                      showMessage: false
+                      status: A
+                      twitterThresholdCount: 0
+                      type: Internal
+                      weatherProvider: WDT
+              schema:
+                $ref: '#/components/schemas/OrganizationPathWrapperInstanceResult'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationWrapperInstanceResult'
+          description: Missing or invalid request input
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationWrapperInstanceResult'
+          description: Invalid or missing credentials
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationWrapperInstanceResult'
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Get Organization
+      tags:
+      - Organizations
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/organizations/{organizationId}
+components:
+  schemas:
+    OrganizationWrapper:
+      properties:
+        accountDisabled:
+          type: boolean
+        accountId:
+          format: int64
+          type: integer
+        accountName:
+          type: string
+        address:
+          $ref: '#/components/schemas/AddressWrapper'
+        adminEmail:
+          type: string
+        adminName:
+          type: string
+        adminPhone:
+          type: string
+        allowSendMessage:
+          type: boolean
+        allowShareMessage:
+          type: boolean
+        awareOrgId:
+          format: int32
+          type: integer
+        conferenceBridgePermission:
+          type: boolean
+        contactCount:
+          format: int64
+          type: integer
+        createdDate:
+          format: date-time
+          type: string
+        createdId:
+          format: int64
+          type: integer
+        createdName:
+          type: string
+        createdProxyName:
+          type: string
+        dataCenterId:
+          format: int64
+          type: integer
+        dirty:
+          type: boolean
+        email:
+          type: string
+        emailFromDisplay:
+          type: string
+        externalIdDesc:
+          type: string
+        featureIds:
+          items:
+            format: int64
+            type: integer
+          type: array
+        gisSetting:
+          $ref: '#/components/schemas/GisSettingWrapper'
+        id:
+          format: int64
+          type: integer
+        language:
+          format: int64
+          type: integer
+        lastModifiedDate:
+          format: date-time
+          type: string
+        lastModifiedId:
+          format: int64
+          type: integer
+        lastModifiedMsgBy:
+          format: int64
+          type: integer
+        lastModifiedMsgDate:
+          format: date-time
+          type: string
+        lastModifiedName:
+          type: string
+        lastModifiedProxyName:
+          type: string
+        lastModifiedTime:
+          format: int64
+          type: integer
+        lastSynchronizedTime:
+          format: int64
+          type: integer
+        loginMessage:
+          type: string
+        name:
+          type: string
+        orgPhone:
+          type: string
+        organizationBroadcastSetting:
+          $ref: '#/components/schemas/OrganizationBroadcastSettingWrapper'
+        organizationId:
+          format: int64
+          type: integer
+        organizationStatus:
+          enum:
+          - Active
+          - Inactive
+          type: string
+        passwordRefreshDays:
+          format: int32
+          type: integer
+        processingState:
+          $ref: '#/components/schemas/ProcessingStateWrapper'
+        productIds:
+          items:
+            format: int64
+            type: integer
+          type: array
+        reply2EmailPermission:
+          type: boolean
+        resourceBundleId:
+          format: int64
+          type: integer
+        roleIds:
+          items:
+            format: int64
+            type: integer
+          type: array
+        senderCallerIdPermission:
+          type: boolean
+        senderEmailInfoPermission:
+          type: boolean
+        senderInfoPermission:
+          type: boolean
+        shareMessageStatus:
+          type: boolean
+        shortId:
+          type: string
+        showMessage:
+          type: boolean
+        status:
+          enum:
+          - A
+          - D
+          type: string
+        thresholdSetting:
+          $ref: '#/components/schemas/ThresholdSettingWrapper'
+        throttleSetting:
+          $ref: '#/components/schemas/ThrottleSettingWrapper'
+        twitterThresholdCount:
+          format: int64
+          type: integer
+        type:
+          type: string
+        weatherProvider:
+          enum:
+          - Accuweather
+          - WDT
+          type: string
+      type: object
+    ThresholdSettingWrapper:
+      properties:
+        accountId:
+          format: int64
+          type: integer
+        createdDate:
+          format: date-time
+          type: string
+        createdId:
+          format: int64
+          type: integer
+        createdName:
+          type: string
+        createdProxyName:
+          type: string
+        id:
+          format: int64
+          type: integer
+        lastModifiedDate:
+          format: date-time
+          type: string
+        lastModifiedId:
+          format: int64
+          type: integer
+        lastModifiedName:
+          type: string
+        lastModifiedProxyName:
+          type: string
+        maxRadiusOfRecipientAppThresholdCircle:
+          format: int32
+          type: integer
+        maxRadiusOfTwitterThresholdCircle:
+          format: int32
+          type: integer
+        messageConstraint:
+          $ref: '#/components/schemas/UnsoicitedMessageConstraintWrapper'
+        organizationId:
+          format: int64
+          type: integer
+        recipientAppThresholdVolumn:
+          format: int32
+          type: integer
+        resourceBundleId:
+          format: int64
+          type: integer
+        status:
+          enum:
+          - A
+          - D
+          type: string
+        tweetConstraint:
+          $ref: '#/components/schemas/TweetConstraintWrapper'
+        twitterthresholdVolumn:
+          format: int32
+          type: integer
+        weatherThresholdVolumn:
+          format: int32
+          type: integer
+      type: object
+    TweetConstraintWrapper:
+      properties:
+        maxTotalTweets:
+          format: int64
+          type: integer
+        maxTweetsPerHour:
+          format: int32
+          type: integer
+        maxTweetsPerMinute:
+          format: int32
+          type: integer
+      type: object
+    OrganizationPathWrapperInstanceResult:
+      properties:
+        message:
+          type: string
+        result:
+          $ref: '#/components/schemas/OrganizationPathWrapper'
+      type: object
+    OrganizationPathWrapper:
+      properties:
+        accountId:
+          format: int64
+          type: integer
+        awarePathId:
+          format: int32
+          type: integer
+        code:
+          type: string
+        confirmType:
+          enum:
+          - REPLY_TO
+          - PHONE
+          - HTTP
+          type: string
+        createdDate:
+          format: date-time
+          type: string
+        createdId:
+          format: int64
+          type: integer
+        createdName:
+          type: string
+        createdProxyName:
+          type: string
+        default:
+          type: boolean
+        displayFlag:
+          type: boolean
+        editable:
+          type: boolean
+        expose:
+          type: boolean
+        extFlag:
+          enum:
+          - Y
+          - N
+          type: string
+        extPrompt:
+          enum:
+          - Pin
+          - Ext
+          - Provider
+          - System
+          type: string
+        extRequired:
+          type: boolean
+        extValue:
+          type: string
+        formatFlag:
+          enum:
+          - P
+          - N
+          - E
+          type: string
+        id:
+          format: int64
+          type: integer
+        isDefault:
+          type: boolean
+        lastModifiedDate:
+          format: date-time
+          type: string
+        lastModifiedId:
+          format: int64
+          type: integer
+        lastModifiedName:
+          type: string
+        lastModifiedProxyName:
+          type: string
+        mandatory:
+          type: boolean
+        messageCode:
+          enum:
+          - P
+          - T
+          - E
+          - F
+          type: string
+        organizationId:
+          format: int64
+          type: integer
+        pathDeliveryType:
+          enum:
+          - T
+          type: string
+        pathFlag:
+          format: int64
+          type: integer
+        pathId:
+          format: int64
+          type: integer
+        pathType:
+          enum:
+          - EMAIL
+          - TTYTDD
+          - SMS
+          - PHONE
+          - EXTPHONE
+          - RECIP
+          - FAX
+          - NUMERICPAGER
+          - TAPPAGER
+          - PLAINTEXTEMAIL
+          - ONEWAYSMS
+          - SECUREPUSH
+          - ONEBRIDGE
+          - MSTEAMS
+          - SLACK
+          type: string
+        prompt:
+          type: string
+        resourceBundleId:
+          format: int64
+          type: integer
+        seq:
+          format: int32
+          type: integer
+        status:
+          enum:
+          - A
+          - D
+          type: string
+        sysPrompt:
+          type: string
+        type:
+          enum:
+          - EMAIL
+          - TA
+          - CALLIN
+          - FAX
+          - TTYTTD
+          - ALPHA
+          - IM
+          - SMS
+          - TELEX
+          - TTYTDD
+          - IPHONE
+          - PHONE
+          - COMPACT
+          - PAGER
+          - RECIP
+          - SECUREPUSH
+          - ONEBRIDGE
+          - NUMERICPAGER
+          - TAPPAGER
+          - EXTPHONE
+          - PLAINTEXTEMAIL
+          - MSTEAMS
+          - SLACK
+          type: string
+      type: object
+    GisLocationWrapper:
+      properties:
+        lat:
+          format: double
+          type: number
+        lon:
+          format: double
+          type: number
+      type: object
+    ProcessingStateWrapper:
+      properties:
+        serverId:
+          format: int64
+          type: integer
+        startTime:
+          format: int64
+          type: integer
+        synchronizeTime:
+          format: int64
+          type: integer
+        threadName:
+          type: string
+      type: object
+    UnsoicitedMessageConstraintWrapper:
+      properties:
+        maxMessagesPerHour:
+          format: int32
+          type: integer
+        maxMessagesPerMinute:
+          format: int32
+          type: integer
+      type: object
+    OrganizationWrapperInstanceResult:
+      properties:
+        message:
+          type: string
+        result:
+          $ref: '#/components/schemas/OrganizationWrapper'
+      type: object
+    OrganizationBroadcastSettingWrapper:
+      properties:
+        attachmentLinkDurationDays:
+          format: int32
+          type: integer
+        confirmFlag:
+          type: boolean
+        cycleInterval:
+          format: int32
+          type: integer
+        defaultCycles:
+          format: int32
+          type: integer
+        duplicatePathsFlag:
+          type: boolean
+        emergencyDuration:
+          format: int32
+          type: integer
+        emergencyPriority:
+          format: int32
+          type: integer
+        enableImminentThreatToLife:
+          type: boolean
+        enableVerifyPin:
+          type: boolean
+        exposeSenderID:
+          type: boolean
+        launchByPhoneFlag:
+          format: int32
+          type: integer
+        maxCycles:
+          format: int32
+          type: integer
+        pathInterval:
+          format: int32
+          type: integer
+        requireSecurityCodeFlag:
+          type: boolean
+        simulationMode:
+          type: boolean
+        standardDuration:
+          format: int32
+          type: integer
+        standardPriority:
+          format: int32
+          type: integer
+        useExternalIdFlag:
+          type: boolean
+        vmPreference:
+          enum:
+          - NO_MESSAGE
+          - MESSAGE_ONLY
+          - MESSAGE_WITH_CONFIRMATION
+          type: string
+      type: object
+    ThrottleSettingWrapper:
+      properties:
+        applyByFlag:
+          type: boolean
+        createdBy:
+          format: int64
+          type: integer
+        createdDate:
+          format: date-time
+          type: string
+        defaultAmount:
+          format: int32
+          type: integer
+        enforceAllFlag:
+          type: boolean
+        flag:
+          type: boolean
+        lastModifiedBy:
+          format: int64
+          type: integer
+        lastModifiedDate:
+          format: date-time
+          type: string
+        senderReviewFlag:
+          type: boolean
+        senderToggleFlag:
+          type: boolean
+      type: object
+    AddressWrapper:
+      properties:
+        city:
+          type: string
+        country:
+          type: string
+        gisLocation:
+          $ref: '#/components/schemas/GisLocationWrapper'
+        locationName:
+          type: string
+        postalCode:
+          type: string
+        state:
+          type: string
+        streetAddress:
+          type: string
+        suite:
+          type: string
+      type: object
+    GisSettingWrapper:
+      properties:
+        baseMap:
+          format: int64
+          type: integer
+        latitude:
+          format: double
+          type: number
+        longitude:
+          format: double
+          type: number
+        mapCenter:
+          type: string
+        mapZoomLevel:
+          format: int64
+          type: integer
+        projection:
+          format: int64
+          type: integer
+      type: object
+  securitySchemes:
+    API_Authorizer:
+      description: oAuth Token
+      in: header
+      name: Authorization
+      type: apiKey
+      x-amazon-apigateway-authorizer:
+        authorizerCredentials: arn:aws:iam::214792946631:role/oas-rest-api-gw-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+      x-amazon-apigateway-authtype: custom
+    BasicAuth:
+      description: Basic Authentication Token
+      scheme: basic
+      type: http
+    api_key:
+      description: API Key - For System Use
+      in: header
+      name: x-api-key
+      type: apiKey
+x-amazon-apigateway-binary-media-types:
+- audio/wav
+- audio/x-wav
+- application/octet-stream
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

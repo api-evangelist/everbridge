@@ -1,0 +1,1178 @@
+openapi: 3.2.0
+info:
+  title: Asset Management Asset Types API
+  description: This is the Asset Management Rest API Documentation
+  contact:
+    name: CAMS Team
+  version: 1.0.0
+servers:
+- url: https://api.everbridge.net/rest/v2/asset-management
+tags:
+- name: Asset Types
+  description: Asset type management operations
+paths:
+  /asset-types:
+    get:
+      tags:
+      - Asset Types
+      operationId: EBS AM List Asset Types
+      summary: List Asset Types
+      description: List Asset Types
+      parameters:
+      - name: X-EB-Organization-Id
+        in: header
+        description: Organization Id
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - name: searchValue
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: includePropertyDefinitions
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+      - name: alertable
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: includeSupplyChain
+        in: query
+        required: false
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListAssetTypeResponse'
+              examples:
+                Success:
+                  summary: Success
+                  value:
+                  - id: 665856825d59930bc2151633
+                    organizationId: 1536984111644674
+                    createdId: 2200330536222721
+                    createdName: Nandish API Access
+                    lastModifiedId: 2200330536222721
+                    lastModifiedName: Nandish API Access
+                    createdTimestamp: 1717065346390
+                    lastModifiedTimestamp: 1717065346390
+                    name: For API Gateway
+                    legacy: false
+                    assetTypeCategory: REGULAR
+                    assetTypeTemplateId: 5d49bc0e00343fff27b81548
+                    iconId: '1'
+                    alertable: false
+                  - id: 665ff8e1a1b61d39e577b9c6
+                    organizationId: 1536984111644674
+                    createdId: 0
+                    lastModifiedId: 0
+                    name: Buildings
+                    legacy: true
+                    assetTypeCategory: REGULAR
+                    assetTypeTemplateId: 5d49bc0e00343fff27b81550
+                    iconId: '1'
+                    alertable: true
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: GET
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-management/asset-types
+        responses:
+          default:
+            statusCode: '200'
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.header.Authorization: context.authorizer.override_token
+    post:
+      tags:
+      - Asset Types
+      operationId: EBS AM Create Asset Type
+      summary: Create Asset Type
+      description: Create Asset Type
+      parameters:
+      - name: X-EB-Organization-Id
+        in: header
+        description: Organization Id
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAssetTypeRequest'
+            examples:
+              Basic:
+                summary: basic
+                value:
+                  name: pre-test1
+                  iconId: '1'
+                  propertyDefinitions:
+                  - assetPropertyType: BASIC
+                    assetPropertyDataType: STRING
+                    assetPropertyDisplayType: TEXTBOX
+                    name: pre-test-prop-def
+                  assetTypeTemplateId: 5d49bc0e00343fff27b81548
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetType'
+              examples:
+                Success:
+                  summary: success
+                  value:
+                    id: string
+                    organizationId: 0
+                    createdId: 0
+                    createdName: string
+                    createdProxyName: string
+                    lastModifiedId: 0
+                    lastModifiedName: string
+                    lastModifiedProxyName: string
+                    createdTimestamp: '2025-08-20T12:21:40.940Z'
+                    lastModifiedTimestamp: '2025-08-20T12:21:40.940Z'
+                    name: string
+                    description: string
+                    seq: 0
+                    legacy: true
+                    assetTypeCategory: REGULAR
+                    propertyDefinitions:
+                    - id: string
+                      organizationId: 0
+                      createdId: 0
+                      createdName: string
+                      createdProxyName: string
+                      lastModifiedId: 0
+                      lastModifiedName: string
+                      lastModifiedProxyName: string
+                      createdTimestamp: '2025-08-20T12:21:40.940Z'
+                      lastModifiedTimestamp: '2025-08-20T12:21:40.940Z'
+                      assetTypeId: string
+                      assetTypeTemplateId: string
+                      seq: 500
+                      assetPropertyType: BASIC
+                      assetPropertyDataType: STRING
+                      assetPropertyDisplayType: SINGLE
+                      name: string
+                      aliasName: string
+                      defaultAliasName: string
+                      description: string
+                      vccPropertyName: string
+                      allowedValues:
+                      - {}
+                    assetTypeTemplateId: string
+                    assetTypeTemplateName: string
+                    iconId: string
+                    alertable: true
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: POST
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-management/asset-types
+        responses:
+          default:
+            statusCode: '200'
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.header.Authorization: context.authorizer.override_token
+  /asset-types/{id}:
+    get:
+      tags:
+      - Asset Types
+      operationId: EBS AM Get Asset Type
+      summary: Get Asset Type
+      description: Get Asset Type
+      parameters:
+      - name: X-EB-Organization-Id
+        in: header
+        description: Organization Id
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetType'
+              examples:
+                Success:
+                  summary: success
+                  value:
+                    id: 665ff8e1a1b61d39e577b9c6
+                    organizationId: 1536984111644674
+                    createdId: 0
+                    lastModifiedId: 0
+                    name: Buildings
+                    legacy: true
+                    assetTypeCategory: REGULAR
+                    propertyDefinitions:
+                    - id: 665ff8e1a1b61d39e577b9c7
+                      organizationId: 1536984111644674
+                      createdId: 0
+                      lastModifiedId: 0
+                      createdTimestamp: 1717565665767
+                      lastModifiedTimestamp: 1717565665767
+                      assetTypeId: 665ff8e1a1b61d39e577b9c6
+                      seq: 0
+                      assetPropertyType: BASIC
+                      assetPropertyDataType: STRING
+                      assetPropertyDisplayType: TEXTBOX
+                      name: External ID
+                    - id: 665ff8e1a1b61d39e577b9c8
+                      organizationId: 1536984111644674
+                      createdId: 0
+                      lastModifiedId: 0
+                      createdTimestamp: 1717565665767
+                      lastModifiedTimestamp: 1717565665767
+                      assetTypeId: 665ff8e1a1b61d39e577b9c6
+                      seq: 1
+                      assetPropertyType: BASIC
+                      assetPropertyDataType: STRING
+                      assetPropertyDisplayType: TEXTBOX
+                      name: Name
+                    assetTypeTemplateId: 5d49bc0e00343fff27b81550
+                    assetTypeTemplateName: SC Building
+                    iconId: '1'
+                    alertable: true
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: GET
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-management/asset-types/{id}
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters:
+          integration.request.path.id: method.request.path.id
+          integration.request.header.Authorization: context.authorizer.override_token
+        passthroughBehavior: when_no_match
+    put:
+      tags:
+      - Asset Types
+      operationId: EBS AM Update Asset Type
+      summary: Update Asset Type
+      description: Update Asset Type
+      parameters:
+      - name: X-EB-Organization-Id
+        in: header
+        description: Organization Id
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssetTypeUpdateRequest'
+            examples:
+              Basic:
+                summary: basic
+                value:
+                  name: pre-test3
+                  iconId: '1'
+                  propertyDefinitions:
+                  - assetPropertyType: BASIC
+                    assetPropertyDataType: STRING
+                    assetPropertyDisplayType: TEXTBOX
+                    name: pre-test-prop-def
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetType'
+              examples:
+                Success:
+                  summary: success
+                  value:
+                    id: 68a5c4a974af7b55898f64ca
+                    organizationId: 1536984111644674
+                    createdId: 2200330536222721
+                    createdName: Nandish API Access
+                    lastModifiedId: 2200330536222721
+                    lastModifiedName: Nandish API Access
+                    createdTimestamp: 1755694249716
+                    lastModifiedTimestamp: 1755694306544
+                    name: pre-test3
+                    legacy: false
+                    assetTypeCategory: REGULAR
+                    propertyDefinitions:
+                    - id: 68a5c4e274af7b55898f64db
+                      organizationId: 1536984111644674
+                      createdId: 2200330536222721
+                      createdName: Nandish API Access
+                      lastModifiedId: 2200330536222721
+                      lastModifiedName: Nandish API Access
+                      createdTimestamp: 1755694306554
+                      lastModifiedTimestamp: 1755694306554
+                      assetTypeId: 68a5c4a974af7b55898f64ca
+                      seq: 0
+                      assetPropertyType: BASIC
+                      assetPropertyDataType: STRING
+                      assetPropertyDisplayType: TEXTBOX
+                      name: pre-test-prop-def
+                    assetTypeTemplateId: 5d49bc0e00343fff27b81548
+                    assetTypeTemplateName: Facility
+                    iconId: '1'
+                    alertable: true
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: PUT
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-management/asset-types/{id}
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters:
+          integration.request.path.id: method.request.path.id
+          integration.request.header.Authorization: context.authorizer.override_token
+        passthroughBehavior: when_no_match
+    delete:
+      tags:
+      - Asset Types
+      operationId: EBS AM Delete Asset Type
+      summary: Delete Asset Type
+      description: Delete Asset Type
+      parameters:
+      - name: X-EB-Organization-Id
+        in: header
+        description: Organization Id
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetType'
+              examples:
+                Success:
+                  summary: success
+                  value:
+                    id: 68a5c4a974af7b55898f64ca
+                    organizationId: 1536984111644674
+                    createdId: 2200330536222721
+                    createdName: Nandish API Access
+                    lastModifiedId: 2200330536222721
+                    lastModifiedName: Nandish API Access
+                    createdTimestamp: 1755694249716
+                    lastModifiedTimestamp: 1755694306544
+                    name: pre-test3
+                    legacy: false
+                    assetTypeCategory: REGULAR
+                    propertyDefinitions:
+                    - id: 68a5c4e274af7b55898f64db
+                      organizationId: 1536984111644674
+                      createdId: 2200330536222721
+                      createdName: Nandish API Access
+                      lastModifiedId: 2200330536222721
+                      lastModifiedName: Nandish API Access
+                      createdTimestamp: 1755694306554
+                      lastModifiedTimestamp: 1755694306554
+                      assetTypeId: 68a5c4a974af7b55898f64ca
+                      seq: 0
+                      assetPropertyType: BASIC
+                      assetPropertyDataType: STRING
+                      assetPropertyDisplayType: TEXTBOX
+                      name: pre-test-prop-def
+                    assetTypeTemplateId: 5d49bc0e00343fff27b81548
+                    iconId: '1'
+                    alertable: true
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: DELETE
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-management/asset-types/{id}
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters:
+          integration.request.path.id: method.request.path.id
+          integration.request.header.Authorization: context.authorizer.override_token
+        passthroughBehavior: when_no_match
+  /asset-types/sc-building:
+    get:
+      tags:
+      - Asset Types
+      operationId: EBS AM Get SC Building Asset Type
+      summary: Get SC Building Asset Type
+      description: Get SC Building Asset Type
+      parameters:
+      - name: X-EB-Organization-Id
+        in: header
+        description: Organization Id
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - name: includePropertyDefinitions
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetType'
+              examples:
+                Success:
+                  summary: success
+                  value:
+                    id: 665ff8e1a1b61d39e577b9c6
+                    organizationId: 1536984111644674
+                    createdId: 0
+                    lastModifiedId: 0
+                    name: Buildings
+                    legacy: true
+                    assetTypeCategory: REGULAR
+                    assetTypeTemplateId: 5d49bc0e00343fff27b81550
+                    assetTypeTemplateName: SC Building
+                    iconId: '1'
+                    alertable: true
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: GET
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-management/asset-types/sc-building
+        responses:
+          default:
+            statusCode: '200'
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.header.Authorization: context.authorizer.override_token
+  /asset-types/property-definitions/{id}/linked-to-asset:
+    get:
+      tags:
+      - Asset Types
+      operationId: EBS AM Is Linked To Asset
+      summary: Is Linked To Asset
+      description: Is Linked To Asset
+      parameters:
+      - name: X-EB-Organization-Id
+        in: header
+        description: Organization Id
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: value
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LinkedToAssetResponse'
+              examples:
+                Summary:
+                  summary: success
+                  value:
+                    linkedToExistingAsset: true
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: GET
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-management/asset-types/property-definitions/{id}/linked-to-asset
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters:
+          integration.request.path.id: method.request.path.id
+          integration.request.header.Authorization: context.authorizer.override_token
+        passthroughBehavior: when_no_match
+  /asset-types/property-definitions/names:
+    get:
+      tags:
+      - Asset Types
+      operationId: EBS AM List Asset Property Names
+      summary: List Asset Property Names
+      description: List Asset Property Names
+      parameters:
+      - name: X-EB-Organization-Id
+        in: header
+        description: Organization Id
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - name: onlyUnMapped
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: true
+      - name: onlySystemProperty
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: true
+      - name: name
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                Summary:
+                  summary: success
+                  value: {}
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: GET
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-management/asset-types/property-definitions/names
+        responses:
+          default:
+            statusCode: '200'
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.header.Authorization: context.authorizer.override_token
+  /asset-types/name:
+    get:
+      tags:
+      - Asset Types
+      operationId: EBS AM List Asset Types By Name
+      summary: List Assets Type By Name
+      description: List Asset Types By Name
+      parameters:
+      - name: X-EB-Organization-Id
+        in: header
+        description: Organization Id
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - name: name
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetType'
+              examples:
+                Success:
+                  summary: success
+                  value:
+                    id: 665856825d59930bc2151633
+                    organizationId: 1536984111644674
+                    createdId: 2200330536222721
+                    createdName: Nandish API Access
+                    lastModifiedId: 2200330536222721
+                    lastModifiedName: Nandish API Access
+                    createdTimestamp: 1717065346390
+                    lastModifiedTimestamp: 1717065346390
+                    name: For API Gateway
+                    legacy: false
+                    assetTypeCategory: REGULAR
+                    propertyDefinitions:
+                    - id: 665856825d59930bc2151634
+                      organizationId: 1536984111644674
+                      createdId: 2200330536222721
+                      createdName: Nandish API Access
+                      lastModifiedId: 2200330536222721
+                      lastModifiedName: Nandish API Access
+                      createdTimestamp: 1717065346437
+                      lastModifiedTimestamp: 1717065346437
+                      assetTypeId: 665856825d59930bc2151633
+                      seq: 0
+                      assetPropertyType: BASIC
+                      assetPropertyDataType: STRING
+                      assetPropertyDisplayType: TEXTBOX
+                      name: External ID
+                    - id: 665856825d59930bc2151635
+                      organizationId: 1536984111644674
+                      createdId: 2200330536222721
+                      createdName: Nandish API Access
+                      lastModifiedId: 2200330536222721
+                      lastModifiedName: Nandish API Access
+                      createdTimestamp: 1717065346437
+                      lastModifiedTimestamp: 1717065346437
+                      assetTypeId: 665856825d59930bc2151633
+                      seq: 1
+                      assetPropertyType: BASIC
+                      assetPropertyDataType: STRING
+                      assetPropertyDisplayType: TEXTBOX
+                      name: Name
+                    assetTypeTemplateId: 5d49bc0e00343fff27b81548
+                    assetTypeTemplateName: Facility
+                    iconId: '1'
+                    alertable: false
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: GET
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-management/asset-types/name
+        responses:
+          default:
+            statusCode: '200'
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.header.Authorization: context.authorizer.override_token
+  /asset-types/name/{name}:
+    get:
+      tags:
+      - Asset Types
+      operationId: EBS AM Get Asset Type By Name
+      summary: Get Asset Type By Name
+      description: Get Asset Type By Name
+      parameters:
+      - name: X-EB-Organization-Id
+        in: header
+        description: Organization Id
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetType'
+              examples:
+                Success:
+                  summary: success
+                  value:
+                    id: 665ff8e1a1b61d39e577b9c6
+                    organizationId: 1536984111644674
+                    createdId: 0
+                    lastModifiedId: 0
+                    name: Buildings
+                    legacy: true
+                    assetTypeCategory: REGULAR
+                    propertyDefinitions:
+                    - id: 665ff8e1a1b61d39e577b9c7
+                      organizationId: 1536984111644674
+                      createdId: 0
+                      lastModifiedId: 0
+                      createdTimestamp: 1717565665767
+                      lastModifiedTimestamp: 1717565665767
+                      assetTypeId: 665ff8e1a1b61d39e577b9c6
+                      seq: 0
+                      assetPropertyType: BASIC
+                      assetPropertyDataType: STRING
+                      assetPropertyDisplayType: TEXTBOX
+                      name: External ID
+                    - id: 665ff8e1a1b61d39e577b9c8
+                      organizationId: 1536984111644674
+                      createdId: 0
+                      lastModifiedId: 0
+                      createdTimestamp: 1717565665767
+                      lastModifiedTimestamp: 1717565665767
+                      assetTypeId: 665ff8e1a1b61d39e577b9c6
+                      seq: 1
+                      assetPropertyType: BASIC
+                      assetPropertyDataType: STRING
+                      assetPropertyDisplayType: TEXTBOX
+                      name: Name
+                    assetTypeTemplateId: 5d49bc0e00343fff27b81550
+                    assetTypeTemplateName: SC Building
+                    iconId: '1'
+                    alertable: true
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: GET
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-management/asset-types/name/{name}
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters:
+          integration.request.path.name: method.request.path.name
+          integration.request.header.Authorization: context.authorizer.override_token
+        passthroughBehavior: when_no_match
+  /asset-types/download-template/{id}:
+    get:
+      tags:
+      - Asset Types
+      operationId: EBS AM Download Upload Template
+      summary: Download Upload Template
+      description: Download Upload Template
+      parameters:
+      - name: X-EB-Organization-Id
+        in: header
+        description: Organization Id
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: GET
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-management/asset-types/download-template/{id}
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters:
+          integration.request.path.id: method.request.path.id
+          integration.request.header.Authorization: context.authorizer.override_token
+        passthroughBehavior: when_no_match
+components:
+  schemas:
+    AssetTypeIcon:
+      allOf:
+      - $ref: '#/components/schemas/AssetIcon'
+      - type: object
+        properties:
+          dynamicMappings:
+            $ref: '#/components/schemas/AssetTypeDynamicMappings'
+    AssetTypeUpdateRequest:
+      required:
+      - iconId
+      - name
+      - propertyDefinitions
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+        description:
+          maxLength: 2000
+          minLength: 0
+          type: string
+        iconId:
+          type: string
+        alertable:
+          type: boolean
+        propertyDefinitions:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetPropertyDefinitionRequest'
+        icon:
+          $ref: '#/components/schemas/AssetTypeIcon'
+    AssetPropertyDefinition:
+      required:
+      - assetPropertyDataType
+      - assetPropertyDisplayType
+      - assetPropertyType
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+        organizationId:
+          type: integer
+          format: int64
+        createdId:
+          type: integer
+          format: int64
+        createdName:
+          type: string
+        createdProxyName:
+          type: string
+        lastModifiedId:
+          type: integer
+          format: int64
+        lastModifiedName:
+          type: string
+        lastModifiedProxyName:
+          type: string
+        createdTimestamp:
+          type: string
+          format: date-time
+        lastModifiedTimestamp:
+          type: string
+          format: date-time
+        assetTypeId:
+          type: string
+        assetTypeTemplateId:
+          type: string
+        seq:
+          maximum: 500
+          minimum: 0
+          type: integer
+          format: int32
+        assetPropertyType:
+          type: string
+          enum:
+          - BASIC
+          - ADDRESS
+          - SYSTEM_PROPERTY
+          - CUSTOM_PROPERTY
+        assetPropertyDataType:
+          type: string
+          enum:
+          - STRING
+          - BOOLEAN
+          - LONG
+          - DOUBLE
+          - DATETIME
+          - GEOJSON
+          - URL
+        assetPropertyDisplayType:
+          type: string
+          enum:
+          - SINGLE
+          - TEXTBOX
+          - MULTIPLE
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+        aliasName:
+          maxLength: 200
+          minLength: 1
+          type: string
+        defaultAliasName:
+          type: string
+        description:
+          maxLength: 2000
+          minLength: 0
+          type: string
+        vccPropertyName:
+          type: string
+        allowedValues:
+          type: array
+          items:
+            type: object
+    AssetTypeDynamicMappings:
+      type: object
+      properties:
+        attributeId:
+          type: string
+        mappings:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetTypeDynamicColorMapping'
+    ListAssetTypeResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+          organizationId:
+            type: number
+          createdId:
+            type: number
+          createdName:
+            type: string
+          lastModifiedId:
+            type: number
+          lastModifiedName:
+            type: string
+          createdTimestamp:
+            type: number
+          lastModifiedTimestamp:
+            type: number
+          name:
+            type: string
+          legacy:
+            type: boolean
+          assetTypeCategory:
+            type: string
+          assetTypeTemplateId:
+            type: string
+          iconId:
+            type: string
+          alertable:
+            type: boolean
+          icon:
+            $ref: '#/components/schemas/AssetTypeIcon'
+    CreateAssetTypeRequest:
+      required:
+      - assetTypeTemplateId
+      - iconId
+      - name
+      - propertyDefinitions
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+        description:
+          maxLength: 2000
+          minLength: 0
+          type: string
+        iconId:
+          type: string
+        alertable:
+          type: boolean
+        propertyDefinitions:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetPropertyDefinitionRequest'
+        assetTypeTemplateId:
+          type: string
+        icon:
+          $ref: '#/components/schemas/AssetTypeIcon'
+    LinkedToAssetResponse:
+      type: object
+      properties:
+        linkedToExistingAsset:
+          type: boolean
+    organizationId:
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      maxLength: 16
+      type: integer
+      example: '1536984111644674'
+      default: '1536984111644674'
+    AssetIcon:
+      type: object
+      properties:
+        source:
+          type: string
+          enum:
+          - SYSTEM
+          - CUSTOM
+        id:
+          type: string
+        name:
+          type: string
+        contentUrl:
+          type: string
+        color:
+          type: string
+    AssetType:
+      required:
+      - iconId
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+        organizationId:
+          type: integer
+          format: int64
+        createdId:
+          type: integer
+          format: int64
+        createdName:
+          type: string
+        createdProxyName:
+          type: string
+        lastModifiedId:
+          type: integer
+          format: int64
+        lastModifiedName:
+          type: string
+        lastModifiedProxyName:
+          type: string
+        createdTimestamp:
+          type: string
+          format: date-time
+        lastModifiedTimestamp:
+          type: string
+          format: date-time
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+        description:
+          maxLength: 2000
+          minLength: 0
+          type: string
+        seq:
+          type: integer
+          format: int32
+        legacy:
+          type: boolean
+        assetTypeCategory:
+          type: string
+          enum:
+          - REGULAR
+          - SUPPLY_CHAIN_STOP
+          - SUPPLY_CHAIN_ROUTE
+        propertyDefinitions:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetPropertyDefinition'
+        assetTypeTemplateId:
+          type: string
+        assetTypeTemplateName:
+          type: string
+        iconId:
+          type: string
+        alertable:
+          type: boolean
+        icon:
+          $ref: '#/components/schemas/AssetTypeIcon'
+    AssetPropertyDefinitionRequest:
+      required:
+      - assetPropertyDataType
+      - assetPropertyDisplayType
+      - assetPropertyType
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+        assetTypeId:
+          maxLength: 2147483647
+          minLength: 1
+          type: string
+        assetPropertyType:
+          type: string
+          enum:
+          - BASIC
+          - ADDRESS
+          - SYSTEM_PROPERTY
+          - CUSTOM_PROPERTY
+        assetPropertyDataType:
+          type: string
+          enum:
+          - STRING
+          - BOOLEAN
+          - LONG
+          - DOUBLE
+          - DATETIME
+          - GEOJSON
+          - URL
+        assetPropertyDisplayType:
+          type: string
+          enum:
+          - SINGLE
+          - TEXTBOX
+          - MULTIPLE
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+        aliasName:
+          maxLength: 200
+          minLength: 1
+          type: string
+        description:
+          maxLength: 2000
+          minLength: 0
+          type: string
+        allowedValues:
+          description: Required when assetPropertyDisplayType is SINGLE or MULTIPLE
+          type: array
+          items:
+            type: object
+    AssetTypeDynamicColorMapping:
+      type: object
+      properties:
+        value:
+          type: string
+        color:
+          type: string
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+      description: Basic Authentication Token
+    API_Authorizer:
+      type: apiKey
+      name: Authorization
+      description: oAuth Token
+      in: header
+      x-amazon-apigateway-authtype: custom
+      x-amazon-apigateway-authorizer:
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        authorizerCredentials: arn:aws:iam::214792946631:role/asset-management-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+    api_key:
+      type: apiKey
+      name: x-api-key
+      description: API Key - For System Use
+      in: header
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

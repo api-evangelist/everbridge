@@ -1,0 +1,910 @@
+openapi: 3.2.0
+info:
+  title: Communications Variables APIs API
+  description: Unified Communications APIs
+  version: '1.0'
+servers:
+- url: https://api.everbridge.net/managerapps/communications/v1
+tags:
+- name: Variables APIs
+paths:
+  /variables:
+    get:
+      tags:
+      - Variables APIs
+      summary: List variables
+      description: 'Get variable library pageable list. Note: when `verbose=true`, items may include full detail fields in addition to the base summary fields.'
+      parameters:
+      - name: ids
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Comma-separated variable IDs (numeric or UUID).
+      - name: name
+        in: query
+        required: false
+        schema:
+          type: string
+        description: The name of variable to search for.
+      - name: variableType
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - Single
+          - Multiple
+          - Textbox
+          - Textarea
+          - Date
+        description: The type of variable to search for.
+      - name: createdByMe
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+        description: Whether search variables only created by current user.
+      - name: verbose
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+        description: Whether search variable details info.
+      - name: pageNumber
+        in: query
+        required: true
+        schema:
+          type: integer
+          default: 1
+          format: int32
+        description: Page number.
+      - name: pageSize
+        in: query
+        required: true
+        schema:
+          type: integer
+          default: 200
+          format: int32
+        description: Page size.
+      - name: sortBy
+        in: query
+        required: false
+        schema:
+          type: string
+          default: createdDate
+          enum:
+          - createdDate
+          - variableType
+          - name
+        description: The field name of sorting by.
+      - name: sortOrder
+        in: query
+        required: false
+        schema:
+          type: string
+          default: DESC
+          enum:
+          - ASC
+          - DESC
+        description: The direction of sorting by.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VariableDataPage'
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '500':
+          description: Internal Error
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        httpMethod: get
+        uri: https://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/cem-comms/variables/v1
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        passthroughBehavior: when_no_match
+        connectionId: 11ofco
+        connectionType: VPC_LINK
+    post:
+      tags:
+      - Variables APIs
+      summary: Create variable
+      description: Create a new variable item
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VariableItemPostVO'
+            examples:
+              Create Single variable:
+                summary: Create a Single variable
+                description: Create a new single-option variable with a default value.
+                value:
+                  name: single-variable
+                  displayName: single-variable
+                  variableType: Single
+                  tooltip: This is a new Single var
+                  properties:
+                  - type: Option
+                    value:
+                    - primary school
+                    - middle school
+                    - university
+                  - type: DefaultValue
+                    value: university
+              Create Multiple variable:
+                summary: Create a Multiple variable
+                description: Create a new multiple-option variable with default selected options.
+                value:
+                  name: multiple-variable
+                  displayName: multiple-variable
+                  variableType: Multiple
+                  tooltip: This is a new Multiple var
+                  properties:
+                  - type: Option
+                    value:
+                    - dog
+                    - cat
+                    - sheep
+                    - bird
+                  - type: DefaultValue
+                    value:
+                    - dog
+                    - cat
+              Create Textbox variable:
+                summary: Create a Textbox variable
+                description: Create Textbox variable with a character length of 1-399.
+                value:
+                  name: text-variable
+                  displayName: text-variable
+                  variableType: Textbox
+                  tooltip: This is a Textbox var
+                  properties:
+                  - type: Length
+                    value: 100
+              Create Textarea variable:
+                summary: Create a Textarea variable
+                description: Create Textarea variable with a character length of 100-50000.
+                value:
+                  name: text-variable
+                  displayName: text-variable
+                  variableType: Textarea
+                  tooltip: This is a Textarea var
+                  properties:
+                  - type: Length
+                    value: 1000
+              Create Date variable:
+                summary: Create Date variable
+                description: Create a new Date variable with a specified time format.
+                value:
+                  name: date-variable
+                  displayName: date-variable
+                  variableType: Date
+                  tooltip: This is a new Date var
+                  properties:
+                  - type: DatetimeFormatter
+                    value: yyyy-MM-dd HH:mm:ss
+        required: true
+      responses:
+        '201':
+          description: Variable create successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VariableResponse'
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '500':
+          description: Internal Error
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        httpMethod: post
+        uri: https://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/cem-comms/variables/v1
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        passthroughBehavior: when_no_match
+        connectionId: 11ofco
+        connectionType: VPC_LINK
+    delete:
+      tags:
+      - Variables APIs
+      summary: Delete variables
+      description: Delete one or multiple variable items. For multiple deletes, use a comma - separated id list in the query param.
+      parameters:
+      - name: ids
+        in: query
+        required: true
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      responses:
+        '200':
+          description: ok
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '500':
+          description: Internal Error
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        httpMethod: delete
+        uri: https://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/cem-comms/variables/v1
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        passthroughBehavior: when_no_match
+        connectionId: 11ofco
+        connectionType: VPC_LINK
+  /variables/{id}:
+    get:
+      tags:
+      - Variables APIs
+      summary: Get variable details
+      description: Get variable details by id.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VariableItemDetailVO'
+              examples:
+                Get Single variable:
+                  summary: Get a Single variable
+                  description: Get a Single variable detail
+                  value:
+                    id: '2581380034723843'
+                    name: best-animal
+                    displayName: best-animal display
+                    variableType: Single
+                    createdDate: '2024-10-23T05:26:13Z'
+                    createdBy: Andrew Ma
+                    lastUpdatedDate: '2024-10-23T07:34:53Z'
+                    lastUpdatedBy: Andrew Ma
+                    tooltip: This is a new Single var
+                    ownerType: CUSTOM
+                    properties:
+                    - type: DefaultValue
+                      value: tiger
+                    - type: Option
+                      value:
+                      - tiger
+                      - elephant
+                      - mouse
+                      - cat
+                    uniqueKey: custom.[best-animal]
+                Get Multiple variable:
+                  summary: Get a Multiple variable
+                  description: Get a Multiple variable detail
+                  value:
+                    id: '2581380034723844'
+                    name: best-animals
+                    displayName: best-animals
+                    variableType: Multiple
+                    createdDate: '2024-10-23T05:26:13Z'
+                    createdBy: Andrew Ma
+                    lastUpdatedDate: '2024-10-25T02:18:32Z'
+                    lastUpdatedBy: Andrew Ma
+                    tooltip: This is a new Multiple var
+                    ownerType: CUSTOM
+                    properties:
+                    - type: DefaultValue
+                      value:
+                      - tiger
+                      - cat
+                    - type: Option
+                      value:
+                      - tiger
+                      - elephant
+                      - mouse
+                      - cat
+                    uniqueKey: custom.[best-animals]
+                Get Textbox variable:
+                  summary: Get a Textbox variable
+                  description: Get a Textbox variable detail
+                  value:
+                    id: '2581380034723845'
+                    name: person-name
+                    displayName: person-name
+                    variableType: Textbox
+                    createdDate: '2024-10-23T05:26:13Z'
+                    createdBy: Andrew Ma
+                    lastUpdatedDate: '2024-10-25T02:20:45Z'
+                    lastUpdatedBy: Andrew Ma
+                    tooltip: This is a new Textbox var
+                    ownerType: CUSTOM
+                    properties:
+                    - type: Length
+                      value: '100'
+                    uniqueKey: custom.[person-animal]
+                Get Textarea variable:
+                  summary: Get a Textarea variable
+                  description: Get a Textarea variable detail
+                  value:
+                    id: '2581380034723846'
+                    name: person-detail
+                    displayName: person-detail
+                    variableType: Textarea
+                    createdDate: '2024-10-23T05:26:13Z'
+                    createdBy: Andrew Maa
+                    lastUpdatedDate: '2024-10-25T02:22:17Z'
+                    lastUpdatedBy: Andrew Maa
+                    tooltip: This is a new Textarea var
+                    ownerType: CUSTOM
+                    properties:
+                    - type: Length
+                      value: '500'
+                    uniqueKey: custom.[person-detail]
+                Get Date variable:
+                  summary: Get a Date variable
+                  description: Get a Date variable detail
+                  value:
+                    id: '2585331404636184'
+                    name: 1024datetest
+                    displayName: 1024datetest
+                    variableType: Date
+                    createdDate: '2024-10-24T07:27:13Z'
+                    createdBy: ethan-role an
+                    lastUpdatedDate: '2024-10-24T07:29:15Z'
+                    lastUpdatedBy: ethan-role an
+                    tooltip: This is a Date var
+                    ownerType: CUSTOM
+                    properties:
+                    - type: DatetimeFormatter
+                      value: dd-MM-yyyy HH:mm
+                    uniqueKey: custom.[1024datetest]
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '500':
+          description: Internal Error
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        httpMethod: get
+        uri: https://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/cem-comms/variables/v1/{id}
+        requestParameters:
+          integration.request.path.id: method.request.path.id
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        passthroughBehavior: when_no_match
+        connectionId: 11ofco
+        connectionType: VPC_LINK
+    patch:
+      tags:
+      - Variables APIs
+      summary: Update variable
+      description: Update an existing variable item
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Variable id.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VariableItemPatchVO'
+            examples:
+              Update Single variable:
+                summary: Update a Single variable
+                description: Update single-option variable with a default value.
+                value:
+                  displayName: single-variable
+                  variableType: Single
+                  tooltip: This is a Single var
+                  properties:
+                  - type: Option
+                    value:
+                    - primary school
+                    - middle school
+                    - university
+                  - type: DefaultValue
+                    value: university
+              Update Multiple variable:
+                summary: Update a Multiple variable
+                description: Update multiple-option variable with default selected options.
+                value:
+                  displayName: multiple-variable
+                  variableType: Multiple
+                  tooltip: This is a Multiple var
+                  properties:
+                  - type: Option
+                    value:
+                    - dog
+                    - cat
+                    - sheep
+                    - bird
+                  - type: DefaultValue
+                    value:
+                    - dog
+                    - cat
+              Update Textbox variable:
+                summary: Update a Textbox variable
+                description: Update Textbox variable with a character length between 1-399.
+                value:
+                  displayName: text-variable
+                  variableType: Textbox
+                  tooltip: This is a Textbox var
+                  properties:
+                  - type: Length
+                    value: 100
+              Update Textarea variable:
+                summary: Update a Textarea variable
+                description: Update Textarea variable with a character length between 100-50000.
+                value:
+                  displayName: text-variable
+                  variableType: Textarea
+                  tooltip: This is a Textarea var
+                  properties:
+                  - type: Length
+                    value: 1000
+              Update Date variable:
+                summary: Update a Date variable
+                description: Update Date variable with a specified time format.
+                value:
+                  displayName: date-variable
+                  variableType: Date
+                  tooltip: This is a Date var
+                  properties:
+                  - type: DatetimeFormatter
+                    value: yyyy-MM-dd HH:mm:ss
+        required: true
+      responses:
+        '200':
+          description: Variable update successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VariableResponse'
+        '204':
+          description: Variable no update field
+        '205':
+          description: 'Reset Content: Resource ID changed during migration (e.g., numeric to UUID). Clients should refresh and use the new ID in the response.'
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '500':
+          description: Internal Error
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        httpMethod: patch
+        uri: https://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/cem-comms/variables/v1/{id}
+        requestParameters:
+          integration.request.path.id: method.request.path.id
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        passthroughBehavior: when_no_match
+        connectionId: 11ofco
+        connectionType: VPC_LINK
+  /variables/validation:
+    post:
+      tags:
+      - Variables APIs
+      summary: Validate variables
+      description: Validate variables.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/VariableValidationRequestItem'
+            examples:
+              Success/fail validation example:
+                summary: Success/fail validation example
+                description: Success/fail validation example
+                value:
+                - id: '2585331404636184'
+                  value: 24-10-2024 10:24
+                - id: '2581380034723843'
+                  value:
+                  - dragon
+              Date/Single/Multiple/Textbox/TextArea validation example:
+                summary: Date/Single/Multiple/Textbox/TextArea validation example
+                description: Date/Single/Multiple/Textbox/TextArea validation example
+                value:
+                - id: '2585331404636184'
+                  value: 24-10-2024 10:24
+                - id: '2581380034723843'
+                  value: dragon
+                - id: '2581380034723844'
+                  value:
+                  - tiger
+                - id: '2581380034723845'
+                  value: Thunder
+                - id: '2581380034723846'
+                  value: Flash
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VariableValidateResponse'
+              examples:
+                'Validation result: Total success':
+                  summary: 'Validation result: Total success'
+                  description: Variable values are all valid.
+                  value:
+                    status: 200
+                    code: 300300
+                    message: Batch operation success
+                    details:
+                      success:
+                      - id: '2585331404636184'
+                      - id: '2581380034723843'
+                      failure: []
+                'Validation result: Contains failure':
+                  summary: 'Validation result: Contains failure'
+                  description: Existing variables have invalid value.
+                  value:
+                    status: 200
+                    code: 300301
+                    message: Batch operation error
+                    details:
+                      success:
+                      - id: '2585331404636184'
+                      failure:
+                      - id: '2581380034723843'
+                        code: 300028
+                        source: Variable value
+                        message: Source is invalid
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '500':
+          description: Internal Error
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        httpMethod: post
+        uri: https://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/cem-comms/variables/v1/validation
+        requestBody:
+          content:
+            application/json: {}
+          required: true
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        passthroughBehavior: when_no_match
+        connectionId: 11ofco
+        connectionType: VPC_LINK
+components:
+  schemas:
+    VariableItemPatchVO:
+      type: object
+      properties:
+        displayName:
+          type: string
+          description: Variable display name.
+        variableType:
+          type: string
+          enum:
+          - Single
+          - Multiple
+          - Textbox
+          - Textarea
+          - Date
+          description: Variable types.
+        tooltip:
+          type: string
+          description: Variable description.
+        properties:
+          type: array
+          items:
+            $ref: '#/components/schemas/VariableProperty'
+          description: "Properties of variable. Different variable type has different properties. \n * Textbox and Textarea: Length \n * Date: DatetimeFormatter \n * Single: DefaultValue(required when it has), Option \n * Multiple: DefaultValue(required when it has), Option"
+    VariableItemPostVO:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Variable name.
+        displayName:
+          type: string
+          description: Variable display name.
+        variableType:
+          type: string
+          enum:
+          - Single
+          - Multiple
+          - Textbox
+          - Textarea
+          - Date
+          description: Variable types.
+        tooltip:
+          type: string
+          description: Variable description.
+        properties:
+          type: array
+          items:
+            $ref: '#/components/schemas/VariableProperty'
+          description: "Properties of variable. Different variable type has different properties. \n * Textbox and Textarea: Length \n * Date: DatetimeFormatter \n * Single: DefaultValue(required when it has), Option \n * Multiple: DefaultValue(required when it has), Option"
+    VariableProperty:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - DefaultValue
+          - Option
+          - Length
+          - DatetimeFormatter
+          description: "* DatetimeFormatter: follow simpleDateFormat. Support pattern: Date pattern: dd-MM-yyyy, MM-dd-yyyy, yyyy-MM-dd; Time pattern: HH:mm, HH:mm:ss, hh:mm aaa, hh:mm:ss aaa \n * Length: max length of text variable value \n * Option: array of option values \n * DefaultValue: default variable value"
+        value:
+          oneOf:
+          - type: integer
+          - type: array
+            items:
+              type: string
+          - type: string
+    VariableDataPage:
+      type: object
+      properties:
+        pageSize:
+          type: integer
+          format: int32
+        start:
+          type: integer
+          format: int32
+        data:
+          type: array
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/VariableItemBaseVO'
+            - $ref: '#/components/schemas/VariableItemDetailVO'
+        totalCount:
+          type: integer
+          format: int64
+        scrollId:
+          type: string
+    VariableItemBaseVO:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Variable id.
+        name:
+          type: string
+          description: Variable name.
+        displayName:
+          type: string
+          description: Variable display name.
+        variableType:
+          type: string
+          enum:
+          - Single
+          - Multiple
+          - Textbox
+          - Textarea
+          - Date
+          description: Variable types.
+        createdDate:
+          type: string
+          format: date-time
+          description: Date and time of variable created.
+        createdBy:
+          type: string
+          description: User id of the creator. If variable is created by System or Service, this field is 0.
+        librarySource:
+          type: string
+          description: Determines the source from which the variable originates. `IC` refers to legacy Incident Communications platform while `COMMS` indicates the new Communications platform.
+          enum:
+          - IC
+          - COMMS
+    VariableItemDetailVO:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Variable id.
+        name:
+          type: string
+          description: Variable name.
+        displayName:
+          type: string
+          description: Variable display name.
+        ownerType:
+          type: string
+          enum:
+          - SYSTEM
+          - SERVICE
+          - CUSTOM
+          description: "Owner of the variable. \n * System - variable is created by system and able to use globally. \n * Service - variable is created by a product or service and able to use by the product or service. \n * Custom - variable is created by organization user and able to use in the organization."
+        variableType:
+          type: string
+          enum:
+          - Single
+          - Multiple
+          - Textbox
+          - Textarea
+          - Date
+        createdDate:
+          type: string
+          format: date-time
+          description: Date and time of variable created.
+        createdBy:
+          type: string
+          description: User id of the creator. If variable is created by System or Service, this field is 0.
+        usedCount:
+          type: integer
+          description: Template count that using this variable.
+        lastUpdatedDate:
+          type: string
+          format: date-time
+          description: Date and time of last updated.
+        lastUpdatedBy:
+          type: string
+          description: User id of the user who updated the variable last time.
+        tooltip:
+          type: string
+          description: Variable description.
+        properties:
+          type: array
+          items:
+            $ref: '#/components/schemas/VariableProperty'
+          description: "Properties of variable. Different variable type has different properties. \n * Textbox and Textarea: Length \n * Date: DatetimeFormatter \n * Single: DefaultValue(required when it has), Option \n * Multiple: DefaultValue(required when it has), Option"
+        uniqueKey:
+          type: string
+          description: Variable uniqueKey, $ownerType.[$name]
+        librarySource:
+          type: string
+          description: Determines the source from which the variable originates. `IC` refers to legacy Incident Communications platform while `COMMS` indicates the new Communications platform.
+          enum:
+          - IC
+          - COMMS
+        partial:
+          type: object
+          description: Metadata to use this variable's value in a Handlebars partial. This is a read-only property.
+          properties:
+            name:
+              type: string
+              description: The name of the Handlebars partial to use.
+              enum:
+              - renderVariable
+            context:
+              type: string
+              description: The Handlebars path expression to the variable's value within the context.
+            arguments:
+              type: array
+              description: An array of arguments to pass to the Handlebars partial, which can be used to provide additional context or parameters for rendering the variable's value.
+              items:
+                type: object
+                description: Custom variables only support the `variableMetadata` argument.
+                properties:
+                  type:
+                    type: string
+                    description: The type of the argument.
+                    enum:
+                    - Single
+                  key:
+                    type: string
+                    description: The key of the argument, which can be used to reference the argument within the Handlebars partial.
+                    enum:
+                    - variableMetadata
+                  description:
+                    type: string
+                    description: A description of the argument and how it can be used within the Handlebars partial.
+                  required:
+                    type: boolean
+                    description: Whether the argument is required when using the Handlebars partial.
+                    default: true
+                  readOnly:
+                    type: boolean
+                    description: Whether the argument's value may be changed by an end user.
+                    default: true
+                  defaultValue:
+                    type: string
+                    description: The default value of the argument.
+                  valueType:
+                    type: string
+                    description: The type of the argument's value, which can be used to enforce type checking when using the Handlebars partial.
+                    enum:
+                    - Path
+    VariableResponse:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          description: Variable id.
+    VariableValidateResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        code:
+          type: integer
+        message:
+          type: string
+        detail:
+          type: object
+          properties:
+            success:
+              type: array
+              items:
+                $ref: '#/components/schemas/VariableValidationResponseItem'
+            failure:
+              type: array
+              items:
+                $ref: '#/components/schemas/VariableValidationResponseItem'
+    VariableValidationRequestItem:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Variable id.
+        value:
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          description: Value of variable assigned.
+    VariableValidationResponseItem:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: integer
+        source:
+          type: string
+        message:
+          type: string
+  securitySchemes:
+    API_Authorizer:
+      type: apiKey
+      name: Authorization
+      in: header
+      x-amazon-apigateway-authtype: custom
+      x-amazon-apigateway-authorizer:
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        authorizerCredentials: arn:aws:iam::214792946631:role/comms-unified-gateway-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+    api_key:
+      type: apiKey
+      name: x-api-key
+      in: header
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

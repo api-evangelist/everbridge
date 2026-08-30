@@ -1,0 +1,370 @@
+openapi: 3.2.0
+info:
+  description: EB Suite APIs.
+  title: EB Suite Notification Categories API
+  version: '1.0'
+servers:
+- url: https://api.everbridge.net/rest
+- url: https://api.everbridge.eu/rest
+tags:
+- description: EB Suites - Notification Category Management
+  name: Notification Categories
+paths:
+  /notificationCategories/{organizationId}:
+    get:
+      operationId: EBS List Notification Categories
+      parameters:
+      - description: The ID of the organization containing the notificationCategories
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: The page number of notificationCategories to return.
+        in: query
+        name: pageNumber
+        required: false
+        schema:
+          default: 1
+          format: int32
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: success
+                  value:
+                    firstPageUri: https://api-dev3.everbridge.net/rest/notificationCategories/1536984111644674?pageNumber=1
+                    lastPageUri: https://api-dev3.everbridge.net/rest/notificationCategories/1536984111644674?pageNumber=1
+                    message: OK
+                    page:
+                      currentPageNo: 1
+                      data:
+                      - accountId: 1536846672691202
+                        createdDate: 1675437422375
+                        createdId: 585800790048776
+                        createdName: Ajay Goel
+                        id: 594253285687298
+                        lastModifiedDate: 1675437422375
+                        lastModifiedId: 585800790048776
+                        lastModifiedName: Ajay Goel
+                        name: MN Category 2
+                        organizationId: 1536984111644674
+                        resourceBundleId: 1536984111644675
+                        status: A
+                      - accountId: 1536846672691202
+                        createdDate: 1675437244238
+                        createdId: 585800790048776
+                        createdName: Ajay Goel
+                        id: 594253285687297
+                        lastModifiedDate: 1675437244238
+                        lastModifiedId: 585800790048776
+                        lastModifiedName: Ajay Goel
+                        name: MN Category 1
+                        organizationId: 1536984111644674
+                        resourceBundleId: 1536984111644675
+                        status: A
+                      pageSize: 10
+                      start: 0
+                      totalCount: 2
+                      totalPageCount: 1
+              schema:
+                $ref: '#/components/schemas/RestfulCollectionResult'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '500':
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: List Notification Categories
+      tags:
+      - Notification Categories
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/notificationCategories/{organizationId}
+    post:
+      operationId: EBS Create Notification Categories
+      parameters:
+      - description: The organization from which to initiate the category
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      requestBody:
+        content:
+          application/json:
+            examples:
+              basic:
+                summary: basic
+                value:
+                  name: pre-test
+            schema:
+              $ref: '#/components/schemas/CategoryWrapper'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: success
+                  value:
+                    baseUri: https://api-dev3.everbridge.net/rest/notificationCategories/1536984111644674
+                    id: 3385878948872193
+                    instanceUri: https://api-dev3.everbridge.net/rest/notificationCategories/1536984111644674/3385878948872193
+                    message: OK
+              schema:
+                $ref: '#/components/schemas/RestfulModificationResult'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '500':
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Create Notification Categories
+      tags:
+      - Notification Categories
+      x-amazon-apigateway-integration:
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/notificationCategories/{organizationId}
+  /notificationCategories/{organizationId}/{categoryId}:
+    get:
+      operationId: EBS Get Notification Category
+      parameters:
+      - description: The ID of the organization containing the category
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: The ID of the notificationCategory to return
+        in: path
+        name: categoryId
+        required: true
+        schema:
+          format: int64
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: success
+                  value:
+                    message: OK
+                    result:
+                      accountId: 0
+                      createdDate: 1760340711145
+                      createdId: 2200330536222721
+                      createdName: Nandish API Access
+                      id: 3385878948872193
+                      lastModifiedDate: 1760340711145
+                      lastModifiedId: 2200330536222721
+                      lastModifiedName: Nandish API Access
+                      name: pre-test
+                      organizationId: 1536984111644674
+                      resourceBundleId: 0
+                      status: A
+              schema:
+                $ref: '#/components/schemas/RestfulInstanceResult'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '500':
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Get Notification Category
+      tags:
+      - Notification Categories
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.categoryId: method.request.path.categoryId
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/notificationCategories/{organizationId}/{categoryId}
+components:
+  schemas:
+    RestfulInstanceResult:
+      properties:
+        message:
+          type: string
+        result:
+          type: object
+      title: RestfulInstanceResult
+      type: object
+    RestfulModificationResult:
+      properties:
+        baseUri:
+          type: string
+        id:
+          format: int64
+          type: integer
+        instanceUri:
+          type: string
+        message:
+          type: string
+      title: RestfulModificationResult
+      type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
+    RestfulCollectionResult:
+      properties:
+        currentPageUri:
+          type: string
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        nextPageUri:
+          type: string
+        page:
+          $ref: '#/components/schemas/DataPageObject'
+        previousPageUri:
+          type: string
+      title: RestfulCollectionResult
+      type: object
+    CategoryWrapper:
+      description: The notificationCategory object to create
+      properties:
+        accountId:
+          format: int64
+          type: integer
+        createdDate:
+          format: date-time
+          type: string
+        createdId:
+          format: int64
+          type: integer
+        createdName:
+          type: string
+        createdProxyName:
+          type: string
+        id:
+          format: int64
+          type: integer
+        lastModifiedDate:
+          format: date-time
+          type: string
+        lastModifiedId:
+          format: int64
+          type: integer
+        lastModifiedName:
+          type: string
+        lastModifiedProxyName:
+          type: string
+        name:
+          type: string
+        organizationId:
+          format: int64
+          type: integer
+        resourceBundleId:
+          format: int64
+          type: integer
+        status:
+          enum:
+          - A
+          - D
+          type: string
+      type: object
+    DataPageObject:
+      properties:
+        currentPageNo:
+          format: int32
+          type: integer
+        data:
+          items:
+            type: object
+          type: array
+        dataPageList:
+          items:
+            $ref: '#/components/schemas/DataPageObject'
+          type: array
+        pageSize:
+          format: int32
+          type: integer
+        scrollId:
+          type: string
+        start:
+          format: int32
+          type: integer
+        totalCount:
+          format: int64
+          type: integer
+        totalPageCount:
+          format: int32
+          type: integer
+      title: DataPage«object»
+      type: object
+  securitySchemes:
+    API_Authorizer:
+      description: oAuth Token
+      in: header
+      name: Authorization
+      type: apiKey
+      x-amazon-apigateway-authorizer:
+        authorizerCredentials: arn:aws:iam::214792946631:role/oas-rest-api-gw-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+      x-amazon-apigateway-authtype: custom
+    BasicAuth:
+      description: Basic Authentication Token
+      scheme: basic
+      type: http
+    api_key:
+      description: API Key - For System Use
+      in: header
+      name: x-api-key
+      type: apiKey
+x-amazon-apigateway-binary-media-types:
+- audio/wav
+- audio/x-wav
+- application/octet-stream
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

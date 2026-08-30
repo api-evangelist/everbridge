@@ -1,0 +1,322 @@
+openapi: 3.2.0
+info:
+  title: Asset Management Uploaded Assets API
+  description: This is the Asset Management Rest API Documentation
+  contact:
+    name: CAMS Team
+  version: 1.0.0
+servers:
+- url: https://api.everbridge.net/rest/v2/asset-management
+tags:
+- name: Uploaded Assets
+  description: Uploaded Assets Status operations
+paths:
+  /upload-assets:
+    get:
+      tags:
+      - Uploaded Assets
+      operationId: EB AM List Uploaded Asset Detail By Status
+      summary: List Uploaded Asset Detail By Status
+      description: List Uploaded Asset Detail By Status
+      parameters:
+      - name: X-EB-Organization-Id
+        in: header
+        description: Organization Id
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - name: pageNumber
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: pageSize
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: uploadRecordStatus
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: uploadBatchId
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataPageUploadAsset'
+              examples:
+                success:
+                  summary: success
+                  value:
+                    pageSize: 100
+                    start: 0
+                    totalCount: 0
+                    currentPageNo: 1
+                    totalPageCount: 0
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: GET
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-management/upload-assets
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters:
+          integration.request.header.Authorization: context.authorizer.override_token
+        passthroughBehavior: when_no_match
+  /upload-assets/{id}:
+    get:
+      tags:
+      - Uploaded Assets
+      operationId: EB AM Get Uploaded Asset Detail By Id
+      summary: Get Uploaded Asset Detail By Id
+      description: Get Uploaded Asset Detail By Id
+      parameters:
+      - name: X-EB-Organization-Id
+        in: header
+        description: Organization Id
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadAsset'
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: GET
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-management/upload-assets/{id}
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters:
+          integration.request.path.id: method.request.path.id
+          integration.request.header.Authorization: context.authorizer.override_token
+        passthroughBehavior: when_no_match
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        field:
+          type: string
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+    UploadPoint:
+      type: object
+      properties:
+        lon:
+          type: string
+        lat:
+          type: string
+    DataPageUploadAsset:
+      type: object
+      properties:
+        pageSize:
+          type: integer
+          format: int32
+        start:
+          type: integer
+          format: int32
+        totalCount:
+          type: integer
+          format: int64
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/UploadAsset'
+        currentPageNo:
+          type: integer
+          format: int32
+        totalPageCount:
+          type: integer
+          format: int32
+    organizationId:
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      maxLength: 16
+      type: integer
+      example: '1536984111644674'
+      default: '1536984111644674'
+    UploadAssetPropertyValue:
+      type: object
+      properties:
+        propertyId:
+          type: string
+        propertyName:
+          type: string
+        value:
+          type: string
+    UploadAsset:
+      type: object
+      properties:
+        id:
+          type: string
+        organizationId:
+          type: integer
+          format: int64
+        createdId:
+          type: integer
+          format: int64
+        createdName:
+          type: string
+        createdProxyName:
+          type: string
+        lastModifiedId:
+          type: integer
+          format: int64
+        lastModifiedName:
+          type: string
+        lastModifiedProxyName:
+          type: string
+        createdTimestamp:
+          type: string
+          format: date-time
+        lastModifiedTimestamp:
+          type: string
+          format: date-time
+        uploadBatchId:
+          type: string
+        chunkId:
+          type: string
+        externalId:
+          type: string
+        assetId:
+          type: string
+        assetTypeId:
+          type: string
+        name:
+          type: string
+        startTimestamp:
+          type: string
+        endTimestamp:
+          type: string
+        notes:
+          type: string
+        iconId:
+          type: string
+        category:
+          type: string
+        geometry:
+          type: string
+        address:
+          $ref: '#/components/schemas/UploadAddress'
+        properties:
+          type: array
+          items:
+            $ref: '#/components/schemas/UploadAssetPropertyValue'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+        hasCriticalError:
+          type: boolean
+        uploadRecordStatus:
+          type: string
+          enum:
+          - LOADED_SUCCESS
+          - LOADED_WITH_ERROR
+          - NOT_LOADED
+        geocodingStatus:
+          type: string
+          enum:
+          - Invalid
+          - RequestPending
+          - RequestSubmitted
+          - SubmissionFailed
+          - Succeeded
+          - Failed
+          - NotNeeded
+        associations:
+          type: array
+          items:
+            $ref: '#/components/schemas/UploadAssetAssociation'
+    UploadAddress:
+      type: object
+      properties:
+        country:
+          type: string
+        state:
+          type: string
+        city:
+          type: string
+        postalCode:
+          type: string
+        streetAddress1:
+          type: string
+        streetAddress2:
+          type: string
+        point:
+          $ref: '#/components/schemas/UploadPoint'
+    UploadAssetAssociation:
+      type: object
+      properties:
+        associationDefinitionId:
+          type: string
+        entityType:
+          type: string
+          enum:
+          - Contact
+          - ContactGroup
+          - ContactFilter
+        entityIds:
+          type: array
+          items:
+            type: string
+        entityValues:
+          type: string
+        associationDefinitionColumnName:
+          type: string
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+      description: Basic Authentication Token
+    API_Authorizer:
+      type: apiKey
+      name: Authorization
+      description: oAuth Token
+      in: header
+      x-amazon-apigateway-authtype: custom
+      x-amazon-apigateway-authorizer:
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        authorizerCredentials: arn:aws:iam::214792946631:role/asset-management-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+    api_key:
+      type: apiKey
+      name: x-api-key
+      description: API Key - For System Use
+      in: header
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

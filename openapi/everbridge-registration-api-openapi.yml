@@ -1,0 +1,125 @@
+openapi: 3.2.0
+info:
+  description: EB Suite APIs.
+  title: EB Suite Registration API
+  version: '1.0'
+servers:
+- url: https://api.everbridge.net/rest
+- url: https://api.everbridge.eu/rest
+tags:
+- description: EB Suites - Registration Management
+  name: Registration
+paths:
+  /registration/contacts/{organizationId}:
+    post:
+      operationId: EBS Send Registration Email
+      parameters:
+      - description: The ID of the organization containing the contacts
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - description: The email registration type.
+        in: query
+        name: registrationType
+        required: true
+        schema:
+          default: member
+          enum:
+          - member
+          - device
+          type: string
+      - description: Whether to send by contact id or contact externalId.
+        in: query
+        name: idType
+        required: false
+        schema:
+          default: contactId
+          enum:
+          - externalId
+          - contactId
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              description: The ID(s) or externalId(s) of the contact.
+              items:
+                type: string
+              type: array
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestfulBatchOperationResult'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '500':
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Send Registration Email
+      tags:
+      - Registration
+      x-amazon-apigateway-integration:
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/registration/contacts/{organizationId}
+components:
+  schemas:
+    RestfulBatchOperationResult:
+      properties:
+        code:
+          format: int64
+          type: integer
+        data:
+          items:
+            type: string
+          type: array
+        message:
+          type: string
+      type: object
+  securitySchemes:
+    API_Authorizer:
+      description: oAuth Token
+      in: header
+      name: Authorization
+      type: apiKey
+      x-amazon-apigateway-authorizer:
+        authorizerCredentials: arn:aws:iam::214792946631:role/oas-rest-api-gw-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+      x-amazon-apigateway-authtype: custom
+    BasicAuth:
+      description: Basic Authentication Token
+      scheme: basic
+      type: http
+    api_key:
+      description: API Key - For System Use
+      in: header
+      name: x-api-key
+      type: apiKey
+x-amazon-apigateway-binary-media-types:
+- audio/wav
+- audio/x-wav
+- application/octet-stream
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

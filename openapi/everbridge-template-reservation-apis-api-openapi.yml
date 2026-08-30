@@ -1,0 +1,321 @@
+openapi: 3.2.0
+info:
+  title: Communications Template Reservation APIs API
+  description: Unified Communications APIs
+  version: '1.0'
+servers:
+- url: https://api.everbridge.net/managerapps/communications/v1
+tags:
+- name: Template Reservation APIs
+paths:
+  /templates/reservations:
+    post:
+      tags:
+      - Template Reservation APIs
+      operationId: post-template-reservation
+      summary: Create template reservation
+      description: Create a reservation against a communication template.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TemplateReservationRequest'
+      responses:
+        '200':
+          description: The reservation already exists. Returning the existing reservation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommsResponse'
+              examples:
+                existingReservation:
+                  value:
+                    id: 4e274d1d-c714-4a58-ac50-e28e424656f9
+        '201':
+          description: The reservation was successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommsResponse'
+              examples:
+                newReservation:
+                  value:
+                    id: 4e274d1d-c714-4a58-ac50-e28e424656f9
+        '400':
+          description: The request was invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommsResponse'
+              examples:
+                invalidRequest:
+                  value:
+                    type: /client-error/invalid-parameter
+                    title: Bad Request
+                    status: 400
+                    detail: 'The "Field Name #1" field must not be empty.'
+                    instance: /templates/reservations
+        '500':
+          description: An internal error has occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommsResponse'
+              examples:
+                internalError:
+                  value:
+                    type: about:blank
+                    title: Internal Server Error
+                    status: 500
+                    detail: The reservation could not be created due to an internal error. Please try again later.
+                    instance: /templates/reservations
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        connectionId: 11ofco
+        httpMethod: POST
+        uri: https://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/cem-comms/communications/templates/reservations
+        responses:
+          default:
+            statusCode: '200'
+        passthroughBehavior: when_no_match
+        connectionType: VPC_LINK
+  /templates/reservations/{templateId}:
+    get:
+      tags:
+      - Template Reservation APIs
+      operationId: get-template-reservations
+      summary: Get template reservations
+      description: Retrieve a detailed list of reservations for a specific communication templates.
+      parameters:
+      - name: templateId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The identifier of the communication template
+      responses:
+        '200':
+          description: A communication was found matching the given `commId`.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TemplateReservationList'
+              examples:
+                templateReservations:
+                  value:
+                  - id: 4e274d1d-c714-4a58-ac50-e28e424656f9
+                    templateType: communication
+                    systemId: cemp
+                    systemEntityId: workflow://4e274d1d-c714-4a58-ac50-e28e424656f9/
+                    systemUrl: https://example.com/reservations/12345
+                    createdDate: '2023-10-01T12:00:00Z'
+                    createdUserId: '1123541234123'
+                  - id: 5f274d1d-c714-4a58-ac50-e28e424656f9
+                    templateType: legacy
+                    systemId: crisismanagement
+                    systemEntityId: workflow://5f274d1d-c714-4a58-ac50-e28e424656f9/
+                    systemUrl: https://example.com/reservations/67890
+                    createdDate: '2023-10-02T12:00:00Z'
+                    createdUserId: '1123541234124'
+        '404':
+          description: The communication could not be found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommsResponse'
+              examples:
+                templateNotFound:
+                  value:
+                    errorCode: '404'
+                    message: The specified template does not exist.
+        '500':
+          description: An internal error has occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommsResponse'
+              examples:
+                internalError:
+                  value:
+                    type: about:blank
+                    title: Internal Server Error
+                    status: 500
+                    detail: The template reservation(s) could not be retrieved. Please try again later.
+                    instance: /templates/reservations/12312354
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        connectionId: 11ofco
+        httpMethod: GET
+        uri: https://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/cem-comms/communications/templates/reservations/{templateId}
+        responses:
+          default:
+            statusCode: '202'
+        requestParameters:
+          integration.request.path.templateId: method.request.path.templateId
+        passthroughBehavior: when_no_match
+        connectionType: VPC_LINK
+    delete:
+      tags:
+      - Template Reservation APIs
+      operationId: delete-template-reservations
+      summary: Delete template reservations for a system.
+      description: 'Delete a reservation from a template. By default, the caller will delete all reservations matching the templateId and systemName.
+
+        Should the caller wish to be specific about a reservation, the reservation must have been created with a systemEntityId. Passing the query parameter systemEntityId will then allow the caller to delete a specific reservation rather than all matching the systemName for the template.'
+      parameters:
+      - name: templateId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The identifier of the communication template
+      - name: systemName
+        in: query
+        required: true
+        schema:
+          type: string
+        description: The system name for reservation(s) to be deleted.
+      - name: systemEntityId
+        in: query
+        required: false
+        schema:
+          type: string
+        description: A unique identifier, allowing the caller to indicate a specific reservation to be deleted matching a systemName and templateId.
+      responses:
+        '204':
+          description: The reservation(s) were successfully deleted matching the systemName and/or systemEntityId.
+        '404':
+          description: The templateId could not be found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommsResponse'
+              examples:
+                templateNotFound:
+                  value:
+                    type: templates/reservations/not-found
+                    title: Template Not Found
+                    status: 404
+                    detail: The reservation could not be created due to an internal error. Please try again later.
+                    instance: /templates/reservations/12312354
+        '500':
+          description: An internal error has occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommsResponse'
+              examples:
+                internalError:
+                  value:
+                    type: about:blank
+                    title: Internal Server Error
+                    status: 500
+                    detail: The template reservation(s) could not be deleted. Please try again later.
+                    instance: /templates/reservations/12312354
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        connectionId: 11ofco
+        httpMethod: DELETE
+        uri: https://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/cem-comms/communications/templates/reservations/{templateId}
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters:
+          integration.request.path.templateId: method.request.path.templateId
+          integration.request.querystring.systemName: method.request.querystring.systemName
+          integration.request.querystring.systemEntityId: method.request.querystring.systemEntityId
+        passthroughBehavior: when_no_match
+        connectionType: VPC_LINK
+components:
+  schemas:
+    TemplateReservationList:
+      type: array
+      items:
+        $ref: '#/components/schemas/TemplateReservation'
+    TemplateReservation:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier for the reservation.
+        templateType:
+          type: string
+          description: The type of the communication template to reserve.
+          enum:
+          - legacy
+          - communication
+        systemId:
+          type: string
+          description: The identifier of the system that is reserving the template.
+        systemEntityId:
+          type: string
+          description: A unique identifier, allowing the caller to indicate which item on its end is holding the reservation.
+        systemUrl:
+          type: string
+          description: A self-generated URL offering a helpful link back to the reservation holder.
+        createdDate:
+          type: string
+          format: date-time
+          description: The date and time when the reservation was created.
+        createdUserId:
+          type: string
+          description: The userId who created the reservation.
+    CommsResponse:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the communication that was launched.
+    TemplateReservationRequest:
+      type: object
+      properties:
+        templateId:
+          type: string
+          description: The template being reserved.
+        templateType:
+          type: string
+          description: The type of the communication template to reserve.
+          enum:
+          - legacy
+          - communication
+        systemId:
+          type: string
+          description: The identifier of the system that is reserving the template.
+        systemEntityId:
+          type: string
+          description: A unique identifier, allowing the caller to indicate which item on it’s end is holding the reservation.
+        systemUrl:
+          type: string
+          description: A self-generated URL offering a helpful link back to the reservation holder.
+      required:
+      - templateId
+      - templateType
+      - systemId
+      - systemUrl
+  securitySchemes:
+    API_Authorizer:
+      type: apiKey
+      name: Authorization
+      in: header
+      x-amazon-apigateway-authtype: custom
+      x-amazon-apigateway-authorizer:
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        authorizerCredentials: arn:aws:iam::214792946631:role/comms-unified-gateway-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+    api_key:
+      type: apiKey
+      name: x-api-key
+      in: header
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

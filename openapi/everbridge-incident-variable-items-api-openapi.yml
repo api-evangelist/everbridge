@@ -1,0 +1,498 @@
+openapi: 3.2.0
+info:
+  description: EB Suite APIs.
+  title: EB Suite Incident Variable Items API
+  version: '1.0'
+servers:
+- url: https://api.everbridge.net/rest
+- url: https://api.everbridge.eu/rest
+tags:
+- description: EB Suites - Incident Variable Items Management
+  name: Incident Variable Items
+paths:
+  /incidentVariableItems/{organizationId}:
+    get:
+      operationId: EBS List Incident Variable Items
+      parameters:
+      - description: The ID of the organization containing the variables
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: The page number of variables to return.
+        in: query
+        name: pageNumber
+        required: false
+        schema:
+          default: 1
+          format: int32
+          type: integer
+      - description: The page size of variables to return.
+        in: query
+        name: pageSize
+        required: false
+        schema:
+          default: 10
+          format: int32
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: success
+                  value:
+                    firstPageUri: https://api-dev3.everbridge.net/rest/incidentVariableItems/1536984111644674?pageSize=10&pageNumber=1
+                    lastPageUri: https://api-dev3.everbridge.net/rest/incidentVariableItems/1536984111644674?pageSize=10&pageNumber=5
+                    message: OK
+                    nextPageUri: https://api-dev3.everbridge.net/rest/incidentVariableItems/1536984111644674?pageSize=10&pageNumber=2
+                    page:
+                      currentPageNo: 1
+                      data:
+                      - accountId: 0
+                        createdId: 0
+                        id: 10003
+                        lastModifiedId: 0
+                        module: IC
+                        name: Current Time
+                        organizationId: -1
+                        resourceBundleId: 0
+                        seq: 0
+                        status: A
+                        varType: Textbox
+                        variableOptions:
+                        - isSelected: false
+                          seq: 0
+                          txt: '{time}'
+                          val: '{time}'
+                      - accountId: 0
+                        createdId: 0
+                        id: 10005
+                        lastModifiedId: 0
+                        module: IC
+                        name: IncidentID
+                        organizationId: -1
+                        resourceBundleId: 0
+                        seq: 0
+                        status: A
+                        varType: Textbox
+                        variableOptions:
+                        - isSelected: false
+                          seq: 0
+                          txt: '{IncidentID}'
+                          val: '{IncidentID}'
+                      - accountId: 0
+                        createdId: 0
+                        id: 10001
+                        lastModifiedDate: 1663052430190
+                        lastModifiedId: 1407241739567123
+                        lastModifiedName: Emma Test
+                        module: IC
+                        name: Message Sender
+                        organizationId: -1
+                        resourceBundleId: 0
+                        seq: 0
+                        status: A
+                        varType: Textbox
+                        variableOptions:
+                        - isSelected: false
+                          seq: 0
+                          txt: '{username}'
+                          val: '{username}'
+                      - accountId: 0
+                        createdId: 0
+                        id: 10002
+                        lastModifiedId: 0
+                        module: IC
+                        name: Notification Status
+                        organizationId: -1
+                        resourceBundleId: 0
+                        seq: 0
+                        status: A
+                        varType: Textbox
+                        variableOptions:
+                        - isSelected: false
+                          seq: 0
+                          txt: '{phaseStatus}'
+                          val: '{phaseStatus}'
+                      - accountId: 0
+                        createdId: 0
+                        id: 10006
+                        lastModifiedId: 0
+                        module: IC
+                        name: Smart Channel
+                        organizationId: -1
+                        resourceBundleId: 0
+                        seq: 0
+                        status: A
+                        varType: Single
+                        variableOptions:
+                        - isSelected: true
+                          seq: 0
+                          txt: Include
+                          val: Include
+                        - isSelected: false
+                          seq: 0
+                          txt: Don't include
+                          val: Don't include
+                      - accountId: 0
+                        createdId: 0
+                        id: 10004
+                        lastModifiedDate: 1663052430203
+                        lastModifiedId: 1407241739567123
+                        lastModifiedName: Emma Test
+                        module: IC
+                        name: Today's Date
+                        organizationId: -1
+                        resourceBundleId: 0
+                        seq: 0
+                        status: A
+                        varType: Textbox
+                        variableOptions:
+                        - isSelected: false
+                          seq: 0
+                          txt: '{date}'
+                          val: '{date}'
+                      - accountId: 0
+                        createdId: 0
+                        extProperties:
+                          maxLength: '255'
+                        id: 10620
+                        lastModifiedId: 0
+                        module: ORC
+                        name: _CEM Latitude and Longitude
+                        organizationId: -1
+                        resourceBundleId: 0
+                        seq: 0
+                        status: A
+                        varType: Textbox
+                      - accountId: 0
+                        createdId: 0
+                        extProperties:
+                          maxLength: '255'
+                        id: 10619
+                        lastModifiedId: 0
+                        module: ORC
+                        name: _CEM Link to Alert Management
+                        organizationId: -1
+                        resourceBundleId: 0
+                        seq: 0
+                        status: A
+                        varType: Textbox
+                      - accountId: 0
+                        createdId: 0
+                        extProperties:
+                          cols: '10000'
+                          rows: '1'
+                        id: 10611
+                        lastModifiedId: 0
+                        module: ORC
+                        name: _CEM Nearest Asset
+                        organizationId: -1
+                        resourceBundleId: 0
+                        seq: 0
+                        status: A
+                        varType: Textarea
+                      - accountId: 0
+                        createdId: 0
+                        extProperties:
+                          cols: '10000'
+                          rows: '1'
+                        id: 10612
+                        lastModifiedId: 0
+                        module: ORC
+                        name: _CEM Nearest Asset List
+                        organizationId: -1
+                        resourceBundleId: 0
+                        seq: 0
+                        status: A
+                        varType: Textarea
+                      pageSize: 10
+                      start: 0
+                      totalCount: 50
+                      totalPageCount: 5
+              schema:
+                $ref: '#/components/schemas/RestfulCollectionResult'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '500':
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: List Incident Variable Items
+      tags:
+      - Incident Variable Items
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/incidentVariableItems/{organizationId}
+  /incidentVariableItems/{organizationId}/{proxy+}:
+    get:
+      description: "This endpoint consolidates multiple previously separate paths under a single route using the {proxy+} catch-all parameter. It supports the following routes:\n- /incidentVariableItems/{organizationId}/{searchOption}\n- /incidentVariableItems/{organizationId}/{templateId}/{phase}\n\nThe {proxy+} parameter captures all additional path segments after {organizationId}. \n\nThis change was required because AWS API Gateway disallows multiple sibling paths with different path variable names at the same level.\n\nYou do not need to change your existing request paths. The API will continue to behave as before, and this structure ensures compatibility across different use cases"
+      operationId: EBS Get Incident Variables Proxy
+      parameters:
+      - description: The ID of the organization containing the variables
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: "Captures additional path segments following the {organizationId}. \n Supported path variations are \n/{organizationId}/{searchOption} \n/{organizationId}/{templateId}/{phase}\nExample: \n/incidentVariableItems/{organizationId}/template123/active"
+        examples:
+          ID Search Option:
+            summary: ID Search Option
+            value: ID
+          Name Search Option:
+            summary: Name Search Option
+            value: Name
+        in: path
+        name: proxy+
+        required: true
+        schema:
+          default: ID
+          type: string
+      - description: "The search value of variable to return.\n This value is required if 'searchOption' is used in proxy path"
+        in: query
+        name: searchValue
+        required: false
+        schema:
+          default: ''
+          type: string
+      - description: The page number of variables to return.
+        in: query
+        name: pageNumber
+        required: false
+        schema:
+          type: string
+      - description: The page size of variables to return.
+        in: query
+        name: pageSize
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                list items:
+                  summary: list items
+                  value:
+                    firstPageUri: https://api-dev3.everbridge.net/rest/incidentVariableItems/1536984111644674/593978407780353/New?pageSize=1000&pageNumber=1
+                    lastPageUri: https://api-dev3.everbridge.net/rest/incidentVariableItems/1536984111644674/593978407780353/New?pageSize=1000&pageNumber=1
+                    message: OK
+                    page:
+                      currentPageNo: 1
+                      data:
+                      - accountId: 1536846672691202
+                        createdDate: 1674823484772
+                        createdId: 1530249602924607
+                        createdName: Vishal Agrawal
+                        id: 591470146879516
+                        lastModifiedDate: 1674823484772
+                        lastModifiedId: 1530249602924607
+                        lastModifiedName: Vishal Agrawal
+                        module: IC
+                        name: Priority
+                        organizationId: 1536984111644674
+                        resourceBundleId: 1536984111644675
+                        seq: 0
+                        status: A
+                        varType: Single
+                        variableOptions:
+                        - isSelected: false
+                          seq: 0
+                          txt: High
+                          val: High
+                        - isSelected: false
+                          seq: 0
+                          txt: Low
+                          val: Low
+                        - isSelected: false
+                          seq: 0
+                          txt: Medium
+                          val: Medium
+                      - accountId: 1536846672691202
+                        createdDate: 1674823442466
+                        createdId: 1530249602924607
+                        createdName: Vishal Agrawal
+                        extProperties:
+                          maxLength: '260'
+                        id: 591470146879515
+                        lastModifiedDate: 1674823442466
+                        lastModifiedId: 1530249602924607
+                        lastModifiedName: Vishal Agrawal
+                        module: IC
+                        name: Status
+                        organizationId: 1536984111644674
+                        resourceBundleId: 1536984111644675
+                        seq: 0
+                        status: A
+                        varType: Textbox
+                      pageSize: 1000
+                      start: 0
+                      totalCount: 2
+                      totalPageCount: 1
+                single item:
+                  summary: single item
+                  value:
+                    message: OK
+                    result:
+                      accountId: 0
+                      createdId: 0
+                      id: 10003
+                      lastModifiedId: 0
+                      module: IC
+                      name: Current Time
+                      organizationId: -1
+                      resourceBundleId: 0
+                      seq: 0
+                      status: A
+                      varType: Textbox
+                      variableOptions:
+                      - isSelected: false
+                        seq: 0
+                        txt: '{time}'
+                        val: '{time}'
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/RestfulCollectionResult'
+                - $ref: '#/components/schemas/RestfulInstanceResult'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '500':
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Get Incident Variables Proxy
+      tags:
+      - Incident Variable Items
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+          integration.request.path.proxy: method.request.path.proxy
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/incidentVariableItems/{organizationId}/{proxy}
+      x-readme:
+        code-samples:
+        - code: "curl -X GET \\\n  'https://api.everbridge.net/rest/incidentVariableItems/organizationId/ID' \\\n  -H 'accept: application/json'"
+          language: curl
+          name: ID search option filter
+        - code: "curl -X GET \\\n  'https://api.everbridge.net/rest/incidentVariableItems/organizationId/Name' \\\n  -H 'accept: application/json'"
+          language: curl
+          name: Name search option filter
+components:
+  schemas:
+    RestfulInstanceResult:
+      properties:
+        message:
+          type: string
+        result:
+          type: object
+      title: RestfulInstanceResult
+      type: object
+    DataPageObject:
+      properties:
+        currentPageNo:
+          format: int32
+          type: integer
+        data:
+          items:
+            type: object
+          type: array
+        dataPageList:
+          items:
+            $ref: '#/components/schemas/DataPageObject'
+          type: array
+        pageSize:
+          format: int32
+          type: integer
+        scrollId:
+          type: string
+        start:
+          format: int32
+          type: integer
+        totalCount:
+          format: int64
+          type: integer
+        totalPageCount:
+          format: int32
+          type: integer
+      title: DataPage«object»
+      type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
+    RestfulCollectionResult:
+      properties:
+        currentPageUri:
+          type: string
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        nextPageUri:
+          type: string
+        page:
+          $ref: '#/components/schemas/DataPageObject'
+        previousPageUri:
+          type: string
+      title: RestfulCollectionResult
+      type: object
+  securitySchemes:
+    API_Authorizer:
+      description: oAuth Token
+      in: header
+      name: Authorization
+      type: apiKey
+      x-amazon-apigateway-authorizer:
+        authorizerCredentials: arn:aws:iam::214792946631:role/oas-rest-api-gw-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+      x-amazon-apigateway-authtype: custom
+    BasicAuth:
+      description: Basic Authentication Token
+      scheme: basic
+      type: http
+    api_key:
+      description: API Key - For System Use
+      in: header
+      name: x-api-key
+      type: apiKey
+x-amazon-apigateway-binary-media-types:
+- audio/wav
+- audio/x-wav
+- application/octet-stream
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

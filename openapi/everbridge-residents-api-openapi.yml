@@ -1,0 +1,209 @@
+openapi: 3.2.0
+info:
+  description: EB Suite APIs.
+  title: EB Suite Residents API
+  version: '1.0'
+servers:
+- url: https://api.everbridge.net/rest
+- url: https://api.everbridge.eu/rest
+tags:
+- description: EB Suites - Residents Management
+  name: Residents
+paths:
+  /residents/{organizationId}/query:
+    post:
+      operationId: EBS Query Residents By Filters
+      parameters:
+      - description: The ID of the organization which the user belongs to
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - description: Page to query.
+        in: query
+        name: page
+        required: false
+        schema:
+          default: 1
+          format: int32
+          type: integer
+      - description: Page size to query.
+        in: query
+        name: pageSize
+        required: false
+        schema:
+          default: 25
+          format: int32
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResidentFiltersWrapper'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonResult'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '500':
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Query Residents By Filters
+      tags:
+      - Residents
+      x-amazon-apigateway-integration:
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/residents/{organizationId}/query
+components:
+  schemas:
+    SearchShapeWrapper:
+      properties:
+        boundaryId:
+          type: string
+        fromLibrary:
+          type: boolean
+        include:
+          type: boolean
+        name:
+          type: string
+        regionId:
+          format: int64
+          type: integer
+        residentContactTypes:
+          items:
+            enum:
+            - RESIDENTIAL
+            - BUSINESS
+            type: string
+          type: array
+        searchShapeTypes:
+          items:
+            enum:
+            - STATIC
+            - DYNAMIC
+            - EXPECTED
+            - TRAVEL
+            type: string
+          type: array
+        shape:
+          $ref: '#/components/schemas/GeoShapeWrapper'
+      type: object
+    ResidentFiltersWrapper:
+      properties:
+        residents:
+          $ref: '#/components/schemas/UmsContactsWrapper'
+        searchShapes:
+          items:
+            $ref: '#/components/schemas/SearchShapeWrapper'
+          type: array
+      type: object
+    UmsContactsWrapper:
+      properties:
+        properties:
+          items:
+            $ref: '#/components/schemas/ResidentPropertyFilterWrapper'
+          type: array
+        searchBySearchShapes:
+          type: boolean
+        umsPatterns:
+          items:
+            $ref: '#/components/schemas/UmsUploadWrapper'
+          type: array
+      type: object
+    ResidentPropertyFilterWrapper:
+      properties:
+        field:
+          type: string
+        values:
+          items:
+            type: string
+          type: array
+      type: object
+    JsonResult:
+      properties:
+        data:
+          type: object
+        message:
+          type: string
+        resultCode:
+          type: string
+        success:
+          type: boolean
+        type:
+          type: string
+      type: object
+    GeoPointWrapper:
+      properties:
+        x:
+          format: double
+          type: number
+        y:
+          format: double
+          type: number
+      type: object
+    UmsUploadWrapper:
+      properties:
+        pattern:
+          type: string
+        values:
+          items:
+            additionalProperties:
+              type: string
+            type: object
+          type: array
+      type: object
+    GeoShapeWrapper:
+      properties:
+        points:
+          items:
+            $ref: '#/components/schemas/GeoPointWrapper'
+          type: array
+      type: object
+  securitySchemes:
+    API_Authorizer:
+      description: oAuth Token
+      in: header
+      name: Authorization
+      type: apiKey
+      x-amazon-apigateway-authorizer:
+        authorizerCredentials: arn:aws:iam::214792946631:role/oas-rest-api-gw-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+      x-amazon-apigateway-authtype: custom
+    BasicAuth:
+      description: Basic Authentication Token
+      scheme: basic
+      type: http
+    api_key:
+      description: API Key - For System Use
+      in: header
+      name: x-api-key
+      type: apiKey
+x-amazon-apigateway-binary-media-types:
+- audio/wav
+- audio/x-wav
+- application/octet-stream
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

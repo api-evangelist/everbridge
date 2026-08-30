@@ -1,0 +1,1323 @@
+openapi: 3.2.0
+info:
+  description: EB Suite APIs.
+  title: EB Suite Travel Itinerary API
+  version: '1.0'
+servers:
+- url: https://api.everbridge.net/rest
+- url: https://api.everbridge.eu/rest
+tags:
+- description: EB Suites - Travel Itinerary Management
+  name: Travel Itinerary
+paths:
+  /itineraries/expectedLocations/{organizationId}/{id}:
+    get:
+      description: GET Expected Locations By Itinerary ID.
+      operationId: EBS Get Expected Locations By Itinerary ID
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - description: Organization ID
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - description: The page number of Itineraries
+        in: query
+        name: pageNumber
+        required: false
+        schema:
+          default: 1
+          format: int32
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExpectedLocationWrapperCollectionResult'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Get Expected Locations By Itinerary ID
+      tags:
+      - Travel Itinerary
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.id: method.request.path.id
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/itineraries/expectedLocations/{organizationId}/{id}
+  /itineraries/query/{organizationId}:
+    post:
+      description: Query Itineraries By Parameters.
+      operationId: EBS Query Itineraries By Parameters
+      parameters:
+      - description: Organization ID
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - description: The page number of Itineraries
+        in: query
+        name: pageNumber
+        required: false
+        schema:
+          default: 1
+          format: int32
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            examples:
+              queryByPnr:
+                summary: Query itineraries by PNR
+                value:
+                  fieldName: pnr
+                  fieldValues:
+                  - PNR-AIR-20240322
+            schema:
+              $ref: '#/components/schemas/ItinerarySearchCriteria'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: Successful query with results
+                  value:
+                    firstPageUri: https://api-dev3.everbridge.net/rest/itineraries/query/1536984111644674?pageNumber=1
+                    lastPageUri: https://api-dev3.everbridge.net/rest/itineraries/query/1536984111644674?pageNumber=1
+                    message: OK
+                    page:
+                      currentPageNo: 1
+                      data:
+                      - id: '4025416759115880'
+                      - id: '4025451118854219'
+                      pageSize: 1000
+                      start: 0
+                      totalCount: 2
+                      totalPageCount: 1
+              schema:
+                $ref: '#/components/schemas/ItineraryQueryResponseWrapper'
+          description: OK
+        '400':
+          content:
+            application/json:
+              examples:
+                invalidInput:
+                  summary: Invalid search criteria
+                  value:
+                    error: Bad Request
+                    message: 'Invalid search criteria: fieldName is required'
+                    status: 400
+          description: Missing or invalid request input
+        '401':
+          content:
+            application/json:
+              examples:
+                unauthorized:
+                  summary: Authentication failed
+                  value:
+                    error: Unauthorized
+                    message: Invalid or missing credentials
+                    status: 401
+          description: Invalid or missing credentials
+        '404':
+          content:
+            application/json:
+              examples:
+                notFound:
+                  summary: Organization not found
+                  value:
+                    error: Not Found
+                    message: Organization with ID 1536984111644674 not found
+                    status: 404
+          description: Not Found
+        '500':
+          content:
+            application/json:
+              examples:
+                serverError:
+                  summary: Internal server error
+                  value:
+                    error: Internal Server Error
+                    message: An unexpected error occurred while processing the query
+                    status: 500
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Query Itineraries By Parameters
+      tags:
+      - Travel Itinerary
+      x-amazon-apigateway-integration:
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/itineraries/query/{organizationId}
+  /itineraries/{organizationId}:
+    post:
+      description: Add An Itinerary.
+      operationId: EBS Add Itinerary
+      parameters:
+      - description: Organization ID
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - description: AutoCreateContact
+        in: query
+        name: autoCreateContact
+        required: false
+        schema:
+          default: true
+          type: boolean
+      - description: ContactRecordTypeId
+        in: query
+        name: contactRecordTypeId
+        required: false
+        schema:
+          default: 0
+          format: int64
+          type: integer
+      - description: Toggle case sensitivity for 'employeeId' during contact matching, if the value is a valid email address. Set to 'true' to enforce case sensitivity, 'false' otherwise.
+        in: query
+        name: emailCaseSensitiveInExternalId
+        required: false
+        schema:
+          default: true
+          type: boolean
+      - description: When true, evaluates email address matching before name-based matching for ANVIL2EBS / EbTravelConnector itinerary sources.
+        in: query
+        name: emailBeforeNameMatching
+        required: false
+        schema:
+          default: false
+          type: boolean
+      requestBody:
+        content:
+          application/json:
+            examples:
+              WithMaximumFields:
+                summary: Example add itinerary request
+                value:
+                  createdDate: '2022-05-11T14:45:00Z'
+                  externalItineraryId: Air-20240322
+                  itinerarySource: TT5 Manual Trip
+                  itineraryStatus: Active
+                  lastModifiedDate: '2022-05-11T14:45:00Z'
+                  passengers:
+                  - emailAddresses:
+                    - trm-test-20240322@everbridge.com
+                    employeeId: trm-test-20240322
+                    firstName: trm
+                    lastName: test-20240322
+                    middleName: ''
+                    phoneNumbers:
+                    - countryName: CN
+                      phoneNumber: '15712341021'
+                  pnr: PNR-AIR-20240322
+                  segments:
+                  - airRailNumber: '7867'
+                    fromAddress:
+                      city: Chicago
+                      country: US
+                      latitude: 41.978611111111114
+                      longitude: -87.90472222222223
+                      state: IL
+                    fromDateTime: '2024-03-22T10:00:00Z'
+                    fromIataCode: ORD
+                    supplierCode: ET
+                    supplierName: Enterise
+                    toAddress:
+                      city: Bamyan
+                      country: AF
+                      latitude: 34.8
+                      longitude: 67.81666666666666
+                    toDateTime: '2024-03-22T13:00:00Z'
+                    toIataCode: BIN
+                    type: Air
+              WithMinimumNoOfFieldw:
+                summary: Example add itinerary request
+                value:
+                  itineraryStatus: active
+                  passengers:
+                  - firstName: trm
+                    lastName: test-20240322
+                  pnr: PNR-AIR-20240322
+                  segments:
+                  - airRailNumber: '7867'
+                    fromDateTime: '2024-03-22T10:00:00Z'
+                    supplierCode: ET
+                    supplierName: Enterise
+                    toDateTime: '2024-03-22T13:00:00Z'
+                    toIataCode: BIN
+                    type: Air
+            schema:
+              $ref: '#/components/schemas/ItineraryRequestWrapper'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: Successful itinerary creation
+                  value:
+                    baseUri: https://api-dev3.everbridge.net/rest/itineraries/1536984111644674
+                    id: 4127533901547590
+                    instanceUri: https://api-dev3.everbridge.net/rest/itineraries/1536984111644674/4127533901547590
+                    message: Itinerary created successfully
+              schema:
+                $ref: '#/components/schemas/ItineraryResponseWrapper'
+          description: OK
+        '400':
+          content:
+            application/json:
+              examples:
+                invalidInput:
+                  summary: Invalid request input
+                  value:
+                    error: Bad Request
+                    message: Field ['pnr'] is empty
+                    status: 400
+          description: Missing or invalid request input
+        '401':
+          content:
+            application/json:
+              examples:
+                unauthorized:
+                  summary: Authentication failed
+                  value:
+                    error: Unauthorized
+                    message: Invalid or missing credentials
+                    status: 401
+          description: Invalid or missing credentials
+        '404':
+          content:
+            application/json:
+              examples:
+                notFound:
+                  summary: Organization not found
+                  value:
+                    error: Not Found
+                    message: Organization with ID 1234567890 not found
+                    status: 404
+          description: Not Found
+        '500':
+          content:
+            application/json:
+              examples:
+                serverError:
+                  summary: Internal server error
+                  value:
+                    error: Internal Server Error
+                    message: An unexpected error occurred while processing the request
+                    status: 500
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Add Itinerary
+      tags:
+      - Travel Itinerary
+      x-amazon-apigateway-integration:
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/itineraries/{organizationId}
+  /itineraries/{organizationId}/batch:
+    delete:
+      description: Batch delete itineraries.
+      operationId: EBS Delete Batch Itinerary
+      parameters:
+      - description: Organization ID
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          format: int64
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            examples:
+              batchDelete:
+                summary: Delete multiple itineraries
+                value:
+                - '4032013828884881'
+                - '4032013828884882'
+            schema:
+              description: JSON object of ids
+              items:
+                type: string
+              type: array
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: Successful batch deletion
+                  value:
+                    code: 100
+                    message: OK
+              schema:
+                $ref: '#/components/schemas/ItineraryBatchDeleteResult'
+          description: OK
+        '400':
+          content:
+            application/json:
+              examples:
+                invalidInput:
+                  summary: Invalid request body
+                  value:
+                    error: Bad Request
+                    message: Invalid itinerary IDs format
+                    status: 400
+          description: Missing or invalid request input
+        '401':
+          content:
+            application/json:
+              examples:
+                unauthorized:
+                  summary: Authentication failed
+                  value:
+                    error: Unauthorized
+                    message: Invalid or missing credentials
+                    status: 401
+          description: Invalid or missing credentials
+        '404':
+          content:
+            application/json:
+              examples:
+                notFound:
+                  summary: Itineraries not found
+                  value:
+                    error: Not Found
+                    message: '4032013828884881: Not Found'
+                    status: 404
+          description: Not Found
+        '500':
+          content:
+            application/json:
+              examples:
+                serverError:
+                  summary: Internal server error
+                  value:
+                    error: Internal Server Error
+                    message: An unexpected error occurred while deleting itineraries
+                    status: 500
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Delete Batch Itinerary
+      tags:
+      - Travel Itinerary
+      x-amazon-apigateway-integration:
+        httpMethod: DELETE
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/itineraries/{organizationId}/batch
+    post:
+      description: Add Batch of Itineraries.
+      operationId: EBS Add Batch Itinerary
+      parameters:
+      - description: Organization ID
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - description: AutoCreateContact
+        in: query
+        name: autoCreateContact
+        required: false
+        schema:
+          default: true
+          type: boolean
+      - description: ContactRecordTypeId
+        in: query
+        name: contactRecordTypeId
+        required: false
+        schema:
+          default: 0
+          format: int64
+          type: integer
+      - description: Toggle case sensitivity for 'employeeId' during contact matching, if the value is a valid email address. Set to 'true' to enforce case sensitivity, 'false' otherwise.
+        in: query
+        name: emailCaseSensitiveInExternalId
+        required: false
+        schema:
+          default: true
+          type: boolean
+      - description: When true, evaluates email address matching before name-based matching for ANVIL2EBS / EbTravelConnector itinerary sources.
+        in: query
+        name: emailBeforeNameMatching
+        required: false
+        schema:
+          default: false
+          type: boolean
+      requestBody:
+        content:
+          application/json:
+            examples:
+              batchItinerary:
+                summary: Batch itinerary with air segments
+                value:
+                - createdDate: '2022-05-11T14:45:00Z'
+                  externalItineraryId: Air-20240322
+                  itinerarySource: TT5 Manual Trip
+                  itineraryStatus: Active
+                  lastModifiedDate: '2022-05-11T14:45:00Z'
+                  passengers:
+                  - emailAddresses:
+                    - trm-test-20240322@everbridge.com
+                    employeeId: trm-test-20240322
+                    firstName: trm
+                    lastName: test-20240322
+                    middleName: ''
+                    phoneNumbers:
+                    - countryName: CN
+                      phoneNumber: '15712341021'
+                  pnr: PNR-AIR-20240322
+                  segments:
+                  - airRailNumber: '7867'
+                    fromAddress:
+                      city: Chicago
+                      country: US
+                      latitude: 41.978611111111114
+                      longitude: -87.90472222222223
+                      state: IL
+                    fromDateTime: '2024-03-22T10:00:00Z'
+                    fromIataCode: ORD
+                    supplierCode: ET
+                    supplierName: Enterise
+                    toAddress:
+                      city: Bamyan
+                      country: AF
+                      latitude: 34.8
+                      longitude: 67.81666666666666
+                    toDateTime: '2024-03-22T13:00:00Z'
+                    toIataCode: BIN
+                    type: Air
+                  - airRailNumber: '7999'
+                    fromAddress:
+                      city: Bamyan
+                      country: AF
+                      latitude: 34.8
+                      longitude: 67.81666666666666
+                    fromDateTime: '2024-03-22T18:00:00Z'
+                    fromIataCode: BIN
+                    supplierCode: ET
+                    supplierName: Enterprise
+                    toAddress:
+                      city: Beijing
+                      country: CN
+                      latitude: 39.886547
+                      longitude: 116.989574
+                    toDateTime: '2024-03-22T23:00:00Z'
+                    toIataCode: PEK
+                    type: Air
+            schema:
+              description: JSON object of TripItinerary
+              items:
+                $ref: '#/components/schemas/ItineraryRequestWrapper'
+              type: array
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: Successful batch creation
+                  value:
+                    baseUri: https://api-dev3.everbridge.net/rest/itineraries/1536984111644674
+                    id: 4025416759115880
+                    instanceUri: https://api-dev3.everbridge.net/rest/itineraries/1536984111644674/4025416759115880
+                    message: OK
+              schema:
+                $ref: '#/components/schemas/ItineraryResponseWrapper'
+          description: OK
+        '400':
+          content:
+            application/json:
+              examples:
+                invalidInput:
+                  summary: Invalid request body
+                  value:
+                    error: Bad Request
+                    message: Field ['pnr'] is empty
+                    status: 400
+          description: Missing or invalid request input
+        '401':
+          content:
+            application/json:
+              examples:
+                unauthorized:
+                  summary: Authentication failed
+                  value:
+                    error: Unauthorized
+                    message: Invalid or missing credentials
+                    status: 401
+          description: Invalid or missing credentials
+        '404':
+          content:
+            application/json:
+              examples:
+                notFound:
+                  summary: Organization not found
+                  value:
+                    error: Not Found
+                    message: Organization with ID 1536984111644674 not found
+                    status: 404
+          description: Not Found
+        '500':
+          content:
+            application/json:
+              examples:
+                serverError:
+                  summary: Internal server error
+                  value:
+                    error: Internal Server Error
+                    message: An unexpected error occurred while processing batch itineraries
+                    status: 500
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Add Batch Itinerary
+      tags:
+      - Travel Itinerary
+      x-amazon-apigateway-integration:
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/itineraries/{organizationId}/batch
+  /itineraries/{organizationId}/{id}:
+    delete:
+      description: Delete an Itinerary.
+      operationId: EBS Delete Itinerary
+      parameters:
+      - description: Organization ID
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - description: id
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: Successful deletion
+                  value:
+                    baseUri: https://api-dev3.everbridge.net/rest/itineraries/1536984111644674
+                    id: 4127465182070597
+                    instanceUri: https://api-dev3.everbridge.net/rest/itineraries/1536984111644674/4127465182070597
+                    message: OK
+              schema:
+                $ref: '#/components/schemas/RestfulModificationResult'
+          description: OK
+        '400':
+          content:
+            application/json:
+              examples:
+                invalidInput:
+                  summary: Invalid itinerary ID
+                  value:
+                    error: Bad Request
+                    message: Type mismatch exception
+                    status: 400
+          description: Missing or invalid request input
+        '401':
+          content:
+            application/json:
+              examples:
+                unauthorized:
+                  summary: Authentication failed
+                  value:
+                    error: Unauthorized
+                    message: Invalid or missing credentials
+                    status: 401
+          description: Invalid or missing credentials
+        '404':
+          content:
+            application/json:
+              examples:
+                notFound:
+                  summary: Itinerary not found
+                  value:
+                    error: Not Found
+                    message: Can not find the trip itinerary with ID 412746518207059 within the organization 1536984111644674
+                    status: 404
+          description: Not Found
+        '500':
+          content:
+            application/json:
+              examples:
+                serverError:
+                  summary: Internal server error
+                  value:
+                    error: Internal Server Error
+                    message: An unexpected error occurred while deleting the itinerary
+                    status: 500
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Delete Itinerary
+      tags:
+      - Travel Itinerary
+      x-amazon-apigateway-integration:
+        httpMethod: DELETE
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.id: method.request.path.id
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/itineraries/{organizationId}/{id}
+    put:
+      description: Update an Itinerary.
+      operationId: EBS Update Itinerary
+      parameters:
+      - description: Organization ID
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - description: id
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - description: AutoCreateContact
+        in: query
+        name: autoCreateContact
+        required: false
+        schema:
+          default: true
+          type: boolean
+      - description: ContactRecordTypeId
+        in: query
+        name: contactRecordTypeId
+        required: false
+        schema:
+          default: 0
+          format: int64
+          type: integer
+      - description: Toggle case sensitivity for 'employeeId' during contact matching, if the value is a valid email address. Set to 'true' to enforce case sensitivity, 'false' otherwise.
+        in: query
+        name: emailCaseSensitiveInExternalId
+        required: false
+        schema:
+          default: true
+          type: boolean
+      - description: When true, evaluates email address matching before name-based matching for ANVIL2EBS / EbTravelConnector itinerary sources.
+        in: query
+        name: emailBeforeNameMatching
+        required: false
+        schema:
+          default: false
+          type: boolean
+      requestBody:
+        content:
+          application/json:
+            examples:
+              WithMaximumFields:
+                summary: Example add itinerary request
+                value:
+                  createdDate: '2022-05-11T14:45:00Z'
+                  externalItineraryId: Air-20240322
+                  itinerarySource: TT5 Manual Trip
+                  itineraryStatus: Active
+                  lastModifiedDate: '2022-05-11T14:45:00Z'
+                  passengers:
+                  - emailAddresses:
+                    - trm-test-20240322@everbridge.com
+                    employeeId: trm-test-20240322
+                    firstName: trm
+                    lastName: test-20240322
+                    middleName: ''
+                    phoneNumbers:
+                    - countryName: CN
+                      phoneNumber: '15712341021'
+                  pnr: PNR-AIR-20240322
+                  segments:
+                  - airRailNumber: '7867'
+                    fromAddress:
+                      city: Chicago
+                      country: US
+                      latitude: 41.978611111111114
+                      longitude: -87.90472222222223
+                      state: IL
+                    fromDateTime: '2024-03-22T10:00:00Z'
+                    fromIataCode: ORD
+                    supplierCode: ET
+                    supplierName: Enterise
+                    toAddress:
+                      city: Bamyan
+                      country: AF
+                      latitude: 34.8
+                      longitude: 67.81666666666666
+                    toDateTime: '2024-03-22T13:00:00Z'
+                    toIataCode: BIN
+                    type: Air
+              WithMinimumNoOfFieldw:
+                summary: Example add itinerary request
+                value:
+                  itineraryStatus: active
+                  passengers:
+                  - firstName: trm
+                    lastName: test-20240322
+                  pnr: PNR-AIR-20240322
+                  segments:
+                  - airRailNumber: '7867'
+                    fromDateTime: '2024-03-22T10:00:00Z'
+                    supplierCode: ET
+                    supplierName: Enterise
+                    toDateTime: '2024-03-22T13:00:00Z'
+                    toIataCode: BIN
+                    type: Air
+            schema:
+              $ref: '#/components/schemas/ItineraryRequestWrapper'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: Successful itinerary creation
+                  value:
+                    baseUri: https://api-dev3.everbridge.net/rest/itineraries/1536984111644674
+                    id: 4127533901547590
+                    instanceUri: https://api-dev3.everbridge.net/rest/itineraries/1536984111644674/4127533901547590
+                    message: Itinerary created successfully
+              schema:
+                $ref: '#/components/schemas/ItineraryResponseWrapper'
+          description: OK
+        '400':
+          content:
+            application/json:
+              examples:
+                invalidInput:
+                  summary: Invalid request input
+                  value:
+                    error: Bad Request
+                    message: Field ['pnr'] is empty
+                    status: 400
+          description: Missing or invalid request input
+        '401':
+          content:
+            application/json:
+              examples:
+                unauthorized:
+                  summary: Authentication failed
+                  value:
+                    error: Unauthorized
+                    message: Invalid or missing credentials
+                    status: 401
+          description: Invalid or missing credentials
+        '404':
+          content:
+            application/json:
+              examples:
+                notFound:
+                  summary: Organization not found
+                  value:
+                    error: Not Found
+                    message: Organization with ID 1234567890 not found
+                    status: 404
+          description: Not Found
+        '500':
+          content:
+            application/json:
+              examples:
+                serverError:
+                  summary: Internal server error
+                  value:
+                    error: Internal Server Error
+                    message: An unexpected error occurred while processing the request
+                    status: 500
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Update Itinerary
+      tags:
+      - Travel Itinerary
+      x-amazon-apigateway-integration:
+        httpMethod: PUT
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.id: method.request.path.id
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/itineraries/{organizationId}/{id}
+components:
+  schemas:
+    DataPageExpectedLocationWrapper:
+      properties:
+        currentPageNo:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/ExpectedLocationWrapper'
+          type: array
+        dataPageList:
+          items:
+            $ref: '#/components/schemas/DataPageExpectedLocationWrapper'
+          type: array
+        pageSize:
+          format: int32
+          type: integer
+        scrollId:
+          type: string
+        start:
+          format: int32
+          type: integer
+        totalCount:
+          format: int64
+          type: integer
+        totalPageCount:
+          format: int32
+          type: integer
+      type: object
+    ItineraryRequestWrapper:
+      properties:
+        createdDate:
+          type: string
+        externalItineraryId:
+          type: string
+        itinerarySource:
+          type: string
+        itineraryStatus:
+          type: string
+        lastModifiedDate:
+          type: string
+        passengers:
+          items:
+            properties:
+              emailAddresses:
+                items:
+                  type: string
+                type: array
+              employeeId:
+                type: string
+              firstName:
+                type: string
+              lastName:
+                type: string
+              middleName:
+                type: string
+              phoneNumbers:
+                items:
+                  properties:
+                    countryName:
+                      type: string
+                    phoneNumber:
+                      type: string
+                  required:
+                  - phoneNumber
+                  - countryName
+                  type: object
+                type: array
+            required:
+            - employeeId
+            - firstName
+            - lastName
+            - middleName
+            - emailAddresses
+            - phoneNumbers
+            type: object
+          type: array
+        pnr:
+          type: string
+        segments:
+          items:
+            properties:
+              airRailNumber:
+                type: string
+              fromAddress:
+                properties:
+                  city:
+                    type: string
+                  country:
+                    type: string
+                  latitude:
+                    type: number
+                  longitude:
+                    type: number
+                  state:
+                    type: string
+                required:
+                - country
+                - city
+                - latitude
+                - longitude
+                type: object
+              fromDateTime:
+                type: string
+              fromIataCode:
+                type: string
+              supplierCode:
+                type: string
+              supplierName:
+                type: string
+              toAddress:
+                properties:
+                  city:
+                    type: string
+                  country:
+                    type: string
+                  latitude:
+                    type: number
+                  longitude:
+                    type: number
+                required:
+                - country
+                - city
+                - latitude
+                - longitude
+                type: object
+              toDateTime:
+                type: string
+              toIataCode:
+                type: string
+              type:
+                type: string
+            required:
+            - type
+            - supplierCode
+            - supplierName
+            - airRailNumber
+            - fromDateTime
+            - toDateTime
+            - fromIataCode
+            - toIataCode
+            - fromAddress
+            - toAddress
+            type: object
+          type: array
+      required:
+      - pnr
+      - externalItineraryId
+      - itineraryStatus
+      - itinerarySource
+      - createdDate
+      - lastModifiedDate
+      - segments
+      - passengers
+      type: object
+    RestfulModificationResult:
+      properties:
+        baseUri:
+          type: string
+        id:
+          format: int64
+          type: integer
+        instanceUri:
+          type: string
+        message:
+          type: string
+      title: RestfulModificationResult
+      type: object
+    ContactAddressWrapper:
+      properties:
+        arriveDate:
+          format: date-time
+          type: string
+        assetExternalId:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+        expireDate:
+          format: date-time
+          type: string
+        gisLocation:
+          $ref: '#/components/schemas/GisLocationWrapper'
+        iata:
+          type: string
+        locationId:
+          format: int64
+          type: integer
+        locationName:
+          type: string
+        locationSource:
+          type: string
+        locationSourceId:
+          format: int64
+          type: integer
+        newAssetId:
+          type: string
+        postalCode:
+          type: string
+        source:
+          enum:
+          - MANUAL
+          - AUTO
+          type: string
+        state:
+          type: string
+        streetAddress:
+          type: string
+        suite:
+          type: string
+      required:
+      - arriveDate
+      - country
+      - expireDate
+      - locationName
+      - streetAddress
+      type: object
+    GisLocationWrapper:
+      properties:
+        lat:
+          format: double
+          type: number
+        lon:
+          format: double
+          type: number
+      type: object
+    ItineraryBatchDeleteResult:
+      properties:
+        code:
+          format: int32
+          type: integer
+        message:
+          type: string
+      required:
+      - message
+      - code
+      title: ItineraryBatchDeleteResult
+      type: object
+    ItinerarySearchCriteria:
+      description: JSON object of SearchCriteria
+      properties:
+        fieldName:
+          type: string
+        fieldValues:
+          items:
+            type: string
+          type: array
+      type: object
+    ItineraryResponseWrapper:
+      properties:
+        baseUri:
+          type: string
+        id:
+          type: number
+        instanceUri:
+          type: string
+        message:
+          type: string
+      required:
+      - message
+      - id
+      - baseUri
+      - instanceUri
+      type: object
+    ItineraryQueryResponseWrapper:
+      description: Response wrapper for itinerary query results
+      properties:
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        page:
+          properties:
+            currentPageNo:
+              format: int32
+              type: integer
+            data:
+              items:
+                properties:
+                  id:
+                    type: string
+                type: object
+              type: array
+            pageSize:
+              format: int32
+              type: integer
+            start:
+              format: int32
+              type: integer
+            totalCount:
+              format: int64
+              type: integer
+            totalPageCount:
+              format: int32
+              type: integer
+          type: object
+      type: object
+    ExpectedLocationWrapper:
+      properties:
+        address:
+          $ref: '#/components/schemas/ContactAddressWrapper'
+        contactExternalId:
+          type: string
+        contactId:
+          format: int64
+          type: integer
+        createdDate:
+          format: date-time
+          type: string
+        createdId:
+          format: int64
+          type: integer
+        createdName:
+          type: string
+        id:
+          format: int64
+          type: integer
+        isInternationalTravel:
+          type: boolean
+        isLocalTravel:
+          type: boolean
+        lastModifiedDate:
+          format: date-time
+          type: string
+        lastModifiedId:
+          format: int64
+          type: integer
+        lastModifiedName:
+          type: string
+        organizationId:
+          format: int64
+          type: integer
+        travelCategory:
+          type: string
+        travelType:
+          type: string
+      required:
+      - contactId
+      type: object
+    ExpectedLocationWrapperCollectionResult:
+      properties:
+        currentPageUri:
+          type: string
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        nextPageUri:
+          type: string
+        page:
+          $ref: '#/components/schemas/DataPageExpectedLocationWrapper'
+        previousPageUri:
+          type: string
+      type: object
+  securitySchemes:
+    API_Authorizer:
+      description: oAuth Token
+      in: header
+      name: Authorization
+      type: apiKey
+      x-amazon-apigateway-authorizer:
+        authorizerCredentials: arn:aws:iam::214792946631:role/oas-rest-api-gw-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+      x-amazon-apigateway-authtype: custom
+    BasicAuth:
+      description: Basic Authentication Token
+      scheme: basic
+      type: http
+    api_key:
+      description: API Key - For System Use
+      in: header
+      name: x-api-key
+      type: apiKey
+x-amazon-apigateway-binary-media-types:
+- audio/wav
+- audio/x-wav
+- application/octet-stream
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

@@ -1,0 +1,825 @@
+openapi: 3.2.0
+info:
+  description: EB Suite APIs.
+  title: EB Suite Expected Locations API
+  version: '1.0'
+servers:
+- url: https://api.everbridge.net/rest
+- url: https://api.everbridge.eu/rest
+tags:
+- description: EB Suites - Expected Location Management
+  name: Expected Locations
+paths:
+  /expectedLocations/{organizationId}:
+    post:
+      description: Batch create Expected Locations.
+      operationId: EBS Add Expected Locations
+      parameters:
+      - description: Organization ID.
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: Contact ID type, contact ID or contact external ID.
+        in: query
+        name: contactIdType
+        required: false
+        schema:
+          default: id
+          enum:
+          - id
+          - externalId
+          type: string
+      - description: If include created expected location Ids in the response.
+        in: query
+        name: returnIds
+        required: false
+        schema:
+          default: false
+          type: boolean
+      requestBody:
+        content:
+          application/json:
+            examples:
+              basic:
+                summary: basic
+                value:
+                - address:
+                    arriveDate: '2026-02-10T08:54:32.512Z'
+                    country: US
+                    expireDate: '2026-02-15T08:54:32.512Z'
+                    locationName: Sq Garden
+                    streetAddress: Mt drive
+                  contactId: 3451059372556308
+            schema:
+              description: JSON object of the new Expected Locations
+              items:
+                $ref: '#/components/schemas/ExpectedLocationWrapper'
+              type: array
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: success
+                  value:
+                    code: 100
+                    message: OK
+              schema:
+                $ref: '#/components/schemas/RestfulBatchOperationResult'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Add Expected Locations
+      tags:
+      - Expected Locations
+      x-amazon-apigateway-integration:
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/expectedLocations/{organizationId}
+  /expectedLocations/{organizationId}/batch:
+    delete:
+      description: Batch Delete Expected Locations.
+      operationId: EBS Delete Batch Expected Locations
+      parameters:
+      - description: Organization ID.
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      requestBody:
+        content:
+          application/json:
+            examples:
+              basic:
+                summary: basic
+                value:
+                - '76398767679964322323'
+                - '43635735245190966990'
+            schema:
+              description: JSON object of ids
+              items:
+                type: string
+              type: array
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: success
+                  value:
+                    code: 100
+                    message: OK
+              schema:
+                $ref: '#/components/schemas/RestfulInstanceResult'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Delete Batch
+      tags:
+      - Expected Locations
+      x-amazon-apigateway-integration:
+        httpMethod: DELETE
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/expectedLocations/{organizationId}/batch
+  /expectedLocations/{organizationId}/{contactId}:
+    get:
+      description: Retrieve all Expected Locations of a contact.
+      operationId: EBS List Expected Location For Contact
+      parameters:
+      - description: Organization ID.
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: Contact ID.
+        in: path
+        name: contactId
+        required: true
+        schema:
+          type: string
+      - description: Contact ID type, contact ID or contact external ID.
+        in: query
+        name: contactIdType
+        required: false
+        schema:
+          default: id
+          enum:
+          - id
+          - externalId
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: success
+                  value:
+                    summary: success
+                    value:
+                      baseUri: https://api-dev3.everbridge.net/rest/expectedLocations/15369841116446743451059372556308
+                      id: 3588773203935233
+                      instanceUri: https://api-dev3.everbridge.net/rest/expectedLocations/15369841116446743451059372556308/3588773203935233
+                      message: OK
+              schema:
+                $ref: '#/components/schemas/ExpectedLocationCollectionResult'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: List Expected Location For Contact
+      tags:
+      - Expected Locations
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.contactId: method.request.path.contactId
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/expectedLocations/{organizationId}/{contactId}
+    post:
+      description: Create new Expected Location.
+      operationId: EBS Create Expected Location For Contact
+      parameters:
+      - description: Organization ID
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: Contact ID
+        in: path
+        name: contactId
+        required: true
+        schema:
+          type: string
+      - description: Contact ID type, contact ID or contact external ID.
+        in: query
+        name: contactIdType
+        required: false
+        schema:
+          default: id
+          enum:
+          - id
+          - externalId
+          type: string
+      requestBody:
+        content:
+          application/json:
+            examples:
+              basic:
+                summary: basic
+                value:
+                  arriveDate: '2026-02-10T08:54:32.512Z'
+                  country: US
+                  expireDate: '2026-02-15T08:54:32.512Z'
+                  locationName: Mountain
+                  streetAddress: Mt drive
+            schema:
+              $ref: '#/components/schemas/ContactAddressWrapper'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: success
+                  value:
+                    baseUri: https://api-dev3.everbridge.net/rest/expectedLocations/15369841116446743451059372556308
+                    id: 3588773203935233
+                    instanceUri: https://api-dev3.everbridge.net/rest/expectedLocations/15369841116446743451059372556308/3588773203935233
+                    message: OK
+              schema:
+                $ref: '#/components/schemas/RestfulModificationResult'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Create Expected Location For Contact
+      tags:
+      - Expected Locations
+      x-amazon-apigateway-integration:
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.contactId: method.request.path.contactId
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/expectedLocations/{organizationId}/{contactId}
+  /expectedLocations/{organizationId}/{contactId}/{expectedLocationId}:
+    delete:
+      description: Delete Expected Location by ID.
+      operationId: EBS Delete Expected Location For Contact
+      parameters:
+      - description: Organization ID.
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: Contact ID.
+        in: path
+        name: contactId
+        required: true
+        schema:
+          type: string
+      - description: Expected Location ID
+        in: path
+        name: expectedLocationId
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - description: Contact ID type, contact ID or contact external ID.
+        in: query
+        name: contactIdType
+        required: false
+        schema:
+          default: id
+          enum:
+          - id
+          - externalId
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: success
+                  value:
+                    message: OK
+              schema:
+                $ref: '#/components/schemas/RestfulInstanceResult'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Delete Expected Location For Contact
+      tags:
+      - Expected Locations
+      x-amazon-apigateway-integration:
+        httpMethod: DELETE
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.contactId: method.request.path.contactId
+          integration.request.path.expectedLocationId: method.request.path.expectedLocationId
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/expectedLocations/{organizationId}/{contactId}/{expectedLocationId}
+    get:
+      description: Retrieve Expected Location by ID.
+      operationId: EBS Get Expected Location For Contact
+      parameters:
+      - description: Organization ID.
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: Contact ID.
+        in: path
+        name: contactId
+        required: true
+        schema:
+          type: string
+      - description: Expected Location ID.
+        in: path
+        name: expectedLocationId
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - description: Contact ID type, contact ID or contact external ID.
+        in: query
+        name: contactIdType
+        required: false
+        schema:
+          default: id
+          enum:
+          - id
+          - externalId
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: success
+                  value:
+                    message: OK
+                    result:
+                      address:
+                        arriveDate: '2026-02-10T08:54:32Z'
+                        country: US
+                        expireDate: '2026-02-15T08:54:32Z'
+                        gisLocation:
+                          lat: 33.7742548
+                          lon: -84.25286585
+                        locationId: 0
+                        locationName: Mountain
+                        locationSource: Api
+                        locationSourceId: 0
+                        streetAddress: Mt drive
+                      contactExternalId: test.user1@everbridge.com
+                      contactId: 3451059372556308
+                      id: 3588773203935233
+              schema:
+                $ref: '#/components/schemas/ExpectedLocationInstanceResult'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Get Expected Location For Contact
+      tags:
+      - Expected Locations
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.contactId: method.request.path.contactId
+          integration.request.path.expectedLocationId: method.request.path.expectedLocationId
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/expectedLocations/{organizationId}/{contactId}/{expectedLocationId}
+    put:
+      description: Update Expected Location by ID.
+      operationId: EBS Update Expected Location For Contact
+      parameters:
+      - description: Organization ID.
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: Contact ID.
+        in: path
+        name: contactId
+        required: true
+        schema:
+          type: string
+      - description: Expected Location ID.
+        in: path
+        name: expectedLocationId
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - description: Contact ID type, contact ID or contact external ID.
+        in: query
+        name: contactIdType
+        required: false
+        schema:
+          default: id
+          enum:
+          - id
+          - externalId
+          type: string
+      requestBody:
+        content:
+          application/json:
+            examples:
+              basic:
+                summary: basic
+                value:
+                  arriveDate: '2026-02-10T08:54:32.512Z'
+                  country: US
+                  expireDate: '2026-02-15T08:54:32.512Z'
+                  locationName: Mountain
+                  streetAddress: Mt drive
+            schema:
+              $ref: '#/components/schemas/ContactAddressWrapper'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestfulModificationResult'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestfulModificationResult'
+          description: Missing or invalid request input
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestfulModificationResult'
+          description: Invalid or missing credentials
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestfulModificationResult'
+          description: Not Found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestfulModificationResult'
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Update Expected Location For Contact
+      tags:
+      - Expected Locations
+      x-amazon-apigateway-integration:
+        httpMethod: PUT
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.contactId: method.request.path.contactId
+          integration.request.path.expectedLocationId: method.request.path.expectedLocationId
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/expectedLocations/{organizationId}/{contactId}/{expectedLocationId}
+components:
+  schemas:
+    RestfulInstanceResult:
+      properties:
+        message:
+          type: string
+        result:
+          type: object
+      title: RestfulInstanceResult
+      type: object
+    RestfulModificationResult:
+      properties:
+        baseUri:
+          type: string
+        id:
+          format: int64
+          type: integer
+        instanceUri:
+          type: string
+        message:
+          type: string
+      title: RestfulModificationResult
+      type: object
+    RestfulBatchOperationResult:
+      properties:
+        code:
+          format: int64
+          type: integer
+        data:
+          items:
+            type: string
+          type: array
+        message:
+          type: string
+      type: object
+    GisLocationWrapper:
+      properties:
+        lat:
+          format: double
+          type: number
+        lon:
+          format: double
+          type: number
+      type: object
+    ContactAddressWrapper:
+      properties:
+        arriveDate:
+          format: date-time
+          type: string
+        assetExternalId:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+        expireDate:
+          format: date-time
+          type: string
+        gisLocation:
+          $ref: '#/components/schemas/GisLocationWrapper'
+        iata:
+          type: string
+        locationId:
+          format: int64
+          type: integer
+        locationName:
+          type: string
+        locationSource:
+          type: string
+        locationSourceId:
+          format: int64
+          type: integer
+        newAssetId:
+          type: string
+        postalCode:
+          type: string
+        source:
+          enum:
+          - MANUAL
+          - AUTO
+          type: string
+        state:
+          type: string
+        streetAddress:
+          type: string
+        suite:
+          type: string
+      required:
+      - arriveDate
+      - country
+      - expireDate
+      - locationName
+      - streetAddress
+      type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
+    ExpectedLocationInstance:
+      properties:
+        address:
+          $ref: '#/components/schemas/ContactAddressInstance'
+        contactExternalId:
+          type: string
+        contactId:
+          format: int64
+          type: integer
+        id:
+          format: int64
+          type: integer
+        isInternationalTravel:
+          type: boolean
+        isLocalTravel:
+          type: boolean
+        travelCategory:
+          type: string
+        travelType:
+          type: string
+      type: object
+    ExpectedLocationInstanceResult:
+      properties:
+        message:
+          type: string
+        result:
+          $ref: '#/components/schemas/ExpectedLocationInstance'
+      type: object
+    ContactAddressInstance:
+      properties:
+        arriveDate:
+          format: date-time
+          type: string
+        assetExternalId:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+        expireDate:
+          format: date-time
+          type: string
+        gisLocation:
+          $ref: '#/components/schemas/GisLocationWrapper'
+        iata:
+          type: string
+        locationId:
+          format: int64
+          type: integer
+        locationName:
+          type: string
+        locationSource:
+          type: string
+        locationSourceId:
+          format: int64
+          type: integer
+        newAssetId:
+          type: string
+        postalCode:
+          type: string
+        source:
+          enum:
+          - MANUAL
+          - AUTO
+          type: string
+        state:
+          type: string
+        streetAddress:
+          type: string
+        suite:
+          type: string
+      type: object
+    ExpectedLocationWrapper:
+      properties:
+        address:
+          $ref: '#/components/schemas/ContactAddressWrapper'
+        contactExternalId:
+          type: string
+        contactId:
+          format: int64
+          type: integer
+        createdDate:
+          format: date-time
+          type: string
+        createdId:
+          format: int64
+          type: integer
+        createdName:
+          type: string
+        id:
+          format: int64
+          type: integer
+        isInternationalTravel:
+          type: boolean
+        isLocalTravel:
+          type: boolean
+        lastModifiedDate:
+          format: date-time
+          type: string
+        lastModifiedId:
+          format: int64
+          type: integer
+        lastModifiedName:
+          type: string
+        organizationId:
+          format: int64
+          type: integer
+        travelCategory:
+          type: string
+        travelType:
+          type: string
+      required:
+      - contactId
+      type: object
+    ExpectedLocationCollectionResult:
+      properties:
+        message:
+          type: string
+        result:
+          items:
+            $ref: '#/components/schemas/ExpectedLocationInstance'
+          type: array
+      type: object
+  securitySchemes:
+    API_Authorizer:
+      description: oAuth Token
+      in: header
+      name: Authorization
+      type: apiKey
+      x-amazon-apigateway-authorizer:
+        authorizerCredentials: arn:aws:iam::214792946631:role/oas-rest-api-gw-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+      x-amazon-apigateway-authtype: custom
+    BasicAuth:
+      description: Basic Authentication Token
+      scheme: basic
+      type: http
+    api_key:
+      description: API Key - For System Use
+      in: header
+      name: x-api-key
+      type: apiKey
+x-amazon-apigateway-binary-media-types:
+- audio/wav
+- audio/x-wav
+- application/octet-stream
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

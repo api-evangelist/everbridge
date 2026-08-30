@@ -1,0 +1,228 @@
+openapi: 3.2.0
+info:
+  title: Digital Apps File Resources API
+  description: 'Digital Apps APIs bring Everbridge notification functionality to your company''s mobile, desktop or web applications. '
+  version: v1
+servers:
+- url: https://api.everbridge.net/digitalapps/v2
+tags:
+- name: File Resources
+  description: Attachments, images, and audios operations
+paths:
+  /resources/images:
+    post:
+      tags:
+      - File Resources
+      summary: Upload Image
+      description: Upload image
+      operationId: ebs-daa-upload-image
+      parameters:
+      - name: image
+        in: query
+        description: Image file name
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+            format: binary
+        example: my_image.jpg
+      - name: Client-Id
+        in: header
+        description: Custom app client id
+        required: true
+        schema:
+          type: string
+        example: 3efb35a2-fdee-44bb-b476-2a45cada8b00
+      - name: Authorization
+        in: header
+        description: Access token
+        required: true
+        schema:
+          type: string
+        example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyLXRlc3QiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MDAwMDAwMDAsImV4cCI6MjAwMDAwMDAwMH0.MEUCIQDRrT_U-WXmq9sdlqZQw4y1GiI4Pp2tJSrKzWSi8vBslgIgQzRSce6h7RkF70ZcQnFX6Zry8FSX8U5CggV2-3OyuVE
+      responses:
+        '200':
+          description: Return image info
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImageUploadResponse'
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        httpMethod: post
+        uri: https://mobilemember.everbridge.net/api/v2/resources/images
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        passthroughBehavior: when_no_match
+  /resources/images/{imageId}:
+    get:
+      tags:
+      - File Resources
+      summary: Get Image
+      description: Download image
+      operationId: ebs-daa-get-image
+      parameters:
+      - name: imageId
+        in: path
+        description: The ID of the image
+        required: true
+        schema:
+          type: string
+      - name: Client-Id
+        in: header
+        description: Custom app client id
+        required: true
+        schema:
+          type: string
+        example: 3efb35a2-fdee-44bb-b476-2a45cada8b00
+      - name: Authorization
+        in: header
+        description: Access token
+        required: true
+        schema:
+          type: string
+        example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyLXRlc3QiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MDAwMDAwMDAsImV4cCI6MjAwMDAwMDAwMH0.MEUCIQDRrT_U-WXmq9sdlqZQw4y1GiI4Pp2tJSrKzWSi8vBslgIgQzRSce6h7RkF70ZcQnFX6Zry8FSX8U5CggV2-3OyuVE
+      responses:
+        '200':
+          description: Return download output stream
+          content:
+            application/octet-stream: {}
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        httpMethod: get
+        uri: https://mobilemember.everbridge.net/api/v2/resources/images/{imageId}
+        requestParameters:
+          integration.request.path.imageId: method.request.path.imageId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        passthroughBehavior: when_no_match
+  /resources/audios/{audioId}:
+    get:
+      tags:
+      - File Resources
+      summary: Get Audio
+      description: Download audio
+      operationId: ebs-daa-get-audio
+      parameters:
+      - name: audioId
+        in: path
+        description: The ID of audio
+        required: true
+        schema:
+          type: string
+      - name: Client-Id
+        in: header
+        description: Custom app client id
+        required: true
+        schema:
+          type: string
+        example: 3efb35a2-fdee-44bb-b476-2a45cada8b00
+      - name: Authorization
+        in: header
+        description: Access token
+        required: true
+        schema:
+          type: string
+        example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyLXRlc3QiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MDAwMDAwMDAsImV4cCI6MjAwMDAwMDAwMH0.MEUCIQDRrT_U-WXmq9sdlqZQw4y1GiI4Pp2tJSrKzWSi8vBslgIgQzRSce6h7RkF70ZcQnFX6Zry8FSX8U5CggV2-3OyuVE
+      responses:
+        '200':
+          description: Return download output stream
+          content:
+            application/octet-stream: {}
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        httpMethod: get
+        uri: https://mobilemember.everbridge.net/api/v2/resources/audios/{audioId}
+        requestParameters:
+          integration.request.path.audioId: method.request.path.audioId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        passthroughBehavior: when_no_match
+  /resources/attachments/{attachmentId}:
+    get:
+      tags:
+      - File Resources
+      summary: Get Attachment
+      description: Download attachment
+      operationId: ebs-daa-get-attachment
+      parameters:
+      - name: attachmentId
+        in: path
+        description: The ID of attachment
+        required: true
+        schema:
+          type: string
+      - name: Client-Id
+        in: header
+        description: Custom app client id
+        required: true
+        schema:
+          type: string
+        example: 3efb35a2-fdee-44bb-b476-2a45cada8b00
+      - name: Authorization
+        in: header
+        description: Access token
+        required: true
+        schema:
+          type: string
+        example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyLXRlc3QiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MDAwMDAwMDAsImV4cCI6MjAwMDAwMDAwMH0.MEUCIQDRrT_U-WXmq9sdlqZQw4y1GiI4Pp2tJSrKzWSi8vBslgIgQzRSce6h7RkF70ZcQnFX6Zry8FSX8U5CggV2-3OyuVE
+      responses:
+        '200':
+          description: Return download output stream
+          content:
+            application/octet-stream: {}
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        httpMethod: get
+        uri: https://mobilemember.everbridge.net/api/v2/resources/attachments/{attachmentId}
+        requestParameters:
+          integration.request.path.attachmentId: method.request.path.attachmentId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        passthroughBehavior: when_no_match
+components:
+  schemas:
+    ImageUploadResponse:
+      required:
+      - id
+      - size
+      type: object
+      properties:
+        id:
+          type: string
+          description: Image ID
+          example: 628ea151b663eb37460292d7
+        size:
+          type: integer
+          description: File size in bytes
+          format: int64
+          example: 32489
+  securitySchemes:
+    API_Authorizer:
+      type: apiKey
+      name: Authorization
+      in: header
+      x-amazon-apigateway-authtype: custom
+      x-amazon-apigateway-authorizer:
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        authorizerCredentials: arn:aws:iam::214792946631:role/ebs-mobile-member-api-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true
+  samples-enabled: true

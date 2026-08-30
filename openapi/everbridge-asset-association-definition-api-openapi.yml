@@ -1,0 +1,484 @@
+openapi: 3.2.0
+info:
+  title: Asset Management Asset Association Definition API
+  description: This is the Asset Management Rest API Documentation
+  contact:
+    name: CAMS Team
+  version: 1.0.0
+servers:
+- url: https://api.everbridge.net/rest/v2/asset-management
+tags:
+- name: Asset Association Definition
+  description: Asset association definition operations
+paths:
+  /asset-association-definitions:
+    get:
+      tags:
+      - Asset Association Definition
+      operationId: EB AM List Asset Association Definitions
+      summary: List Asset Association Definitions
+      description: List Asset Association Definitions
+      parameters:
+      - name: X-EB-Organization-Id
+        in: header
+        description: Organization Id
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AssetAssociationDefinition'
+              examples:
+                success:
+                  summary: success
+                  value:
+                  - id: 665857c05d59930bc2151643
+                    organizationId: 1536984111644674
+                    createdId: 2200330536222721
+                    createdName: Nandish API Access
+                    lastModifiedId: 2200330536222721
+                    lastModifiedName: Nandish API Access
+                    createdTimestamp: 1717065664608
+                    lastModifiedTimestamp: 1762942207980
+                    name: Rest API
+                    associationType: AssetToContact
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: GET
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-management/asset-association-definitions
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters:
+          integration.request.header.Authorization: context.authorizer.override_token
+        passthroughBehavior: when_no_match
+    post:
+      tags:
+      - Asset Association Definition
+      operationId: EB AM Create Asset Association Definition
+      summary: Create Asset Association Definition
+      description: Create Asset Association Definition
+      parameters:
+      - name: X-EB-Organization-Id
+        in: header
+        description: Organization Id
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssetAssociationDefinitionRequest'
+            examples:
+              basic:
+                summary: basic
+                value:
+                  name: PRE Test
+                  associationType: AssetToContact
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetAssociationDefinition'
+              examples:
+                success:
+                  summary: success
+                  value:
+                    id: 69145ddafac6a63878af9e91
+                    organizationId: 1536984111644674
+                    createdId: 2200330536222721
+                    createdName: Nandish API Access
+                    lastModifiedId: 2200330536222721
+                    lastModifiedName: Nandish API Access
+                    createdTimestamp: 1762942426692
+                    lastModifiedTimestamp: 1762942426692
+                    name: PRE Test
+                    associationType: AssetToContact
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: POST
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-management/asset-association-definitions
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters:
+          integration.request.header.Authorization: context.authorizer.override_token
+        passthroughBehavior: when_no_match
+  /asset-association-definitions/{id}:
+    get:
+      tags:
+      - Asset Association Definition
+      operationId: EB AM Get Asset Association Definitions
+      summary: Get Asset Association Definitions
+      description: Get Asset Association Definitions
+      parameters:
+      - name: X-EB-Organization-Id
+        in: header
+        description: Organization Id
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetAssociationDefinition'
+              examples:
+                success:
+                  summary: success
+                  value:
+                    id: 665857c05d59930bc2151643
+                    organizationId: 1536984111644674
+                    createdId: 2200330536222721
+                    createdName: Nandish API Access
+                    lastModifiedId: 2200330536222721
+                    lastModifiedName: Nandish API Access
+                    createdTimestamp: 1717065664608
+                    lastModifiedTimestamp: 1717065664608
+                    name: Rest API
+                    associationType: AssetToContact
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: GET
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-management/asset-association-definitions/{id}
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters:
+          integration.request.path.id: method.request.path.id
+          integration.request.header.Authorization: context.authorizer.override_token
+        passthroughBehavior: when_no_match
+    put:
+      tags:
+      - Asset Association Definition
+      operationId: EB AM Update Asset Association Definition By Id
+      summary: Update Asset Association Definition By Id
+      description: Update Asset Association Definition By Id
+      parameters:
+      - name: X-EB-Organization-Id
+        in: header
+        description: Organization Id
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssetAssociationDefinitionRequest'
+            examples:
+              basic:
+                summary: basic
+                value:
+                  name: Rest API
+                  associationType: AssetToContact
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetAssociationDefinition'
+              examples:
+                success:
+                  summary: success
+                  value:
+                    id: 665857c05d59930bc2151643
+                    organizationId: 1536984111644674
+                    createdId: 2200330536222721
+                    createdName: Nandish API Access
+                    lastModifiedId: 2200330536222721
+                    lastModifiedName: Nandish API Access
+                    createdTimestamp: 1717065664608
+                    lastModifiedTimestamp: 1762942207980
+                    name: Rest API
+                    associationType: AssetToContact
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: PUT
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-management/asset-association-definitions/{id}
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters:
+          integration.request.path.id: method.request.path.id
+          integration.request.header.Authorization: context.authorizer.override_token
+        passthroughBehavior: when_no_match
+    delete:
+      tags:
+      - Asset Association Definition
+      operationId: EB AM Delete Asset Association Definition By Id
+      summary: Delete Asset Association Definition By Id
+      description: Delete Asset Association Definition By Id
+      parameters:
+      - name: X-EB-Organization-Id
+        in: header
+        description: Organization Id
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetAssociationDefinition'
+              examples:
+                success:
+                  summary: success
+                  value:
+                    id: 69145ddafac6a63878af9e91
+                    organizationId: 1536984111644674
+                    createdId: 2200330536222721
+                    createdName: Nandish API Access
+                    lastModifiedId: 2200330536222721
+                    lastModifiedName: Nandish API Access
+                    createdTimestamp: 1762942426692
+                    lastModifiedTimestamp: 1762942426692
+                    name: PRE Test
+                    associationType: AssetToContact
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: DELETE
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-management/asset-association-definitions/{id}
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters:
+          integration.request.path.id: method.request.path.id
+          integration.request.header.Authorization: context.authorizer.override_token
+        passthroughBehavior: when_no_match
+  /asset-association-definitions/{id}/linked-to-asset:
+    get:
+      tags:
+      - Asset Association Definition
+      operationId: EB AM Get Linked Asset
+      summary: Get Linked Asset
+      description: Get Linked Asset
+      parameters:
+      - name: X-EB-Organization-Id
+        in: header
+        description: Organization Id
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LinkedToAssetResponse'
+              examples:
+                success:
+                  summary: success
+                  value:
+                    linkedToExistingAsset: true
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: GET
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-management/asset-association-definitions/{id}/linked-to-asset
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters:
+          integration.request.path.id: method.request.path.id
+          integration.request.header.Authorization: context.authorizer.override_token
+        passthroughBehavior: when_no_match
+  /asset-association-definitions/name:
+    get:
+      tags:
+      - Asset Association Definition
+      operationId: EB AM Get Asset Association Definition By Name
+      summary: Get Asset Association Definition By Name
+      description: Get Asset Association Definition By Name
+      parameters:
+      - name: X-EB-Organization-Id
+        in: header
+        description: Organization Id
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - name: name
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetAssociationDefinition'
+              examples:
+                success:
+                  summary: success
+                  value:
+                    id: 665857c05d59930bc2151643
+                    organizationId: 1536984111644674
+                    createdId: 2200330536222721
+                    createdName: Nandish API Access
+                    lastModifiedId: 2200330536222721
+                    lastModifiedName: Nandish API Access
+                    createdTimestamp: 1717065664608
+                    lastModifiedTimestamp: 1762942207980
+                    name: Rest API
+                    associationType: AssetToContact
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: GET
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-management/asset-association-definitions/name
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters:
+          integration.request.header.Authorization: context.authorizer.override_token
+        passthroughBehavior: when_no_match
+components:
+  schemas:
+    AssetAssociationDefinition:
+      type: object
+      properties:
+        id:
+          type: string
+        organizationId:
+          type: integer
+          format: int64
+        createdId:
+          type: integer
+          format: int64
+        createdName:
+          type: string
+        createdProxyName:
+          type: string
+        lastModifiedId:
+          type: integer
+          format: int64
+        lastModifiedName:
+          type: string
+        lastModifiedProxyName:
+          type: string
+        createdTimestamp:
+          type: string
+          format: date-time
+        lastModifiedTimestamp:
+          type: string
+          format: date-time
+        name:
+          type: string
+        associationType:
+          type: string
+          enum:
+          - AssetToContact
+    LinkedToAssetResponse:
+      type: object
+      properties:
+        linkedToExistingAsset:
+          type: boolean
+    organizationId:
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      maxLength: 16
+      type: integer
+      example: '1536984111644674'
+      default: '1536984111644674'
+    AssetAssociationDefinitionRequest:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+        associationType:
+          type: string
+          enum:
+          - AssetToContact
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+      description: Basic Authentication Token
+    API_Authorizer:
+      type: apiKey
+      name: Authorization
+      description: oAuth Token
+      in: header
+      x-amazon-apigateway-authtype: custom
+      x-amazon-apigateway-authorizer:
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        authorizerCredentials: arn:aws:iam::214792946631:role/asset-management-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+    api_key:
+      type: apiKey
+      name: x-api-key
+      description: API Key - For System Use
+      in: header
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

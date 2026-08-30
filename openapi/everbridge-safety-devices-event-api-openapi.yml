@@ -1,0 +1,196 @@
+openapi: 3.2.0
+info:
+  title: Safety Devices Event API
+  description: Safety Devices API.
+  version: v1
+servers:
+- url: https://api.everbridge.net/safety-connection/v1
+tags:
+- name: Safety Devices Event
+paths:
+  /devices:
+    post:
+      tags:
+      - Safety Devices Event
+      operationId: Push a safety device event
+      summary: Push a safety device event
+      description: This method only supports the client_credential grant type authentication. Refer to the <a href="../docs/ebs-gs-guide-authentication-types#oauth-20-authentication">OAuth</a> section of the getting started guide as well as to the methods where you can <a href="generate-token">retrieve the token</a>.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                deviceId:
+                  type: string
+                  description: ID or IMEI, limited to 64 characters.
+                eventType:
+                  type: string
+                  enum:
+                  - SOS
+                  - CheckIn
+                  description: 'Event Type: SOS, CheckIn'
+                eventTime:
+                  type: string
+                  description: Actual event time in ISO 8601 format, suggested in `YYYY-MM-DDThh:mm:ss.sssZ` format.
+                message:
+                  type: string
+                  description: Plain text message, limited to 1,024 characters.
+                location:
+                  type: object
+                  properties:
+                    latitude:
+                      type: number
+                      description: Latitude.
+                    longitude:
+                      type: number
+                      description: Longitude.
+                battery:
+                  type: string
+                  description: Battery percentage, 0-100.
+                temperature:
+                  type: string
+                  description: Temperature in Celsius.
+                vendor:
+                  type: string
+                  description: Vendor, limited to 64 characters.
+            examples:
+              Default:
+                summary: Personal Safety Device Event
+                value:
+                  deviceId: '100000001'
+                  eventType: SOS
+                  eventTime: '2024-02-07T01:59:36.622Z'
+                  message: Report an SOS event
+                  location:
+                    latitude: 12.34
+                    longitude: 123.456
+                  battery: '50.1'
+                  temperature: '20.3'
+                  vendor: vendor
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Empty'
+              examples:
+                Default:
+                  summary: Default
+                  value:
+                    status: 200
+                    message: The event was created.
+                    data:
+                      deviceId: '100000001'
+                      eventId: 0dffeebf-50ee-46c0-8bb3-29dd54e3f610
+        '400':
+          description: Missing or invalid request parameter
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum:
+                    - '400'
+                    description: Request status
+                  message:
+                    type: string
+                    enum:
+                    - 'validate request failed, eventType: <eventType>'
+                    - 'field is missing, battery: <battery>'
+                    description: Missing or invalid request parameter
+              examples:
+                invalid responseSetting:
+                  summary: Missing or invalid request parameter
+                  value:
+                    status: 400
+                    message: The vendor value is missing.
+        '403':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum:
+                    - '403'
+                    description: Invalid credentials
+                  title:
+                    type: string
+                    enum:
+                    - ACCESS_DENIED
+                    description: ACCESS_DENIED
+                  detail:
+                    type: string
+                    enum:
+                    - Authorization failure
+                    description: Authorization failure
+              examples:
+                invalid responseSetting:
+                  summary: Authorization failure.
+                  value:
+                    title: ACCESS_DENIED
+                    status: '403'
+                    detail: Authorization failure.
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum:
+                    - '500'
+                    description: Internal Error
+                  message:
+                    type: string
+                    enum:
+                    - Data access error
+                    description: Data access error
+              examples:
+                invalid responseSetting:
+                  summary: Internal Error
+                  value:
+                    status: 500
+                    message: Data access error
+      security:
+      - LambdaAuthorizer: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        httpMethod: post
+        uri: http://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/sc-safety-device-ingestor/devices
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        passthroughBehavior: when_no_match
+        connectionId: 11ofco
+        connectionType: VPC_LINK
+components:
+  schemas:
+    Empty:
+      title: Empty Schema
+      type: object
+  securitySchemes:
+    LambdaAuthorizer:
+      type: apiKey
+      name: Authorization
+      in: header
+      x-amazon-apigateway-authtype: custom
+      x-amazon-apigateway-authorizer:
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        authorizerCredentials: arn:aws:iam::214792946631:role/sc-safety-device-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 0
+        identitySource: method.request.header.Authorization
+        type: request
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

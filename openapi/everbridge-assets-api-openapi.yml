@@ -1,0 +1,1203 @@
+openapi: 3.2.0
+info:
+  title: Asset Management Assets API
+  description: This is the Asset Management Rest API Documentation
+  contact:
+    name: CAMS Team
+  version: 1.0.0
+servers:
+- url: https://api.everbridge.net/rest/v2/asset-management
+tags:
+- name: Assets
+  description: Asset management operations
+paths:
+  /assets:
+    post:
+      tags:
+      - Assets
+      operationId: EBS AM Create Asset
+      summary: Create Asset
+      description: Create a new asset to an organization. To get the assertTypeId use [List Asset Types](https://developers.everbridge.net/home/reference/ebs-list-asset-types) endpoint.
+      parameters:
+      - description: The organization ID
+        in: header
+        name: X-EB-Organization-Id
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/assetsManagementRequestWrapper'
+            examples:
+              Request with minimum properties:
+                summary: Create an asset with minimum properties
+                value:
+                  externalId: externalId1@everbridge.com
+                  name: Home
+                  assetTypeId: 665ff8e1a1b61d39e577b9c6
+              Request with most properties:
+                summary: Create an asset with most properties
+                value:
+                  assetTypeId: 665856825d59930bc2151633
+                  name: Office Address2
+                  externalId: c-vishal.agrawal5@everbridge.com
+                  category: office
+                  notes: Everbridge Bangalore Office
+                  startTimestamp: 1738175400000
+                  endTimestamp: 1738261800000
+                  isEditMode: false
+                  address:
+                    country: IN
+                    state: Karnataka (IN)
+                    streetAddress1: 1st Floor, Everbridge Pvt Ltd
+                    streetAddress2: 9th cross road, Silver spring layout, Whitefield
+                    city: Bangalore
+                    postalCode: '560037'
+                  associations:
+                  - associationDefinitionId: 665857c05d59930bc2151643
+                    entityIds:
+                    - 2668619410440194
+                    entityType: Contact
+              Request with geometry coordinates:
+                summary: Request with geometry coordinates
+                value:
+                  assetTypeId: 665ff8e1a1b61d39e577b9c6
+                  iconId: '1'
+                  name: 'Everbridge Bangalore Office '
+                  externalId: c-vishal.agrawal01@everbridge.com
+                  properties:
+                  - propertyId: 665ff8e1a1b61d39e577b9d5
+                    value: 1st
+                  - propertyId: 665ff8e1a1b61d39e577b9d6
+                    value: '101'
+                  isEditMode: false
+                  address:
+                    country: IN
+                    state: Karnataka (IN)
+                    streetAddress1: 9th Cross Road
+                    streetAddress2: null
+                    city: Bangalore
+                    postalCode: '560037'
+                    point:
+                      lat: 12.95115784
+                      lon: 77.71304049
+                  geometry: '{"type":"Point","coordinates":[77.71304049,12.95115784]}'
+                  associations:
+                  - associationDefinitionId: 665857c05d59930bc2151643
+                    entityIds:
+                    - 2668619410440194
+                    entityType: Contact
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/assetsManagementResponseWrapper'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema: {}
+              example:
+                Success:
+                  summary: Bad request
+                  value:
+                    status: 400
+                    errors:
+                    - field: externalId
+                      code: 10005
+                      message: must not be null
+          description: OK
+        '401':
+          content:
+            application/json:
+              schema: {}
+              example:
+                Success:
+                  summary: Invalid input
+                  value:
+                    status: 401
+                    message: Org is invalid.
+          description: OK
+        '404':
+          content:
+            application/json:
+              schema: {}
+              example:
+                Success:
+                  summary: Not Found
+                  value: {}
+          description: OK
+        '500':
+          description: Internal Error
+          content:
+            text/plain:
+              example: default internal error
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: POST
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-management/assets
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters:
+          integration.request.header.Authorization: context.authorizer.override_token
+        passthroughBehavior: when_no_match
+    get:
+      tags:
+      - Assets
+      operationId: EBS AM List Assets
+      summary: List Assets
+      description: Retrieve all assets for a given asset type with in an organization. To get the assertTypeId use [List Asset Types](https://developers.everbridge.net/home/reference/ebs-list-asset-types) endpoint.
+      parameters:
+      - description: The organization ID
+        in: header
+        name: X-EB-Organization-Id
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: Available on manager portal (Settings --> Organization --> Contacts/Assets --> Assert Types)
+        in: query
+        name: assetTypeId
+        required: true
+        schema:
+          type: string
+          default: 665ff8e1a1b61d39e577b9c6
+      - description: Supports name and externalId. It is case-insensitive and uses the 'contains' criteria. For example 'os' will return Boston.
+        in: query
+        name: searchValue
+        required: false
+        schema:
+          type: string
+          default: ''
+      - description: The page number of assets to return.
+        in: query
+        name: pageNumber
+        required: false
+        schema:
+          type: integer
+          default: '1'
+      - description: The page size of assets to return.
+        in: query
+        name: pageSize
+        required: false
+        schema:
+          type: integer
+          default: '1'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/assetsManagementListResponseWrapper'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema: {}
+              example:
+                Success:
+                  summary: Invalid input
+                  value:
+                    status: 400
+                    message: Required request parameter 'assetTypeId' for method parameter type String is not present
+          description: OK
+        '401':
+          content:
+            application/json:
+              schema: {}
+              example:
+                Success:
+                  summary: Invalid input
+                  value:
+                    status: 401
+                    message: Org is invalid.
+          description: OK
+        '404':
+          content:
+            application/json:
+              schema: {}
+              example:
+                Success:
+                  summary: Not Found
+                  value: {}
+          description: OK
+        '500':
+          description: Internal Error
+          content:
+            text/plain:
+              example: default internal error
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: GET
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-management/assets
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters:
+          integration.request.header.Authorization: context.authorizer.override_token
+        passthroughBehavior: when_no_match
+  /assets/quick-search:
+    post:
+      tags:
+      - Assets
+      operationId: EBS AM Search Assets
+      summary: Search Assets
+      description: Retrieve assets based on different search criteria with in a given asset type. To get the assertTypeId use [List Asset Types](https://developers.everbridge.net/home/reference/ebs-list-asset-types) endpoint.
+      parameters:
+      - description: The organization ID
+        in: header
+        name: X-EB-Organization-Id
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - in: query
+        name: assetTypeId
+        required: true
+        schema:
+          $ref: '#/components/schemas/assetTypeId'
+      - description: Supports name and externalId. It is case-insensitive and uses the 'contains' criteria. For example 'os' will return Boston.
+        in: query
+        name: searchValue
+        required: false
+        schema:
+          type: string
+          default: ''
+      - description: The page number of assets to return.
+        in: query
+        name: pageNumber
+        required: false
+        schema:
+          type: integer
+          default: '1'
+      - description: The page size of assets to return.
+        in: query
+        name: pageSize
+        required: false
+        schema:
+          type: integer
+          default: '1'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/assetsManagementQuickSearchRequestWrapper'
+            examples:
+              Create asset with most properties:
+                summary: Create asset request
+                value:
+                - 67989d1a864bb0253a72213f
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/assetsManagementListResponseWrapper'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema: {}
+              example:
+                Success:
+                  summary: Invalid input
+                  value:
+                    status: 400
+                    message: Required request parameter 'assetTypeId' for method parameter type String is not present
+          description: OK
+        '401':
+          content:
+            application/json:
+              schema: {}
+              example:
+                Success:
+                  summary: Invalid input
+                  value:
+                    status: 401
+                    message: Org is invalid.
+          description: OK
+        '500':
+          description: Internal Error
+          content:
+            text/plain:
+              example: default internal error
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: POST
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-management/assets/quick-search
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters:
+          integration.request.header.Authorization: context.authorizer.override_token
+        passthroughBehavior: when_no_match
+  /assets/{id}:
+    get:
+      tags:
+      - Assets
+      operationId: EBS AM Get Asset
+      summary: Get Asset
+      description: Retrieve the specified asset within an organization. To get the assertTypeId use [List Asset Types](https://developers.everbridge.net/home/reference/ebs-list-asset-types) endpoint.
+      parameters:
+      - description: The organization ID
+        in: header
+        name: X-EB-Organization-Id
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: Asset ID
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+          example: '2344950675013633'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/assetsManagementSingleResponseWrapper'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+          content:
+            text/plain:
+              examples:
+                Bad request:
+                  value:
+                    message: 'BadRequest due to Not Found DataCenterId, orgId: '
+        '401':
+          content:
+            application/json:
+              schema: {}
+              example:
+                Success:
+                  summary: Invalid input
+                  value:
+                    status: 401
+                    message: authorization check error
+                    errors: null
+          description: OK
+        '404':
+          content:
+            application/json:
+              schema: {}
+              example:
+                Success:
+                  summary: Not Found
+                  value: {}
+          description: OK
+        '500':
+          description: Internal Error
+          content:
+            text/plain:
+              example:
+                value:
+                  message: default internal error
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: GET
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-management/assets/{id}
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters:
+          integration.request.path.id: method.request.path.id
+          integration.request.header.Authorization: context.authorizer.override_token
+        passthroughBehavior: when_no_match
+    put:
+      tags:
+      - Assets
+      operationId: EBS AM Update Asset
+      summary: Update Asset
+      description: Update the specified asset within an organization. To get the assertTypeId use [List Asset Types](https://developers.everbridge.net/home/reference/ebs-list-asset-types) endpoint.
+      parameters:
+      - description: The organization ID
+        in: header
+        name: X-EB-Organization-Id
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: Asset ID
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+          example: '2344950675013633'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/assetsManagementRequestWrapper'
+            examples:
+              Update an asset name:
+                summary: Update an asset name
+                value:
+                  externalId: externalId1@everbridge.com
+                  name: Home
+                  assetTypeId: 665ff8e1a1b61d39e577b9c6
+              Update an asset address:
+                summary: Update an asset address
+                value:
+                  assetTypeId: 665ff8e1a1b61d39e577b9c6
+                  name: Office Address2
+                  externalId: c-vishal.agrawal5@everbridge.com
+                  address:
+                    country: IN
+                    state: Karnataka (IN)
+                    streetAddress1: 1st Floor, Everbridge Pvt Ltd
+                    streetAddress2: 9th cross road, Silver spring layout, Whitefield
+                    city: Bangalore
+                    postalCode: '560037'
+              Update an asset geometry coordinates:
+                summary: Update an asset geometry coordinates
+                value:
+                  assetTypeId: 665ff8e1a1b61d39e577b9c6
+                  name: Everbridge Bangalore Office
+                  externalId: c-vishal.agrawal011@everbridge.com
+                  geometry: '{"type":"Point","coordinates":[77.71304049,12.95115784]}'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/assetsManagementSingleResponseWrapper'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+          content:
+            text/plain:
+              examples:
+                Bad request:
+                  value:
+                    message: 'BadRequest due to Not Found DataCenterId, orgId: '
+                ExternalId is required:
+                  value:
+                    status: 400
+                    errors:
+                    - field: externalId
+                      code: 10005
+                      message: must not be null
+        '401':
+          content:
+            application/json:
+              schema: {}
+              example:
+                Success:
+                  summary: Invalid input
+                  value:
+                    status: 401
+                    message: authorization check error
+                    errors: null
+          description: OK
+        '404':
+          content:
+            application/json:
+              schema: {}
+              example:
+                Success:
+                  summary: Not Found
+                  value: {}
+          description: OK
+        '500':
+          description: Internal Error
+          content:
+            text/plain:
+              example:
+                value:
+                  message: default internal error
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: PUT
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-management/assets/{id}
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters:
+          integration.request.path.id: method.request.path.id
+          integration.request.header.Authorization: context.authorizer.override_token
+        passthroughBehavior: when_no_match
+    delete:
+      tags:
+      - Assets
+      operationId: EBS AM Delete Asset
+      summary: Delete Asset
+      description: Delete the specified asset within an organization. To get the assertTypeId use [List Asset Types](https://developers.everbridge.net/home/reference/ebs-list-asset-types) endpoint.
+      parameters:
+      - description: The organization ID
+        in: header
+        name: X-EB-Organization-Id
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: Asset ID
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+          example: '2344950675013633'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/assetsManagementSingleResponseWrapper'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+          content:
+            text/plain:
+              examples:
+                Bad request:
+                  value:
+                    message: 'BadRequest due to Not Found DataCenterId, orgId: '
+        '401':
+          content:
+            application/json:
+              schema: {}
+              example:
+                Success:
+                  summary: Invalid input
+                  value:
+                    status: 401
+                    message: authorization check error
+                    errors: null
+          description: OK
+        '404':
+          content:
+            application/json:
+              schema: {}
+              example:
+                Success:
+                  summary: Not Found
+                  value: {}
+          description: OK
+        '500':
+          description: Internal Error
+          content:
+            text/plain:
+              example:
+                value:
+                  message: default internal error
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: DELETE
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-management/assets/{id}
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters:
+          integration.request.path.id: method.request.path.id
+          integration.request.header.Authorization: context.authorizer.override_token
+        passthroughBehavior: when_no_match
+  /assets/asset-type-id/{assetTypeId}/external-id:
+    get:
+      tags:
+      - Assets
+      operationId: EBS AM Get Asset By ExternalId
+      summary: Get Asset By ExternalId
+      description: Retrieve the specified assets for the provided assertTypeId. To get the assertTypeId use [List Asset Types](https://developers.everbridge.net/home/reference/ebs-list-asset-types) endpoint.
+      parameters:
+      - description: The organization ID
+        in: header
+        name: X-EB-Organization-Id
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - in: path
+        name: assetTypeId
+        required: true
+        schema:
+          $ref: '#/components/schemas/assetTypeId'
+      - in: query
+        name: externalId
+        required: true
+        schema:
+          $ref: '#/components/schemas/externalId'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/assetsManagementSingleResponseWrapper'
+              examples:
+                Success:
+                  summary: success
+                  value:
+                    id: 684038ffb1acf15bb25211a1
+                    organizationId: 1536984111644674
+                    createdId: 1530249602924608
+                    createdName: Nandish Siddaiah
+                    lastModifiedId: 2200330536222721
+                    lastModifiedName: Nandish API Access
+                    createdTimestamp: 1749039359221
+                    lastModifiedTimestamp: 1754498784644
+                    externalId: external_id_03d763b5-8098-446e-87b2-d8e696d85ac6
+                    assetTypeId: 665ff8e1a1b61d39e577b9c6
+                    name: test-Namefc532672-bd9f-4925-958b-ac0f9d347439
+                    address:
+                      country: US
+                      state: test-State26ea67d0-73ed-4487-9ba5-46311b36977c
+                      city: test-City54d8a7ef-563d-4db7-9075-75c20aaf5572
+                      postalCode: test-Postal Code5f8
+                      streetAddress1: test-Street Address 19993953c-e616-4c74-8bc4-e32973174850
+                      streetAddress2: test-Street Address 266db1b6c-0de6-4ed2-8d7b-4438d7b1235f
+                    iconId: '12'
+                    startTimestamp: 1745339126000
+                    endTimestamp: 1745339126000
+                    notes: test-Notese2f15443-aaa0-48ba-a919-f4f67cc66128
+                    category: test-Categoryc2f1f412-1aaa-474e-b444-ccef9882cd07
+                    geometry: '{"coordinates": [100.0, 0.0], "type": "Point"}'
+                    assetTypeName: Buildings
+                    geocodingAddressRequired: false
+                    smartEnabled: false
+          description: OK
+        '400':
+          description: Missing or invalid request input
+          content:
+            text/plain:
+              examples:
+                Bad request:
+                  value:
+                    message: 'BadRequest due to Not Found DataCenterId, orgId: '
+                ExternalId is required:
+                  value:
+                    status: 400
+                    message: Required request parameter 'externalId' for method parameter type String is not present
+        '401':
+          content:
+            application/json:
+              schema: {}
+              example:
+                Success:
+                  summary: Invalid input
+                  value:
+                    status: 401
+                    message: Org is invalid.
+          description: OK
+        '404':
+          content:
+            application/json:
+              schema: {}
+              example:
+                Success:
+                  summary: Not Found
+                  value: {}
+          description: OK
+        '500':
+          description: Internal Error
+          content:
+            text/plain:
+              example:
+                value:
+                  message: default internal error
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: GET
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-management/assets/asset-type-id/{assetTypeId}/external-id
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters:
+          integration.request.path.assetTypeId: method.request.path.assetTypeId
+          integration.request.header.Authorization: context.authorizer.override_token
+        passthroughBehavior: when_no_match
+  /assets/asset-type-id/{assetTypeId}/external-id/{externalId}:
+    get:
+      tags:
+      - Assets
+      operationId: EBS AM Get Asset By ExternalId Path
+      summary: Get Asset By ExternalId (Path)
+      description: Retrieve the specified assets for the provided assetTypeId. ExternalId provided as path variable. </br> To get the assertTypeId use [List Asset Types](https://developers.everbridge.net/home/reference/ebs-list-asset-types) endpoint.
+      parameters:
+      - description: The organization ID
+        in: header
+        name: X-EB-Organization-Id
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - in: path
+        name: assetTypeId
+        required: true
+        schema:
+          $ref: '#/components/schemas/assetTypeId'
+      - in: path
+        name: externalId
+        required: true
+        schema:
+          $ref: '#/components/schemas/externalId'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/assetsManagementSingleResponseWrapper'
+              examples:
+                Success:
+                  summary: success
+                  value:
+                    id: 684038ffb1acf15bb25211a1
+                    organizationId: 1536984111644674
+                    createdId: 1530249602924608
+                    createdName: Nandish Siddaiah
+                    lastModifiedId: 2200330536222721
+                    lastModifiedName: Nandish API Access
+                    createdTimestamp: 1749039359221
+                    lastModifiedTimestamp: 1754498784644
+                    externalId: external_id_03d763b5-8098-446e-87b2-d8e696d85ac6
+                    assetTypeId: 665ff8e1a1b61d39e577b9c6
+                    name: test-Namefc532672-bd9f-4925-958b-ac0f9d347439
+                    address:
+                      country: US
+                      state: test-State26ea67d0-73ed-4487-9ba5-46311b36977c
+                      city: test-City54d8a7ef-563d-4db7-9075-75c20aaf5572
+                      postalCode: test-Postal Code5f8
+                      streetAddress1: test-Street Address 19993953c-e616-4c74-8bc4-e32973174850
+                      streetAddress2: test-Street Address 266db1b6c-0de6-4ed2-8d7b-4438d7b1235f
+                    iconId: '12'
+                    startTimestamp: 1745339126000
+                    endTimestamp: 1745339126000
+                    notes: test-Notese2f15443-aaa0-48ba-a919-f4f67cc66128
+                    category: test-Categoryc2f1f412-1aaa-474e-b444-ccef9882cd07
+                    geometry: '{"coordinates": [100.0, 0.0], "type": "Point"}'
+                    assetTypeName: Buildings
+                    geocodingAddressRequired: false
+                    smartEnabled: false
+          description: OK
+        '400':
+          description: Missing or invalid request input
+          content:
+            text/plain:
+              examples:
+                Bad request:
+                  value:
+                    message: 'BadRequest due to Not Found DataCenterId, orgId: '
+                ExternalId is required:
+                  value:
+                    status: 400
+                    message: Required request parameter 'externalId' for method parameter type String is not present
+        '401':
+          content:
+            application/json:
+              schema: {}
+              example:
+                Success:
+                  summary: Invalid input
+                  value:
+                    status: 401
+                    message: Org is invalid.
+          description: OK
+        '404':
+          content:
+            application/json:
+              schema: {}
+              example:
+                Success:
+                  summary: Not Found
+                  value: {}
+          description: OK
+        '500':
+          description: Internal Error
+          content:
+            text/plain:
+              example:
+                value:
+                  message: default internal error
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: GET
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-management/assets/asset-type-id/{assetTypeId}/external-id/{externalId}
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters:
+          integration.request.path.assetTypeId: method.request.path.assetTypeId
+          integration.request.path.externalId: method.request.path.externalId
+          integration.request.header.Authorization: context.authorizer.override_token
+        passthroughBehavior: when_no_match
+components:
+  schemas:
+    assetTypeId:
+      description: Available on manager portal (Settings --> Organization --> Contacts/Assets --> Assert Types)
+      type: string
+      example: 665ff8e1a1b61d39e577b9c6
+    assetsManagementResponseWrapper:
+      type: object
+      properties:
+        id:
+          type: string
+        organizationId:
+          type: number
+        createdId:
+          type: number
+        createdName:
+          type: string
+        lastModifiedId:
+          type: number
+        lastModifiedName:
+          type: string
+        createdTimestamp:
+          type: number
+        lastModifiedTimestamp:
+          type: number
+        externalId:
+          type: string
+        assetTypeId:
+          type: string
+        name:
+          type: string
+        address:
+          type: object
+          properties:
+            country:
+              type: string
+            state:
+              type: string
+            city:
+              type: string
+            postalCode:
+              type: string
+        iconId:
+          type: string
+        geocodingAddressRequired:
+          type: boolean
+        smartEnabled:
+          type: boolean
+        icon:
+          $ref: '#/components/schemas/AssetIcon'
+        color:
+          type: string
+    externalId:
+      description: The External ID
+      type: string
+      example: externalId@everbridge.com
+    organizationId:
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      maxLength: 16
+      type: integer
+      example: '1536984111644674'
+      default: '1536984111644674'
+    assetsManagementQuickSearchRequestWrapper:
+      type: array
+      description: Asset ids
+      items:
+        type: string
+    AssetIcon:
+      type: object
+      properties:
+        source:
+          type: string
+          enum:
+          - SYSTEM
+          - CUSTOM
+        id:
+          type: string
+        name:
+          type: string
+        contentUrl:
+          type: string
+        color:
+          type: string
+    assetsManagementSingleResponseWrapper:
+      type: object
+      properties:
+        id:
+          type: string
+        organizationId:
+          type: number
+        createdId:
+          type: number
+        createdName:
+          type: string
+        lastModifiedId:
+          type: number
+        lastModifiedName:
+          type: string
+        createdTimestamp:
+          type: number
+        lastModifiedTimestamp:
+          type: number
+        externalId:
+          type: string
+        assetTypeId:
+          type: string
+        name:
+          type: string
+        address:
+          type: object
+          properties:
+            country:
+              type: string
+            state:
+              type: string
+            city:
+              type: string
+            postalCode:
+              type: string
+            streetAddress1:
+              type: string
+            streetAddress2:
+              type: string
+          required:
+          - country
+          - state
+          - city
+          - postalCode
+          - streetAddress1
+          - streetAddress2
+        iconId:
+          type: string
+        geometry:
+          type: string
+        assetTypeName:
+          type: string
+        properties:
+          type: array
+          items:
+            type: object
+            properties:
+              propertyId:
+                type: string
+              value:
+                type: string
+              name:
+                type: string
+            required:
+            - propertyId
+            - value
+            - name
+        geocodingAddressRequired:
+          type: boolean
+        smartEnabled:
+          type: boolean
+        icon:
+          $ref: '#/components/schemas/AssetIcon'
+        color:
+          type: string
+      required:
+      - id
+      - organizationId
+      - createdId
+      - createdName
+      - lastModifiedId
+      - lastModifiedName
+      - createdTimestamp
+      - lastModifiedTimestamp
+      - externalId
+      - assetTypeId
+      - name
+      - address
+      - iconId
+      - geometry
+      - assetTypeName
+      - properties
+      - geocodingAddressRequired
+      - smartEnabled
+    assetsManagementListResponseWrapper:
+      type: object
+      properties:
+        pageSize:
+          type: number
+        start:
+          type: number
+        totalCount:
+          type: number
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              organizationId:
+                type: number
+              createdId:
+                type: number
+              createdName:
+                type: string
+              lastModifiedId:
+                type: number
+              lastModifiedName:
+                type: string
+              createdTimestamp:
+                type: number
+              lastModifiedTimestamp:
+                type: number
+              externalId:
+                type: string
+              assetTypeId:
+                type: string
+              name:
+                type: string
+              address:
+                type: object
+                properties:
+                  country:
+                    type: string
+                  state:
+                    type: string
+                  city:
+                    type: string
+                  postalCode:
+                    type: string
+                  streetAddress1:
+                    type: string
+                  streetAddress2:
+                    type: string
+              iconId:
+                type: string
+              assetTypeName:
+                type: string
+              geocodingAddressRequired:
+                type: boolean
+              smartEnabled:
+                type: boolean
+              icon:
+                $ref: '#/components/schemas/AssetIcon'
+              color:
+                type: string
+        currentPageNo:
+          type: number
+        totalPageCount:
+          type: number
+    assetsManagementRequestWrapper:
+      type: object
+      properties:
+        assetTypeId:
+          type: string
+        name:
+          type: string
+        externalId:
+          type: string
+        category:
+          type: string
+        notes:
+          type: string
+        startTimestamp:
+          type: number
+        endTimestamp:
+          type: number
+        properties:
+          type: array
+          items:
+            type: object
+            properties:
+              propertyId:
+                type: string
+              value:
+                type: string
+            required:
+            - propertyId
+            - value
+        isEditMode:
+          type: boolean
+        address:
+          type: object
+          properties:
+            country:
+              type: string
+            state:
+              type: string
+            streetAddress1:
+              type: string
+            streetAddress2:
+              type: string
+            city:
+              type: string
+            postalCode:
+              type: string
+          required:
+          - country
+          - state
+          - streetAddress1
+          - streetAddress2
+          - city
+          - postalCode
+        geometry:
+          type: string
+        associations:
+          type: array
+          items:
+            type: object
+            properties:
+              associationDefinitionId:
+                type: string
+              entityIds:
+                type: array
+                items:
+                  type: number
+              entityType:
+                type: string
+            required:
+            - associationDefinitionId
+            - entityIds
+            - entityType
+      required:
+      - assetTypeId
+      - name
+      - externalId
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+      description: Basic Authentication Token
+    API_Authorizer:
+      type: apiKey
+      name: Authorization
+      description: oAuth Token
+      in: header
+      x-amazon-apigateway-authtype: custom
+      x-amazon-apigateway-authorizer:
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        authorizerCredentials: arn:aws:iam::214792946631:role/asset-management-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+    api_key:
+      type: apiKey
+      name: x-api-key
+      description: API Key - For System Use
+      in: header
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

@@ -1,0 +1,2999 @@
+openapi: 3.2.0
+info:
+  description: EB Suite APIs.
+  title: EB Suite Notifications API
+  version: '1.0'
+servers:
+- url: https://api.everbridge.net/rest
+- url: https://api.everbridge.eu/rest
+tags:
+- description: EB Suites - Notifications Management
+  name: Notifications
+paths:
+  /notificationEvents/{organizationId}:
+    get:
+      deprecated: false
+      description: Retrieve all notification events for an organization
+      operationId: List Notification Events
+      parameters:
+      - description: The ID of the organization containing the notificationEvents
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: success
+                  value:
+                    firstPageUri: https://api-dev3.everbridge.net/rest/notificationEvents/1536984111644674?pageNumber=1
+                    lastPageUri: https://api-dev3.everbridge.net/rest/notificationEvents/1536984111644674?pageNumber=1
+                    message: OK
+                    page:
+                      currentPageNo: 1
+                      data:
+                      - accountId: 0
+                        createdDate: 1719302431410
+                        createdId: 2200330536222721
+                        createdName: Nandish API Access
+                        id: 2357320180826114
+                        lastModifiedDate: 1719302431410
+                        lastModifiedId: 2200330536222721
+                        lastModifiedName: Nandish API Access
+                        name: Test Event 1719302430
+                        organizationId: 1536984111644674
+                        resourceBundleId: 0
+                        status: A
+                      pageSize: 15
+                      start: 1
+                      totalCount: 15
+                      totalPageCount: 1
+              schema:
+                $ref: '#/components/schemas/RestfulCollectionResult'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '500':
+          description: Internal Error
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      summary: List Notification Events
+      tags:
+      - Notifications
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/notificationEvents/{organizationId}
+    post:
+      deprecated: false
+      description: Create a new notification event within an organization
+      operationId: Create Notification Event
+      parameters:
+      - description: The ID of the organization containing the notificationEvents
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      requestBody:
+        content:
+          application/json:
+            examples:
+              basic:
+                summary: basic
+                value:
+                  name: pre-test
+            schema:
+              $ref: '#/components/schemas/NotificationEventWrapper'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: ''
+                  value:
+                    baseUri: https://api-dev3.everbridge.net/rest/notificationEvents/1536984111644674
+                    id: 3385878948872193
+                    instanceUri: https://api-dev3.everbridge.net/rest/notificationEvents/1536984111644674/3385878948872193
+                    message: OK
+              schema:
+                $ref: '#/components/schemas/RestfulModificationResult'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '500':
+          description: Internal Error
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      summary: Create Notification Event
+      tags:
+      - Notifications
+      x-amazon-apigateway-integration:
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/notificationEvents/{organizationId}
+  /notificationEvents/{organizationId}/{notificationEventId}:
+    get:
+      deprecated: false
+      description: Retrieve a specific notification event
+      operationId: Get Notification Event
+      parameters:
+      - description: The ID of the organization in which to find the notificationEvent
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: The ID of the notificationEvent
+        in: path
+        name: notificationEventId
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: basic
+                  value:
+                    accountId: 0
+                    createdDate: 1718187982828
+                    createdId: 2200330536222721
+                    createdName: Nandish API Access
+                    id: 2357320180826113
+                    lastModifiedDate: 1718187982828
+                    lastModifiedId: 2200330536222721
+                    lastModifiedName: Nandish API Access
+                    lastModifiedProxyName: string
+                    name: string
+                    organizationId: 1536984111644674
+                    resourceBundleId: 0
+                    status: A
+              schema:
+                $ref: '#/components/schemas/RestfulInstanceResult'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '500':
+          description: Internal Error
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      summary: Get Notification Event
+      tags:
+      - Notifications
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.notificationEventId: method.request.path.notificationEventId
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/notificationEvents/{organizationId}/{notificationEventId}
+  /notifications/push/{organizationId}:
+    post:
+      description: Initiate an immediate push notification.  To launch incident notification, see [Launch Incident](https://developers.everbridge.net/home/reference/ebs-launch-incident)
+      operationId: EBS Launch Push Notification
+      parameters:
+      - in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      requestBody:
+        content:
+          application/json:
+            examples: {}
+            schema: {}
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Default:
+                  summary: Created
+                  value:
+                    baseUri: https://api-dev3.everbridge.net/rest/notifications/1536984111644674/
+                    id: 624558574927948
+                    instanceUri: https://api-dev3.everbridge.net/rest/notifications/1536984111644674/624558574927948
+                    message: OK
+              schema:
+                properties:
+                  baseUri:
+                    description: API endpoint base URL.  You must append notificationId to retrieve the notification.
+                    type: string
+                  id:
+                    description: Notification ID of the created notification.
+                    type: string
+                  instanceUri:
+                    description: API endpoint which can be used to return the notification details.
+                    type: string
+                  message:
+                    description: Returns status (OK).
+                    type: string
+                type: object
+          description: Created
+        '400':
+          content:
+            application/json:
+              examples:
+                Default:
+                  summary: Validation Error
+                  value:
+                    message: Invalid source template id.
+                    status: 400
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    enum:
+                    - Invalid source template id
+                    type: string
+                  status:
+                    description: "Request Status\n * 400: Validation Error\n * 500: Unexpected Error"
+                    type: string
+                type: object
+          description: Bad Request
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      summary: Launch Push Notification
+      tags:
+      - Notifications
+      x-amazon-apigateway-integration:
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/notifications/push/{organizationId}
+  /notifications/{organizationId}:
+    get:
+      description: Retrieve all notifications at the org level.  Please note that this API only returns Mass Notifications and not [Incident Notifications](https://developers.everbridge.net/home/reference/ebs-list-incident-notifications).
+      operationId: EBS List Mass Notifications
+      parameters:
+      - in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: 'Boolean value indicating whether only active broadcasts should be returned. Default value: false'
+        in: query
+        name: onlyActive
+        required: false
+        schema:
+          enum:
+          - 'false'
+          - 'true'
+          type: string
+      - description: Returns notifications for a given notification event
+        in: query
+        name: notificationEventId
+        required: false
+        schema:
+          default: '-1'
+          type: integer
+      - in: query
+        name: pageNumber
+        required: false
+        schema:
+          example: 1
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Success:
+                  summary: Default
+                  value:
+                    firstPageUri: https://api-dev3.everbridge.net/rest/notifications/1536984111644674/?pageNumber=1
+                    lastPageUri: https://api-dev3.everbridge.net/rest/notifications/1536984111644674/?pageNumber=2
+                    message: OK
+                    nextPageUri: https://api-dev3.everbridge.net/rest/notifications/1536984111644674/?pageNumber=2
+                    page:
+                      currentPageNo: 1
+                      data:
+                      - accountId: 1536846672691202
+                        batchNotificationId: 0
+                        broadcastSettings:
+                          bookConference: false
+                          confirm: true
+                          contactCycles: 1
+                          cycleInterval: 0
+                          deliverPaths:
+                          - accountId: 1536846672691202
+                            awarePathId: 0
+                            createdDate: 1674823177533
+                            createdId: 1530249602924607
+                            createdName: Vishal Agrawal
+                            default: true
+                            displayFlag: false
+                            editable: false
+                            expose: false
+                            extRequired: false
+                            id: 589820879437825
+                            isDefault: true
+                            lastModifiedDate: 1674823192141
+                            lastModifiedId: 1530249602924607
+                            lastModifiedName: Vishal Agrawal
+                            mandatory: false
+                            organizationId: 1536984111644674
+                            pathId: 241901148045316
+                            prompt: Email
+                            resourceBundleId: 1536984111644675
+                            seq: 1
+                            status: A
+                          deliveryMethodInterval: 0
+                          deliveryPathOrder: Contact
+                          duration: 1
+                          durationTimeUnit: HOURS
+                          enableBeep: true
+                          enableRecord: false
+                          enableSecureNotification: false
+                          enableSmartConferenceConfirmationText: true
+                          language: en_US
+                          quietTimeOverride: false
+                          recipientApp: false
+                          requirePinForMessage: false
+                          senderCallerInfos:
+                          - accountId: 0
+                            callerId: '7818646213'
+                            countryCode: US
+                            countryName: United States
+                            createdDate: 1637777082188
+                            createdId: 565290710597634
+                            createdName: Ajay Goel
+                            id: 1536984111644674
+                            isDefault: true
+                            lastModifiedDate: 1637777082188
+                            lastModifiedId: 565290710597634
+                            lastModifiedName: Ajay Goel
+                            organizationId: 1536984111644674
+                            resourceBundleId: 233109349990401
+                            status: A
+                          senderEmail: Internal Training (Dev3)
+                          smsCallBack: false
+                          throttlDefaultAmount: 0
+                          throttle: false
+                          validateContacts: true
+                          validateContactsByOrganization: false
+                          voiceMailOption: MESSAGE_WITH_CONFIRMATION
+                        createdDate: 1675782973741
+                        createdId: 1530249602924607
+                        createdName: Vishal Agrawal
+                        enableLifeSafety: false
+                        enableMessageTruncate: false
+                        endDate: 1675786573786
+                        escalatedNotification: false
+                        escalationConfirmedCount: 0
+                        hasNotification: true
+                        id: 609886966644738
+                        lastModifiedDate: 1675786590068
+                        lastModifiedId: 1530249602924607
+                        lastModifiedName: Vishal Agrawal
+                        launchtype: SendNow
+                        message:
+                          accountId: 0
+                          conferenceBridgeId: 0
+                          contentType: Text
+                          createdId: 0
+                          id: 0
+                          lastModifiedId: 0
+                          organizationId: 0
+                          questionaire:
+                            answers:
+                            - name: I am safe
+                              quotaNum: 0
+                            - name: Am in danger
+                              quotaNum: 0
+                            inputOptionAllowable: false
+                            multipleSelected: false
+                            required: false
+                          resourceBundleId: 0
+                          rtfContent: <b>This is an emergency notification!<b>
+                          textMessage: How are you?
+                          title: Polling message from the API 4
+                          useCustomEmail: true
+                          useCustomSms: false
+                        notificationMode: Live
+                        notificationResult:
+                          confirmedCount: 0
+                          confirmedLateCount: 0
+                          notConfirmedCount: 1
+                          notificationId: 609886966644738
+                          pollingDetails:
+                          - count: 1
+                            quotaNum: 0
+                            responseText: Not Confirmed
+                          - count: 0
+                            quotaNum: 0
+                            responseText: Unreachable
+                          - count: 0
+                            quotaNum: 0
+                            responseText: Invalid Response
+                          - count: 0
+                            quotaNum: 0
+                            responseText: I am safe
+                          - count: 0
+                            quotaNum: 0
+                            responseText: Am in danger
+                          totalCount: 1
+                          unreachableCount: 0
+                        notificationStatus: Completed
+                        oldAwareCAMPID: 0
+                        organizationId: 1536984111644674
+                        priority: NonPriority
+                        processedBy: schedule-task-dev3-blue-i-06174345d96d44b8d
+                        productSource: MNIV
+                        publicMessages: {}
+                        resourceBundleId: 0
+                        source: Api
+                        startDate: 1675782973786
+                        status: A
+                        stoppedBy: 0
+                        transformed: false
+                        type: Polling
+                      - accountId: 1536846672691202
+                        batchNotificationId: 0
+                        broadcastSettings:
+                          bookConference: false
+                          confirm: false
+                          contactCycles: 1
+                          cycleInterval: 0
+                          deliverPaths:
+                          - accountId: 1536846672691202
+                            awarePathId: 0
+                            createdDate: 1674823177533
+                            createdId: 1530249602924607
+                            createdName: Vishal Agrawal
+                            default: true
+                            displayFlag: false
+                            editable: false
+                            expose: false
+                            extRequired: false
+                            id: 589820879437825
+                            isDefault: true
+                            lastModifiedDate: 1674823192141
+                            lastModifiedId: 1530249602924607
+                            lastModifiedName: Vishal Agrawal
+                            mandatory: false
+                            organizationId: 1536984111644674
+                            pathId: 241901148045316
+                            prompt: Email
+                            resourceBundleId: 1536984111644675
+                            seq: 1
+                            status: A
+                          deliveryMethodInterval: 0
+                          deliveryPathOrder: Contact
+                          duration: 1
+                          durationTimeUnit: HOURS
+                          enableBeep: true
+                          enableRecord: false
+                          enableSecureNotification: false
+                          enableSmartConferenceConfirmationText: true
+                          language: en_US
+                          mobileSettings:
+                            allowShare: false
+                            pushAlertEnabled: false
+                            requestComment: false
+                            requestImage: false
+                            requestLocation: false
+                            requireConfirm: false
+                          quietTimeOverride: false
+                          recipientApp: false
+                          requirePinForMessage: false
+                          senderCallerInfos:
+                          - accountId: 0
+                            callerId: '7818646213'
+                            countryCode: US
+                            countryName: United States
+                            createdId: 0
+                            id: 0
+                            isDefault: true
+                            lastModifiedId: 0
+                            organizationId: 0
+                            resourceBundleId: 0
+                          senderEmail: Internal Training (Dev3)
+                          throttlDefaultAmount: 0
+                          throttle: false
+                          validateContacts: true
+                          validateContactsByOrganization: false
+                          voiceMailOption: MESSAGE_ONLY
+                        createdDate: 1675776032835
+                        createdId: 1530249602924607
+                        createdName: Vishal Agrawal
+                        enableLifeSafety: false
+                        enableMessageTruncate: false
+                        endDate: 1675779632898
+                        escalatedNotification: false
+                        escalationConfirmedCount: 0
+                        hasNotification: true
+                        id: 595387157054054
+                        lastModifiedDate: 1675779660062
+                        lastModifiedId: 1530249602924607
+                        lastModifiedName: Vishal Agrawal
+                        launchtype: SendNow
+                        message:
+                          accountId: 0
+                          conferenceBridgeId: 0
+                          contentType: Text
+                          createdId: 0
+                          id: 0
+                          lastModifiedId: 0
+                          organizationId: 0
+                          resourceBundleId: 0
+                          textMessage: New Notification
+                          title: New Notification
+                          useCustomEmail: false
+                          useCustomSms: false
+                        notificationMode: Live
+                        notificationResult:
+                          confirmedCount: 0
+                          confirmedLateCount: 0
+                          notConfirmedCount: 1
+                          notificationId: 595387157054054
+                          totalCount: 1
+                          unreachableCount: 0
+                        notificationStatus: Completed
+                        oldAwareCAMPID: 0
+                        organizationId: 1536984111644674
+                        priority: NonPriority
+                        processedBy: schedule-task-dev3-blue-i-06174345d96d44b8d
+                        productSource: MNIV
+                        publicMessages: {}
+                        resourceBundleId: 1536984111644675
+                        source: Web
+                        startDate: 1675776032898
+                        status: A
+                        stoppedBy: 0
+                        transformed: true
+                        type: Standard
+                      - accountId: 1536846672691202
+                        batchNotificationId: 0
+                        broadcastSettings:
+                          bookConference: false
+                          confirm: true
+                          contactCycles: 1
+                          cycleInterval: 0
+                          deliverPaths:
+                          - accountId: 1536846672691202
+                            awarePathId: 0
+                            createdDate: 1674823177533
+                            createdId: 1530249602924607
+                            createdName: Vishal Agrawal
+                            default: true
+                            displayFlag: false
+                            editable: false
+                            expose: false
+                            extRequired: false
+                            id: 589820879437825
+                            isDefault: true
+                            lastModifiedDate: 1674823192141
+                            lastModifiedId: 1530249602924607
+                            lastModifiedName: Vishal Agrawal
+                            mandatory: false
+                            organizationId: 1536984111644674
+                            pathId: 241901148045316
+                            prompt: Email
+                            resourceBundleId: 1536984111644675
+                            seq: 1
+                            status: A
+                          deliveryMethodInterval: 0
+                          deliveryPathOrder: Contact
+                          duration: 1
+                          durationTimeUnit: HOURS
+                          enableBeep: true
+                          enableRecord: false
+                          enableSecureNotification: false
+                          enableSmartConferenceConfirmationText: true
+                          language: en_US
+                          mobileSettings:
+                            allowShare: false
+                            pushAlertEnabled: false
+                            requestComment: false
+                            requestImage: false
+                            requestLocation: false
+                            requireConfirm: false
+                          quietTimeOverride: false
+                          recipientApp: false
+                          requirePinForMessage: false
+                          senderCallerInfos:
+                          - accountId: 0
+                            callerId: '7818646213'
+                            countryCode: US
+                            countryName: United States
+                            createdId: 0
+                            id: 0
+                            isDefault: true
+                            lastModifiedId: 0
+                            organizationId: 0
+                            resourceBundleId: 0
+                          senderEmail: Internal Training (Dev3)
+                          smsCallBack: false
+                          throttlDefaultAmount: 0
+                          throttle: false
+                          validateContacts: true
+                          validateContactsByOrganization: false
+                          voiceMailOption: MESSAGE_WITH_CONFIRMATION
+                        categoryId: 594253285687298
+                        createdDate: 1675775057924
+                        createdId: 1530249602924607
+                        createdName: Vishal Agrawal
+                        enableLifeSafety: false
+                        enableMessageTruncate: false
+                        endDate: 1675778658143
+                        escalatedNotification: false
+                        escalationConfirmedCount: 0
+                        hasNotification: true
+                        id: 595696394699033
+                        lastModifiedDate: 1675778670038
+                        lastModifiedId: 1530249602924607
+                        lastModifiedName: Vishal Agrawal
+                        launchtype: SendNow
+                        message:
+                          accountId: 0
+                          category:
+                            accountId: 1536846672691202
+                            createdDate: 1675437422375
+                            createdId: 585800790048776
+                            createdName: Ajay Goel
+                            id: 594253285687298
+                            lastModifiedDate: 1675437422375
+                            lastModifiedId: 585800790048776
+                            lastModifiedName: Ajay Goel
+                            name: MN Category 2
+                            organizationId: 1536984111644674
+                            resourceBundleId: 1536984111644675
+                            status: A
+                          categoryId: 594253285687298
+                          conferenceBridgeId: 0
+                          contentType: Text
+                          createdId: 0
+                          id: 0
+                          lastModifiedId: 0
+                          organizationId: 0
+                          questionaire:
+                            answers:
+                            - name: 'Yes'
+                              quotaNum: 0
+                            - name: 'No'
+                              quotaNum: 0
+                            inputOptionAllowable: false
+                            multipleSelected: false
+                            required: false
+                          resourceBundleId: 0
+                          textMessage: Test
+                          title: Polling MN Template
+                          useCustomEmail: false
+                          useCustomSms: false
+                        notificationMode: Live
+                        notificationResult:
+                          confirmedCount: 1
+                          confirmedLateCount: 0
+                          notConfirmedCount: 0
+                          notificationId: 595696394699033
+                          pollingDetails:
+                          - count: 0
+                            quotaNum: 0
+                            responseText: Not Confirmed
+                          - count: 0
+                            quotaNum: 0
+                            responseText: Unreachable
+                          - count: 0
+                            quotaNum: 0
+                            responseText: Invalid Response
+                          - count: 1
+                            quotaNum: 0
+                            responseText: 'Yes'
+                          - count: 0
+                            quotaNum: 0
+                            responseText: 'No'
+                          totalCount: 1
+                          unreachableCount: 0
+                        notificationStatus: Completed
+                        oldAwareCAMPID: 0
+                        organizationId: 1536984111644674
+                        priority: NonPriority
+                        processedBy: schedule-task-dev3-blue-i-06174345d96d44b8d
+                        productSource: MNIV
+                        publicMessages: {}
+                        resourceBundleId: 1536984111644675
+                        source: Api
+                        sourceTemplateId: 594253285687316
+                        startDate: 1675775058143
+                        status: A
+                        stoppedBy: 0
+                        transformed: true
+                        type: Polling
+                      - accountId: 1536846672691202
+                        batchNotificationId: 0
+                        broadcastSettings:
+                          bookConference: false
+                          confirm: false
+                          contactCycles: 1
+                          cycleInterval: 0
+                          deliverPaths:
+                          - accountId: 1536846672691202
+                            awarePathId: 0
+                            createdDate: 1674823177533
+                            createdId: 1530249602924607
+                            createdName: Vishal Agrawal
+                            default: true
+                            displayFlag: false
+                            editable: false
+                            expose: false
+                            extRequired: false
+                            id: 589820879437825
+                            isDefault: true
+                            lastModifiedDate: 1674823192141
+                            lastModifiedId: 1530249602924607
+                            lastModifiedName: Vishal Agrawal
+                            mandatory: false
+                            organizationId: 1536984111644674
+                            pathId: 241901148045316
+                            prompt: Email
+                            resourceBundleId: 1536984111644675
+                            seq: 1
+                            status: A
+                          deliveryMethodInterval: 0
+                          deliveryPathOrder: Contact
+                          duration: 1
+                          durationTimeUnit: HOURS
+                          enableBeep: true
+                          enableRecord: false
+                          enableSecureNotification: false
+                          enableSmartConferenceConfirmationText: true
+                          language: en_US
+                          mobileSettings:
+                            allowShare: false
+                            pushAlertEnabled: false
+                            requestComment: false
+                            requestImage: false
+                            requestLocation: false
+                            requireConfirm: false
+                          quietTimeOverride: false
+                          recipientApp: false
+                          requirePinForMessage: false
+                          senderCallerInfos:
+                          - accountId: 0
+                            callerId: '7818646213'
+                            countryCode: US
+                            countryName: United States
+                            createdId: 0
+                            id: 0
+                            isDefault: true
+                            lastModifiedId: 0
+                            organizationId: 0
+                            resourceBundleId: 0
+                          senderEmail: Internal Training (Dev3)
+                          throttlDefaultAmount: 0
+                          throttle: false
+                          validateContacts: true
+                          validateContactsByOrganization: false
+                          voiceMailOption: MESSAGE_ONLY
+                        createdDate: 1675683095470
+                        createdId: 1530249602924607
+                        createdName: Vishal Agrawal
+                        enableLifeSafety: false
+                        enableMessageTruncate: false
+                        endDate: 1675683639319
+                        escalatedNotification: false
+                        escalationConfirmedCount: 0
+                        hasNotification: true
+                        id: 595387157053909
+                        lastModifiedDate: 1675683639319
+                        lastModifiedId: 1530249602924607
+                        lastModifiedName: Vishal Agrawal
+                        launchtype: SendNow
+                        message:
+                          accountId: 0
+                          conferenceBridgeId: 0
+                          contentType: Text
+                          createdId: 0
+                          id: 0
+                          lastModifiedId: 0
+                          organizationId: 0
+                          resourceBundleId: 0
+                          textMessage: New notification
+                          title: New Notification
+                          useCustomEmail: false
+                          useCustomSms: false
+                        notificationMode: Live
+                        notificationResult:
+                          confirmedCount: 0
+                          confirmedLateCount: 0
+                          notConfirmedCount: 1
+                          notificationId: 595387157053909
+                          totalCount: 1
+                          unreachableCount: 0
+                        notificationStatus: Stopped
+                        oldAwareCAMPID: 0
+                        organizationId: 1536984111644674
+                        priority: NonPriority
+                        processedBy: schedule-task-dev3-blue-i-06174345d96d44b8d
+                        productSource: MNIV
+                        publicMessages: {}
+                        resourceBundleId: 1536984111644675
+                        source: Web
+                        startDate: 1675683095674
+                        status: A
+                        stoppedBy: 1530249602924607
+                        stoppedByName: Vishal Agrawal
+                        stoppedDate: 1675683639319
+                        transformed: true
+                        type: Standard
+                      - accountId: 1536846672691202
+                        batchNotificationId: 0
+                        broadcastSettings:
+                          bookConference: false
+                          confirm: false
+                          contactCycles: 1
+                          cycleInterval: 0
+                          deliverPaths:
+                          - accountId: 1536846672691202
+                            awarePathId: 0
+                            createdDate: 1674823177533
+                            createdId: 1530249602924607
+                            createdName: Vishal Agrawal
+                            default: true
+                            displayFlag: false
+                            editable: false
+                            expose: false
+                            extRequired: false
+                            id: 589820879437825
+                            isDefault: true
+                            lastModifiedDate: 1674823192141
+                            lastModifiedId: 1530249602924607
+                            lastModifiedName: Vishal Agrawal
+                            mandatory: false
+                            organizationId: 1536984111644674
+                            pathId: 241901148045316
+                            prompt: Email
+                            resourceBundleId: 1536984111644675
+                            seq: 1
+                            status: A
+                          deliveryMethodInterval: 0
+                          deliveryPathOrder: Contact
+                          duration: 1
+                          durationTimeUnit: HOURS
+                          enableBeep: true
+                          enableRecord: false
+                          enableSecureNotification: false
+                          enableSmartConferenceConfirmationText: true
+                          language: en_US
+                          mobileSettings:
+                            allowShare: false
+                            pushAlertEnabled: false
+                            requestComment: false
+                            requestImage: false
+                            requestLocation: false
+                            requireConfirm: false
+                          quietTimeOverride: false
+                          recipientApp: false
+                          requirePinForMessage: false
+                          senderCallerInfos:
+                          - accountId: 0
+                            callerId: '7818646213'
+                            countryCode: US
+                            countryName: United States
+                            createdId: 0
+                            id: 0
+                            isDefault: true
+                            lastModifiedId: 0
+                            organizationId: 0
+                            resourceBundleId: 0
+                          senderEmail: Internal Training (Dev3)
+                          throttlDefaultAmount: 0
+                          throttle: false
+                          validateContacts: true
+                          validateContactsByOrganization: false
+                          voiceMailOption: MESSAGE_ONLY
+                        createdDate: 1675682328109
+                        createdId: 1530249602924607
+                        createdName: Vishal Agrawal
+                        enableLifeSafety: false
+                        enableMessageTruncate: false
+                        endDate: 1675682408018
+                        escalatedNotification: false
+                        escalationConfirmedCount: 0
+                        hasNotification: true
+                        id: 595387157053907
+                        lastModifiedDate: 1675682408018
+                        lastModifiedId: 1530249602924607
+                        lastModifiedName: Vishal Agrawal
+                        launchtype: SendNow
+                        message:
+                          accountId: 0
+                          conferenceBridgeId: 0
+                          contentType: Text
+                          createdId: 0
+                          id: 0
+                          lastModifiedId: 0
+                          organizationId: 0
+                          resourceBundleId: 0
+                          textMessage: Test
+                          title: Test notification
+                          useCustomEmail: false
+                          useCustomSms: false
+                        notificationMode: Live
+                        notificationResult:
+                          confirmedCount: 0
+                          confirmedLateCount: 0
+                          notConfirmedCount: 1
+                          notificationId: 595387157053907
+                          totalCount: 1
+                          unreachableCount: 0
+                        notificationStatus: Stopped
+                        oldAwareCAMPID: 0
+                        organizationId: 1536984111644674
+                        priority: NonPriority
+                        processedBy: schedule-task-dev3-blue-i-06174345d96d44b8d
+                        productSource: MNIV
+                        publicMessages: {}
+                        resourceBundleId: 1536984111644675
+                        source: Web
+                        startDate: 1675682328146
+                        status: A
+                        stoppedBy: 1530249602924607
+                        stoppedByName: Vishal Agrawal
+                        stoppedDate: 1675682408018
+                        transformed: true
+                        type: Standard
+                      - accountId: 1536846672691202
+                        batchNotificationId: 0
+                        broadcastSettings:
+                          bookConference: false
+                          confirm: true
+                          contactCycles: 1
+                          cycleInterval: 0
+                          deliverPaths:
+                          - accountId: 1536846672691202
+                            awarePathId: 0
+                            createdDate: 1674823177533
+                            createdId: 1530249602924607
+                            createdName: Vishal Agrawal
+                            default: true
+                            displayFlag: false
+                            editable: false
+                            expose: false
+                            extRequired: false
+                            id: 589820879437825
+                            isDefault: true
+                            lastModifiedDate: 1674823192141
+                            lastModifiedId: 1530249602924607
+                            lastModifiedName: Vishal Agrawal
+                            mandatory: false
+                            organizationId: 1536984111644674
+                            pathId: 241901148045316
+                            prompt: Email
+                            resourceBundleId: 1536984111644675
+                            seq: 1
+                            status: A
+                          deliveryMethodInterval: 0
+                          deliveryPathOrder: Contact
+                          duration: 1
+                          durationTimeUnit: HOURS
+                          enableBeep: true
+                          enableRecord: false
+                          enableSecureNotification: false
+                          enableSmartConferenceConfirmationText: true
+                          language: en_US
+                          quietTimeOverride: false
+                          recipientApp: false
+                          requirePinForMessage: false
+                          senderCallerInfos:
+                          - accountId: 0
+                            callerId: '7818646213'
+                            countryCode: US
+                            countryName: United States
+                            createdDate: 1637777082188
+                            createdId: 565290710597634
+                            createdName: Ajay Goel
+                            id: 1536984111644674
+                            isDefault: true
+                            lastModifiedDate: 1637777082188
+                            lastModifiedId: 565290710597634
+                            lastModifiedName: Ajay Goel
+                            organizationId: 1536984111644674
+                            resourceBundleId: 233109349990401
+                            status: A
+                          senderEmail: Internal Training (Dev3)
+                          smsCallBack: false
+                          throttlDefaultAmount: 0
+                          throttle: false
+                          validateContacts: true
+                          validateContactsByOrganization: false
+                          voiceMailOption: MESSAGE_WITH_CONFIRMATION
+                        createdDate: 1675446127476
+                        createdId: 585800790048776
+                        createdName: Ajay Goel
+                        enableLifeSafety: false
+                        enableMessageTruncate: false
+                        endDate: 1675446238671
+                        escalatedNotification: false
+                        escalationConfirmedCount: 0
+                        hasNotification: true
+                        id: 607309986267156
+                        lastModifiedDate: 1675446238671
+                        lastModifiedId: 585800790048776
+                        lastModifiedName: Ajay Goel
+                        launchtype: SendNow
+                        message:
+                          accountId: 0
+                          conferenceBridgeId: 0
+                          contentType: Text
+                          createdId: 0
+                          id: 0
+                          lastModifiedId: 0
+                          organizationId: 0
+                          questionaire:
+                            answers:
+                            - name: I am safe
+                              quotaNum: 0
+                            - name: Am in danger
+                              quotaNum: 0
+                            inputOptionAllowable: false
+                            multipleSelected: false
+                            required: false
+                          resourceBundleId: 0
+                          rtfContent: <b>This is an emergency notification!<b>
+                          textMessage: How are you?
+                          title: Polling message from the API 4
+                          useCustomEmail: true
+                          useCustomSms: false
+                        notificationMode: Live
+                        notificationResult:
+                          confirmedCount: 0
+                          confirmedLateCount: 0
+                          notConfirmedCount: 1
+                          notificationId: 607309986267156
+                          pollingDetails:
+                          - count: 1
+                            quotaNum: 0
+                            responseText: Not Confirmed
+                          - count: 0
+                            quotaNum: 0
+                            responseText: Unreachable
+                          - count: 0
+                            quotaNum: 0
+                            responseText: Invalid Response
+                          - count: 0
+                            quotaNum: 0
+                            responseText: I am safe
+                          - count: 0
+                            quotaNum: 0
+                            responseText: Am in danger
+                          totalCount: 1
+                          unreachableCount: 0
+                        notificationStatus: Stopped
+                        oldAwareCAMPID: 0
+                        organizationId: 1536984111644674
+                        priority: NonPriority
+                        processedBy: schedule-task-dev3-blue-i-06174345d96d44b8d
+                        productSource: MNIV
+                        publicMessages: {}
+                        resourceBundleId: 0
+                        source: Api
+                        startDate: 1675446127517
+                        status: A
+                        stoppedBy: 585800790048776
+                        stoppedByName: Ajay Goel
+                        stoppedDate: 1675446238671
+                        transformed: false
+                        type: Polling
+                      - accountId: 1536846672691202
+                        batchNotificationId: 0
+                        broadcastSettings:
+                          bookConference: false
+                          confirm: true
+                          contactCycles: 1
+                          cycleInterval: 0
+                          deliverPaths:
+                          - accountId: 1536846672691202
+                            awarePathId: 0
+                            createdDate: 1674823177533
+                            createdId: 1530249602924607
+                            createdName: Vishal Agrawal
+                            default: true
+                            displayFlag: false
+                            editable: false
+                            expose: false
+                            extRequired: false
+                            id: 589820879437825
+                            isDefault: true
+                            lastModifiedDate: 1674823192141
+                            lastModifiedId: 1530249602924607
+                            lastModifiedName: Vishal Agrawal
+                            mandatory: false
+                            organizationId: 1536984111644674
+                            pathId: 241901148045316
+                            prompt: Email
+                            resourceBundleId: 1536984111644675
+                            seq: 1
+                            status: A
+                          deliveryMethodInterval: 0
+                          deliveryPathOrder: Contact
+                          duration: 1
+                          durationTimeUnit: HOURS
+                          enableBeep: true
+                          enableRecord: false
+                          enableSecureNotification: false
+                          enableSmartConferenceConfirmationText: true
+                          language: en_US
+                          quietTimeOverride: false
+                          recipientApp: false
+                          requirePinForMessage: false
+                          senderCallerInfos:
+                          - accountId: 0
+                            callerId: '7818646213'
+                            countryCode: US
+                            countryName: United States
+                            createdDate: 1637777082188
+                            createdId: 565290710597634
+                            createdName: Ajay Goel
+                            id: 1536984111644674
+                            isDefault: true
+                            lastModifiedDate: 1637777082188
+                            lastModifiedId: 565290710597634
+                            lastModifiedName: Ajay Goel
+                            organizationId: 1536984111644674
+                            resourceBundleId: 233109349990401
+                            status: A
+                          senderEmail: Internal Training (Dev3)
+                          smsCallBack: false
+                          throttlDefaultAmount: 0
+                          throttle: false
+                          validateContacts: true
+                          validateContactsByOrganization: false
+                          voiceMailOption: MESSAGE_WITH_CONFIRMATION
+                        createdDate: 1675446113540
+                        createdId: 585800790048776
+                        createdName: Ajay Goel
+                        enableLifeSafety: false
+                        enableMessageTruncate: false
+                        endDate: 1675449713581
+                        escalatedNotification: false
+                        escalationConfirmedCount: 0
+                        hasNotification: true
+                        id: 607309986267155
+                        lastModifiedDate: 1675449720067
+                        lastModifiedId: 585800790048776
+                        lastModifiedName: Ajay Goel
+                        launchtype: SendNow
+                        message:
+                          accountId: 0
+                          conferenceBridgeId: 0
+                          contentType: Text
+                          createdId: 0
+                          id: 0
+                          lastModifiedId: 0
+                          organizationId: 0
+                          questionaire:
+                            answers:
+                            - name: I am safe
+                              quotaNum: 0
+                            - name: Am in danger
+                              quotaNum: 0
+                            inputOptionAllowable: false
+                            multipleSelected: false
+                            required: false
+                          resourceBundleId: 0
+                          rtfContent: <b>This is an emergency notification!<b>
+                          textMessage: How are you?
+                          title: Polling message from the API 4
+                          useCustomEmail: true
+                          useCustomSms: false
+                        notificationMode: Live
+                        notificationResult:
+                          confirmedCount: 0
+                          confirmedLateCount: 0
+                          notConfirmedCount: 1
+                          notificationId: 607309986267155
+                          pollingDetails:
+                          - count: 1
+                            quotaNum: 0
+                            responseText: Not Confirmed
+                          - count: 0
+                            quotaNum: 0
+                            responseText: Unreachable
+                          - count: 0
+                            quotaNum: 0
+                            responseText: Invalid Response
+                          - count: 0
+                            quotaNum: 0
+                            responseText: I am safe
+                          - count: 0
+                            quotaNum: 0
+                            responseText: Am in danger
+                          totalCount: 1
+                          unreachableCount: 0
+                        notificationStatus: Completed
+                        oldAwareCAMPID: 0
+                        organizationId: 1536984111644674
+                        priority: NonPriority
+                        processedBy: schedule-task-dev3-blue-i-06174345d96d44b8d
+                        productSource: MNIV
+                        publicMessages: {}
+                        resourceBundleId: 0
+                        source: Api
+                        startDate: 1675446113581
+                        status: A
+                        stoppedBy: 0
+                        transformed: false
+                        type: Polling
+                      - accountId: 1536846672691202
+                        batchNotificationId: 0
+                        broadcastSettings:
+                          bookConference: false
+                          confirm: true
+                          contactCycles: 1
+                          cycleInterval: 0
+                          deliverPaths:
+                          - accountId: 1536846672691202
+                            awarePathId: 0
+                            createdDate: 1674823177533
+                            createdId: 1530249602924607
+                            createdName: Vishal Agrawal
+                            default: true
+                            displayFlag: false
+                            editable: false
+                            expose: false
+                            extRequired: false
+                            id: 589820879437825
+                            isDefault: true
+                            lastModifiedDate: 1674823192141
+                            lastModifiedId: 1530249602924607
+                            lastModifiedName: Vishal Agrawal
+                            mandatory: false
+                            organizationId: 1536984111644674
+                            pathId: 241901148045316
+                            prompt: Email
+                            resourceBundleId: 1536984111644675
+                            seq: 1
+                            status: A
+                          deliveryMethodInterval: 0
+                          deliveryPathOrder: Contact
+                          duration: 1
+                          durationTimeUnit: HOURS
+                          enableBeep: true
+                          enableRecord: false
+                          enableSecureNotification: false
+                          enableSmartConferenceConfirmationText: true
+                          language: en_US
+                          quietTimeOverride: false
+                          recipientApp: false
+                          requirePinForMessage: false
+                          senderCallerInfos:
+                          - accountId: 0
+                            callerId: '7818646213'
+                            countryCode: US
+                            countryName: United States
+                            createdDate: 1637777082188
+                            createdId: 565290710597634
+                            createdName: Ajay Goel
+                            id: 1536984111644674
+                            isDefault: true
+                            lastModifiedDate: 1637777082188
+                            lastModifiedId: 565290710597634
+                            lastModifiedName: Ajay Goel
+                            organizationId: 1536984111644674
+                            resourceBundleId: 233109349990401
+                            status: A
+                          senderEmail: Internal Training (Dev3)
+                          smsCallBack: false
+                          throttlDefaultAmount: 0
+                          throttle: false
+                          validateContacts: true
+                          validateContactsByOrganization: false
+                          voiceMailOption: MESSAGE_WITH_CONFIRMATION
+                        createdDate: 1675446105153
+                        createdId: 585800790048776
+                        createdName: Ajay Goel
+                        enableLifeSafety: false
+                        enableMessageTruncate: false
+                        endDate: 1675449705201
+                        escalatedNotification: false
+                        escalationConfirmedCount: 0
+                        hasNotification: true
+                        id: 607309986267154
+                        lastModifiedDate: 1675449720067
+                        lastModifiedId: 585800790048776
+                        lastModifiedName: Ajay Goel
+                        launchtype: SendNow
+                        message:
+                          accountId: 0
+                          conferenceBridgeId: 0
+                          contentType: Text
+                          createdId: 0
+                          id: 0
+                          lastModifiedId: 0
+                          organizationId: 0
+                          questionaire:
+                            answers:
+                            - name: I am safe
+                              quotaNum: 0
+                            - name: Am in danger
+                              quotaNum: 0
+                            inputOptionAllowable: false
+                            multipleSelected: false
+                            required: false
+                          resourceBundleId: 0
+                          rtfContent: <b>This is an emergency notification!<b>
+                          textMessage: How are you?
+                          title: Polling message from the API 4
+                          useCustomEmail: true
+                          useCustomSms: false
+                        notificationMode: Live
+                        notificationResult:
+                          confirmedCount: 0
+                          confirmedLateCount: 0
+                          notConfirmedCount: 1
+                          notificationId: 607309986267154
+                          pollingDetails:
+                          - count: 1
+                            quotaNum: 0
+                            responseText: Not Confirmed
+                          - count: 0
+                            quotaNum: 0
+                            responseText: Unreachable
+                          - count: 0
+                            quotaNum: 0
+                            responseText: Invalid Response
+                          - count: 0
+                            quotaNum: 0
+                            responseText: I am safe
+                          - count: 0
+                            quotaNum: 0
+                            responseText: Am in danger
+                          totalCount: 1
+                          unreachableCount: 0
+                        notificationStatus: Completed
+                        oldAwareCAMPID: 0
+                        organizationId: 1536984111644674
+                        priority: NonPriority
+                        processedBy: schedule-task-dev3-blue-i-06174345d96d44b8d
+                        productSource: MNIV
+                        publicMessages: {}
+                        resourceBundleId: 0
+                        source: Api
+                        startDate: 1675446105201
+                        status: A
+                        stoppedBy: 0
+                        transformed: false
+                        type: Polling
+                      - accountId: 1536846672691202
+                        batchNotificationId: 0
+                        broadcastSettings:
+                          bookConference: false
+                          confirm: true
+                          contactCycles: 1
+                          cycleInterval: 0
+                          deliverPaths:
+                          - accountId: 1536846672691202
+                            awarePathId: 0
+                            createdDate: 1674823177533
+                            createdId: 1530249602924607
+                            createdName: Vishal Agrawal
+                            default: true
+                            displayFlag: false
+                            editable: false
+                            expose: false
+                            extRequired: false
+                            id: 589820879437825
+                            isDefault: true
+                            lastModifiedDate: 1674823192141
+                            lastModifiedId: 1530249602924607
+                            lastModifiedName: Vishal Agrawal
+                            mandatory: false
+                            organizationId: 1536984111644674
+                            pathId: 241901148045316
+                            prompt: Email
+                            resourceBundleId: 1536984111644675
+                            seq: 1
+                            status: A
+                          deliveryMethodInterval: 0
+                          deliveryPathOrder: Contact
+                          duration: 1
+                          durationTimeUnit: HOURS
+                          enableBeep: true
+                          enableRecord: false
+                          enableSecureNotification: false
+                          enableSmartConferenceConfirmationText: true
+                          language: en_US
+                          mobileSettings:
+                            allowShare: false
+                            pushAlertEnabled: false
+                            requestComment: false
+                            requestImage: false
+                            requestLocation: false
+                            requireConfirm: false
+                          quietTimeOverride: false
+                          recipientApp: false
+                          requirePinForMessage: false
+                          senderCallerInfos:
+                          - accountId: 0
+                            callerId: '7818646213'
+                            countryCode: US
+                            countryName: United States
+                            createdId: 0
+                            id: 0
+                            isDefault: true
+                            lastModifiedId: 0
+                            organizationId: 0
+                            resourceBundleId: 0
+                          senderEmail: Internal Training (Dev3)
+                          smsCallBack: false
+                          throttlDefaultAmount: 0
+                          throttle: false
+                          validateContacts: true
+                          validateContactsByOrganization: false
+                          voiceMailOption: MESSAGE_WITH_CONFIRMATION
+                        categoryId: 594253285687298
+                        createdDate: 1675445920568
+                        createdId: 585800790048776
+                        createdName: Ajay Goel
+                        enableLifeSafety: false
+                        enableMessageTruncate: false
+                        endDate: 1675449520617
+                        escalatedNotification: false
+                        escalationConfirmedCount: 0
+                        hasNotification: true
+                        id: 595696394698942
+                        lastModifiedDate: 1675449540056
+                        lastModifiedId: 585800790048776
+                        lastModifiedName: Ajay Goel
+                        launchtype: SendNow
+                        message:
+                          accountId: 0
+                          category:
+                            accountId: 1536846672691202
+                            createdDate: 1675437422375
+                            createdId: 585800790048776
+                            createdName: Ajay Goel
+                            id: 594253285687298
+                            lastModifiedDate: 1675437422375
+                            lastModifiedId: 585800790048776
+                            lastModifiedName: Ajay Goel
+                            name: MN Category 2
+                            organizationId: 1536984111644674
+                            resourceBundleId: 1536984111644675
+                            status: A
+                          categoryId: 594253285687298
+                          conferenceBridgeId: 0
+                          contentType: Text
+                          createdId: 0
+                          id: 0
+                          lastModifiedId: 0
+                          organizationId: 0
+                          questionaire:
+                            answers:
+                            - name: 'Yes'
+                              quotaNum: 0
+                            - name: 'No'
+                              quotaNum: 0
+                            inputOptionAllowable: false
+                            multipleSelected: false
+                            required: false
+                          resourceBundleId: 0
+                          textMessage: Test
+                          title: Polling MN Template
+                          useCustomEmail: false
+                          useCustomSms: false
+                        notificationMode: Live
+                        notificationResult:
+                          confirmedCount: 1
+                          confirmedLateCount: 0
+                          notConfirmedCount: 0
+                          notificationId: 595696394698942
+                          pollingDetails:
+                          - count: 0
+                            quotaNum: 0
+                            responseText: Not Confirmed
+                          - count: 0
+                            quotaNum: 0
+                            responseText: Unreachable
+                          - count: 0
+                            quotaNum: 0
+                            responseText: Invalid Response
+                          - count: 1
+                            quotaNum: 0
+                            responseText: 'Yes'
+                          - count: 0
+                            quotaNum: 0
+                            responseText: 'No'
+                          totalCount: 1
+                          unreachableCount: 0
+                        notificationStatus: Completed
+                        oldAwareCAMPID: 0
+                        organizationId: 1536984111644674
+                        priority: NonPriority
+                        processedBy: schedule-task-dev3-blue-i-06174345d96d44b8d
+                        productSource: MNIV
+                        publicMessages: {}
+                        resourceBundleId: 1536846672691203
+                        source: Api
+                        sourceTemplateId: 594253285687316
+                        startDate: 1675445920617
+                        status: A
+                        stoppedBy: 0
+                        transformed: true
+                        type: Polling
+                      - accountId: 1536846672691202
+                        batchNotificationId: 0
+                        broadcastSettings:
+                          bookConference: false
+                          confirm: false
+                          contactCycles: 1
+                          cycleInterval: 0
+                          deliverPaths:
+                          - accountId: 1536846672691202
+                            awarePathId: 0
+                            createdDate: 1674823177533
+                            createdId: 1530249602924607
+                            createdName: Vishal Agrawal
+                            default: true
+                            displayFlag: false
+                            editable: false
+                            expose: false
+                            extRequired: false
+                            id: 589820879437825
+                            isDefault: true
+                            lastModifiedDate: 1674823192141
+                            lastModifiedId: 1530249602924607
+                            lastModifiedName: Vishal Agrawal
+                            mandatory: false
+                            organizationId: 1536984111644674
+                            pathId: 241901148045316
+                            prompt: Email
+                            resourceBundleId: 1536984111644675
+                            seq: 1
+                            status: A
+                          deliveryMethodInterval: 0
+                          deliveryPathOrder: Contact
+                          duration: 1
+                          durationTimeUnit: HOURS
+                          enableBeep: true
+                          enableRecord: false
+                          enableSecureNotification: false
+                          enableSmartConferenceConfirmationText: true
+                          language: en_US
+                          mobileSettings:
+                            allowShare: false
+                            pushAlertEnabled: false
+                            requestComment: false
+                            requestImage: false
+                            requestLocation: false
+                            requireConfirm: false
+                          quietTimeOverride: false
+                          recipientApp: false
+                          requirePinForMessage: false
+                          senderCallerInfos:
+                          - accountId: 0
+                            callerId: '7818646213'
+                            countryCode: US
+                            countryName: United States
+                            createdId: 0
+                            id: 0
+                            isDefault: true
+                            lastModifiedId: 0
+                            organizationId: 0
+                            resourceBundleId: 0
+                          senderEmail: Internal Training (Dev3)
+                          throttlDefaultAmount: 0
+                          throttle: false
+                          validateContacts: true
+                          validateContactsByOrganization: false
+                          voiceMailOption: MESSAGE_ONLY
+                        createdDate: 1675443862226
+                        createdId: 585800790048776
+                        createdName: Ajay Goel
+                        enableLifeSafety: false
+                        enableMessageTruncate: false
+                        endDate: 1675447462268
+                        escalatedNotification: false
+                        escalationConfirmedCount: 0
+                        event:
+                          accountId: 1536846672691202
+                          createdDate: 1675437452695
+                          createdId: 585800790048776
+                          createdName: Ajay Goel
+                          id: 594253285687297
+                          lastModifiedDate: 1675437452695
+                          lastModifiedId: 585800790048776
+                          lastModifiedName: Ajay Goel
+                          name: Test Event 1
+                          organizationId: 1536984111644674
+                          resourceBundleId: 1536984111644675
+                          status: A
+                        hasNotification: true
+                        id: 594253285687684
+                        lastModifiedDate: 1675447470054
+                        lastModifiedId: 585800790048776
+                        lastModifiedName: Ajay Goel
+                        launchtype: SendNow
+                        message:
+                          accountId: 0
+                          conferenceBridgeId: 0
+                          contentType: Text
+                          createdId: 0
+                          id: 0
+                          lastModifiedId: 0
+                          organizationId: 0
+                          resourceBundleId: 0
+                          textMessage: dsfsd
+                          title: New manual message without template
+                          useCustomEmail: false
+                          useCustomSms: false
+                        notificationEventId: 594253285687297
+                        notificationMode: Live
+                        notificationName: Test Event 1
+                        notificationResult:
+                          confirmedCount: 0
+                          confirmedLateCount: 0
+                          notConfirmedCount: 1
+                          notificationId: 594253285687684
+                          totalCount: 1
+                          unreachableCount: 0
+                        notificationStatus: Completed
+                        oldAwareCAMPID: 0
+                        organizationId: 1536984111644674
+                        priority: NonPriority
+                        processedBy: schedule-task-dev3-blue-i-06174345d96d44b8d
+                        productSource: MNIV
+                        publicMessages: {}
+                        resourceBundleId: 1536984111644675
+                        source: Web
+                        sourceNotificationId: 594253285687681
+                        startDate: 1675443862268
+                        status: A
+                        stoppedBy: 0
+                        transformed: true
+                        type: Standard
+                      pageSize: 10
+                      start: 0
+                      totalCount: 20
+                      totalPageCount: 2
+              schema:
+                properties:
+                  message:
+                    description: Request status
+                    enum:
+                    - OK
+                    type: string
+                type: object
+          description: Accepted
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      summary: List Mass Notifications
+      tags:
+      - Notifications
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/notifications/{organizationId}
+    post:
+      description: Launch a Mass notification.  To launch incident notification, see [Launch Incident](https://developers.everbridge.net/home/reference/ebs-launch-incident)
+      operationId: EBS Launch Mass Notification
+      parameters:
+      - in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Default:
+                summary: Notification Template Id
+                value:
+                  sourceTemplateId: 594253285687316
+              Override Delivery Path/Sender Info/Duration:
+                summary: Override Delivery Paths, Sender Information, and maximize duration
+                value:
+                  broadcastContacts:
+                    externalIds:
+                    - c-vishal.agrawal@everbridge.com
+                  broadcastSettings:
+                    deliverPaths:
+                    - id: 589820879437825
+                    duration: 5
+                    durationTimeUnit: DAYS
+                    senderCallerInfos:
+                    - callerId: '+17817817811'
+                      countryCode: US
+                      countryName: United States
+                    senderEmail: API Notification
+                  launchtype: SendNow
+                  message:
+                    textMessage: Launch a mass notification
+                    title: Launch notification
+                  type: Standard
+              Polling Notification:
+                summary: Polling Notification with Default Settings
+                value:
+                  broadcastContacts:
+                    externalIds:
+                    - c-vishal.agrawal@everbridge.com
+                  launchtype: SendNow
+                  message:
+                    questionaire:
+                      answers:
+                      - name: 'Yes'
+                    textMessage: Launch a notification with polling options
+                    title: Polling MN Template
+                  type: Polling
+              Title and Message:
+                summary: Override Notification Title and Messages
+                value:
+                  broadcastContacts:
+                    externalIds:
+                    - c-vishal.agrawal@everbridge.com
+                  launchtype: SendNow
+                  message:
+                    textMessage: Launch a mass notification
+                    title: Launch notification
+                  type: Standard
+            schema:
+              $ref: '#/components/schemas/createNotification'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Default:
+                  summary: Created
+                  value:
+                    baseUri: https://api-dev3.everbridge.net/rest/notifications/1536984111644674/
+                    id: 624558574927948
+                    instanceUri: https://api-dev3.everbridge.net/rest/notifications/1536984111644674/624558574927948
+                    message: OK
+              schema:
+                properties:
+                  baseUri:
+                    description: API endpoint base URL.  You must append notificationId to retrieve the notification.
+                    type: string
+                  id:
+                    description: Notification ID of the created notification.
+                    type: string
+                  instanceUri:
+                    description: API endpoint which can be used to return the notification details.
+                    type: string
+                  message:
+                    description: Returns status (OK).
+                    type: string
+                type: object
+          description: Created
+        '400':
+          content:
+            application/json:
+              examples:
+                Default:
+                  summary: Validation Error
+                  value:
+                    message: Invalid source template id.
+                    status: 400
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    enum:
+                    - Invalid source template id
+                    type: string
+                  status:
+                    description: "Request Status\n * 400: Validation Error\n * 500: Unexpected Error"
+                    type: string
+                type: object
+          description: Bad Request
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      summary: Launch Mass Notification
+      tags:
+      - Notifications
+      x-amazon-apigateway-integration:
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/notifications/{organizationId}
+  /notifications/{organizationId}/{notificationId}:
+    get:
+      description: Retrieve details of a notification within an  organization.  This can be used to return Mass Notification as well as Incident Notification.
+      operationId: EBS Get Notification
+      parameters:
+      - example: '591470146880264'
+        in: path
+        name: notificationId
+        required: true
+        schema:
+          maxLength: 16
+          type: string
+      - in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: Detailed 'Notification Results' information is returned within 'notificationResult' node when verbose is turned on. Returns various fields like confirmedCount, unreachableCount etc.  Also returns node 'allDetails' instead of 'pollingDetails'
+        in: query
+        name: verbose
+        required: false
+        schema:
+          enum:
+          - 'true'
+          - 'false'
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Non Verbose:
+                  summary: Non Verbose
+                  value:
+                    message: OK
+                    result:
+                      accountId: 1536846672691202
+                      batchNotificationId: 0
+                      broadcastContacts:
+                        contactIds:
+                        - 426680841666562
+                        contactSearchType: AllOr
+                        defaultSeqGroupQuota: 1
+                        enableGroupCalendar: false
+                        enableSendToSubscribers: false
+                        sequenceGroupEnabled: false
+                        sequenceGroupInterval: 5
+                      broadcastSettings:
+                        bookConference: false
+                        confirm: false
+                        contactCycles: 1
+                        cycleInterval: 0
+                        deliverPaths:
+                        - accountId: 1536846672691202
+                          awarePathId: 0
+                          createdDate: 1674823177533
+                          createdId: 1530249602924607
+                          createdName: Vishal Agrawal
+                          default: true
+                          displayFlag: false
+                          editable: false
+                          expose: false
+                          extRequired: false
+                          id: 589820879437825
+                          isDefault: true
+                          lastModifiedDate: 1674823192141
+                          lastModifiedId: 1530249602924607
+                          lastModifiedName: Vishal Agrawal
+                          mandatory: false
+                          organizationId: 1536984111644674
+                          pathId: 241901148045316
+                          prompt: Email
+                          resourceBundleId: 1536984111644675
+                          seq: 1
+                          status: A
+                        deliveryMethodInterval: 0
+                        deliveryPathOrder: Contact
+                        duration: 1
+                        durationTimeUnit: HOURS
+                        enableBeep: true
+                        enableRecord: false
+                        enableSecureNotification: false
+                        enableSmartConferenceConfirmationText: true
+                        language: en_US
+                        mobileSettings:
+                          allowShare: false
+                          pushAlertEnabled: false
+                          requestComment: false
+                          requestImage: false
+                          requestLocation: false
+                          requireConfirm: false
+                        quietTimeOverride: false
+                        recipientApp: false
+                        requirePinForMessage: false
+                        senderCallerInfos:
+                        - accountId: 0
+                          callerId: '7818646213'
+                          countryCode: US
+                          countryName: United States
+                          createdId: 0
+                          id: 0
+                          isDefault: true
+                          lastModifiedId: 0
+                          organizationId: 0
+                          resourceBundleId: 0
+                        senderEmail: SORCH Dev3
+                        throttlDefaultAmount: 0
+                        throttle: false
+                        validateContacts: true
+                        validateContactsByOrganization: false
+                        voiceMailOption: MESSAGE_ONLY
+                      createdDate: 1674823609798
+                      createdId: 1530249602924607
+                      createdName: Vishal Agrawal
+                      enableLifeSafety: false
+                      enableMessageTruncate: false
+                      endDate: 1674827209848
+                      escalatedNotification: false
+                      escalationConfirmedCount: 0
+                      hasNotification: true
+                      id: 591470146880264
+                      incident:
+                        accountId: 1536846672691202
+                        createdDate: 1674823609695
+                        createdId: 1530249602924607
+                        createdName: Vishal Agrawal
+                        duration: 0
+                        enableMessageTruncate: false
+                        hasJournal: false
+                        id: 591470146880507
+                        incidentMode: Live
+                        incidentStatus: Open
+                        incidentType: Incident
+                        lastModifiedDate: 1674823609695
+                        lastModifiedId: 1530249602924607
+                        lastModifiedName: Vishal Agrawal
+                        name: Readme Testing
+                        organizationId: 1536984111644674
+                        phaseStatus:
+                          id: 1001
+                          incidentStatus: Open
+                          isDefault: true
+                          name: New
+                          phaseNodeType: Begin
+                          seq: 100
+                          status: A
+                        resourceBundleId: 1536984111644675
+                        status: A
+                        useTemplateVarValue: false
+                      incidentPhase:
+                        accountId: 1536846672691202
+                        createdDate: 1674823609703
+                        createdId: 1530249602924607
+                        createdName: Vishal Agrawal
+                        id: 10011
+                        incidentId: 591470146880507
+                        lastModifiedDate: 1674823609703
+                        lastModifiedId: 1530249602924607
+                        lastModifiedName: Vishal Agrawal
+                        name: New
+                        notificationId: -1
+                        organizationId: 1536984111644674
+                        phaseDefinition:
+                          id: 1001
+                          incidentStatus: Open
+                          isDefault: true
+                          name: New
+                          phaseNodeType: Begin
+                          seq: 100
+                          status: A
+                        phaseTemplate:
+                          broadcastTemplate:
+                            accountId: 0
+                            broadcastContacts:
+                              contactIds:
+                              - 426680841666562
+                              contactSearchType: AllOr
+                              defaultSeqGroupQuota: 1
+                              enableGroupCalendar: false
+                              enableSendToSubscribers: false
+                              sequenceGroupEnabled: false
+                              sequenceGroupInterval: 5
+                            broadcastSettings:
+                              bookConference: false
+                              confirm: false
+                              contactCycles: 1
+                              cycleInterval: 0
+                              deliverPaths:
+                              - accountId: 1536846672691202
+                                awarePathId: 0
+                                createdDate: 1674823177533
+                                createdId: 1530249602924607
+                                createdName: Vishal Agrawal
+                                default: true
+                                displayFlag: false
+                                editable: false
+                                expose: false
+                                extRequired: false
+                                id: 589820879437825
+                                isDefault: true
+                                lastModifiedDate: 1674823192141
+                                lastModifiedId: 1530249602924607
+                                lastModifiedName: Vishal Agrawal
+                                mandatory: false
+                                organizationId: 1536984111644674
+                                pathId: 241901148045316
+                                prompt: Email
+                                resourceBundleId: 1536984111644675
+                                seq: 1
+                                status: A
+                              deliveryMethodInterval: 0
+                              deliveryPathOrder: Contact
+                              duration: 1
+                              durationTimeUnit: HOURS
+                              enableBeep: true
+                              enableRecord: false
+                              enableSecureNotification: false
+                              enableSmartConferenceConfirmationText: true
+                              language: en_US
+                              mobileSettings:
+                                allowShare: false
+                                pushAlertEnabled: false
+                                requestComment: false
+                                requestImage: false
+                                requestLocation: false
+                                requireConfirm: false
+                              quietTimeOverride: false
+                              recipientApp: false
+                              requirePinForMessage: false
+                              senderCallerInfos:
+                              - accountId: 0
+                                callerId: '7818646213'
+                                countryCode: US
+                                countryName: United States
+                                createdId: 0
+                                id: 0
+                                isDefault: true
+                                lastModifiedId: 0
+                                organizationId: 0
+                                resourceBundleId: 0
+                              senderEmail: SORCH Dev3
+                              throttlDefaultAmount: 0
+                              throttle: false
+                              validateContacts: true
+                              validateContactsByOrganization: false
+                              voiceMailOption: MESSAGE_ONLY
+                            createdId: 0
+                            enableLifeSafety: false
+                            id: 0
+                            lastModifiedId: 0
+                            message:
+                              accountId: 1536846672691202
+                              conferenceBridgeId: 0
+                              contentType: Text
+                              createdDate: 1674823609743
+                              createdId: 1530249602924607
+                              createdName: Vishal Agrawal
+                              id: 0
+                              lastModifiedDate: 1674823609743
+                              lastModifiedId: 1530249602924607
+                              lastModifiedName: Vishal Agrawal
+                              organizationId: 1536984111644674
+                              resourceBundleId: 1536984111644675
+                              status: A
+                              textMessage: "Status: Testing   \nPriority: High   "
+                              title: Readme Testing
+                              useCustomEmail: false
+                              useCustomSms: false
+                            organizationId: 0
+                            priority: NonPriority
+                            publicMessages: {}
+                            resourceBundleId: 0
+                            type: Standard
+                            useEscalation: false
+                          contactsFlag: 3
+                          evaluateAll: false
+                          formTemplate:
+                            formVariableItems:
+                            - isRequired: true
+                              prefixName: '1'
+                              seq: 1
+                              val:
+                              - Testing
+                              variableId: 591470146879515
+                              variableName: Status
+                            - isRequired: false
+                              prefixName: '1'
+                              seq: 2
+                              val:
+                              - High
+                              variableId: 591470146879516
+                              variableName: Priority
+                            subject: Readme Testing
+                            sysVarCurrentTimeFormat: HH:mm:ss
+                            sysVarTodayDateFormat: mm-dd-yyyy
+                          ignoreVariable: false
+                          incidentNotificationPropertyBag:
+                            enableExerciseMode: 'false'
+                          messageFlag: 3
+                          name: New
+                          phaseDefinitions:
+                          - id: 1001
+                            isDefault: false
+                            name: New
+                            seq: 0
+                            status: A
+                          publishOptionsFlag:
+                            abb: 1
+                            alertUs: 1
+                            desktopAlerts: 1
+                            ipawsCap: 1
+                            memberPortal: 1
+                            network: 1
+                            nixleChannel: 1
+                            socialMedia: 1
+                            webPosting: 1
+                            webWidget: 1
+                          settingsFlag: 3
+                          templateId: 1536984111644674
+                          templateName: Readme Testing
+                        resourceBundleId: 1536984111644675
+                        status: A
+                      lastModifiedDate: 1674827220088
+                      lastModifiedId: 1530249602924607
+                      lastModifiedName: Vishal Agrawal
+                      launchtype: SendNow
+                      message:
+                        accountId: 1536846672691202
+                        conferenceBridgeId: 0
+                        contentType: Text
+                        createdDate: 1674823609743
+                        createdId: 1530249602924607
+                        createdName: Vishal Agrawal
+                        id: 0
+                        lastModifiedDate: 1674823609743
+                        lastModifiedId: 1530249602924607
+                        lastModifiedName: Vishal Agrawal
+                        organizationId: 1536984111644674
+                        resourceBundleId: 1536984111644675
+                        status: A
+                        textMessage: "Status: Testing   \nPriority: High   "
+                        title: Readme Testing
+                        useCustomEmail: false
+                        useCustomSms: false
+                      notificationMode: Live
+                      notificationName: Readme Testing
+                      notificationResult:
+                        confirmedCount: 0
+                        confirmedLateCount: 0
+                        notConfirmedCount: 1
+                        notificationId: 591470146880264
+                        totalCount: 1
+                        unreachableCount: 0
+                      notificationStatus: Completed
+                      oldAwareCAMPID: 0
+                      organizationId: 1536984111644674
+                      priority: NonPriority
+                      processedBy: schedule-task-dev3-green-i-026dbaf0eea0f3e89
+                      productSource: Matrix
+                      publicMessages: {}
+                      resourceBundleId: 1536984111644675
+                      source: Web
+                      sourceTemplateId: 0
+                      startDate: 1674823609848
+                      status: A
+                      stoppedBy: 0
+                      transformed: true
+                      type: Standard
+                Verbose:
+                  summary: Verbose (detailed notification results)
+                  value:
+                    message: OK
+                    result:
+                      accountId: 1536846672691202
+                      batchNotificationId: 0
+                      broadcastContacts:
+                        contactIds:
+                        - 426680841666562
+                        contactSearchType: AllOr
+                        defaultSeqGroupQuota: 1
+                        enableGroupCalendar: false
+                        enableSendToSubscribers: false
+                        sequenceGroupEnabled: false
+                        sequenceGroupInterval: 5
+                      broadcastSettings:
+                        bookConference: false
+                        confirm: false
+                        contactCycles: 1
+                        cycleInterval: 0
+                        deliverPaths:
+                        - accountId: 1536846672691202
+                          awarePathId: 0
+                          createdDate: 1674823177533
+                          createdId: 1530249602924607
+                          createdName: Vishal Agrawal
+                          default: true
+                          displayFlag: false
+                          editable: false
+                          expose: false
+                          extRequired: false
+                          id: 589820879437825
+                          isDefault: true
+                          lastModifiedDate: 1674823192141
+                          lastModifiedId: 1530249602924607
+                          lastModifiedName: Vishal Agrawal
+                          mandatory: false
+                          organizationId: 1536984111644674
+                          pathId: 241901148045316
+                          prompt: Email
+                          resourceBundleId: 1536984111644675
+                          seq: 1
+                          status: A
+                        deliveryMethodInterval: 0
+                        deliveryPathOrder: Contact
+                        duration: 1
+                        durationTimeUnit: HOURS
+                        enableBeep: true
+                        enableRecord: false
+                        enableSecureNotification: false
+                        enableSmartConferenceConfirmationText: true
+                        language: en_US
+                        mobileSettings:
+                          allowShare: false
+                          pushAlertEnabled: false
+                          requestComment: false
+                          requestImage: false
+                          requestLocation: false
+                          requireConfirm: false
+                        quietTimeOverride: false
+                        recipientApp: false
+                        requirePinForMessage: false
+                        senderCallerInfos:
+                        - accountId: 0
+                          callerId: '7818646213'
+                          countryCode: US
+                          countryName: United States
+                          createdId: 0
+                          id: 0
+                          isDefault: true
+                          lastModifiedId: 0
+                          organizationId: 0
+                          resourceBundleId: 0
+                        senderEmail: SORCH Dev3
+                        throttlDefaultAmount: 0
+                        throttle: false
+                        validateContacts: true
+                        validateContactsByOrganization: false
+                        voiceMailOption: MESSAGE_ONLY
+                      createdDate: 1674823609798
+                      createdId: 1530249602924607
+                      createdName: Vishal Agrawal
+                      enableLifeSafety: false
+                      enableMessageTruncate: false
+                      endDate: 1674827209848
+                      escalatedNotification: false
+                      escalationConfirmedCount: 0
+                      hasNotification: true
+                      id: 591470146880264
+                      incident:
+                        accountId: 1536846672691202
+                        createdDate: 1674823609695
+                        createdId: 1530249602924607
+                        createdName: Vishal Agrawal
+                        duration: 0
+                        enableMessageTruncate: false
+                        hasJournal: false
+                        id: 591470146880507
+                        incidentMode: Live
+                        incidentStatus: Open
+                        incidentType: Incident
+                        lastModifiedDate: 1674823609695
+                        lastModifiedId: 1530249602924607
+                        lastModifiedName: Vishal Agrawal
+                        name: Readme Testing
+                        organizationId: 1536984111644674
+                        phaseStatus:
+                          id: 1001
+                          incidentStatus: Open
+                          isDefault: true
+                          name: New
+                          phaseNodeType: Begin
+                          seq: 100
+                          status: A
+                        resourceBundleId: 1536984111644675
+                        status: A
+                        useTemplateVarValue: false
+                      incidentPhase:
+                        accountId: 1536846672691202
+                        createdDate: 1674823609703
+                        createdId: 1530249602924607
+                        createdName: Vishal Agrawal
+                        id: 10011
+                        incidentId: 591470146880507
+                        lastModifiedDate: 1674823609703
+                        lastModifiedId: 1530249602924607
+                        lastModifiedName: Vishal Agrawal
+                        name: New
+                        notificationId: -1
+                        organizationId: 1536984111644674
+                        phaseDefinition:
+                          id: 1001
+                          incidentStatus: Open
+                          isDefault: true
+                          name: New
+                          phaseNodeType: Begin
+                          seq: 100
+                          status: A
+                        phaseTemplate:
+                          broadcastTemplate:
+                            accountId: 0
+                            broadcastContacts:
+                              contactIds:
+                              - 426680841666562
+                              contactSearchType: AllOr
+                              defaultSeqGroupQuota: 1
+                              enableGroupCalendar: false
+                              enableSendToSubscribers: false
+                              sequenceGroupEnabled: false
+                              sequenceGroupInterval: 5
+                            broadcastSettings:
+                              bookConference: false
+                              confirm: false
+                              contactCycles: 1
+                              cycleInterval: 0
+                              deliverPaths:
+                              - accountId: 1536846672691202
+                                awarePathId: 0
+                                createdDate: 1674823177533
+                                createdId: 1530249602924607
+                                createdName: Vishal Agrawal
+                                default: true
+                                displayFlag: false
+                                editable: false
+                                expose: false
+                                extRequired: false
+                                id: 589820879437825
+                                isDefault: true
+                                lastModifiedDate: 1674823192141
+                                lastModifiedId: 1530249602924607
+                                lastModifiedName: Vishal Agrawal
+                                mandatory: false
+                                organizationId: 1536984111644674
+                                pathId: 241901148045316
+                                prompt: Email
+                                resourceBundleId: 1536984111644675
+                                seq: 1
+                                status: A
+                              deliveryMethodInterval: 0
+                              deliveryPathOrder: Contact
+                              duration: 1
+                              durationTimeUnit: HOURS
+                              enableBeep: true
+                              enableRecord: false
+                              enableSecureNotification: false
+                              enableSmartConferenceConfirmationText: true
+                              language: en_US
+                              mobileSettings:
+                                allowShare: false
+                                pushAlertEnabled: false
+                                requestComment: false
+                                requestImage: false
+                                requestLocation: false
+                                requireConfirm: false
+                              quietTimeOverride: false
+                              recipientApp: false
+                              requirePinForMessage: false
+                              senderCallerInfos:
+                              - accountId: 0
+                                callerId: '7818646213'
+                                countryCode: US
+                                countryName: United States
+                                createdId: 0
+                                id: 0
+                                isDefault: true
+                                lastModifiedId: 0
+                                organizationId: 0
+                                resourceBundleId: 0
+                              senderEmail: SORCH Dev3
+                              throttlDefaultAmount: 0
+                              throttle: false
+                              validateContacts: true
+                              validateContactsByOrganization: false
+                              voiceMailOption: MESSAGE_ONLY
+                            createdId: 0
+                            enableLifeSafety: false
+                            id: 0
+                            lastModifiedId: 0
+                            message:
+                              accountId: 1536846672691202
+                              conferenceBridgeId: 0
+                              contentType: Text
+                              createdDate: 1674823609743
+                              createdId: 1530249602924607
+                              createdName: Vishal Agrawal
+                              id: 0
+                              lastModifiedDate: 1674823609743
+                              lastModifiedId: 1530249602924607
+                              lastModifiedName: Vishal Agrawal
+                              organizationId: 1536984111644674
+                              resourceBundleId: 1536984111644675
+                              status: A
+                              textMessage: "Status: Testing   \nPriority: High   "
+                              title: Readme Testing
+                              useCustomEmail: false
+                              useCustomSms: false
+                            organizationId: 0
+                            priority: NonPriority
+                            publicMessages: {}
+                            resourceBundleId: 0
+                            type: Standard
+                            useEscalation: false
+                          contactsFlag: 3
+                          evaluateAll: false
+                          formTemplate:
+                            formVariableItems:
+                            - isRequired: true
+                              prefixName: '1'
+                              seq: 1
+                              val:
+                              - Testing
+                              variableId: 591470146879515
+                              variableName: Status
+                            - isRequired: false
+                              prefixName: '1'
+                              seq: 2
+                              val:
+                              - High
+                              variableId: 591470146879516
+                              variableName: Priority
+                            subject: Readme Testing
+                            sysVarCurrentTimeFormat: HH:mm:ss
+                            sysVarTodayDateFormat: mm-dd-yyyy
+                          ignoreVariable: false
+                          incidentNotificationPropertyBag:
+                            enableExerciseMode: 'false'
+                          messageFlag: 3
+                          name: New
+                          phaseDefinitions:
+                          - id: 1001
+                            isDefault: false
+                            name: New
+                            seq: 0
+                            status: A
+                          publishOptionsFlag:
+                            abb: 1
+                            alertUs: 1
+                            desktopAlerts: 1
+                            ipawsCap: 1
+                            memberPortal: 1
+                            network: 1
+                            nixleChannel: 1
+                            socialMedia: 1
+                            webPosting: 1
+                            webWidget: 1
+                          settingsFlag: 3
+                          templateId: 1536984111644674
+                          templateName: Readme Testing
+                        resourceBundleId: 1536984111644675
+                        status: A
+                      lastModifiedDate: 1674827220088
+                      lastModifiedId: 1530249602924607
+                      lastModifiedName: Vishal Agrawal
+                      launchtype: SendNow
+                      message:
+                        accountId: 1536846672691202
+                        conferenceBridgeId: 0
+                        contentType: Text
+                        createdDate: 1674823609743
+                        createdId: 1530249602924607
+                        createdName: Vishal Agrawal
+                        id: 0
+                        lastModifiedDate: 1674823609743
+                        lastModifiedId: 1530249602924607
+                        lastModifiedName: Vishal Agrawal
+                        organizationId: 1536984111644674
+                        resourceBundleId: 1536984111644675
+                        status: A
+                        textMessage: "Status: Testing   \nPriority: High   "
+                        title: Readme Testing
+                        useCustomEmail: false
+                        useCustomSms: false
+                      notificationMode: Live
+                      notificationName: Readme Testing
+                      notificationResult:
+                        allDetails:
+                        - attempt: 0
+                          attemptTime: 1674823613439
+                          callResultByPaths:
+                          - attemptId: 63d3c7bb0139ad08c9997fed
+                            attemptOrder: 1
+                            attemptTime: 1674823613439
+                            callResult: Sent
+                            confirmed: false
+                            countryCode: IN
+                            cycleSeq: 1
+                            firstName: Vishal
+                            journalId: 0
+                            lastName: Agrawal
+                            path: Email
+                            pathText: c-vishal.agrawal@everbridge.com
+                            waitTime: 0
+                          confirmed: false
+                          contactId: 426680841666562
+                          createdId: 1530249602924607
+                          externalId: c-vishal.agrawal@everbridge.com
+                          firstAttemptTime: 1674823613439
+                          firstName: Vishal
+                          fullName: Vishal Agrawal
+                          id: 0
+                          lastName: Agrawal
+                          notificationId: 591470146880264
+                          result: Sent
+                        confirmedCount: 0
+                        confirmedLateCount: 0
+                        notConfirmedCount: 1
+                        notificationId: 0
+                        totalCount: 1
+                        unreachableCount: 0
+                      notificationStatus: Completed
+                      oldAwareCAMPID: 0
+                      organizationId: 1536984111644674
+                      priority: NonPriority
+                      processedBy: schedule-task-dev3-green-i-026dbaf0eea0f3e89
+                      productSource: Matrix
+                      publicMessages: {}
+                      resourceBundleId: 1536984111644675
+                      source: Web
+                      sourceTemplateId: 0
+                      startDate: 1674823609848
+                      status: A
+                      stoppedBy: 0
+                      transformed: true
+                      type: Standard
+              schema:
+                properties:
+                  message:
+                    description: Request status
+                    enum:
+                    - OK
+                    type: string
+                type: object
+          description: Accepted
+        '404':
+          content:
+            application/json:
+              examples:
+                Not found:
+                  summary: Incident not found
+                  value:
+                    message: Incident 301678932871606 not found
+                    status: 404
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    enum:
+                    - Incident <incidentId> not found
+                    type: string
+                  status:
+                    description: Request status
+                    enum:
+                    - '404'
+                    type: string
+                type: object
+          description: Not Found
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      summary: Get Notification
+      tags:
+      - Notifications
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.notificationId: method.request.path.notificationId
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/notifications/{organizationId}/{notificationId}
+    put:
+      description: This API can be used for Mass Notification as well as Incident Notification.  Except stopping a notification, other updates to Incident Notification should be done using [Update Incident](https://developers.everbridge.net/home/reference/update-incident).  <br /><br />Additional samples for updating Mass Notification will be added soon.
+      operationId: EBS Update Notification
+      parameters:
+      - in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - in: path
+        name: notificationId
+        required: true
+        schema:
+          example: '591470146880264'
+          maxLength: 16
+          type: string
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Default:
+                summary: Stop Notification
+                value:
+                  notificationStatus: Stopped
+            schema:
+              $ref: '#/components/schemas/updateNotification'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Default:
+                  summary: Created
+                  value:
+                    baseUri: https://api-dev3.everbridge.net/rest/incidents/892807736728255/
+                    id: 3004419817920365
+                    instanceUri: https://api-dev3.everbridge.net/rest/incidents/892807736728255/3004419817920365
+                    message: OK
+              schema:
+                properties:
+                  baseUri:
+                    description: API endpoint base URL.  You must append incidentId to retrieve the incident.
+                    type: string
+                  id:
+                    description: Incident ID of the created incident.
+                    type: string
+                  instanceUri:
+                    description: API endpoint which can be used to return the incident details.
+                    type: string
+                  message:
+                    description: Returns status (OK).
+                    type: string
+                type: object
+          description: Created
+        '400':
+          content:
+            application/json:
+              examples:
+                Default:
+                  summary: Validation Error
+                  value:
+                    message: Invalid template id.
+                    status: 400
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    enum:
+                    - Information variable <variableName>[variableID] is required!
+                    - Invalid template id
+                    type: string
+                  status:
+                    description: "Request Status\n * 400: Validation Error\n * 500: Unexpected Error"
+                    type: string
+                type: object
+          description: Bad Request
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      summary: Update Notification
+      tags:
+      - Notifications
+      x-amazon-apigateway-integration:
+        httpMethod: PUT
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.notificationId: method.request.path.notificationId
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/notifications/{organizationId}/{notificationId}
+components:
+  schemas:
+    RestfulInstanceResult:
+      properties:
+        message:
+          type: string
+        result:
+          type: object
+      title: RestfulInstanceResult
+      type: object
+    NotificationEventWrapper:
+      properties:
+        accountId:
+          format: int64
+          type: integer
+        createdDate:
+          format: date-time
+          type: string
+        createdId:
+          format: int64
+          type: integer
+        createdName:
+          type: string
+        createdProxyName:
+          type: string
+        id:
+          format: int64
+          type: integer
+        lastModifiedDate:
+          format: date-time
+          type: string
+        lastModifiedId:
+          format: int64
+          type: integer
+        lastModifiedName:
+          type: string
+        lastModifiedProxyName:
+          type: string
+        name:
+          type: string
+        organizationId:
+          format: int64
+          type: integer
+        resourceBundleId:
+          format: int64
+          type: integer
+        status:
+          enum:
+          - A
+          - D
+          type: string
+      title: NotificationEventWrapper
+      type: object
+    RestfulModificationResult:
+      properties:
+        baseUri:
+          type: string
+        id:
+          format: int64
+          type: integer
+        instanceUri:
+          type: string
+        message:
+          type: string
+      title: RestfulModificationResult
+      type: object
+    updateNotification:
+      allOf:
+      - properties:
+          notificationStatus:
+            example: Stopped
+            type: string
+        required:
+        - notificationStatus
+        type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
+    RestfulCollectionResult:
+      properties:
+        currentPageUri:
+          type: string
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        nextPageUri:
+          type: string
+        page:
+          $ref: '#/components/schemas/DataPageObject'
+        previousPageUri:
+          type: string
+      title: RestfulCollectionResult
+      type: object
+    notification:
+      properties:
+        broadcastContacts:
+          description: Required if Source Template id is not provided.
+          properties:
+            externalIds:
+              description: Comma separated list of externalIds.  ExternalIds can be found in Manager Portal under contacts.
+              items:
+                type: string
+              type: array
+            groupIds:
+              description: Comma separated list of groupIds.  GroupIds can be found using /groups/{organizationId}
+              items:
+                type: string
+              type: array
+          required:
+          - externalIds
+          type: object
+        broadcastSettings:
+          description: Required if Source Template id is not provided.
+          properties:
+            deliverPaths:
+              description: Contact delivery paths e.g. Phone, SMS, Email etc.
+              items:
+                properties:
+                  id:
+                    description: id returned from /contactPaths/{organizationId}
+                    example: '589820879437825'
+                    type: string
+                required:
+                - id
+                type: object
+              type: array
+            senderCallerInfos:
+              description: "Sender information for phone call. \n Required if Source Template id is not provided."
+              items:
+                properties:
+                  callerId:
+                    description: Phone number displayed as called ID
+                    type: string
+                  countryCode:
+                    description: Two letter country code for the phone number
+                    type: string
+                  countryName:
+                    description: Country name from the list of predefined countries for the phone number
+                    type: string
+                required:
+                - callerId
+                - countryCode
+                - countryName
+                type: object
+              type: array
+            senderEmail:
+              description: ' Sender E-Mail Display'
+              example: Internal+Training+(Dev3)
+              type: string
+          required:
+          - deliverPaths
+          - senderCallerInfos
+          - senderEmail
+          type: object
+        launchtype:
+          default: SendNow
+          description: "Notification launch type. \n Required if Source Template id is not provided."
+          enum:
+          - SendNow
+          type: string
+        message:
+          description: Required if Source Template id is not provided.
+          properties:
+            conferenceBridgeId:
+              description: "Conference bridge id is configured in manager portal. \n Required only if type is :Conference."
+              example: '1536984111644677'
+              type: integer
+            questionaire:
+              properties:
+                answers:
+                  items:
+                    properties:
+                      name:
+                        type: string
+                    required:
+                    - name
+                    type: object
+                  type: array
+              required:
+              - answers
+              type: object
+            textMessage:
+              type: string
+            title:
+              type: string
+          required:
+          - title
+          - textMessage
+          type: object
+        sourceTemplateId:
+          description: Source Template ID which can be found from manager portal. If you use a sourceTemplateId, you will NOT be able to override any elements of the notification template including the contacts.
+          type: integer
+        type:
+          default: ''
+          description: Required if Source Template id is not provided.
+          enum:
+          - Standard
+          - Polling
+          - Conference
+          type: string
+      type: object
+    DataPageObject:
+      properties:
+        currentPageNo:
+          format: int32
+          type: integer
+        data:
+          items:
+            type: object
+          type: array
+        dataPageList:
+          items:
+            $ref: '#/components/schemas/DataPageObject'
+          type: array
+        pageSize:
+          format: int32
+          type: integer
+        scrollId:
+          type: string
+        start:
+          format: int32
+          type: integer
+        totalCount:
+          format: int64
+          type: integer
+        totalPageCount:
+          format: int32
+          type: integer
+      title: DataPage«object»
+      type: object
+    createNotification:
+      allOf:
+      - $ref: '#/components/schemas/notification'
+  securitySchemes:
+    API_Authorizer:
+      description: oAuth Token
+      in: header
+      name: Authorization
+      type: apiKey
+      x-amazon-apigateway-authorizer:
+        authorizerCredentials: arn:aws:iam::214792946631:role/oas-rest-api-gw-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+      x-amazon-apigateway-authtype: custom
+    BasicAuth:
+      description: Basic Authentication Token
+      scheme: basic
+      type: http
+    api_key:
+      description: API Key - For System Use
+      in: header
+      name: x-api-key
+      type: apiKey
+x-amazon-apigateway-binary-media-types:
+- audio/wav
+- audio/x-wav
+- application/octet-stream
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

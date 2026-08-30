@@ -1,0 +1,3083 @@
+openapi: 3.2.0
+info:
+  description: EB Suite APIs.
+  title: EB Suite Uploads API
+  version: '1.0'
+servers:
+- url: https://api.everbridge.net/rest
+- url: https://api.everbridge.eu/rest
+tags:
+- description: EB Suites - Uploads
+  name: Uploads
+paths:
+  /dynamicGroups/{organizationId}:
+    get:
+      description: Retrieve all the dynamic groups for an orgnization.
+      operationId: EBS List Dynamic Groups
+      parameters:
+      - description: The ID of the organization containing the upload
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: The page number of dynamicGroups to return
+        in: query
+        name: pageNumber
+        required: false
+        schema:
+          default: 1
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: success
+                  value:
+                    firstPageUri: https://api-dev3.everbridge.net/rest/dynamicGroups/1536984111644674?pageNumber=1
+                    lastPageUri: https://api-dev3.everbridge.net/rest/dynamicGroups/1536984111644674?pageNumber=1
+                    message: OK
+                    page:
+                      currentPageNo: 1
+                      data:
+                      - accountId: 0
+                        contactFilterRules:
+                        - columnName: externalId
+                          columnValue: everbridge.com
+                          contactFieldId: 7
+                          contactFilterOption: ENDWITH
+                          dataType: STRING
+                          operator: ENDWITH
+                          type: SYSTEM
+                        contactFilterType: DataScope
+                        createdId: 0
+                        dirty: true
+                        fillColor: '#311b92'
+                        id: 2702291954040833
+                        lastModifiedDate: 1734594670923
+                        lastModifiedId: 0
+                        lastModifiedName: Vishal Agrawal
+                        lastModifiedTime: 0
+                        lastSynchronizedTime: 0
+                        name: Dynamic_group_1
+                        organizationId: 0
+                        resourceBundleId: 1536846672691203
+                      pageSize: 100
+                      start: 0
+                      totalCount: 1
+                      totalPageCount: 1
+              schema:
+                $ref: '#/components/schemas/DynamicGroupResponseListSchema'
+          description: OK
+        '400':
+          content:
+            application/json:
+              examples:
+                Type Mismatch Exception:
+                  summary: Type mismatch exception
+                  value:
+                    message: type mismatch exception
+                    status: 400
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Type mismatch exception
+                    enum:
+                    - 40o
+                    type: string
+                type: object
+          description: Type Mismatch Exception
+        '401':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Invalid Credentials
+                  value:
+                    message: Unauthorized
+                    status: 401
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Invalid or missing credentials
+                    enum:
+                    - '401'
+                    type: string
+                type: object
+          description: Invalid Credentials
+        '500':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Internal Error
+                  value:
+                    message: Fatal error on handling request
+                    status: 500
+              schema:
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: number
+                required:
+                - status
+                - message
+                type: object
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: List Dynamic Groups
+      tags:
+      - Uploads
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/dynamicGroups/{organizationId}
+  /dynamicGroups/{organizationId}/{dynamicGroupId}:
+    get:
+      description: Retrieve the specified dynamic group for an orgnization.
+      operationId: EBS Get Dynamic Groups Details
+      parameters:
+      - description: The ID of the organization containing the upload
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: The ID of the dynamicGroup to return
+        in: path
+        name: dynamicGroupId
+        required: true
+        schema:
+          example: '2698271864651813'
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Success:
+                  summary: Success
+                  value:
+                    message: OK
+                    result:
+                      accountId: 0
+                      createdId: 0
+                      dirty: false
+                      id: 0
+                      lastModifiedId: 0
+                      lastModifiedTime: 0
+                      lastSynchronizedTime: 0
+                      organizationId: 0
+                      resourceBundleId: 0
+              schema:
+                properties:
+                  message:
+                    type: string
+                  result:
+                    properties:
+                      accountId:
+                        type: number
+                      createdId:
+                        type: number
+                      dirty:
+                        type: boolean
+                      id:
+                        type: number
+                      lastModifiedId:
+                        type: number
+                      lastModifiedTime:
+                        type: number
+                      lastSynchronizedTime:
+                        type: number
+                      organizationId:
+                        type: number
+                      resourceBundleId:
+                        type: number
+                    type: object
+                type: object
+          description: Success
+        '400':
+          content:
+            application/json:
+              examples:
+                Type Mismatch Exception:
+                  summary: Type mismatch exception
+                  value:
+                    message: type mismatch exception
+                    status: 400
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Type mismatch exception
+                    enum:
+                    - 40o
+                    type: string
+                type: object
+          description: Type Mismatch Exception
+        '401':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Invalid Credentials
+                  value:
+                    message: Unauthorized
+                    status: 401
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Invalid or missing credentials
+                    enum:
+                    - '401'
+                    type: string
+                type: object
+          description: Invalid Credentials
+        '500':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Internal Error
+                  value:
+                    message: Fatal error on handling request
+                    status: 500
+              schema:
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: number
+                required:
+                - status
+                - message
+                type: object
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Get Dynamic Groups Details
+      tags:
+      - Uploads
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.dynamicGroupId: method.request.path.dynamicGroupId
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/dynamicGroups/{organizationId}/{dynamicGroupId}
+  /dynamicLocations/{organizationId}:
+    post:
+      description: Upload a CSV with last known location for multiple contacts. <br />Once the file has been uploaded, use [Get DynamicLocation Status](https://developers.everbridge.net/home/reference/ebs-get-dynamic-location-status) to find the status of the upload.
+      operationId: EBS Upload Dynamic Locations
+      parameters:
+      - in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: Type of upload to perform,; the default is Update
+        in: query
+        name: uploadBatchType
+        required: false
+        schema:
+          enum:
+          - Update
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                file:
+                  description: A CSV contains dynamic locations to be uploaded.
+                  format: binary
+                  type: string
+              type: object
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Success:
+                  summary: Success
+                  value:
+                    baseUri: https://api-dev3.everbridge.net/rest/dynamicLocations/1536984111644674
+                    id: 2856257941667841
+                    instanceUri: https://api-dev3.everbridge.net/rest/dynamicLocations/1536984111644674/2856257941667841
+                    message: OK
+              schema:
+                properties:
+                  baseUri:
+                    description: API endpoint base URL.
+                    type: string
+                  id:
+                    description: Batch ID of the job created during upload.
+                    type: string
+                  instanceUri:
+                    description: Unique url containing batchID.  This can not be used to return the batch details.  See [Get Contact Upload](https://developers.everbridge.net/home/reference/ebs-get-contact-upload)
+                    type: string
+                  message:
+                    description: Returns status (OK).
+                    type: string
+                type: object
+          description: Accepted
+        '400':
+          content:
+            application/json:
+              examples:
+                Invalid Request Input:
+                  summary: Invalid Input
+                  value:
+                    message: type mismatch exception
+                    status: 400
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Missing or invalid request input
+                    enum:
+                    - '400'
+                    type: string
+                type: object
+          description: Invalid request input
+        '401':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Invalid Credentials
+                  value:
+                    message: Unauthorized
+                    status: 401
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Invalid or missing credentials
+                    enum:
+                    - '401'
+                    type: string
+                type: object
+          description: Invalid Credentials
+        '415':
+          content:
+            application/json:
+              examples:
+                Invalid Media Type:
+                  summary: Invalid media type
+                  value:
+                    moreInfoUrl: http media type not supported
+                    status: 415
+              schema:
+                properties:
+                  status:
+                    description: Invalid media type
+                    enum:
+                    - '415'
+                    type: string
+                type: object
+          description: Invalid Media Type
+        '500':
+          content:
+            application/json:
+              examples:
+                Contact Upload Failed:
+                  summary: Contact upload failed
+                  value:
+                    message: Contact upload failed
+                    status: 500
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Contact upload failed
+                    enum:
+                    - '500'
+                    type: string
+                type: object
+          description: Contact upload Failed
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Upload Dynamic Locations
+      tags:
+      - Uploads
+      x-amazon-apigateway-integration:
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/dynamicLocations/{organizationId}
+  /dynamicLocations/{organizationId}/{uploadBatchId}:
+    get:
+      description: Retrieve the specified dynamic locations uploadBatch details.
+      operationId: EBS Get Dynamic Locations Details
+      parameters:
+      - description: The ID of the organization containing the upload
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: The ID of the uploadBatch
+        in: path
+        name: uploadBatchId
+        required: true
+        schema:
+          example: '2698271864651813'
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Success:
+                  summary: Success
+                  value:
+                    message: OK
+                    result:
+                      chunkNum: 0
+                      chunking: false
+                      createdDate: 1741079194285
+                      createdId: 1530249602924607
+                      createdName: Vishal Agrawal
+                      criticalNum: 1
+                      dataCenterId: 0
+                      fileName: DynamicLocationsUpload.csv
+                      fileSize: 139
+                      geoFailNum: 0
+                      geoSuccessNum: 0
+                      geocodingType: Bing
+                      id: 2856257941667841
+                      lastModifiedDate: 1741079250050
+                      lastModifiedId: 1530249602924607
+                      lastModifiedName: Vishal Agrawal
+                      organizationId: 1536984111644674
+                      resourceBundleId: 0
+                      serverId: 83128
+                      source: Api
+                      successNum: 0
+                      uploadStatus: completed
+                      withErrorNum: 0
+              schema:
+                properties:
+                  message:
+                    type: string
+                  result:
+                    properties:
+                      chunkNum:
+                        type: number
+                      chunking:
+                        type: boolean
+                      createdDate:
+                        type: number
+                      createdId:
+                        type: number
+                      createdName:
+                        type: string
+                      criticalNum:
+                        type: number
+                      dataCenterId:
+                        type: number
+                      fileName:
+                        type: string
+                      fileSize:
+                        type: number
+                      geoFailNum:
+                        type: number
+                      geoSuccessNum:
+                        type: number
+                      geocodingType:
+                        type: string
+                      id:
+                        type: number
+                      lastModifiedDate:
+                        type: number
+                      lastModifiedId:
+                        type: number
+                      lastModifiedName:
+                        type: string
+                      organizationId:
+                        type: number
+                      resourceBundleId:
+                        type: number
+                      serverId:
+                        type: number
+                      source:
+                        type: string
+                      successNum:
+                        type: number
+                      uploadStatus:
+                        type: string
+                      withErrorNum:
+                        type: number
+                    type: object
+                type: object
+          description: Success
+        '400':
+          content:
+            application/json:
+              examples:
+                Type Mismatch Exception:
+                  summary: Type mismatch exception
+                  value:
+                    message: type mismatch exception
+                    status: 400
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Type mismatch exception
+                    enum:
+                    - 40o
+                    type: string
+                type: object
+          description: Type Mismatch Exception
+        '401':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Invalid Credentials
+                  value:
+                    message: Unauthorized
+                    status: 401
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Invalid or missing credentials
+                    enum:
+                    - '401'
+                    type: string
+                type: object
+          description: Invalid Credentials
+        '500':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Internal Error
+                  value:
+                    message: Fatal error on handling request
+                    status: 500
+              schema:
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: number
+                required:
+                - status
+                - message
+                type: object
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Get Upload Dynamic Locations Details
+      tags:
+      - Uploads
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+          integration.request.path.uploadBatchId: method.request.path.uploadBatchId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/dynamicLocations/{organizationId}/{uploadBatchId}
+  /uploadContacts/{organizationId}/groups/{uploadBatchId}:
+    get:
+      description: Returns the details of a given contact group upload batch ID.
+      operationId: EBS Get Contacts Group Upload Details
+      parameters:
+      - description: The ID of the organization containing the uploadBatchs
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: The ID of the uploadBatch
+        in: path
+        name: uploadBatchId
+        required: true
+        schema:
+          example: '2698271864651813'
+          type: integer
+      - description: Whether to search by LOADED_SUCCESS or LOADED_WITH_ERROR or NOT_LOADED
+        in: query
+        name: uploadRecordStatus
+        required: true
+        schema:
+          enum:
+          - LOADED_SUCCESS
+          - LOADED_WITH_ERROR
+          - NOT_LOADED
+          type: string
+      - description: The column name to order
+        in: query
+        name: columnName
+        required: true
+        schema:
+          enum:
+          - externalId
+          - uploadErrors
+          type: string
+      - description: Whether to order by ASC or DESC
+        in: query
+        name: orderDirection
+        schema:
+          enum:
+          - ASC
+          - DESC
+          type: string
+      - description: The page number of uploadContacts to return
+        in: query
+        name: pageNumber
+        schema:
+          default: 1
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Success:
+                  summary: Success
+                  value:
+                    firstPageUri: https://api-dev3.everbridge.net/rest/uploads/1536984111644674?pageNumber=1
+                    lastPageUri: https://api-dev3.everbridge.net/rest/uploads/1536984111644674?pageNumber=7
+                    message: OK
+                    nextPageUri: https://api-dev3.everbridge.net/rest/uploads/1536984111644674?pageNumber=2
+                    page:
+                      currentPageNo: 1
+                      data:
+                      - accountId: 0
+                        createdDate: 1741068794230
+                        createdId: 2200330536222721
+                        createdName: Nandish API Access
+                        criticalNum: 0
+                        fileName: Contact-Upload-Template.csv
+                        fileSize: 105
+                        geoFailNum: 0
+                        geoSuccessNum: 0
+                        headers:
+                        - csvColumnName: EBInternalCsvRowNo
+                          useful: true
+                        - csvColumnName: First Name
+                          useful: true
+                        - csvColumnName: Last Name
+                          useful: true
+                        - csvColumnName: External ID
+                          useful: true
+                        - csvColumnName: Record Type
+                          useful: true
+                        id: 2853131205476566
+                        lastModifiedDate: 1741068794491
+                        lastModifiedId: 2200330536222721
+                        lastModifiedName: Nandish API Access
+                        organizationId: 1536984111644674
+                        resourceBundleId: 0
+                        source: API
+                        status: A
+                        successNum: 1
+                        uploadMethod: PARTIAL
+                        uploadRecordTypes:
+                        - recordType: Employee
+                          recordTypeId: 1536984111644674
+                        uploadStatus: DONE
+                        withErrorNum: 0
+                      - accountId: 0
+                        createdDate: 1741068788134
+                        createdId: 2200330536222721
+                        createdName: Nandish API Access
+                        criticalNum: 0
+                        fileName: Contact-Upload-Template.csv
+                        fileSize: 105
+                        geoFailNum: 0
+                        geoSuccessNum: 0
+                        headers:
+                        - csvColumnName: EBInternalCsvRowNo
+                          useful: true
+                        - csvColumnName: First Name
+                          useful: true
+                        - csvColumnName: Last Name
+                          useful: true
+                        - csvColumnName: External ID
+                          useful: true
+                        - csvColumnName: Record Type
+                          useful: true
+                        id: 2853131205476565
+                        lastModifiedDate: 1741068788443
+                        lastModifiedId: 2200330536222721
+                        lastModifiedName: Nandish API Access
+                        organizationId: 1536984111644674
+                        resourceBundleId: 0
+                        source: API
+                        status: A
+                        successNum: 1
+                        uploadMethod: DELETE
+                        uploadStatus: DONE
+                        withErrorNum: 0
+                      pageSize: 10
+                      start: 0
+                      totalCount: 3
+                      totalPageCount: 7
+              schema:
+                properties:
+                  firstPageUri:
+                    type: string
+                  lastPageUri:
+                    type: string
+                  message:
+                    type: string
+                  nextPageUri:
+                    type: string
+                  page:
+                    properties:
+                      currentPageNo:
+                        type: number
+                      data:
+                        items:
+                          properties:
+                            accountId:
+                              type: number
+                            createdDate:
+                              type: number
+                            createdId:
+                              type: number
+                            createdName:
+                              type: string
+                            criticalNum:
+                              type: number
+                            fileName:
+                              type: string
+                            fileSize:
+                              type: number
+                            geoFailNum:
+                              type: number
+                            geoSuccessNum:
+                              type: number
+                            headers:
+                              items:
+                                properties:
+                                  csvColumnName:
+                                    type: string
+                                  useful:
+                                    type: boolean
+                                required:
+                                - csvColumnName
+                                - useful
+                                type: object
+                              type: array
+                            id:
+                              type: number
+                            lastModifiedDate:
+                              type: number
+                            lastModifiedId:
+                              type: number
+                            lastModifiedName:
+                              type: string
+                            organizationId:
+                              type: number
+                            resourceBundleId:
+                              type: number
+                            source:
+                              type: string
+                            status:
+                              type: string
+                            successNum:
+                              type: number
+                            uploadMethod:
+                              type: string
+                            uploadRecordTypes:
+                              items:
+                                properties:
+                                  recordType:
+                                    type: string
+                                  recordTypeId:
+                                    type: number
+                                required:
+                                - recordTypeId
+                                - recordType
+                                type: object
+                              type: array
+                            uploadStatus:
+                              type: string
+                            withErrorNum:
+                              type: number
+                          required:
+                          - headers
+                          - accountId
+                          - organizationId
+                          - geoSuccessNum
+                          - fileSize
+                          - id
+                          - uploadMethod
+                          - createdDate
+                          - createdName
+                          - geoFailNum
+                          - status
+                          - withErrorNum
+                          - uploadStatus
+                          - resourceBundleId
+                          - criticalNum
+                          - source
+                          - successNum
+                          - fileName
+                          - createdId
+                          - lastModifiedId
+                          - lastModifiedDate
+                          - lastModifiedName
+                          type: object
+                        type: array
+                      pageSize:
+                        type: number
+                      start:
+                        type: number
+                      totalCount:
+                        type: number
+                      totalPageCount:
+                        type: number
+                    required:
+                    - pageSize
+                    - start
+                    - data
+                    - totalCount
+                    - totalPageCount
+                    - currentPageNo
+                    type: object
+                required:
+                - message
+                - firstPageUri
+                - nextPageUri
+                - lastPageUri
+                - page
+                type: object
+          description: Success
+        '400':
+          content:
+            application/json:
+              examples:
+                Type Mismatch Exception:
+                  summary: Type mismatch exception
+                  value:
+                    message: type mismatch exception
+                    status: 400
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Type mismatch exception
+                    enum:
+                    - 40o
+                    type: string
+                type: object
+          description: Type Mismatch Exception
+        '401':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Invalid Credentials
+                  value:
+                    message: Unauthorized
+                    status: 401
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Invalid or missing credentials
+                    enum:
+                    - '401'
+                    type: string
+                type: object
+          description: Invalid Credentials
+        '500':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Internal Error
+                  value:
+                    message: Fatal error on handling request
+                    status: 500
+              schema:
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: number
+                required:
+                - status
+                - message
+                type: object
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Get Contacts Group Upload Details
+      tags:
+      - Uploads
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+          integration.request.path.uploadBatchId: method.request.path.uploadBatchId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/uploadContacts/{organizationId}/groups/{uploadBatchId}
+  /uploadContacts/{organizationId}/{uploadBatchId}:
+    get:
+      description: Returns the details of a given job filtered by upload status (created using [Upload Contacts](https://developers.everbridge.net/internal/reference/ebs-upload-contacts).
+      operationId: EBS Get Contacts Upload Details
+      parameters:
+      - in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - in: path
+        name: uploadBatchId
+        required: true
+        schema:
+          example: 609852606906746
+          type: integer
+      - in: query
+        name: columnName
+        required: false
+        schema:
+          default: firstName
+          enum:
+          - firstName
+          - lastName
+          - middleInitial
+          - externalId
+          - uploadErrors
+          type: string
+      - in: query
+        name: orderDirection
+        required: false
+        schema:
+          default: ASC
+          enum:
+          - ASC
+          - DESC
+          type: string
+      - in: query
+        name: pageNumber
+        required: false
+        schema:
+          default: 1
+          example: 1
+          type: integer
+      - in: query
+        name: uploadRecordStatus
+        required: false
+        schema:
+          default: LOADED_SUCCESS
+          enum:
+          - LOADED_SUCCESS
+          - LOADED_WITH_ERROR
+          - NOT_LOADED
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Success:
+                  summary: Success
+                  value:
+                    firstPageUri: https://api-dev3.everbridge.net/rest/uploadContacts/1536984111644674/2853131205476588?columnName=firstName&orderDirection=ASC&uploadRecordStatus=LOADED_SUCCESS&pageNumber=1
+                    lastPageUri: https://api-dev3.everbridge.net/rest/uploadContacts/1536984111644674/2853131205476588?columnName=firstName&orderDirection=ASC&uploadRecordStatus=LOADED_SUCCESS&pageNumber=1
+                    message: OK
+                    page:
+                      currentPageNo: 1
+                      data:
+                      - contactId: 2853131205476660
+                        createdDate: 1741071412303
+                        createdId: 2200330536222721
+                        createdName: Nandish API Access
+                        externalId: c-vishal.agrawal00001@everbridge.com
+                        firstName: Vishal
+                        id: 2853131205489319
+                        lastModifiedDate: 1741071412306
+                        lastName: Upload
+                        recordType: Employee
+                        uploadBatchId: 2853131205476588
+                        uploadRecordStatus: LOADED_SUCCESS
+                      pageSize: 10
+                      start: 0
+                      totalCount: 1
+                      totalPageCount: 1
+              schema:
+                properties:
+                  firstPageUri:
+                    type: string
+                  lastPageUri:
+                    type: string
+                  message:
+                    type: string
+                  page:
+                    properties:
+                      currentPageNo:
+                        type: number
+                      data:
+                        items:
+                          properties:
+                            contactId:
+                              type: number
+                            createdDate:
+                              type: number
+                            createdId:
+                              type: number
+                            createdName:
+                              type: string
+                            externalId:
+                              type: string
+                            firstName:
+                              type: string
+                            id:
+                              type: number
+                            lastModifiedDate:
+                              type: number
+                            lastName:
+                              type: string
+                            recordType:
+                              type: string
+                            uploadBatchId:
+                              type: number
+                            uploadRecordStatus:
+                              type: string
+                          required:
+                          - id
+                          - uploadBatchId
+                          - firstName
+                          - lastName
+                          - recordType
+                          - externalId
+                          - uploadRecordStatus
+                          - contactId
+                          - createdId
+                          - lastModifiedDate
+                          - createdName
+                          - createdDate
+                          type: object
+                        type: array
+                      pageSize:
+                        type: number
+                      start:
+                        type: number
+                      totalCount:
+                        type: number
+                      totalPageCount:
+                        type: number
+                    required:
+                    - pageSize
+                    - start
+                    - data
+                    - totalCount
+                    - totalPageCount
+                    - currentPageNo
+                    type: object
+                required:
+                - message
+                - firstPageUri
+                - lastPageUri
+                - page
+                type: object
+          description: Success
+        '400':
+          content:
+            application/json:
+              examples:
+                Type Mismatch Exception:
+                  summary: Type mismatch exception
+                  value:
+                    message: type mismatch exception
+                    status: 400
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Type mismatch exception
+                    enum:
+                    - 40o
+                    type: string
+                type: object
+          description: Type Mismatch Exception
+        '401':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Invalid Credentials
+                  value:
+                    message: Unauthorized
+                    status: 401
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Invalid or missing credentials
+                    enum:
+                    - '401'
+                    type: string
+                type: object
+          description: Invalid Credentials
+        '500':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Internal Error
+                  value:
+                    message: Fatal error on handling request
+                    status: 500
+              schema:
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: number
+                required:
+                - status
+                - message
+                type: object
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Get Contacts Upload Details
+      tags:
+      - Uploads
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+          integration.request.path.uploadBatchId: method.request.path.uploadBatchId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/uploadContacts/{organizationId}/{uploadBatchId}
+  /uploadDynamicLocations/{organizationId}/{uploadBatchId}:
+    get:
+      description: Returns the details of a given dynamic location upload batch ID.
+      operationId: EBS Get Upload Dynamic Locations Details
+      parameters:
+      - description: The ID of the organization containing the upload
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: The ID of the uploadBatch
+        in: path
+        name: uploadBatchId
+        required: true
+        schema:
+          example: '2698271864651813'
+          type: integer
+      - description: Whether to search by Success or WithError or Failed.
+        in: query
+        name: uploadRecordStatus
+        required: true
+        schema:
+          default: Success
+          enum:
+          - Success
+          - WithError
+          - Failed
+          type: string
+      - description: The page number of uploadDynamicLocations to return
+        in: query
+        name: pageNumber
+        schema:
+          default: 1
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Success:
+                  summary: Success
+                  value:
+                    firstPageUri: https://api-dev3.everbridge.net/rest/uploadDynamicLocations/1536984111644674/2856257941667841?uploadRecordStatus=Failed&pageNumber=1
+                    lastPageUri: https://api-dev3.everbridge.net/rest/uploadDynamicLocations/1536984111644674/2856257941667841?uploadRecordStatus=Failed&pageNumber=1
+                    message: OK
+                    page:
+                      currentPageNo: 1
+                      data:
+                      - arriveDate: '2023-08-15T10:08:30.000-08:00'
+                        createdDate: 1741079196306
+                        createdId: 1530249602924607
+                        createdName: Vishal Agrawal
+                        externalId: c-vishal.agrawal@everbridge.com
+                        id: 2856257941667841
+                        lastModifiedDate: 1741079196306
+                        lat: '42.08771204'
+                        lon: '-72.57961796'
+                        referenceId: 2856257941667841
+                        uploadBatchId: 2856257941667841
+                        uploadErrors:
+                        - columnName: externalId
+                          columnValue: c-vishal.agrawal@everbridge.com
+                          uploadErrorCode: EXTERNAL_ID_NOT_EXIST
+                        uploadRecordStatus: Failed
+                      pageSize: 1000
+                      start: 0
+                      totalCount: 1
+                      totalPageCount: 1
+              schema:
+                properties:
+                  firstPageUri:
+                    type: string
+                  lastPageUri:
+                    type: string
+                  message:
+                    type: string
+                  page:
+                    properties:
+                      currentPageNo:
+                        type: number
+                      data:
+                        items:
+                          properties:
+                            arriveDate:
+                              type: string
+                            createdDate:
+                              type: number
+                            createdId:
+                              type: number
+                            createdName:
+                              type: string
+                            externalId:
+                              type: string
+                            id:
+                              type: number
+                            lastModifiedDate:
+                              type: number
+                            lat:
+                              type: string
+                            lon:
+                              type: string
+                            referenceId:
+                              type: number
+                            uploadBatchId:
+                              type: number
+                            uploadErrors:
+                              items:
+                                properties:
+                                  columnName:
+                                    type: string
+                                  columnValue:
+                                    type: string
+                                  uploadErrorCode:
+                                    type: string
+                                required:
+                                - uploadErrorCode
+                                - columnName
+                                - columnValue
+                                type: object
+                              type: array
+                            uploadRecordStatus:
+                              type: string
+                          required:
+                          - id
+                          - uploadBatchId
+                          - uploadErrors
+                          - uploadRecordStatus
+                          - referenceId
+                          - arriveDate
+                          - externalId
+                          - lon
+                          - lat
+                          - createdId
+                          - createdName
+                          - createdDate
+                          - lastModifiedDate
+                          type: object
+                        type: array
+                      pageSize:
+                        type: number
+                      start:
+                        type: number
+                      totalCount:
+                        type: number
+                      totalPageCount:
+                        type: number
+                    type: object
+                type: object
+          description: Success
+        '400':
+          content:
+            application/json:
+              examples:
+                Type Mismatch Exception:
+                  summary: Type mismatch exception
+                  value:
+                    message: type mismatch exception
+                    status: 400
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Type mismatch exception
+                    enum:
+                    - 40o
+                    type: string
+                type: object
+          description: Type Mismatch Exception
+        '401':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Invalid Credentials
+                  value:
+                    message: Unauthorized
+                    status: 401
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Invalid or missing credentials
+                    enum:
+                    - '401'
+                    type: string
+                type: object
+          description: Invalid Credentials
+        '500':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Internal Error
+                  value:
+                    message: Fatal error on handling request
+                    status: 500
+              schema:
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: number
+                required:
+                - status
+                - message
+                type: object
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Get Upload Dynamic Locations Details
+      tags:
+      - Uploads
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+          integration.request.path.uploadBatchId: method.request.path.uploadBatchId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/uploadDynamicLocations/{organizationId}/{uploadBatchId}
+  /uploads/{organizationId}:
+    get:
+      description: List the summary of all previous contact uploads.
+      operationId: EBS List Upload Contacts
+      parameters:
+      - description: The ID of the organization containing the uploads
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: The page number of uploads to return.
+        in: query
+        name: pageNumber
+        required: false
+        schema:
+          default: 1
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Success:
+                  summary: Success
+                  value:
+                    firstPageUri: https://api-dev3.everbridge.net/rest/uploads/1536984111644674?pageNumber=1
+                    lastPageUri: https://api-dev3.everbridge.net/rest/uploads/1536984111644674?pageNumber=7
+                    message: OK
+                    nextPageUri: https://api-dev3.everbridge.net/rest/uploads/1536984111644674?pageNumber=2
+                    page:
+                      currentPageNo: 1
+                      data:
+                      - accountId: 0
+                        createdDate: 1741068794230
+                        createdId: 2200330536222721
+                        createdName: Nandish API Access
+                        criticalNum: 0
+                        fileName: Contact-Upload-Template.csv
+                        fileSize: 105
+                        geoFailNum: 0
+                        geoSuccessNum: 0
+                        headers:
+                        - csvColumnName: EBInternalCsvRowNo
+                          useful: true
+                        - csvColumnName: First Name
+                          useful: true
+                        - csvColumnName: Last Name
+                          useful: true
+                        - csvColumnName: External ID
+                          useful: true
+                        - csvColumnName: Record Type
+                          useful: true
+                        id: 2853131205476566
+                        lastModifiedDate: 1741068794491
+                        lastModifiedId: 2200330536222721
+                        lastModifiedName: Nandish API Access
+                        organizationId: 1536984111644674
+                        resourceBundleId: 0
+                        source: API
+                        status: A
+                        successNum: 1
+                        uploadMethod: PARTIAL
+                        uploadRecordTypes:
+                        - recordType: Employee
+                          recordTypeId: 1536984111644674
+                        uploadStatus: DONE
+                        withErrorNum: 0
+                      - accountId: 0
+                        createdDate: 1741068788134
+                        createdId: 2200330536222721
+                        createdName: Nandish API Access
+                        criticalNum: 0
+                        fileName: Contact-Upload-Template.csv
+                        fileSize: 105
+                        geoFailNum: 0
+                        geoSuccessNum: 0
+                        headers:
+                        - csvColumnName: EBInternalCsvRowNo
+                          useful: true
+                        - csvColumnName: First Name
+                          useful: true
+                        - csvColumnName: Last Name
+                          useful: true
+                        - csvColumnName: External ID
+                          useful: true
+                        - csvColumnName: Record Type
+                          useful: true
+                        id: 2853131205476565
+                        lastModifiedDate: 1741068788443
+                        lastModifiedId: 2200330536222721
+                        lastModifiedName: Nandish API Access
+                        organizationId: 1536984111644674
+                        resourceBundleId: 0
+                        source: API
+                        status: A
+                        successNum: 1
+                        uploadMethod: DELETE
+                        uploadStatus: DONE
+                        withErrorNum: 0
+                      pageSize: 10
+                      start: 0
+                      totalCount: 3
+                      totalPageCount: 7
+              schema:
+                properties:
+                  firstPageUri:
+                    type: string
+                  lastPageUri:
+                    type: string
+                  message:
+                    type: string
+                  nextPageUri:
+                    type: string
+                  page:
+                    properties:
+                      currentPageNo:
+                        type: number
+                      data:
+                        items:
+                          properties:
+                            accountId:
+                              type: number
+                            createdDate:
+                              type: number
+                            createdId:
+                              type: number
+                            createdName:
+                              type: string
+                            criticalNum:
+                              type: number
+                            fileName:
+                              type: string
+                            fileSize:
+                              type: number
+                            geoFailNum:
+                              type: number
+                            geoSuccessNum:
+                              type: number
+                            headers:
+                              items:
+                                properties:
+                                  csvColumnName:
+                                    type: string
+                                  useful:
+                                    type: boolean
+                                required:
+                                - csvColumnName
+                                - useful
+                                type: object
+                              type: array
+                            id:
+                              type: number
+                            lastModifiedDate:
+                              type: number
+                            lastModifiedId:
+                              type: number
+                            lastModifiedName:
+                              type: string
+                            organizationId:
+                              type: number
+                            resourceBundleId:
+                              type: number
+                            source:
+                              type: string
+                            status:
+                              type: string
+                            successNum:
+                              type: number
+                            uploadMethod:
+                              type: string
+                            uploadRecordTypes:
+                              items:
+                                properties:
+                                  recordType:
+                                    type: string
+                                  recordTypeId:
+                                    type: number
+                                required:
+                                - recordTypeId
+                                - recordType
+                                type: object
+                              type: array
+                            uploadStatus:
+                              type: string
+                            withErrorNum:
+                              type: number
+                          required:
+                          - headers
+                          - accountId
+                          - organizationId
+                          - geoSuccessNum
+                          - fileSize
+                          - id
+                          - uploadMethod
+                          - createdDate
+                          - createdName
+                          - geoFailNum
+                          - status
+                          - withErrorNum
+                          - uploadStatus
+                          - resourceBundleId
+                          - criticalNum
+                          - source
+                          - successNum
+                          - fileName
+                          - createdId
+                          - lastModifiedId
+                          - lastModifiedDate
+                          - lastModifiedName
+                          type: object
+                        type: array
+                      pageSize:
+                        type: number
+                      start:
+                        type: number
+                      totalCount:
+                        type: number
+                      totalPageCount:
+                        type: number
+                    required:
+                    - pageSize
+                    - start
+                    - data
+                    - totalCount
+                    - totalPageCount
+                    - currentPageNo
+                    type: object
+                required:
+                - message
+                - firstPageUri
+                - nextPageUri
+                - lastPageUri
+                - page
+                type: object
+          description: Success
+        '400':
+          content:
+            application/json:
+              examples:
+                Type Mismatch Exception:
+                  summary: Type mismatch exception
+                  value:
+                    message: type mismatch exception
+                    status: 400
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Type mismatch exception
+                    enum:
+                    - 40o
+                    type: string
+                type: object
+          description: Type Mismatch Exception
+        '401':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Invalid Credentials
+                  value:
+                    message: Unauthorized
+                    status: 401
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Invalid or missing credentials
+                    enum:
+                    - '401'
+                    type: string
+                type: object
+          description: Invalid Credentials
+        '500':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Internal Error
+                  value:
+                    message: Fatal error on handling request
+                    status: 500
+              schema:
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: number
+                required:
+                - status
+                - message
+                type: object
+          description: Internal Error
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      summary: List Upload Contacts
+      tags:
+      - Uploads
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/uploads/{organizationId}
+    post:
+      description: This API allows adding, updating or deleting contacts in bulk by uploading a file. <br />Once the file has been uploaded, use [Get Contacts Upload Status](https://developers.everbridge.net/home/reference/ebs-get-contacts-upload-status) to find the status of the upload. Use [Create Contact](https://developers.everbridge.net/home/reference/ebs-create-contact) to add individual contact.
+      operationId: EBS Upload Contacts
+      parameters:
+      - in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: ''
+        in: query
+        name: uploadMethod
+        required: false
+        schema:
+          default: PARTIAL
+          enum:
+          - PARTIAL
+          - WITH_RECORD_TYPE
+          - DELETE
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                file:
+                  description: File to upload
+                  format: binary
+                  type: string
+              type: object
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Success:
+                  summary: Success
+                  value:
+                    baseUri: https://api-dev3.everbridge.net/rest/uploads/1536984111644674/?uploadMethod=PARTIAL
+                    id: 609852606906412
+                    instanceUri: https://api-dev3.everbridge.net/rest/uploads/1536984111644674/?uploadMethod=PARTIAL609852606906412
+                    message: OK
+              schema:
+                properties:
+                  baseUri:
+                    description: API endpoint base URL.
+                    type: string
+                  id:
+                    description: Batch ID of the job created during upload.
+                    type: string
+                  instanceUri:
+                    description: Unique url containing batchID.  This can not be used to return the batch details.  See [Get Contact Upload](https://developers.everbridge.net/home/reference/ebs-get-contact-upload)
+                    type: string
+                  message:
+                    description: Returns status (OK).
+                    type: string
+                type: object
+          description: Accepted
+        '400':
+          content:
+            application/json:
+              examples:
+                Invalid Request Input:
+                  summary: Invalid Input
+                  value:
+                    message: type mismatch exception
+                    status: 400
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Missing or invalid request input
+                    enum:
+                    - '400'
+                    type: string
+                type: object
+          description: Invalid request input
+        '401':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Invalid Credentials
+                  value:
+                    message: Unauthorized
+                    status: 401
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Invalid or missing credentials
+                    enum:
+                    - '401'
+                    type: string
+                type: object
+          description: Invalid Credentials
+        '415':
+          content:
+            application/json:
+              examples:
+                Invalid Media Type:
+                  summary: Invalid media type
+                  value:
+                    moreInfoUrl: http media type not supported
+                    status: 415
+              schema:
+                properties:
+                  status:
+                    description: Invalid media type
+                    enum:
+                    - '415'
+                    type: string
+                type: object
+          description: Invalid Media Type
+        '500':
+          content:
+            application/json:
+              examples:
+                Contact Upload Failed:
+                  summary: Contact upload failed
+                  value:
+                    message: Contact upload failed
+                    status: 500
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Contact upload failed
+                    enum:
+                    - '500'
+                    type: string
+                type: object
+          description: Contact upload Failed
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      summary: Upload Contacts
+      tags:
+      - Uploads
+      x-amazon-apigateway-integration:
+        contentHandling: CONVERT_TO_TEXT
+        credentials: arn:aws:iam::214792946631:role/apigateway_invoke_lambda
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        timeoutInMillis: 120000
+        type: aws_proxy
+        uri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:apigw-large-file-handler-us-east-1-prod/invocations
+  /uploads/{organizationId}/groups:
+    get:
+      description: Returns all the upload contacts groups details.
+      operationId: EBS List Upload Contacts Groups
+      parameters:
+      - description: The ID of the organization containing the uploads
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: The page number of uploads to return.
+        in: query
+        name: pageNumber
+        required: false
+        schema:
+          default: 1
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Success:
+                  summary: Success
+                  value:
+                    firstPageUri: https://api-dev3.everbridge.net/rest/uploads/1536984111644674?pageNumber=1
+                    lastPageUri: https://api-dev3.everbridge.net/rest/uploads/1536984111644674?pageNumber=4
+                    message: OK
+                    nextPageUri: https://api-dev3.everbridge.net/rest/uploads/1536984111644674?pageNumber=2
+                    page:
+                      currentPageNo: 1
+                      data:
+                      - accountId: 0
+                        createdDate: 1741072521900
+                        createdId: 2200330536222721
+                        createdName: Nandish API Access
+                        criticalNum: 1
+                        fileName: Group-Uploads-Sample.csv
+                        fileSize: 59
+                        geoFailNum: 0
+                        geoSuccessNum: 0
+                        headers:
+                        - csvColumnName: EBInternalCsvRowNo
+                          useful: true
+                        - csvColumnName: External ID
+                          useful: true
+                        - csvColumnName: Groups
+                          useful: true
+                        - csvColumnName: Group Remove
+                          useful: true
+                        id: 2853131205476590
+                        lastModifiedDate: 1741072522247
+                        lastModifiedId: 2200330536222721
+                        lastModifiedName: Nandish API Access
+                        organizationId: 1536984111644674
+                        resourceBundleId: 0
+                        source: API
+                        status: A
+                        successNum: 0
+                        uploadMethod: GROUP
+                        uploadStatus: DONE
+                        withErrorNum: 0
+                      - accountId: 0
+                        createdDate: 1740995661841
+                        createdId: 2200330536222721
+                        createdName: Nandish API Access
+                        criticalNum: 0
+                        fileName: Group-Uploads-Sample.csv
+                        fileSize: 59
+                        geoFailNum: 0
+                        geoSuccessNum: 0
+                        headers:
+                        - csvColumnName: EBInternalCsvRowNo
+                          useful: true
+                        - csvColumnName: External ID
+                          useful: true
+                        - csvColumnName: Groups
+                          useful: true
+                        - csvColumnName: Group Remove
+                          useful: true
+                        id: 2853131205476354
+                        lastModifiedDate: 1740995662287
+                        lastModifiedId: 2200330536222721
+                        lastModifiedName: Nandish API Access
+                        organizationId: 1536984111644674
+                        resourceBundleId: 0
+                        source: API
+                        status: A
+                        successNum: 1
+                        uploadMethod: GROUP
+                        uploadStatus: DONE
+                        withErrorNum: 0
+                      pageSize: 10
+                      start: 0
+                      totalCount: 2
+                      totalPageCount: 1
+              schema:
+                properties:
+                  firstPageUri:
+                    type: string
+                  lastPageUri:
+                    type: string
+                  message:
+                    type: string
+                  nextPageUri:
+                    type: string
+                  page:
+                    properties:
+                      currentPageNo:
+                        type: number
+                      data:
+                        items:
+                          properties:
+                            accountId:
+                              type: number
+                            createdDate:
+                              type: number
+                            createdId:
+                              type: number
+                            createdName:
+                              type: string
+                            criticalNum:
+                              type: number
+                            fileName:
+                              type: string
+                            fileSize:
+                              type: number
+                            geoFailNum:
+                              type: number
+                            geoSuccessNum:
+                              type: number
+                            headers:
+                              items:
+                                properties:
+                                  csvColumnName:
+                                    type: string
+                                  useful:
+                                    type: boolean
+                                required:
+                                - csvColumnName
+                                - useful
+                                type: object
+                              type: array
+                            id:
+                              type: number
+                            lastModifiedDate:
+                              type: number
+                            lastModifiedId:
+                              type: number
+                            lastModifiedName:
+                              type: string
+                            organizationId:
+                              type: number
+                            resourceBundleId:
+                              type: number
+                            source:
+                              type: string
+                            status:
+                              type: string
+                            successNum:
+                              type: number
+                            uploadMethod:
+                              type: string
+                            uploadStatus:
+                              type: string
+                            withErrorNum:
+                              type: number
+                          required:
+                          - headers
+                          - accountId
+                          - organizationId
+                          - geoSuccessNum
+                          - fileSize
+                          - id
+                          - uploadMethod
+                          - createdDate
+                          - createdName
+                          - geoFailNum
+                          - status
+                          - withErrorNum
+                          - uploadStatus
+                          - resourceBundleId
+                          - criticalNum
+                          - source
+                          - successNum
+                          - fileName
+                          - createdId
+                          - lastModifiedId
+                          - lastModifiedDate
+                          - lastModifiedName
+                          type: object
+                        type: array
+                      pageSize:
+                        type: number
+                      start:
+                        type: number
+                      totalCount:
+                        type: number
+                      totalPageCount:
+                        type: number
+                    required:
+                    - pageSize
+                    - start
+                    - data
+                    - totalCount
+                    - totalPageCount
+                    - currentPageNo
+                    type: object
+                required:
+                - message
+                - firstPageUri
+                - nextPageUri
+                - lastPageUri
+                - page
+                type: object
+          description: Success
+        '400':
+          content:
+            application/json:
+              examples:
+                Type Mismatch Exception:
+                  summary: Type mismatch exception
+                  value:
+                    message: type mismatch exception
+                    status: 400
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Type mismatch exception
+                    enum:
+                    - 40o
+                    type: string
+                type: object
+          description: Type Mismatch Exception
+        '401':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Invalid Credentials
+                  value:
+                    message: Unauthorized
+                    status: 401
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Invalid or missing credentials
+                    enum:
+                    - '401'
+                    type: string
+                type: object
+          description: Invalid Credentials
+        '500':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Internal Error
+                  value:
+                    message: Fatal error on handling request
+                    status: 500
+              schema:
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: number
+                required:
+                - status
+                - message
+                type: object
+          description: Internal Error
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      summary: ' List Upload Contacts Groups'
+      tags:
+      - Uploads
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/uploads/{organizationId}/groups
+    post:
+      description: 'This API allows adding, removing contacts to group(s) in bulk by uploading a file.
+
+        Once the file has been uploaded, use [Get Contacts Groups Upload Status](https://developers.everbridge.net/home/reference/ebs-get-contacts-groups-upload-status) to find the status of the upload.'
+      operationId: EBS Upload Contacts Groups
+      parameters:
+      - description: The ID of the organization containing the contacts
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                file:
+                  description: Multipart file upload body
+                  format: binary
+                  type: string
+              required:
+              - file
+              type: object
+          multipart/related:
+            schema:
+              properties:
+                file:
+                  description: Multipart file upload body
+                  format: binary
+                  type: string
+              required:
+              - file
+              type: object
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Success:
+                  summary: Success
+                  value:
+                    baseUri: https://api-dev3.everbridge.net/rest/uploads/1536984111644674/?uploadMethod=PARTIAL
+                    id: 609852606906412
+                    instanceUri: https://api-dev3.everbridge.net/rest/uploads/1536984111644674/?uploadMethod=PARTIAL609852606906412
+                    message: OK
+              schema:
+                properties:
+                  baseUri:
+                    description: API endpoint base URL.
+                    type: string
+                  id:
+                    description: Batch ID of the job created during upload.
+                    type: string
+                  instanceUri:
+                    description: Unique url containing batchID.  This can not be used to return the batch details.  See [Get Contact Upload](https://developers.everbridge.net/home/reference/ebs-get-contact-upload)
+                    type: string
+                  message:
+                    description: Returns status (OK).
+                    type: string
+                type: object
+          description: Accepted
+        '400':
+          content:
+            application/json:
+              examples:
+                Invalid Request Input:
+                  summary: Invalid Input
+                  value:
+                    message: type mismatch exception
+                    status: 400
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Missing or invalid request input
+                    enum:
+                    - '400'
+                    type: string
+                type: object
+          description: Invalid request input
+        '401':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Invalid Credentials
+                  value:
+                    message: Unauthorized
+                    status: 401
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Invalid or missing credentials
+                    enum:
+                    - '401'
+                    type: string
+                type: object
+          description: Invalid Credentials
+        '415':
+          content:
+            application/json:
+              examples:
+                Invalid Media Type:
+                  summary: Invalid media type
+                  value:
+                    moreInfoUrl: http media type not supported
+                    status: 415
+              schema:
+                properties:
+                  status:
+                    description: Invalid media type
+                    enum:
+                    - '415'
+                    type: string
+                type: object
+          description: Invalid Media Type
+        '500':
+          content:
+            application/json:
+              examples:
+                Contact Upload Failed:
+                  summary: Contact upload failed
+                  value:
+                    message: Contact upload failed
+                    status: 500
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Contact upload failed
+                    enum:
+                    - '500'
+                    type: string
+                type: object
+          description: Contact upload Failed
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      summary: Upload Contacts Groups
+      tags:
+      - Uploads
+      x-amazon-apigateway-integration:
+        contentHandling: CONVERT_TO_TEXT
+        credentials: arn:aws:iam::214792946631:role/apigateway_invoke_lambda
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          '400':
+            statusCode: '400'
+          default:
+            statusCode: '200'
+        timeoutInMillis: 120000
+        type: aws_proxy
+        uri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:apigw-large-file-handler-us-east-1-prod/invocations
+  /uploads/{organizationId}/groups/{uploadBatchId}:
+    get:
+      description: Returns details of a given group(s) upload batch ID.  This API is used to find the status of a given job (created using [Upload Contacts Groups](https://developers.everbridge.net/internal/reference/ebs-upload-contacts-groups).
+      operationId: EBS Get Contacts Groups Upload Status
+      parameters:
+      - description: The ID of the organization containing the uploadBatchs
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: The ID of the uploadBatch to return
+        in: path
+        name: uploadBatchId
+        required: true
+        schema:
+          example: '2698271864651813'
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Success:
+                  summary: Success
+                  value:
+                    message: OK
+                    result:
+                      accountId: 0
+                      createdDate: 1741072521900
+                      createdId: 2200330536222721
+                      createdName: Nandish API Access
+                      criticalNum: 1
+                      fileName: Group-Uploads-Sample.csv
+                      fileSize: 59
+                      geoFailNum: 0
+                      geoSuccessNum: 0
+                      headers:
+                      - csvColumnName: EBInternalCsvRowNo
+                        useful: true
+                      - csvColumnName: External ID
+                        useful: true
+                      - csvColumnName: Groups
+                        useful: true
+                      - csvColumnName: Group Remove
+                        useful: true
+                      id: 2853131205476590
+                      lastModifiedDate: 1741072522247
+                      lastModifiedId: 2200330536222721
+                      lastModifiedName: Nandish API Access
+                      organizationId: 1536984111644674
+                      resourceBundleId: 0
+                      source: API
+                      status: A
+                      successNum: 0
+                      uploadMethod: GROUP
+                      uploadStatus: DONE
+                      withErrorNum: 0
+              schema:
+                properties:
+                  message:
+                    type: string
+                  result:
+                    properties:
+                      accountId:
+                        type: number
+                      createdDate:
+                        type: number
+                      createdId:
+                        type: number
+                      createdName:
+                        type: string
+                      criticalNum:
+                        type: number
+                      fileName:
+                        type: string
+                      fileSize:
+                        type: number
+                      geoFailNum:
+                        type: number
+                      geoSuccessNum:
+                        type: number
+                      headers:
+                        items:
+                          properties:
+                            csvColumnName:
+                              type: string
+                            useful:
+                              type: boolean
+                          required:
+                          - csvColumnName
+                          - useful
+                          type: object
+                        type: array
+                      id:
+                        type: number
+                      lastModifiedDate:
+                        type: number
+                      lastModifiedId:
+                        type: number
+                      lastModifiedName:
+                        type: string
+                      organizationId:
+                        type: number
+                      resourceBundleId:
+                        type: number
+                      source:
+                        type: string
+                      status:
+                        type: string
+                      successNum:
+                        type: number
+                      uploadMethod:
+                        type: string
+                      uploadStatus:
+                        type: string
+                      withErrorNum:
+                        type: number
+                    required:
+                    - headers
+                    - accountId
+                    - organizationId
+                    - geoSuccessNum
+                    - fileSize
+                    - id
+                    - uploadMethod
+                    - createdDate
+                    - createdName
+                    - geoFailNum
+                    - status
+                    - withErrorNum
+                    - uploadStatus
+                    - resourceBundleId
+                    - criticalNum
+                    - source
+                    - successNum
+                    - fileName
+                    - createdId
+                    - lastModifiedId
+                    - lastModifiedDate
+                    - lastModifiedName
+                    type: object
+                required:
+                - message
+                - result
+                type: object
+          description: Success
+        '400':
+          content:
+            application/json:
+              examples:
+                Type Mismatch Exception:
+                  summary: Type mismatch exception
+                  value:
+                    message: type mismatch exception
+                    status: 400
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Type mismatch exception
+                    enum:
+                    - 40o
+                    type: string
+                type: object
+          description: Type Mismatch Exception
+        '401':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Invalid Credentials
+                  value:
+                    message: Unauthorized
+                    status: 401
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Invalid or missing credentials
+                    enum:
+                    - '401'
+                    type: string
+                type: object
+          description: Invalid Credentials
+        '500':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Internal Error
+                  value:
+                    message: Fatal error on handling request
+                    status: 500
+              schema:
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: number
+                required:
+                - status
+                - message
+                type: object
+          description: Internal Error
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      summary: Get Contacts Groups Upload Status
+      tags:
+      - Uploads
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+          integration.request.path.uploadBatchId: method.request.path.uploadBatchId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/uploads/{organizationId}/groups/{uploadBatchId}
+  /uploads/{organizationId}/{uploadBatchId}:
+    get:
+      description: Get the summary of given contact upload.
+      operationId: EBS Get Contacts Upload Status
+      parameters:
+      - description: The ID of the organization containing the uploadBatchs
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: The ID of the uploadBatch to return
+        in: path
+        name: uploadBatchId
+        required: true
+        schema:
+          example: '2698271864651813'
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Success:
+                  summary: Success
+                  value:
+                    firstPageUri: https://api-dev3.everbridge.net/rest/uploads/1536984111644674?pageNumber=1
+                    lastPageUri: https://api-dev3.everbridge.net/rest/uploads/1536984111644674?pageNumber=7
+                    message: OK
+                    nextPageUri: https://api-dev3.everbridge.net/rest/uploads/1536984111644674?pageNumber=2
+                    page:
+                      currentPageNo: 1
+                      data:
+                      - accountId: 0
+                        createdDate: 1741068794230
+                        createdId: 2200330536222721
+                        createdName: Nandish API Access
+                        criticalNum: 0
+                        fileName: Contact-Upload-Template.csv
+                        fileSize: 105
+                        geoFailNum: 0
+                        geoSuccessNum: 0
+                        headers:
+                        - csvColumnName: EBInternalCsvRowNo
+                          useful: true
+                        - csvColumnName: First Name
+                          useful: true
+                        - csvColumnName: Last Name
+                          useful: true
+                        - csvColumnName: External ID
+                          useful: true
+                        - csvColumnName: Record Type
+                          useful: true
+                        id: 2853131205476566
+                        lastModifiedDate: 1741068794491
+                        lastModifiedId: 2200330536222721
+                        lastModifiedName: Nandish API Access
+                        organizationId: 1536984111644674
+                        resourceBundleId: 0
+                        source: API
+                        status: A
+                        successNum: 1
+                        uploadMethod: PARTIAL
+                        uploadRecordTypes:
+                        - recordType: Employee
+                          recordTypeId: 1536984111644674
+                        uploadStatus: DONE
+                        withErrorNum: 0
+                      - accountId: 0
+                        createdDate: 1741068788134
+                        createdId: 2200330536222721
+                        createdName: Nandish API Access
+                        criticalNum: 0
+                        fileName: Contact-Upload-Template.csv
+                        fileSize: 105
+                        geoFailNum: 0
+                        geoSuccessNum: 0
+                        headers:
+                        - csvColumnName: EBInternalCsvRowNo
+                          useful: true
+                        - csvColumnName: First Name
+                          useful: true
+                        - csvColumnName: Last Name
+                          useful: true
+                        - csvColumnName: External ID
+                          useful: true
+                        - csvColumnName: Record Type
+                          useful: true
+                        id: 2853131205476565
+                        lastModifiedDate: 1741068788443
+                        lastModifiedId: 2200330536222721
+                        lastModifiedName: Nandish API Access
+                        organizationId: 1536984111644674
+                        resourceBundleId: 0
+                        source: API
+                        status: A
+                        successNum: 1
+                        uploadMethod: DELETE
+                        uploadStatus: DONE
+                        withErrorNum: 0
+                      pageSize: 10
+                      start: 0
+                      totalCount: 3
+                      totalPageCount: 7
+              schema:
+                properties:
+                  firstPageUri:
+                    type: string
+                  lastPageUri:
+                    type: string
+                  message:
+                    type: string
+                  nextPageUri:
+                    type: string
+                  page:
+                    properties:
+                      currentPageNo:
+                        type: number
+                      data:
+                        items:
+                          properties:
+                            accountId:
+                              type: number
+                            createdDate:
+                              type: number
+                            createdId:
+                              type: number
+                            createdName:
+                              type: string
+                            criticalNum:
+                              type: number
+                            fileName:
+                              type: string
+                            fileSize:
+                              type: number
+                            geoFailNum:
+                              type: number
+                            geoSuccessNum:
+                              type: number
+                            headers:
+                              items:
+                                properties:
+                                  csvColumnName:
+                                    type: string
+                                  useful:
+                                    type: boolean
+                                required:
+                                - csvColumnName
+                                - useful
+                                type: object
+                              type: array
+                            id:
+                              type: number
+                            lastModifiedDate:
+                              type: number
+                            lastModifiedId:
+                              type: number
+                            lastModifiedName:
+                              type: string
+                            organizationId:
+                              type: number
+                            resourceBundleId:
+                              type: number
+                            source:
+                              type: string
+                            status:
+                              type: string
+                            successNum:
+                              type: number
+                            uploadMethod:
+                              type: string
+                            uploadRecordTypes:
+                              items:
+                                properties:
+                                  recordType:
+                                    type: string
+                                  recordTypeId:
+                                    type: number
+                                required:
+                                - recordTypeId
+                                - recordType
+                                type: object
+                              type: array
+                            uploadStatus:
+                              type: string
+                            withErrorNum:
+                              type: number
+                          required:
+                          - headers
+                          - accountId
+                          - organizationId
+                          - geoSuccessNum
+                          - fileSize
+                          - id
+                          - uploadMethod
+                          - createdDate
+                          - createdName
+                          - geoFailNum
+                          - status
+                          - withErrorNum
+                          - uploadStatus
+                          - resourceBundleId
+                          - criticalNum
+                          - source
+                          - successNum
+                          - fileName
+                          - createdId
+                          - lastModifiedId
+                          - lastModifiedDate
+                          - lastModifiedName
+                          type: object
+                        type: array
+                      pageSize:
+                        type: number
+                      start:
+                        type: number
+                      totalCount:
+                        type: number
+                      totalPageCount:
+                        type: number
+                    required:
+                    - pageSize
+                    - start
+                    - data
+                    - totalCount
+                    - totalPageCount
+                    - currentPageNo
+                    type: object
+                required:
+                - message
+                - firstPageUri
+                - nextPageUri
+                - lastPageUri
+                - page
+                type: object
+          description: Success
+        '400':
+          content:
+            application/json:
+              examples:
+                Type Mismatch Exception:
+                  summary: Type mismatch exception
+                  value:
+                    message: type mismatch exception
+                    status: 400
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Type mismatch exception
+                    enum:
+                    - 40o
+                    type: string
+                type: object
+          description: Type Mismatch Exception
+        '401':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Invalid Credentials
+                  value:
+                    message: Unauthorized
+                    status: 401
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Invalid or missing credentials
+                    enum:
+                    - '401'
+                    type: string
+                type: object
+          description: Invalid Credentials
+        '500':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Internal Error
+                  value:
+                    message: Fatal error on handling request
+                    status: 500
+              schema:
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: number
+                required:
+                - status
+                - message
+                type: object
+          description: Internal Error
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      summary: Get Contacts Upload Status
+      tags:
+      - Uploads
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+          integration.request.path.uploadBatchId: method.request.path.uploadBatchId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/uploads/{organizationId}/{uploadBatchId}
+components:
+  schemas:
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
+    DynamicGroupResponseListSchema:
+      properties:
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        page:
+          properties:
+            currentPageNo:
+              type: number
+            data:
+              items:
+                properties:
+                  accountId:
+                    type: number
+                  contactFilterRules:
+                    items:
+                      properties:
+                        columnName:
+                          type: string
+                        columnValue:
+                          type: string
+                        contactFieldId:
+                          type: number
+                        contactFilterOption:
+                          type: string
+                        dataType:
+                          type: string
+                        operator:
+                          type: string
+                        type:
+                          type: string
+                      required:
+                      - contactFieldId
+                      - type
+                      - operator
+                      - dataType
+                      - columnName
+                      - contactFilterOption
+                      - columnValue
+                      type: object
+                    type: array
+                  contactFilterType:
+                    type: string
+                  createdId:
+                    type: number
+                  dirty:
+                    type: boolean
+                  fillColor:
+                    type: string
+                  id:
+                    type: number
+                  lastModifiedDate:
+                    type: number
+                  lastModifiedId:
+                    type: number
+                  lastModifiedName:
+                    type: string
+                  lastModifiedTime:
+                    type: number
+                  lastSynchronizedTime:
+                    type: number
+                  name:
+                    type: string
+                  organizationId:
+                    type: number
+                  resourceBundleId:
+                    type: number
+                required:
+                - lastModifiedTime
+                - accountId
+                - fillColor
+                - resourceBundleId
+                - contactFilterType
+                - organizationId
+                - id
+                - name
+                - lastModifiedDate
+                - lastModifiedId
+                - createdId
+                - lastSynchronizedTime
+                - lastModifiedName
+                - contactFilterRules
+                - dirty
+                type: object
+              type: array
+            pageSize:
+              type: number
+            start:
+              type: number
+            totalCount:
+              type: number
+            totalPageCount:
+              type: number
+          required:
+          - pageSize
+          - start
+          - data
+          - totalCount
+          - totalPageCount
+          - currentPageNo
+          type: object
+      required:
+      - message
+      - firstPageUri
+      - lastPageUri
+      - page
+      type: object
+  securitySchemes:
+    API_Authorizer:
+      description: oAuth Token
+      in: header
+      name: Authorization
+      type: apiKey
+      x-amazon-apigateway-authorizer:
+        authorizerCredentials: arn:aws:iam::214792946631:role/oas-rest-api-gw-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+      x-amazon-apigateway-authtype: custom
+    BasicAuth:
+      description: Basic Authentication Token
+      scheme: basic
+      type: http
+    api_key:
+      description: API Key - For System Use
+      in: header
+      name: x-api-key
+      type: apiKey
+x-amazon-apigateway-binary-media-types:
+- audio/wav
+- audio/x-wav
+- application/octet-stream
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

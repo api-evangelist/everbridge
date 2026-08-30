@@ -1,0 +1,299 @@
+openapi: 3.2.0
+info:
+  description: EB Suite APIs.
+  title: EB Suite Audio API
+  version: '1.0'
+servers:
+- url: https://api.everbridge.net/rest
+- url: https://api.everbridge.eu/rest
+tags:
+- description: EB Suites - Audio Management
+  name: Audio
+paths:
+  /audio/{organizationId}:
+    post:
+      description: "Upload an audio file to use in notifications. \nThe recommended format is 8KHz, 8bit, mono u-Law or uncompressed PCM WAV and less than 5 minutes in length."
+      operationId: EBS Upload Audio
+      parameters:
+      - description: The ID of the organization containing the audio
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                file:
+                  description: Multipart file upload body
+                  format: binary
+                  type: string
+              required:
+              - file
+              type: object
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Success:
+                  summary: Success
+                  value:
+                    audioKey: 672cb89f25a980166586f958
+                    id: 0
+                    instanceUri: null0
+                    message: OK
+              schema:
+                $ref: '#/components/schemas/AudioRestfulModificationResult'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '500':
+          description: Internal Error
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      summary: Upload Audio
+      tags:
+      - Audio
+      x-amazon-apigateway-integration:
+        contentHandling: CONVERT_TO_BINARY
+        credentials: arn:aws:iam::214792946631:role/apigateway_invoke_lambda
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: aws_proxy
+        uri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:apigw-large-file-handler-us-east-1-prod/invocations
+  /audio/{organizationId}/{audioId}:
+    get:
+      description: Retrieve a specific audio
+      operationId: EBS Get Audio
+      parameters:
+      - description: The ID of the organization in which to find the audio
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: The ID of the audio
+        in: path
+        name: audioId
+        required: true
+        schema:
+          type: string
+      - description: Return the raw audio file or the record associated with that file.
+        in: query
+        name: returnType
+        required: false
+        schema:
+          default: data
+          enum:
+          - data
+          - file
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Response with Audio Data:
+                  summary: Response when 'data' query parameter is provided
+                  value:
+                    message: OK
+                    result:
+                      accountId: 0
+                      bucket: Notification
+                      createdDate: 1730960348291
+                      createdId: 2200330536222721
+                      createdName: Nandish API Access
+                      fileId: Notification_672c5bdcdcf8680543dcb83f
+                      id: 672c5bdcdcf8680543dcb83f
+                      lastModifiedDate: 1730960348544
+                      lastModifiedId: 2200330536222721
+                      lastModifiedName: Nandish API Access
+                      metadata:
+                        contentType: audio/wav
+                        length: '44158'
+                        organizationId: '1536984111644674'
+                      name: API Uploaded Audio 1730960348291
+                      organizationId: 1536984111644674
+                      resourceBundleId: 0
+                      status: A
+              schema:
+                $ref: '#/components/schemas/AudioWrapperInstanceResult'
+            audio/wav:
+              examples:
+                Response with Audio File:
+                  summary: Response when 'file' query parameter is provided
+                  value: {}
+              schema:
+                $ref: '#/components/schemas/AudioWrapperInstanceResult'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '500':
+          description: Internal Error
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      summary: Get Audio
+      tags:
+      - Audio
+      x-amazon-apigateway-integration:
+        contentHandling: CONVERT_TO_BINARY
+        credentials: arn:aws:iam::214792946631:role/apigateway_invoke_lambda
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.audioId: method.request.path.audioId
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: aws_proxy
+        uri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:apigw-large-file-handler-us-east-1-prod/invocations
+components:
+  schemas:
+    AudioWrapperInstanceResult:
+      properties:
+        message:
+          type: string
+        result:
+          $ref: '#/components/schemas/AudioWrapper'
+      type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
+    FileResourceWrapper:
+      properties:
+        fileName:
+          type: string
+        id:
+          type: string
+        mimeType:
+          type: string
+        size:
+          format: double
+          type: number
+      type: object
+    AudioRestfulModificationResult:
+      properties:
+        audioKey:
+          type: string
+        baseUri:
+          type: string
+        id:
+          format: int64
+          type: integer
+        instanceUri:
+          type: string
+        message:
+          type: string
+      type: object
+    AudioWrapper:
+      properties:
+        accountId:
+          format: int64
+          type: integer
+        bucket:
+          enum:
+          - Notification
+          - SSP
+          - RecipientApp
+          - Greetings
+          - ShapeFiles
+          - IVRResources
+          - RTFImage
+          - TempFiles
+          - CommCoverImage
+          type: string
+        createdDate:
+          format: date-time
+          type: string
+        createdId:
+          format: int64
+          type: integer
+        createdName:
+          type: string
+        createdProxyName:
+          type: string
+        fileId:
+          type: string
+        fileResource:
+          $ref: '#/components/schemas/FileResourceWrapper'
+        formattedCreatedDate:
+          type: string
+        id:
+          type: string
+        lastModifiedDate:
+          format: date-time
+          type: string
+        lastModifiedId:
+          format: int64
+          type: integer
+        lastModifiedName:
+          type: string
+        lastModifiedProxyName:
+          type: string
+        metadata:
+          additionalProperties:
+            type: string
+          type: object
+        name:
+          type: string
+        organizationId:
+          format: int64
+          type: integer
+        resourceBundleId:
+          format: int64
+          type: integer
+        status:
+          enum:
+          - A
+          - D
+          type: string
+      type: object
+  securitySchemes:
+    API_Authorizer:
+      description: oAuth Token
+      in: header
+      name: Authorization
+      type: apiKey
+      x-amazon-apigateway-authorizer:
+        authorizerCredentials: arn:aws:iam::214792946631:role/oas-rest-api-gw-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+      x-amazon-apigateway-authtype: custom
+    BasicAuth:
+      description: Basic Authentication Token
+      scheme: basic
+      type: http
+    api_key:
+      description: API Key - For System Use
+      in: header
+      name: x-api-key
+      type: apiKey
+x-amazon-apigateway-binary-media-types:
+- audio/wav
+- audio/x-wav
+- application/octet-stream
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

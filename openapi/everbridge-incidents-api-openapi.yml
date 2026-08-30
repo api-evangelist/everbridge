@@ -1,0 +1,1635 @@
+openapi: 3.2.0
+info:
+  title: Everbridge Incidents API
+  version: '1.0'
+  description: 'Operations tagged Incidents across 2 of this provider''s published API definitions: everbridge-digital-apps-openapi.json, everbridge-eb-suite-openapi.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.everbridge.net/digitalapps/v2
+- url: https://api.everbridge.net/rest
+- url: https://api.everbridge.eu/rest
+tags:
+- name: Incidents
+  description: Incidents operations
+paths:
+  /incidents/{incidentId}:
+    get:
+      tags:
+      - Incidents
+      summary: Get Incident
+      description: Retrieve the incident by incident id
+      operationId: ebs-daa-get-incident
+      parameters:
+      - name: incidentId
+        in: path
+        description: Incident id
+        required: true
+        schema:
+          type: integer
+          format: int64
+        example: 1539455328453094
+      - name: Client-Id
+        in: header
+        description: Custom app client id
+        required: true
+        schema:
+          type: string
+        example: 3efb35a2-fdee-44bb-b476-2a45cada8b00
+      - name: Authorization
+        in: header
+        description: Access token
+        required: true
+        schema:
+          type: string
+        example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyLXRlc3QiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MDAwMDAwMDAsImV4cCI6MjAwMDAwMDAwMH0.MEUCIQDRrT_U-WXmq9sdlqZQw4y1GiI4Pp2tJSrKzWSi8vBslgIgQzRSce6h7RkF70ZcQnFX6Zry8FSX8U5CggV2-3OyuVE
+      responses:
+        '200':
+          description: Retrieve the incident by incident id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IncidentV2response'
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        httpMethod: get
+        uri: https://mobilemember.everbridge.net/api/v2/incidents/{incidentId}
+        requestParameters:
+          integration.request.path.incidentId: method.request.path.incidentId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        passthroughBehavior: when_no_match
+    servers:
+    - url: https://api.everbridge.net/digitalapps/v2
+  /incidentJournals/{organizationId}/{incidentId}:
+    get:
+      description: Get all incident journals for a given incidentId
+      operationId: EBS Get Journals
+      parameters:
+      - example: '591470146880572'
+        in: path
+        name: incidentId
+        required: true
+        schema:
+          maxLength: 16
+          type: string
+      - in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: Success
+                  value:
+                    firstPageUri: https://api-dev3.everbridge.net/rest/incidentJournals/1536984111644674/633389027691687/?pageNumber=1
+                    lastPageUri: https://api-dev3.everbridge.net/rest/incidentJournals/1536984111644674/633389027691687/?pageNumber=0
+                    message: OK
+                    nextPageUri: https://api-dev3.everbridge.net/rest/incidentJournals/1536984111644674/633389027691687/?pageNumber=2
+                    page:
+                      currentPageNo: 1
+                      data:
+                      - accountId: 1536846672691202
+                        createdDate: 1678041125595
+                        createdId: 1530249602924607
+                        createdName: Vishal Agrawal
+                        id: 0
+                        incidentId: 633389027691687
+                        journalEntry: 'Launch incident:  with Response Subscription: Profile Id: 63f9025e74afd050981becae, Response type: EVERY, Polling response: .'
+                        lastModifiedDate: 1678041125595
+                        lastModifiedId: 1530249602924607
+                        lastModifiedName: Vishal Agrawal
+                        organizationId: 1536984111644674
+                        resourceBundleId: 1536984111644675
+                        status: A
+                      - accountId: 1536846672691202
+                        createdDate: 1679429073965
+                        createdId: 1536846672691205
+                        createdName: Ajay Goel
+                        id: 0
+                        incidentId: 633389027691687
+                        journalEntry: Added via API
+                        lastModifiedDate: 1679429073965
+                        lastModifiedId: 1536846672691205
+                        lastModifiedName: Ajay Goel
+                        organizationId: 1536984111644674
+                        resourceBundleId: 1536984111644675
+                        status: A
+                      pageSize: 10
+                      start: 0
+                      totalCount: 0
+                      totalPageCount: 0
+              schema: {}
+          description: OK
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      summary: Get Journals
+      tags:
+      - Incidents
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.incidentId: method.request.path.incidentId
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/incidentJournals/{organizationId}/{incidentId}
+    post:
+      description: Add a new incident journal to a given incident
+      operationId: EBS Add Incident Journal
+      parameters:
+      - example: '591470146880572'
+        in: path
+        name: incidentId
+        required: true
+        schema:
+          maxLength: 16
+          type: string
+      - in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Default:
+                summary: Add journal to incident
+                value:
+                  journalEntry: Follow up needed on this incident
+            schema:
+              properties:
+                journalEntry:
+                  description: Journal entry to be added
+                  maxLength: 500
+                  type: string
+              required:
+              - journalEntry
+              type: object
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: Journal entry added
+                  value:
+                    baseUri: https://api-dev3.everbridge.net/rest/incidentJournals/1536984111644674/
+                    id: 591470146880572
+                    instanceUri: https://api-dev3.everbridge.net/rest/incidentJournals/1536984111644674/591470146880572
+                    message: OK
+              schema: {}
+          description: OK
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      summary: Add Incident Journal
+      tags:
+      - Incidents
+      x-amazon-apigateway-integration:
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.incidentId: method.request.path.incidentId
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/incidentJournals/{organizationId}/{incidentId}
+    servers:
+    - url: https://api.everbridge.net/rest
+    - url: https://api.everbridge.eu/rest
+  /incidents/{organizationId}:
+    get:
+      description: 'Retrieve all the incidents for an organization. '
+      operationId: EBS List Incidents
+      parameters:
+      - in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: Boolean value indicating whether only open incidents should be returned.
+        in: query
+        name: onlyOpen
+        required: false
+        schema:
+          default: false
+          type: boolean
+      - description: The page number of incidents to return.
+        in: query
+        name: pageNumber
+        required: false
+        schema:
+          default: 1
+          format: int32
+          type: integer
+      - description: The page size of incidents to return.
+        in: query
+        name: pageSize
+        required: false
+        schema:
+          default: 10
+          format: int32
+          type: integer
+      - description: Return incidents by specified status.
+        in: query
+        name: status
+        required: false
+        schema:
+          default: All
+          enum:
+          - All
+          - Open
+          - Closed
+          type: string
+      - description: Return incidents by specified type.
+        in: query
+        name: incidentType
+        required: false
+        schema:
+          default: Incident
+          enum:
+          - Incident
+          - Scenario
+          - All
+          type: string
+      - description: Business module type.
+        in: query
+        name: businessModuleType
+        required: false
+        schema:
+          enum:
+          - AlertEvent
+          type: string
+      - description: Start time of createdDate/lastModifiedDate/closeDate (epoch format).
+        example: 1720542948557
+        in: query
+        name: startTime
+        required: false
+        schema:
+          format: int64
+          type: integer
+      - description: End time of createdDate/lastModifiedDate/closeDate (epoch format).
+        example: 1718267242885
+        in: query
+        name: endTime
+        required: false
+        schema:
+          format: int64
+          type: integer
+      - description: dateType will be used with time range of startTime or endTime.
+        in: query
+        name: dateType
+        required: false
+        schema:
+          default: createdDate
+          enum:
+          - createdDate
+          - lastModifiedDate
+          - lastModifiedDateAny
+          - closedDate
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Success:
+                  summary: Default
+                  value:
+                    message: OK
+                    result:
+                      accountId: 453003085614350
+                      closeBy: Ajay Goel
+                      closeDate: 1658191464719
+                      createdDate: 1658191408215
+                      createdId: 505642204790883
+                      createdName: Ajay Goel
+                      duration: 56
+                      enableMessageTruncate: false
+                      hasJournal: false
+                      id: 3017751396588101
+                      incidentAction: Launch
+                      incidentPhases:
+                      - accountId: 453003085614350
+                        createdDate: 1658191408222
+                        createdId: 505642204790883
+                        createdName: Ajay Goel
+                        id: 10011
+                        incidentId: 3017751396588101
+                        lastModifiedDate: 1658191408222
+                        lastModifiedId: 505642204790883
+                        lastModifiedName: Ajay Goel
+                        name: New
+                        notificationId: 3017751396440312
+                        organizationId: 892807736728255
+                        phaseDefinition:
+                          id: 1001
+                          incidentStatus: Open
+                          isDefault: true
+                          name: New
+                          phaseNodeType: Begin
+                          seq: 100
+                          status: A
+                        phaseTemplate:
+                          contactsFlag: 3
+                          evaluateAll: false
+                          formTemplate:
+                            formVariableItems:
+                            - isRequired: false
+                              seq: 1
+                              variableId: 8110002061444228
+                              variableName: Priority
+                            - isRequired: false
+                              seq: 2
+                              variableId: 8110002061444229
+                              variableName: Summary
+                            - isRequired: false
+                              seq: 3
+                              val:
+                              - Accounting & Finance
+                              variableId: 8110002061447337
+                              variableName: Business Unit
+                            preMessage: "Priority: \nSummary:"
+                            subject: 'API  Doc Testing- '
+                            sysVarCurrentTimeFormat: HH:mm:ss
+                            sysVarTodayDateFormat: mm-dd-yyyy
+                          ignoreVariable: true
+                          incidentNotificationPropertyBag:
+                            enableExerciseMode: 'false'
+                          messageFlag: 3
+                          name: Created
+                          publishOptionsFlag:
+                            abb: 1
+                            alertUs: 1
+                            desktopAlerts: 1
+                            ipawsCap: 1
+                            memberPortal: 1
+                            network: 1
+                            nixleChannel: 1
+                            socialMedia: 1
+                            webPosting: 1
+                            webWidget: 0
+                          settingsFlag: 3
+                          templateId: 1536984111644674
+                          templateName: 1 - Readme API doc testing
+                        resourceBundleId: 453003085618621
+                        status: A
+                      - comment: Removed additional repeating nodes for brevity.
+                      incidentStatus: Closed
+                      incidentType: Incident
+                      lastModifiedDate: 1658191464719
+                      lastModifiedDateAny: 1658191464719
+                      lastModifiedId: 505642204790883
+                      lastModifiedName: Ajay Goel
+                      name: API  Doc Testing-
+                      organizationId: 892807736728255
+                      phaseStatus:
+                        id: 1003
+                        incidentStatus: Closed
+                        isDefault: false
+                        name: Close
+                        phaseNodeType: End
+                        seq: 300
+                        status: A
+                      resourceBundleId: 453003085618621
+                      status: A
+                      useTemplateVarValue: false
+              schema:
+                $ref: '#/components/schemas/IncidentResponse'
+          description: Accepted
+        '404':
+          content:
+            application/json:
+              examples:
+                Not found:
+                  summary: Incident not found
+                  value:
+                    message: Incident 301678932871606 not found
+                    status: 404
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    enum:
+                    - Incident <incidentId> not found
+                    type: string
+                  status:
+                    description: Request status
+                    enum:
+                    - '404'
+                    type: string
+                type: object
+          description: Incident Not Found
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      summary: List Incidents
+      tags:
+      - Incidents
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/incidents/{organizationId}
+    post:
+      description: Creating a new incident results in launching one or more new notifications.  Incident can be launched with default values set up at the template level or various parameters defined at the template level can be overridden by sending it through this API.
+      operationId: EBS Launch Incident
+      parameters:
+      - in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Default:
+                summary: Default Template Values
+                value:
+                  incidentAction: Launch
+                  incidentPhases:
+                  - phaseTemplate:
+                      templateId: 1536984111644674
+              Override Delivery Path/Sender Info/Duration:
+                summary: Override Delivery Paths, Sender Information and maximize duration
+                value:
+                  incidentAction: Launch
+                  incidentPhases:
+                  - phaseTemplate:
+                      broadcastTemplate:
+                        broadcastSettings:
+                          deliverPaths:
+                          - id: 8105604014932722
+                          duration: 5
+                          durationTimeUnit: DAYS
+                          senderCallerInfos:
+                          - callerId: '+17817817811'
+                            countryCode: US
+                            countryName: United States
+                          senderEmail: API Notification
+                      templateId: '1536984111644674'
+              Override Recipients:
+                summary: Override Recipients and Variables
+                value:
+                  incidentAction: LaunchThenClose
+                  incidentPhases:
+                  - phaseTemplate:
+                      broadcastTemplate:
+                        broadcastContacts:
+                          externalIds:
+                          - apidocextuser
+                          groupIds:
+                          - '3008835044245508'
+                      formTemplate:
+                        formVariableItems:
+                        - val:
+                          - This incident will auto close after launch
+                          variableId: 8110002061444229
+                      templateId: 1536984111644674
+              Override TemplateId and VariableId:
+                summary: Override TemplateId and VariableId
+                value:
+                  incidentAction: Launch
+                  incidentPhases:
+                  - phaseTemplate:
+                      formTemplate:
+                        formVariableItems:
+                        - val:
+                          - High
+                          variableId: 589820879437825
+                      templateId: 593978407780353
+              Subject and Variables:
+                summary: Override Notification Title and Variables
+                value:
+                  incidentAction: Launch
+                  incidentPhases:
+                  - phaseTemplate:
+                      formTemplate:
+                        formVariableItems:
+                        - val:
+                          - High
+                          variableId: 8110002061444228
+                        - val:
+                          - Variable summary has been replaced with text from API
+                          variableId: 8110002061444229
+                        - val:
+                          - Accounting & Finance
+                          - Call Centers
+                          variableId: 8110002061447337
+                        postMessage: This is the closing instructions in the message sent out.
+                        preMessage: This is sent as SMS Text, Fax, Pager, Text-to-speech conversation.
+                        subject: Subject of the message sent out.  This is also the incident name and notification title
+                      templateId: 1536984111644674
+            schema:
+              $ref: '#/components/schemas/createIncident'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Default:
+                  summary: Created
+                  value:
+                    baseUri: https://api-dev3.everbridge.net/rest/incidents/892807736728255/
+                    id: 3004419817920365
+                    instanceUri: https://api-dev3.everbridge.net/rest/incidents/892807736728255/3004419817920365
+                    message: OK
+              schema:
+                properties:
+                  baseUri:
+                    description: API endpoint base URL.  You must append incidentId to retrieve the incident.
+                    type: string
+                  id:
+                    description: Incident ID of the created incident.
+                    type: string
+                  instanceUri:
+                    description: API endpoint which can be used to return the incident details.
+                    type: string
+                  message:
+                    description: Returns status (OK).
+                    type: string
+                type: object
+          description: Created
+        '400':
+          content:
+            application/json:
+              examples:
+                Default:
+                  summary: Validation Error
+                  value:
+                    message: Invalid template id.
+                    status: 400
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    enum:
+                    - Information variable <variableName>[variableID] is required!
+                    - Invalid template id
+                    type: string
+                  status:
+                    description: "Request Status\n * 400: Validation Error\n * 500: Unexpected Error"
+                    type: string
+                type: object
+          description: Bad Request
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      summary: Launch Incident
+      tags:
+      - Incidents
+      x-amazon-apigateway-integration:
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/incidents/{organizationId}
+    servers:
+    - url: https://api.everbridge.net/rest
+    - url: https://api.everbridge.eu/rest
+  /incidents/{organizationId}/incidentDynamicInfo/query:
+    post:
+      description: Get dynamic information after parsing
+      operationId: EBS Get Incident Dynamic Info Query
+      parameters:
+      - in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              examples: {}
+              schema: {}
+          description: Created
+        '400':
+          content:
+            application/json:
+              examples: {}
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    enum:
+                    - Missing or invalid request input
+                    type: string
+                  status:
+                    description: Missing or invalid request input
+                    type: string
+                type: object
+          description: Missing or invalid request input
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      summary: Get Incident Dynamic Info Query
+      tags:
+      - Incidents
+      x-amazon-apigateway-integration:
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/incidents/{organizationId}/incidentDynamicInfo/query
+    servers:
+    - url: https://api.everbridge.net/rest
+    - url: https://api.everbridge.eu/rest
+  /incidents/{organizationId}/preview:
+    post:
+      description: Returns a dummy incident.
+      operationId: EBS Preview Incident
+      parameters:
+      - in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Default:
+                summary: Default Template Values
+                value:
+                  incidentAction: Launch
+                  incidentPhases:
+                  - phaseTemplate:
+                      templateId: 1536984111644674
+            schema:
+              $ref: '#/components/schemas/previewIncident'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Default:
+                  summary: Created
+                  value:
+                    baseUri: https://api-dev3.everbridge.net/rest/incidents/892807736728255/
+                    id: 3004419817920365
+                    instanceUri: https://api-dev3.everbridge.net/rest/incidents/892807736728255/3004419817920365
+                    message: OK
+              schema:
+                properties:
+                  baseUri:
+                    description: API endpoint base URL.  You must append incidentId to retrieve the incident.
+                    type: string
+                  id:
+                    description: Incident ID of the created incident.
+                    type: string
+                  instanceUri:
+                    description: API endpoint which can be used to return the incident details.
+                    type: string
+                  message:
+                    description: Returns status (OK).
+                    type: string
+                type: object
+          description: Created
+        '400':
+          content:
+            application/json:
+              examples:
+                Default:
+                  summary: Validation Error
+                  value:
+                    message: Invalid template id.
+                    status: 400
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    enum:
+                    - Information variable <variableName>[variableID] is required!
+                    - Invalid template id
+                    type: string
+                  status:
+                    description: "Request Status\n * 400: Validation Error\n * 500: Unexpected Error"
+                    type: string
+                type: object
+          description: Bad Request
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      summary: Preview Incident
+      tags:
+      - Incidents
+      x-amazon-apigateway-integration:
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/incidents/{organizationId}/preview
+    servers:
+    - url: https://api.everbridge.net/rest
+    - url: https://api.everbridge.eu/rest
+  /incidents/{organizationId}/verifyPIN:
+    post:
+      description: The organization from which to verify the PIN
+      operationId: EBS Incident Verify Pin
+      parameters:
+      - in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              examples: {}
+              schema: {}
+          description: Created
+        '400':
+          content:
+            application/json:
+              examples: {}
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    enum:
+                    - Missing or invalid request input
+                    type: string
+                  status:
+                    description: Missing or invalid request input
+                    type: string
+                type: object
+          description: Missing or invalid request input
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      summary: Incident Verify Pin
+      tags:
+      - Incidents
+      x-amazon-apigateway-integration:
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/incidents/{organizationId}/verifyPIN
+    servers:
+    - url: https://api.everbridge.net/rest
+    - url: https://api.everbridge.eu/rest
+  /incidents/{organizationId}/{incidentId}:
+    get:
+      description: 'Retrieve details of an incident within an organization.  This also returns the list of notifications launched within a given incident. '
+      operationId: EBS Get Incident
+      parameters:
+      - example: '591470146880507'
+        in: path
+        name: incidentId
+        required: true
+        schema:
+          maxLength: 16
+          type: string
+      - in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Success:
+                  summary: Default
+                  value:
+                    message: OK
+                    result:
+                      accountId: 453003085614350
+                      closeBy: Ajay Goel
+                      closeDate: 1658191464719
+                      createdDate: 1658191408215
+                      createdId: 505642204790883
+                      createdName: Ajay Goel
+                      duration: 56
+                      enableMessageTruncate: false
+                      hasJournal: false
+                      id: 3017751396588101
+                      incidentAction: Launch
+                      incidentPhases:
+                      - accountId: 453003085614350
+                        createdDate: 1658191408222
+                        createdId: 505642204790883
+                        createdName: Ajay Goel
+                        id: 10011
+                        incidentId: 3017751396588101
+                        lastModifiedDate: 1658191408222
+                        lastModifiedId: 505642204790883
+                        lastModifiedName: Ajay Goel
+                        name: New
+                        notificationId: 3017751396440312
+                        organizationId: 892807736728255
+                        phaseDefinition:
+                          id: 1001
+                          incidentStatus: Open
+                          isDefault: true
+                          name: New
+                          phaseNodeType: Begin
+                          seq: 100
+                          status: A
+                        phaseTemplate:
+                          contactsFlag: 3
+                          evaluateAll: false
+                          formTemplate:
+                            formVariableItems:
+                            - isRequired: false
+                              seq: 1
+                              variableId: 8110002061444228
+                              variableName: Priority
+                            - isRequired: false
+                              seq: 2
+                              variableId: 8110002061444229
+                              variableName: Summary
+                            - isRequired: false
+                              seq: 3
+                              val:
+                              - Accounting & Finance
+                              variableId: 8110002061447337
+                              variableName: Business Unit
+                            preMessage: "Priority: \nSummary:"
+                            subject: 'API  Doc Testing- '
+                            sysVarCurrentTimeFormat: HH:mm:ss
+                            sysVarTodayDateFormat: mm-dd-yyyy
+                          ignoreVariable: true
+                          incidentNotificationPropertyBag:
+                            enableExerciseMode: 'false'
+                          messageFlag: 3
+                          name: Created
+                          publishOptionsFlag:
+                            abb: 1
+                            alertUs: 1
+                            desktopAlerts: 1
+                            ipawsCap: 1
+                            memberPortal: 1
+                            network: 1
+                            nixleChannel: 1
+                            socialMedia: 1
+                            webPosting: 1
+                            webWidget: 0
+                          settingsFlag: 3
+                          templateId: 1536984111644674
+                          templateName: 1 - Readme API doc testing
+                        resourceBundleId: 453003085618621
+                        status: A
+                      - comment: Removed additional repeating nodes for brevity.
+                      incidentStatus: Closed
+                      incidentType: Incident
+                      lastModifiedDate: 1658191464719
+                      lastModifiedDateAny: 1658191464719
+                      lastModifiedId: 505642204790883
+                      lastModifiedName: Ajay Goel
+                      name: API  Doc Testing-
+                      organizationId: 892807736728255
+                      phaseStatus:
+                        id: 1003
+                        incidentStatus: Closed
+                        isDefault: false
+                        name: Close
+                        phaseNodeType: End
+                        seq: 300
+                        status: A
+                      resourceBundleId: 453003085618621
+                      status: A
+                      useTemplateVarValue: false
+              schema:
+                properties:
+                  message:
+                    description: Request status
+                    enum:
+                    - OK
+                    type: string
+                  result:
+                    type: object
+                type: object
+          description: Accepted
+        '404':
+          content:
+            application/json:
+              examples:
+                Not found:
+                  summary: Incident not found
+                  value:
+                    message: Incident 301678932871606 not found
+                    status: 404
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    enum:
+                    - Incident <incidentId> not found
+                    type: string
+                  status:
+                    description: Request status
+                    enum:
+                    - '404'
+                    type: string
+                type: object
+          description: Incident Not Found
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      summary: Get Incident
+      tags:
+      - Incidents
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.incidentId: method.request.path.incidentId
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/incidents/{organizationId}/{incidentId}
+    put:
+      description: Update an existing incident to launch another notification within a given notification.  This can also be used to close an incident (with or without sending notification).
+      operationId: EBS Update Incident
+      parameters:
+      - in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - in: path
+        name: incidentId
+        required: true
+        schema:
+          example: '591470146880507'
+          maxLength: 16
+          type: string
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Close without Notification:
+                summary: Close without notification
+                value:
+                  incidentAction: CloseWithoutNotification
+              Default:
+                summary: Send update using update phase (default template values)
+                value:
+                  incidentAction: Update
+                  incidentPhases:
+                  - phaseTemplate:
+                      templateId: 1536984111644674
+                  name: API Doc test message
+              Update and Override Delivery Path/Sender Info:
+                summary: Override Delivery Paths and Sender Information
+                value:
+                  incidentAction: Update
+                  incidentPhases:
+                  - phaseTemplate:
+                      broadcastTemplate:
+                        broadcastSettings:
+                          deliverPaths:
+                          - id: 8105604014932722
+                          senderCallerInfos:
+                          - callerId: '+17817817811'
+                            countryCode: US
+                            countryName: United States
+                          senderEmail: API Notification
+                      templateId: '1536984111644674'
+            schema:
+              $ref: '#/components/schemas/updateIncident'
+              required:
+              - incidentAction
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Default:
+                  summary: Created
+                  value:
+                    baseUri: https://api-dev3.everbridge.net/rest/incidents/892807736728255/
+                    id: 3004419817920365
+                    instanceUri: https://api-dev3.everbridge.net/rest/incidents/892807736728255/3004419817920365
+                    message: OK
+              schema:
+                properties:
+                  baseUri:
+                    description: API endpoint base URL.  You must append incidentId to retrieve the incident.
+                    type: string
+                  id:
+                    description: Incident ID of the created incident.
+                    type: string
+                  instanceUri:
+                    description: API endpoint which can be used to return the incident details.
+                    type: string
+                  message:
+                    description: Returns status (OK).
+                    type: string
+                type: object
+          description: Created
+        '400':
+          content:
+            application/json:
+              examples:
+                Default:
+                  summary: Validation Error
+                  value:
+                    message: Invalid template id.
+                    status: 400
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    enum:
+                    - Information variable <variableName>[variableID] is required!
+                    - Invalid template id
+                    type: string
+                  status:
+                    description: "Request Status\n * 400: Validation Error\n * 500: Unexpected Error"
+                    type: string
+                type: object
+          description: Bad Request
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      summary: Update Incident
+      tags:
+      - Incidents
+      x-amazon-apigateway-integration:
+        httpMethod: PUT
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.incidentId: method.request.path.incidentId
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/incidents/{organizationId}/{incidentId}
+    servers:
+    - url: https://api.everbridge.net/rest
+    - url: https://api.everbridge.eu/rest
+components:
+  schemas:
+    MessageSetting:
+      required:
+      - allowShare
+      - requestComment
+      - requestImage
+      - requestLocation
+      - requireConfirm
+      type: object
+      properties:
+        requestImage:
+          type: boolean
+          description: Indicates if an image upload has been requested by the message sender.
+        requestLocation:
+          type: boolean
+          description: Indicates if a location has been requested by the message sender.
+        requestComment:
+          type: boolean
+          description: Indicates if comments are requested by the message sender.
+        allowShare:
+          type: boolean
+          description: Indicates if the message is allowed to be shared.
+        requireConfirm:
+          type: boolean
+          description: Indicates if the the message sender has requested confirmation.
+      description: Additional message settings.
+    Sender:
+      required:
+      - firstName
+      - id
+      - lastName
+      type: object
+      properties:
+        id:
+          type: string
+          description: Sender ID.
+        firstName:
+          type: string
+          description: The Sender's first name.
+        lastName:
+          type: string
+          description: The Sender's last name.
+      description: Message sender.
+    IncidentV2response:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Incident ID.
+          format: int64
+        name:
+          type: string
+          description: Incident name.
+        incidentStatus:
+          type: string
+          description: Incident status.
+          enum:
+          - Open
+          - Closed
+          - All
+        incidentCreatedDate:
+          type: integer
+          description: Incident created date.
+          format: int64
+        incidentLastModifiedDate:
+          type: integer
+          description: Incident last modified date.
+          format: int64
+        incidentClosedDate:
+          type: integer
+          description: Incident closed date.
+          format: int64
+        incidentDuration:
+          type: integer
+          description: Incident duration.
+          format: int64
+        messages:
+          type: array
+          description: Notification messages belong to this incident.
+          items:
+            $ref: '#/components/schemas/MessageResponseForQuery'
+    MessageResponseForQuery:
+      required:
+      - body
+      - id
+      - priority
+      - sender
+      - setting
+      - source
+      - state
+      - title
+      type: object
+      properties:
+        id:
+          type: string
+          description: Message ID.
+        title:
+          type: string
+          description: Message title.
+        body:
+          type: string
+          description: Message content.
+        priority:
+          type: boolean
+          description: Message priority.
+        sender:
+          $ref: '#/components/schemas/Sender'
+        source:
+          type: string
+          description: Message source.
+        setting:
+          $ref: '#/components/schemas/MessageSetting'
+        state:
+          $ref: '#/components/schemas/MessageState'
+        incidentName:
+          type: string
+          description: Incident name. Only available if the message was triggered from an incident.
+        createdAt:
+          type: integer
+          description: Message created time.
+          format: int64
+    MessageState:
+      required:
+      - active
+      - confirmed
+      - read
+      - shared
+      type: object
+      properties:
+        read:
+          type: boolean
+          description: Indicates whether the message has been marked as read for the Contact.
+        shared:
+          type: boolean
+          description: Indicates whether the message has been marked as shared for the Contact.
+        confirmed:
+          type: boolean
+          description: Indicates whether the message has been marked as confirmed for the Contact.
+        confirmedAt:
+          type: integer
+          description: The time the message was marked as confirmed for the Contact.
+          format: int64
+        readAt:
+          type: integer
+          description: The time the message was marked as read for the Contact.
+          format: int64
+        active:
+          type: boolean
+          description: Indicates whether the message is still active.
+      description: Message state.
+    incident:
+      properties:
+        incidentPhases:
+          items:
+            properties:
+              phaseTemplate:
+                properties:
+                  broadcastTemplate:
+                    properties:
+                      broadcastContacts:
+                        properties:
+                          externalIds:
+                            description: Comma separated list of externalIds.  ExternalIds can be found in Manager Portal under contacts.
+                            items:
+                              type: string
+                            type: array
+                          groupIds:
+                            description: Comma separated list of groupIds.  GroupIds can be found using /groups/{organizationId}
+                            items:
+                              type: string
+                            type: array
+                        type: object
+                      broadcastSettings:
+                        properties:
+                          deliverPaths:
+                            description: Contact delivery paths e.g. Phone, SMS, Email etc.
+                            items:
+                              properties:
+                                id:
+                                  description: id returned from /contactPaths/{organizationId}
+                                  type: string
+                              type: object
+                            type: array
+                          duration:
+                            description: Maximum duration of broadcast, without any units
+                            type: integer
+                          durationTimeUnit:
+                            description: 'Associated units for the above duration: MINUTES, HOURS, or DAYS.'
+                            type: string
+                          senderCallerInfos:
+                            description: Sender information for phone call.
+                            items:
+                              properties:
+                                callerId:
+                                  description: Phone number displayed as called ID
+                                  type: string
+                                countryCode:
+                                  description: Two letter country code for the phone number
+                                  type: string
+                                countryName:
+                                  description: Country name from the list of predefined countries for the phone number
+                                  type: string
+                              type: object
+                            type: array
+                          senderEmail:
+                            description: ' Sender E-Mail Display'
+                            type: string
+                        type: object
+                    type: object
+                  formTemplate:
+                    properties:
+                      formVariableItems:
+                        items:
+                          properties:
+                            val:
+                              description: Variable value to be sent in the notification
+                              items:
+                                type: string
+                              type: array
+                            variableId:
+                              description: Variable ID from the template.  Can be found using /incidentVariableItems/{organizationId}/{templateId}/{phase} or /incidentVariableItems/{organizationId}
+                              type: string
+                          type: object
+                        type: array
+                      postMessage:
+                        description: This is the closing instructions (when list of variables is hidden in the template).
+                        type: string
+                      preMessage:
+                        description: Notification content for SMS Text, Fax, Pager, Text-to-speech conversation.
+                        type: string
+                      subject:
+                        description: Subject of the incident and notification.  If name is not provided, it also changes the name/title of incident and the notification.
+                        maxLength: 255
+                        type: string
+                    type: object
+                  templateId:
+                    description: Template ID which can be found from manager portal or using API GET /templates/{organizationId}.
+                    type: integer
+                required:
+                - templateId
+                type: object
+            type: object
+          type: array
+        name:
+          description: This replaces the name/title of the incident and notification.  Please note that this is NOT the subject of the notification sent out.
+          type: string
+      type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
+    createIncident:
+      allOf:
+      - properties:
+          incidentAction:
+            description: "Incident Action:\n * `Launch`: This is the most common use case for launching a new incident.\n * `LaunchThenClose`: This closes the incident right after launching the incident."
+            enum:
+            - Launch
+            - LaunchThenClose
+            type: string
+        required:
+        - incidentAction
+        - incidentPhases
+        type: object
+      - $ref: '#/components/schemas/incident'
+    updateIncident:
+      allOf:
+      - properties:
+          incidentAction:
+            default: Update
+            description: "When sending an update to the incident, incidentAction can control the state of the incident.\n * `Update`: Sends an update to the incident using update phase of the template. \n * `UpdateThenClose`: Closes the incident right after updating the incident. \n * `Close` : Closes the incident without sending notification.\n * `CloseWithoutNotification`: Same as Close but does not need additional details in request.\n * `CloseWithNotification`: Sends a notification using close phase and then closes the incident.<br /><br /><b>Note:</b> When using Update/Close/UpdateThenClose, required parameters like templateId must be provided in the request"
+            enum:
+            - Update
+            - Close
+            - UpdateThenClose
+            - CloseWithNotification
+            - CloseWithoutNotification
+            type: string
+        type: object
+      - $ref: '#/components/schemas/incident'
+    previewIncident:
+      allOf:
+      - properties:
+          incidentAction:
+            description: "Incident Action:\n * `Launch`: This is the most common use case for launching a new incident.\n * `LaunchThenClose`: This closes the incident right after launching the incident."
+            enum:
+            - Launch
+            - LaunchThenClose
+            type: string
+        required:
+        - incidentAction
+        - incidentPhases
+        type: object
+      - $ref: '#/components/schemas/incident'
+    IncidentResponse:
+      properties:
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        nextPageUri:
+          type: string
+        page:
+          properties:
+            currentPageNo:
+              type: number
+            data:
+              items:
+                properties:
+                  accountId:
+                    type: number
+                  createdDate:
+                    type: number
+                  createdId:
+                    type: number
+                  createdName:
+                    type: string
+                  duration:
+                    type: number
+                  enableMessageTruncate:
+                    type: boolean
+                  hasJournal:
+                    type: boolean
+                  id:
+                    type: number
+                  incidentJournals:
+                    items:
+                      properties:
+                        accountId:
+                          type: number
+                        createdDate:
+                          type: number
+                        createdId:
+                          type: number
+                        createdName:
+                          type: string
+                        id:
+                          type: number
+                        incidentId:
+                          type: number
+                        journalEntry:
+                          type: string
+                        lastModifiedDate:
+                          type: number
+                        lastModifiedId:
+                          type: number
+                        lastModifiedName:
+                          type: string
+                        organizationId:
+                          type: number
+                        resourceBundleId:
+                          type: number
+                        status:
+                          type: string
+                      required:
+                      - incidentId
+                      - createdName
+                      - accountId
+                      - status
+                      - resourceBundleId
+                      - journalEntry
+                      - organizationId
+                      - id
+                      - createdId
+                      - lastModifiedId
+                      - lastModifiedDate
+                      - lastModifiedDateAny
+                      - createdDate
+                      - lastModifiedName
+                      type: object
+                    type: array
+                  incidentMode:
+                    type: string
+                  incidentStatus:
+                    type: string
+                  incidentType:
+                    type: string
+                  lastModifiedDate:
+                    type: number
+                  lastModifiedDateAny:
+                    description: Represents the most recent modification timestamp, determined as the later of the incident's lastModifiedDate and the latest lastModifiedDate among its associated notifications
+                    type: number
+                  lastModifiedId:
+                    type: number
+                  lastModifiedName:
+                    type: string
+                  name:
+                    type: string
+                  notificationIds:
+                    items:
+                      type: number
+                    type: array
+                  organizationId:
+                    type: number
+                  phaseStatus:
+                    properties:
+                      id:
+                        type: number
+                      incidentStatus:
+                        type: string
+                      isDefault:
+                        type: boolean
+                      name:
+                        type: string
+                      phaseNodeType:
+                        type: string
+                      seq:
+                        type: number
+                      status:
+                        type: string
+                    required:
+                    - phaseNodeType
+                    - id
+                    - incidentStatus
+                    - status
+                    - isDefault
+                    - name
+                    - seq
+                    type: object
+                  resourceBundleId:
+                    type: number
+                  status:
+                    type: string
+                  useTemplateVarValue:
+                    type: boolean
+                required:
+                - accountId
+                - organizationId
+                - id
+                - incidentStatus
+                - incidentJournals
+                - name
+                - createdDate
+                - hasJournal
+                - notificationIds
+                - createdName
+                - status
+                - resourceBundleId
+                - duration
+                - createdId
+                - lastModifiedId
+                - lastModifiedDate
+                - phaseStatus
+                - incidentType
+                - lastModifiedName
+                - useTemplateVarValue
+                - enableMessageTruncate
+                - incidentMode
+                type: object
+              type: array
+            pageSize:
+              type: number
+            start:
+              type: number
+            totalCount:
+              type: number
+            totalPageCount:
+              type: number
+          required:
+          - pageSize
+          - start
+          - data
+          - totalCount
+          - totalPageCount
+          - currentPageNo
+          type: object
+      required:
+      - message
+      - firstPageUri
+      - nextPageUri
+      - lastPageUri
+      - page
+      title: Generated schema for Root
+      type: object
+  securitySchemes:
+    API_Authorizer:
+      type: apiKey
+      name: Authorization
+      in: header
+      x-amazon-apigateway-authtype: custom
+      x-amazon-apigateway-authorizer:
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        authorizerCredentials: arn:aws:iam::214792946631:role/ebs-mobile-member-api-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+    BasicAuth:
+      description: Basic Authentication Token
+      scheme: basic
+      type: http
+    api_key:
+      description: API Key - For System Use
+      in: header
+      name: x-api-key
+      type: apiKey
+x-refined-from:
+- everbridge-digital-apps-openapi.json
+- everbridge-eb-suite-openapi.json
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

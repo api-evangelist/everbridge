@@ -1,0 +1,521 @@
+openapi: 3.2.0
+info:
+  title: Communications Plan APIs API
+  description: Unified Communications APIs
+  version: '1.0'
+servers:
+- url: https://api.everbridge.net/managerapps/communications/v1
+tags:
+- name: Plan APIs
+paths:
+  /plans:
+    get:
+      tags:
+      - Plan APIs
+      operationId: getPlans
+      summary: List plans
+      description: List Comms plans.
+      parameters:
+      - in: query
+        name: name
+        schema:
+          type: string
+        description: Performs a case-insensitive substring match against the communication plan name. If provided, only plans whose names contain the specified value (regardless of case) will be included in the result set. If not provided, no filtering is applied based on name.
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - DRAFT
+          - LIVE
+        description: Filters communication plans by their status. Accepted values are DRAFT and LIVE, and the comparison is case-insensitive. If status is not provided, plans of all statuses will be included in the result set.
+      - in: query
+        name: eventTypes
+        schema:
+          type: array
+          items:
+            type: string
+        description: This parameter supports multiple values. When provided, the response will include only communication plans whose event type matches any of the specified values. Matching is case-insensitive. If no eventType values are provided, plans of all event types will be included. Multiple values can be passed as a comma-separated list. If none of the values match valid event types, the parameter will be ignored.
+      - in: query
+        name: createdBy
+        schema:
+          type: string
+        description: Filters communication plans to include only those created by the specified user identifiers. If this parameter is not provided, plans created by all users will be included.
+      - in: query
+        name: sortBy
+        schema:
+          type: string
+          enum:
+          - updatedAt
+          - lastUsedAt
+          - name
+        description: Specifies the field used to sort the result set. To control the sort order, refer to the sortDirection parameter. If not provided, the default sort field is name.
+      - in: query
+        name: sortDirection
+        schema:
+          type: string
+          enum:
+          - ASC
+          - ASCENDING
+          - DESC
+          - DESCENDING
+        description: The order by which to sort the result set by. `ASC` and `ASCENDING` have the same effect of ordering the values in ascending order; additionally, `DESC` and `DESCENDING` also have the same effect of ordering the values in descending order. See `sortBy` for details on changing which field is used in sorting. Defaults to `DESCENDING`.
+      - in: query
+        name: pageSize
+        schema:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 100
+        description: The size of each page of search results. Defaults to ten records.
+      - in: query
+        name: pageNumber
+        schema:
+          type: integer
+          format: int32
+          minimum: 1
+        description: The requested page number out of the total number of pages. Defaults to the first page, which is page number 1.
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanApiPaginatedResponse'
+        '400':
+          description: 'Invalid value for: header Authorization, Invalid value for: body'
+          content:
+            text/plain:
+              schema:
+                type: string
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        connectionId: 11ofco
+        httpMethod: GET
+        uri: https://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/cem-comms/communications/plans
+        responses:
+          default:
+            statusCode: '200'
+        passthroughBehavior: when_no_match
+        connectionType: VPC_LINK
+    post:
+      tags:
+      - Plan APIs
+      operationId: createPlan
+      summary: Create Plan
+      description: Create a new Comms plan.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpsertPlanRequest'
+            examples:
+              Creating a Draft plan:
+                summary: Create a Draft plan
+                value:
+                  name: Earthquake in Michigan
+                  description: Earthquake in Michigan related communication templates.
+                  eventTypes:
+                  - Earthquake
+                  status: DRAFT
+                  initialTemplates:
+                  - 638d13c0-f4cf-4c73-a35d-0092f2ebcb44
+        required: true
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommsResponse'
+        '400':
+          description: 'Invalid value for: header Authorization, Invalid value for: body'
+          content:
+            text/plain:
+              schema:
+                type: string
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        connectionId: 11ofco
+        httpMethod: POST
+        uri: https://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/cem-comms/communications/plans
+        responses:
+          default:
+            statusCode: '201'
+        passthroughBehavior: when_no_match
+        connectionType: VPC_LINK
+  /plans/{planId}:
+    get:
+      tags:
+      - Plan APIs
+      operationId: getPlan
+      summary: Retrieve the plan associated with the specified identifier.
+      description: Retrieves a Comms plan details.
+      parameters:
+      - name: planId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanDetail'
+        '400':
+          description: Invalid planId
+          content:
+            text/plain:
+              schema:
+                type: string
+        '404':
+          description: resource could not be found
+          content:
+            text/plain:
+              schema:
+                type: string
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        connectionId: 11ofco
+        httpMethod: GET
+        uri: https://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/cem-comms/communications/plans/{planId}
+        responses:
+          default:
+            statusCode: '202'
+        requestParameters:
+          integration.request.path.planId: method.request.path.planId
+        passthroughBehavior: when_no_match
+        connectionType: VPC_LINK
+    patch:
+      tags:
+      - Plan APIs
+      operationId: partial update plan
+      summary: Partial Update plan
+      description: partial Updates an existing Comms plan.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpsertPlanRequest'
+            examples:
+              Update plan Status:
+                summary: Update the status of a plan to LIVE.
+                value:
+                  status: LIVE
+              Update Name, Description and of initialTemplates the plan:
+                summary: Update the name and description of a plan.
+                value:
+                  name: Updated plan Name
+                  description: Updated description for the plan.
+                  initialTemplates:
+                  - 638d13c0-f4cf-4c73-a35d-0092f2ebcb44
+        required: true
+      parameters:
+      - name: planId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommsResponse'
+        '400':
+          description: 'Invalid value for: header Authorization, Invalid value for planId, Invalid value for : body'
+          content:
+            text/plain:
+              schema:
+                type: string
+        '404':
+          description: Resource could not be found
+          content:
+            text/plain:
+              schema:
+                type: string
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        connectionId: 11ofco
+        httpMethod: PATCH
+        uri: https://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/cem-comms/communications/plans/{planId}
+        responses:
+          default:
+            statusCode: '202'
+        requestParameters:
+          integration.request.path.planId: method.request.path.planId
+        passthroughBehavior: when_no_match
+        connectionType: VPC_LINK
+    delete:
+      tags:
+      - Plan APIs
+      operationId: deletePlan
+      summary: Delete plan
+      description: Delete an existing Comms plan.
+      parameters:
+      - name: planId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommsResponse'
+        '400':
+          description: 'Invalid value for: header Authorization, Invalid value for planId'
+          content:
+            text/plain:
+              schema:
+                type: string
+        '404':
+          description: Resource could not be found
+          content:
+            text/plain:
+              schema:
+                type: string
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        connectionId: 11ofco
+        httpMethod: DELETE
+        uri: https://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/cem-comms/communications/plans/{planId}
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters:
+          integration.request.path.planId: method.request.path.planId
+        passthroughBehavior: when_no_match
+        connectionType: VPC_LINK
+components:
+  schemas:
+    UpsertPlanRequest:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          description: The name of the plan. Must be unique within the current organization. Maximum length is 100 characters.
+        description:
+          type: string
+          description: Maximum length is 500 characters.
+        eventTypes:
+          type: array
+          items:
+            type: string
+          description: Event types for the plan. Each value must exist in the event type library.
+        status:
+          type: string
+          enum:
+          - DRAFT
+          - LIVE
+        initialTemplates:
+          type: array
+          items:
+            type: string
+          description: A list containing at most one communication template ID intended for initial communications.
+        updateTemplates:
+          type: array
+          items:
+            type: string
+          description: A list of communication template IDs for intended for updating communications.
+        closeTemplates:
+          type: array
+          items:
+            type: string
+          description: A list of communication template IDs for intended for closing communications.
+    CommsResponse:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the communication that was launched.
+    PlanApiPaginatedResponse:
+      type: object
+      description: A page of data from an endpoint.
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlanBase'
+        pages:
+          type: object
+          properties:
+            currentPage:
+              type: number
+              description: The requested page number.
+            pageSize:
+              type: number
+              description: The requested page size.
+            pageCount:
+              type: number
+              description: The number of elements in the current page.
+            totalPages:
+              type: number
+              description: The total number of pages available for request.
+            maxSize:
+              type: number
+              description: The maximum size of a single page that is allowed by the API.
+            totalCount:
+              type: number
+              description: The total number of elements across all pages.
+    Tag:
+      type: string
+      description: A value used to contain a simple categorization.
+      example: eventType:hurricane
+    PlanBase:
+      type: object
+      required:
+      - id
+      - name
+      - status
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum:
+          - DRAFT
+          - LIVE
+        eventTypes:
+          type: array
+          items:
+            type: string
+          description: Event types for the plan. Each value must exist in the event type library.
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+          description: A list of tags assigned to the communication plan.
+        templateCounts:
+          type: object
+          additionalProperties:
+            type: integer
+          description: A map from phase name (NEW, UPDATE, CLOSE) to the number of templates in that phase.
+        createdAt:
+          type: string
+          description: ISO 8601 formatted date-time string representing when the plan was created.
+        createdBy:
+          type: string
+        createdByName:
+          type: string
+        updatedAt:
+          type: string
+          description: ISO 8601 formatted date-time string representing when the plan was last updated.
+        updatedBy:
+          type: string
+        updatedByName:
+          type: string
+        createdRoleId:
+          type: string
+        updatedRoleId:
+          type: string
+        canEdit:
+          type: boolean
+          description: Whether the current caller can edit this plan.
+        canDelete:
+          type: boolean
+          description: Whether the current caller can delete this plan.
+        lastUsedAt:
+          type: string
+          description: ISO 8601 formatted date-time string representing when the plan was last updated by the logged in user.
+    PlanDetail:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum:
+          - DRAFT
+          - LIVE
+        eventTypes:
+          type: array
+          items:
+            type: string
+          description: Event types for the plan. Each value must exist in the event type library.
+        createdAt:
+          type: string
+          description: ISO 8601 formatted date-time string representing when the plan was created.
+        createdBy:
+          type: string
+        createdByName:
+          type: string
+        updatedAt:
+          type: string
+          description: ISO 8601 formatted date-time string representing when the plan was last updated.
+        updatedBy:
+          type: string
+        updatedByName:
+          type: string
+        createdRoleId:
+          type: string
+        updatedRoleId:
+          type: string
+        lastUsedAt:
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+          description: A list of tags assigned to the communication plan.
+        initialTemplates:
+          type: array
+          items:
+            type: string
+          description: A list containing at most one communication template intended for initial communications.
+        updateTemplates:
+          type: array
+          items:
+            type: string
+          description: A list of communication template IDs for intended for updating communications.
+        closeTemplates:
+          type: array
+          items:
+            type: string
+          description: A list of communication template IDs for intended for closing communications.
+  securitySchemes:
+    API_Authorizer:
+      type: apiKey
+      name: Authorization
+      in: header
+      x-amazon-apigateway-authtype: custom
+      x-amazon-apigateway-authorizer:
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        authorizerCredentials: arn:aws:iam::214792946631:role/comms-unified-gateway-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+    api_key:
+      type: apiKey
+      name: x-api-key
+      in: header
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

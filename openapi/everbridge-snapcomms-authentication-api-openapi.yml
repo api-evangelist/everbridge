@@ -1,0 +1,67 @@
+openapi: 3.2.0
+info:
+  title: SnapComms API Reference SnapComms Authentication API
+  description: Authentication related API's
+  version: v1
+servers:
+- description: API Url
+  url: https://api.snapcomms.com/v1
+- description: API Sandbox Url
+  url: https://api.snapcomms.com/mock
+security:
+- bearerAuth: []
+tags:
+- name: SnapComms Authentication
+  description: Authentication related API's
+paths:
+  /auth/token:
+    post:
+      tags:
+      - SnapComms Authentication
+      security: []
+      summary: Token
+      description: 'Gets an authentication token for the provided credentials
+
+        '
+      operationId: token
+      parameters:
+      - name: x-tenant-id
+        in: header
+        description: Format - uuid. the snapcomms organisation id
+        required: true
+        schema:
+          type: string
+      - name: x-api-key
+        in: header
+        description: the snapcomms api key associated with the user
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Token'
+        '400':
+          description: Bad Request - The provided x-tenant-id format is invalid
+        '401':
+          description: Unauthorized - the provided credentials are invalid
+        '429':
+          description: Failed - Rate limit is exceeded
+components:
+  schemas:
+    Token:
+      properties:
+        token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXJ2ZXI6YWNjZXNzX3Rva2VuIjoia08tTHFyNm5Cd09vV1FrZTlLVU1zSS11aWpWYWVHaTA1TGFIZ3VscjZfelZ5eHV2MjEwa1plNFVXNnRKUUp6MXBiaDU1RVpKZDNaMlEtYlZsaFluSmNWcC1ZZjVkdGlQSm1SdklNNzVCS2I0SzVYeUhTdzAybmR2dnVEeGxIbG1HS2NyZjhqYUx3MG1nMjVEZ3V5ODdUU282SklnRUJMcnVQMVp5SFNHeWtCeWVnVVpRQmx1LTk1c0Uta0lKa0pYNEJSUWdWVTNkTDJXbDIwY3dBWjhVZ1JLbWNabTYwUUY1T1NteVJEQ0FvaXpwZXZabGdfZVdIMElFM2tvbmZtYjR1UU9XQk14OFpPLTVSa3RhbGJ6ZS1MUUl0TklVbkE2SFJEWXFlVFd1RHpMVmR6NzBPdTJDcEczSW90bnR3UUhFQ190NFVFMXRSLWZEQ2k4U25qb240R2YzckdDaUY4MzFtQ0hYeTlIaHJ4enRDNGRWdWdDOU4zUlVraHJNbzc5QWdUSHNnVnJzajdGNzB4ZnJRWWVsRWtTWnYweFh1b3oxNGRhRmF4RXRBLXVFX1dFOGNJaU9qWUpPR2RiZmppTm9Zc2ctX0k4Z2F6T2VFWTFEUXo4eXR0TXB6Z1dtUzRXaXpWVkxNeElFX204czYydlhJYjkyUGRVVHFxTlRRQlJQRjlZNTlXTjJMcmttZHh2Qnp0N0tQMmF1aXl0MEZZaHQ1U0lWS2hlWW1YSTczampUVXRNQUdMNmFIbjhKZXNFU0xsYkR6X1I1OVlyNmNza3paZ0hPaVFvUzFPdFVQV2dSR0pOSmtQTEhjMFlyTnZsXzY1eUNQNXBFemo3SGVlU19JWUJXZHA3ZWdqOFplakxpOE1uVVBxdUUwblNJY04xVUtwb2t3Q0c1SDRXOXN4eWZqYzJhV0pvRnowNHFOenl2eTJObHFUeDZyeHRGTlpsbjVvd1NvTVdUVWlQSUw0YmpORkJtMEZEVFRDQURYR2l2dTdYcENTWllnTHZQLXUtOFRDSDdfMjRIck9kUkhOazhadFhCQSIsInNlcnZlcjpyZWZyZXNoX3Rva2VuIjoiYzBmM2MxMmZiYjZlNGYxMTkzZWIzYzliMzI1MmQ2OWUiLCJzZXJ2ZXI6ZXhwaXJlc19pbiI6IjE3OTkiLCJzZXJ2ZXI6dXJsIjoiaHR0cHM6Ly9teW9yZy5zbmFwY29tbXMuY29tL1NuYXBDb21tcy5BUEkvIiwic2VydmVyOnRlbmFudF9pZCI6IjMxNmZmYmY5LWRjMDEtNDgxMC1hYmM1LWE0N2IzMGNjNjUwOCIsIm5iZiI6MTYxMjMxNDA2NywiZXhwIjoxNjEyMzE1ODY2LCJpYXQiOjE2MTIzMTQwNjcsImlzcyI6Imh0dHBzOi8vbG9naW4uc25hcGNvbW1zLmNvbSJ9.Z7ClfuVH5X84OBnXaiIF21I7xfTbub6VX8A0rbWTyfg
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

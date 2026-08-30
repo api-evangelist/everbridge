@@ -1,0 +1,189 @@
+openapi: 3.2.0
+info:
+  description: EB Suite APIs.
+  title: EB Suite Audit Log API
+  version: '1.0'
+servers:
+- url: https://api.everbridge.net/rest
+- url: https://api.everbridge.eu/rest
+tags:
+- description: EB Suites - Audit Log Management
+  name: Audit Log
+paths:
+  /reports/auditLog:
+    get:
+      description: Retrieve event log report data
+      operationId: EBS Get Audit Log
+      parameters:
+      - description: Start date in format yyyy-MM-ddTHH:MM:SS
+        example: '2026-05-01T08:00:00'
+        in: query
+        name: from
+        required: true
+        schema:
+          format: date-time
+          type: string
+      - description: End date in format yyyy-MM-ddTHH:MM:SS
+        example: '2026-05-01T09:00:00'
+        in: query
+        name: to
+        required: true
+        schema:
+          format: date-time
+          type: string
+      - description: Security or Contact
+        in: query
+        name: reportType
+        required: true
+        schema:
+          default: Security
+          enum:
+          - Security
+          - Contact
+          type: string
+      - description: By page query or scroll.
+        in: query
+        name: queryType
+        required: false
+        schema:
+          default: pageQuery
+          enum:
+          - pageQuery
+          - scroll
+          type: string
+      - description: The scrollId is generated during an initial search request and must be passed back in subsequent calls to "scroll" through the results.
+        in: query
+        name: scrollId
+        required: false
+        schema:
+          type: string
+      - description: Page number.
+        in: query
+        name: pageNo
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: success
+                  value:
+                    data:
+                      currentPageNo: 1
+                      pageSize: 100
+                      start: 0
+                      totalCount: 0
+                      totalPageCount: 0
+                    success: true
+                    type: Security
+              schema:
+                $ref: '#/components/schemas/DataPage'
+          description: Models
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Get Audit Log
+      tags:
+      - Audit Log
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/reports/auditLog
+components:
+  schemas:
+    DataPage:
+      properties:
+        currentPageNo:
+          format: int32
+          type: integer
+        data:
+          items: {}
+          type: array
+        dataPageList:
+          items:
+            $ref: '#/components/schemas/DataPageObject'
+          type: array
+        pageSize:
+          format: int32
+          type: integer
+        scroll:
+          type: boolean
+          writeOnly: true
+        scrollId:
+          type: string
+        start:
+          format: int32
+          type: integer
+        totalCount:
+          format: int64
+          type: integer
+        totalPageCount:
+          format: int32
+          type: integer
+      type: object
+    DataPageObject:
+      properties:
+        currentPageNo:
+          format: int32
+          type: integer
+        data:
+          items:
+            type: object
+          type: array
+        dataPageList:
+          items:
+            $ref: '#/components/schemas/DataPageObject'
+          type: array
+        pageSize:
+          format: int32
+          type: integer
+        scrollId:
+          type: string
+        start:
+          format: int32
+          type: integer
+        totalCount:
+          format: int64
+          type: integer
+        totalPageCount:
+          format: int32
+          type: integer
+      title: DataPage«object»
+      type: object
+  securitySchemes:
+    API_Authorizer:
+      description: oAuth Token
+      in: header
+      name: Authorization
+      type: apiKey
+      x-amazon-apigateway-authorizer:
+        authorizerCredentials: arn:aws:iam::214792946631:role/oas-rest-api-gw-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+      x-amazon-apigateway-authtype: custom
+    BasicAuth:
+      description: Basic Authentication Token
+      scheme: basic
+      type: http
+    api_key:
+      description: API Key - For System Use
+      in: header
+      name: x-api-key
+      type: apiKey
+x-amazon-apigateway-binary-media-types:
+- audio/wav
+- audio/x-wav
+- application/octet-stream
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

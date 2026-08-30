@@ -1,0 +1,181 @@
+openapi: 3.2.0
+info:
+  description: EB Suite APIs.
+  title: EB Suite Last Known Locations API
+  version: '1.0'
+servers:
+- url: https://api.everbridge.net/rest
+- url: https://api.everbridge.eu/rest
+tags:
+- description: EB Suites - Last Known Locations
+  name: Last Known Locations
+paths:
+  /lastknownlocations/{organizationId}/{contactId}:
+    post:
+      description: Create new Dynamic Location for a contact
+      operationId: EBS Create Dynamic Location For Contact
+      parameters:
+      - description: The ID of the organization containing the contacts
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: Contact ID
+        in: path
+        name: contactId
+        required: true
+        schema:
+          type: string
+      - description: Contact ID type, contact ID or contact external ID.
+        in: query
+        name: contactIdType
+        required: false
+        schema:
+          default: id
+          enum:
+          - id
+          - externalId
+          type: string
+      requestBody:
+        content:
+          application/json:
+            examples:
+              With coordinates:
+                summary: Using latitude and longitude
+                value:
+                  arriveDate: '2026-05-19T08:00:00.000Z'
+                  expireDate: '2026-05-20T08:00:00.000Z'
+                  floorNumber: '5'
+                  latitude: 42.3601
+                  longitude: -71.0589
+                  roomNumber: '502'
+                  source: mobile-gps
+              With locationId:
+                summary: Using a location ID
+                value:
+                  arriveDate: '2026-05-19T08:00:00.000Z'
+                  expireDate: '2026-05-20T08:00:00.000Z'
+                  floorNumber: '3'
+                  locationId: '123456789'
+                  roomNumber: 301A
+                  source: badge-reader
+            schema:
+              $ref: '#/components/schemas/LastKnownLocationWrapper'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestfulModificationResult'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '500':
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Create Dynamic Location For Contact
+      tags:
+      - Last Known Locations
+      x-amazon-apigateway-integration:
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.contactId: method.request.path.contactId
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/lastknownlocations/{organizationId}/{contactId}
+components:
+  schemas:
+    RestfulModificationResult:
+      properties:
+        baseUri:
+          type: string
+        id:
+          format: int64
+          type: integer
+        instanceUri:
+          type: string
+        message:
+          type: string
+      title: RestfulModificationResult
+      type: object
+    LastKnownLocationWrapper:
+      anyOf:
+      - required:
+        - locationId
+      - required:
+        - latitude
+        - longitude
+      description: JSON object describing the lastKnownLocation
+      properties:
+        arriveDate:
+          description: Arrival date/time in ISO 8601 format (e.g., current date/time)
+          format: date-time
+          type: string
+        expireDate:
+          description: Expiration date/time in ISO 8601 format (must be after arriveDate)
+          format: date-time
+          type: string
+        floorNumber:
+          type: string
+        latitude:
+          format: double
+          type: number
+        locationId:
+          type: string
+        longitude:
+          format: double
+          type: number
+        roomNumber:
+          type: string
+        source:
+          type: string
+      required:
+      - arriveDate
+      - expireDate
+      type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
+  securitySchemes:
+    API_Authorizer:
+      description: oAuth Token
+      in: header
+      name: Authorization
+      type: apiKey
+      x-amazon-apigateway-authorizer:
+        authorizerCredentials: arn:aws:iam::214792946631:role/oas-rest-api-gw-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+      x-amazon-apigateway-authtype: custom
+    BasicAuth:
+      description: Basic Authentication Token
+      scheme: basic
+      type: http
+    api_key:
+      description: API Key - For System Use
+      in: header
+      name: x-api-key
+      type: apiKey
+x-amazon-apigateway-binary-media-types:
+- audio/wav
+- audio/x-wav
+- application/octet-stream
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

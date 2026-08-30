@@ -1,0 +1,761 @@
+openapi: 3.2.0
+info:
+  description: EB Suite APIs.
+  title: EB Suite Conference Bridges API
+  version: '1.0'
+servers:
+- url: https://api.everbridge.net/rest
+- url: https://api.everbridge.eu/rest
+tags:
+- description: EB Suites - Conference Bridges
+  name: Conference Bridges
+paths:
+  /conferenceBridges/{organizationId}:
+    get:
+      description: List all the conference bridges for an org.
+      operationId: EBS List Conference Bridges
+      parameters:
+      - description: The ID of the organization
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Success:
+                  summary: Success
+                  value:
+                    message: OK
+                    result:
+                      firstPageUri: https://api-dev3.everbridge.net/rest/conferenceBridges/1536984111644674?pageNumber=1
+                      lastPageUri: https://api-dev3.everbridge.net/rest/conferenceBridges/1536984111644674?pageNumber=1
+                      message: OK
+                      page:
+                        currentPageNo: 1
+                        data:
+                        - accessCode: '4313010'
+                          accessPath: '4313010'
+                          accountId: 1536846672691202
+                          awareBridgeId: 0
+                          countryCode: US
+                          countryName: United States
+                          createdDate: 1637777082075
+                          createdId: 0
+                          id: 1536984111644677
+                          isDefault: true
+                          lastModifiedId: 0
+                          name: Everbridge Conference Bridge 1
+                          number: '6054688035'
+                          organizationId: 1536984111644674
+                          resourceBundleId: 0
+                          status: A
+                        - accessCode: '4313020'
+                          accessPath: '4313020'
+                          accountId: 1536846672691202
+                          awareBridgeId: 0
+                          countryCode: US
+                          countryName: United States
+                          createdDate: 1637777082090
+                          createdId: 0
+                          id: 1536984111644678
+                          isDefault: true
+                          lastModifiedId: 0
+                          name: Everbridge Conference Bridge 2
+                          number: '6054688035'
+                          organizationId: 1536984111644674
+                          resourceBundleId: 0
+                          status: A
+                        pageSize: 100
+                        start: 0
+                        totalCount: 6
+                        totalPageCount: 1
+              schema:
+                $ref: '#/components/schemas/ConferenceBridgeResponseSchema'
+          description: Model
+        '400':
+          content:
+            application/json:
+              examples:
+                Invalid Request Input:
+                  summary: Invalid Input
+                  value:
+                    message: type mismatch exception
+                    status: 400
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Missing or invalid request input
+                    enum:
+                    - '400'
+                    type: string
+                type: object
+          description: Invalid request input
+        '401':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Invalid Credentials
+                  value:
+                    message: Unauthorized
+                    status: 401
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Invalid or missing credentials
+                    enum:
+                    - '401'
+                    type: string
+                type: object
+          description: Invalid Credentials
+        '500':
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: List Conference Bridges
+      tags:
+      - Conference Bridges
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/conferenceBridges/{organizationId}
+    post:
+      description: Create a conference bridge.
+      operationId: EBS Create Conference Bridge
+      parameters:
+      - description: The ID of the organization
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Request with minimum properties:
+                summary: Request with minimum properties
+                value:
+                  countryCode: US
+                  name: Everbridge Conference Bridge
+                  number: '6054688035'
+              Request with most properties:
+                summary: Request with most properties
+                value:
+                  countryCode: US
+                  countryName: United States
+                  name: Everbridge Conference Bridge8
+                  number: '6054688035'
+                  steps:
+                  - type: Wait
+                    value: '1'
+                  - type: Dial
+                    value: '#'
+                  - type: Code
+                    value: '9999999999'
+            schema:
+              $ref: '#/components/schemas/ConferenceBridgeRequestSchema'
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Success:
+                  summary: Success
+                  value:
+                    baseUri: https://api-dev3.everbridge.net/rest/conferenceBridges/1536984111644674
+                    id: 2769465242550273
+                    instanceUri: https://api-dev3.everbridge.net/rest/conferenceBridges/1536984111644674/2769465242550273
+                    message: OK
+              schema:
+                $ref: '#/components/schemas/ConferenceBridgePostResponseSchema'
+          description: OK
+        '400':
+          content:
+            application/json:
+              examples:
+                Invalid Request Input:
+                  summary: Invalid Input
+                  value:
+                    message: type mismatch exception
+                    status: 400
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Missing or invalid request input
+                    enum:
+                    - '400'
+                    type: string
+                type: object
+          description: Invalid request input
+        '401':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Invalid Credentials
+                  value:
+                    message: Unauthorized
+                    status: 401
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Invalid or missing credentials
+                    enum:
+                    - '401'
+                    type: string
+                type: object
+          description: Invalid Credentials
+        '500':
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Create Conference Bridge
+      tags:
+      - Conference Bridges
+      x-amazon-apigateway-integration:
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/conferenceBridges/{organizationId}
+  /conferenceBridges/{organizationId}/{id}:
+    delete:
+      description: Delete a specific conference bridge.
+      operationId: EBS Delete Conference Bridge
+      parameters:
+      - description: The ID of the organization
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: Confrence bridge Id
+        in: path
+        name: id
+        required: true
+        schema:
+          example: 589820879437825
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Success:
+                  summary: Success
+                  value:
+                    baseUri: https://api-dev3.everbridge.net/rest/conferenceBridges/1536984111644674
+                    id: 2769465242550273
+                    instanceUri: https://api-dev3.everbridge.net/rest/conferenceBridges/1536984111644674/2769465242550273
+                    message: OK
+              schema:
+                $ref: '#/components/schemas/ConferenceBridgePostResponseSchema'
+          description: OK
+        '400':
+          content:
+            application/json:
+              examples:
+                Invalid Request Input:
+                  summary: Invalid Input
+                  value:
+                    message: type mismatch exception
+                    status: 400
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Missing or invalid request input
+                    enum:
+                    - '400'
+                    type: string
+                type: object
+          description: Invalid request input
+        '401':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Invalid Credentials
+                  value:
+                    message: 'Invalid credentials: Password invalid'
+                    status: 401
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Invalid or missing credentials
+                    enum:
+                    - '401'
+                    type: string
+                type: object
+          description: Invalid Credentials
+        '404':
+          description: No conferenceBridge found
+        '500':
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Delete Conference Bridge
+      tags:
+      - Conference Bridges
+      x-amazon-apigateway-integration:
+        httpMethod: DELETE
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.id: method.request.path.id
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/conferenceBridges/{organizationId}/{id}
+    get:
+      description: Get a specific conference bridge.
+      operationId: EBS Get Conference Bridge
+      parameters:
+      - description: The ID of the organization
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: Conference bridge Id
+        in: path
+        name: id
+        required: true
+        schema:
+          example: 589820879437825
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Success:
+                  summary: Success
+                  value:
+                    message: OK
+                    result:
+                      accountId: 0
+                      awareBridgeId: 0
+                      countryCode: US
+                      countryName: United States
+                      createdDate: 1737363995887
+                      createdId: 2200330536222721
+                      createdName: Nandish API Access
+                      id: 2765479512899585
+                      isDefault: false
+                      lastModifiedDate: 1737363995887
+                      lastModifiedId: 2200330536222721
+                      lastModifiedName: Nandish API Access
+                      name: Everbridge Conference Bridge 5
+                      number: '6054688035'
+                      organizationId: 1536984111644674
+                      resourceBundleId: 0
+                      status: A
+              schema:
+                $ref: '#/components/schemas/ConferenceBridgeResponseSchema'
+          description: Model
+        '400':
+          content:
+            application/json:
+              examples:
+                Invalid Request Input:
+                  summary: Invalid Input
+                  value:
+                    message: type mismatch exception
+                    status: 400
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Missing or invalid request input
+                    enum:
+                    - '400'
+                    type: string
+                type: object
+          description: Invalid request input
+        '401':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Invalid Credentials
+                  value:
+                    message: 'Invalid credentials: Password invalid'
+                    status: 401
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Invalid or missing credentials
+                    enum:
+                    - '401'
+                    type: string
+                type: object
+          description: Invalid Credentials
+        '404':
+          description: No conferenceBridge found
+        '500':
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Get Conference Bridge
+      tags:
+      - Conference Bridges
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.id: method.request.path.id
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/conferenceBridges/{organizationId}/{id}
+    put:
+      description: Update a specific conference bridge.
+      operationId: EBS Update Conference Bridge
+      parameters:
+      - description: The ID of the organization
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: Confrence bridge Id
+        in: path
+        name: id
+        required: true
+        schema:
+          example: 589820879437825
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Request with most properties:
+                summary: Request with most properties
+                value:
+                  countryCode: US
+                  countryName: United States
+                  name: Everbridge Conference Bridge8
+                  number: '6054688035'
+                  steps:
+                  - type: Wait
+                    value: '1'
+                  - type: Dial
+                    value: '#'
+                  - type: Code
+                    value: '9999999999'
+            schema:
+              $ref: '#/components/schemas/ConferenceBridgeUpdateRequestSchema'
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Success:
+                  summary: Success
+                  value:
+                    baseUri: https://api-dev3.everbridge.net/rest/conferenceBridges/1536984111644674
+                    id: 2769465242550273
+                    instanceUri: https://api-dev3.everbridge.net/rest/conferenceBridges/1536984111644674/2769465242550273
+                    message: OK
+              schema:
+                $ref: '#/components/schemas/ConferenceBridgePostResponseSchema'
+          description: OK
+        '400':
+          content:
+            application/json:
+              examples:
+                Invalid Request Input:
+                  summary: Invalid Input
+                  value:
+                    message: type mismatch exception
+                    status: 400
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Missing or invalid request input
+                    enum:
+                    - '400'
+                    type: string
+                type: object
+          description: Invalid request input
+        '401':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Invalid Credentials
+                  value:
+                    message: 'Invalid credentials: Password invalid'
+                    status: 401
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Invalid or missing credentials
+                    enum:
+                    - '401'
+                    type: string
+                type: object
+          description: Invalid Credentials
+        '404':
+          description: No conferenceBridge found
+        '500':
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Update Conference Bridge
+      tags:
+      - Conference Bridges
+      x-amazon-apigateway-integration:
+        httpMethod: PUT
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.id: method.request.path.id
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/conferenceBridges/{organizationId}/{id}
+components:
+  schemas:
+    ConferenceBridgeUpdateRequestSchema:
+      properties:
+        countryCode:
+          type: string
+        countryName:
+          type: string
+        name:
+          type: string
+        number:
+          type: string
+        steps:
+          items:
+            properties:
+              type:
+                type: string
+              value:
+                type: string
+            required:
+            - type
+            - value
+            type: object
+          type: array
+      type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
+    ConferenceBridgeRequestSchema:
+      properties:
+        countryCode:
+          type: string
+        countryName:
+          type: string
+        name:
+          type: string
+        number:
+          type: string
+        steps:
+          items:
+            properties:
+              type:
+                type: string
+              value:
+                type: string
+            required:
+            - type
+            - value
+            type: object
+          type: array
+      required:
+      - countryCode
+      - number
+      - name
+      type: object
+    ConferenceBridgePostResponseSchema:
+      properties:
+        baseUri:
+          type: string
+        id:
+          type: integer
+        instanceUri:
+          type: string
+        message:
+          type: string
+      type: object
+    ConferenceBridgeResponseSchema:
+      properties:
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        page:
+          properties:
+            currentPageNo:
+              type: number
+            data:
+              items:
+                properties:
+                  accessCode:
+                    type: string
+                  accessPath:
+                    type: string
+                  accountId:
+                    type: number
+                  awareBridgeId:
+                    type: number
+                  countryCode:
+                    type: string
+                  countryName:
+                    type: string
+                  createdDate:
+                    type: number
+                  createdId:
+                    type: number
+                  id:
+                    type: number
+                  isDefault:
+                    type: boolean
+                  lastModifiedId:
+                    type: number
+                  name:
+                    type: string
+                  number:
+                    type: string
+                  organizationId:
+                    type: number
+                  resourceBundleId:
+                    type: number
+                  status:
+                    type: string
+                required:
+                - awareBridgeId
+                - countryName
+                - accountId
+                - accessPath
+                - status
+                - countryCode
+                - resourceBundleId
+                - number
+                - organizationId
+                - accessCode
+                - id
+                - isDefault
+                - name
+                - lastModifiedId
+                - createdId
+                - createdDate
+                type: object
+              type: array
+            pageSize:
+              type: number
+            start:
+              type: number
+            totalCount:
+              type: number
+            totalPageCount:
+              type: number
+          required:
+          - pageSize
+          - start
+          - data
+          - totalCount
+          - totalPageCount
+          - currentPageNo
+          type: object
+      required:
+      - message
+      - firstPageUri
+      - lastPageUri
+      - page
+      type: object
+  securitySchemes:
+    API_Authorizer:
+      description: oAuth Token
+      in: header
+      name: Authorization
+      type: apiKey
+      x-amazon-apigateway-authorizer:
+        authorizerCredentials: arn:aws:iam::214792946631:role/oas-rest-api-gw-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+      x-amazon-apigateway-authtype: custom
+    BasicAuth:
+      description: Basic Authentication Token
+      scheme: basic
+      type: http
+    api_key:
+      description: API Key - For System Use
+      in: header
+      name: x-api-key
+      type: apiKey
+x-amazon-apigateway-binary-media-types:
+- audio/wav
+- audio/x-wav
+- application/octet-stream
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

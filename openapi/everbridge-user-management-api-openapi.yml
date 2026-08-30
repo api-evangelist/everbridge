@@ -1,0 +1,633 @@
+openapi: 3.2.0
+info:
+  title: SnapComms API Reference User Management API
+  description: User, Group and Machine related API's
+  version: v1
+servers:
+- description: API Url
+  url: https://api.snapcomms.com/v1
+- description: API Sandbox Url
+  url: https://api.snapcomms.com/mock
+security:
+- bearerAuth: []
+tags:
+- name: User Management
+  description: User, Group and Machine related API's
+paths:
+  /Machine/Delete:
+    post:
+      tags:
+      - User Management
+      operationId: user-management-delete-machines
+      summary: Delete Machines
+      description: Mark specified machines as deleted
+      requestBody:
+        x-name: consumerIds
+        description: A list of Consumer IDs. The Consumer ID for a machine can be retrieved with the [Machine](/reference/user-management-machines) endpoint
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+                format: uuid
+                example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        required: true
+        x-position: 1
+      responses:
+        '200':
+          description: ''
+  /user/delete/:
+    post:
+      tags:
+      - User Management
+      summary: Delete Users
+      description: Mark specified users as deleted
+      operationId: user-management-delete-users
+      requestBody:
+        description: A list of Consumer IDs. The Consumer ID for a User can be retrieved with the [User](/reference/user-management-get-users) endpoint
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+                format: uuid
+                example: d290f1ee-6c54-4b01-90e6-d701748f0851
+            example:
+            - 5bca85dd-05f4-453e-8d40-e4e1d727aaa3
+      responses:
+        '200':
+          description: ''
+  /Machine/Disable:
+    post:
+      tags:
+      - User Management
+      operationId: user-management-disable-machines
+      summary: Disable Machines
+      description: Mark specified machines as disabled
+      requestBody:
+        x-name: consumerIds
+        description: A list of Consumer IDs. The Consumer ID for a Machine can be retrieved with the [Machine](/reference/user-management-machines) endpoint
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+                format: uuid
+                example: d290f1ee-6c54-4b01-90e6-d701748f0851
+            example:
+            - d290f1ee-6c54-4b01-90e6-d701748f0851
+        required: true
+        x-position: 1
+      responses:
+        '200':
+          description: ''
+  /User/Disable:
+    post:
+      tags:
+      - User Management
+      operationId: user-management-disable-users
+      summary: Disable Users
+      description: Mark specified users as disabled
+      requestBody:
+        x-name: consumerIds
+        description: A list of Consumer IDs. The Consumer ID for a User can be retrieved with the [User](/reference/user-management-get-users) endpoint
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+                format: uuid
+                example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              example:
+              - d290f1ee-6c54-4b01-90e6-d701748f0851
+        required: true
+        x-position: 1
+      responses:
+        '200':
+          description: ''
+  /Group/{groupId}/Members:
+    post:
+      tags:
+      - User Management
+      operationId: user-management-group-members
+      summary: Group Users and Machines
+      description: Get all users and machines in a specified group
+      parameters:
+      - name: groupId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: d300f1ee-6c54-4b01-90e6-d701748f0843
+        x-position: 1
+      requestBody:
+        x-name: getDataModel
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetDataModel'
+        required: true
+        x-position: 2
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetDataResponseModelOfGroupMemberModel'
+  /Group:
+    get:
+      tags:
+      - User Management
+      operationId: user-management-groups
+      summary: Groups
+      description: Get all groups
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GroupModel'
+  /Machine:
+    get:
+      tags:
+      - User Management
+      operationId: user-management-machines
+      summary: Machines
+      description: Get all machines
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MachineModel'
+  /user/:
+    get:
+      tags:
+      - User Management
+      summary: Users
+      description: Get all users
+      operationId: user-management-get-users
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserModel'
+components:
+  schemas:
+    PaginationModel:
+      type: object
+      additionalProperties: false
+      properties:
+        current:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    ConsumerKind:
+      type: integer
+      description: ''
+      x-enumNames:
+      - User
+      - Machine
+      enum:
+      - 0
+      - 1
+    GetDataResponseModelOfGroupMemberModel:
+      type: object
+      additionalProperties: false
+      properties:
+        results:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/GroupMemberModel'
+        total:
+          type: integer
+          format: int32
+    GroupMemberModel:
+      type: object
+      additionalProperties: false
+      properties:
+        consumerId:
+          type: string
+          format: uuid
+        organisationId:
+          type: string
+          format: uuid
+        userName:
+          type:
+          - string
+          - 'null'
+        domainName:
+          type:
+          - string
+          - 'null'
+        fullName:
+          type:
+          - string
+          - 'null'
+        organizationalUnit:
+          type:
+          - string
+          - 'null'
+        comment:
+          type:
+          - string
+          - 'null'
+        appVersion:
+          type:
+          - string
+          - 'null'
+        corporateConsumerKind:
+          type:
+          - string
+          - 'null'
+        corporateConsumerKindId:
+          $ref: '#/components/schemas/ConsumerKind'
+        osPlatform:
+          type:
+          - string
+          - 'null'
+        osVersion:
+          type:
+          - string
+          - 'null'
+        machineName:
+          type:
+          - string
+          - 'null'
+        email:
+          type:
+          - string
+          - 'null'
+        sms:
+          type:
+          - string
+          - 'null'
+        status:
+          $ref: '#/components/schemas/ConsumerStatus'
+        lastConnectDateUtc:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        dataSourceName:
+          type:
+          - string
+          - 'null'
+    GetDataModel:
+      type: object
+      additionalProperties: false
+      properties:
+        filters:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: array
+            items: {}
+        searchTerm:
+          type:
+          - string
+          - 'null'
+        pagination:
+          oneOf:
+          - $ref: '#/components/schemas/PaginationModel'
+        sorter:
+          oneOf:
+          - $ref: '#/components/schemas/SorterModel'
+    GroupDetailModel:
+      allOf:
+      - $ref: '#/components/schemas/GroupBaseModel'
+      - type: object
+        additionalProperties: false
+        properties:
+          organisationId:
+            type: string
+            format: uuid
+          groupId:
+            type: string
+            format: uuid
+          domainName:
+            type:
+            - string
+            - 'null'
+          groupType:
+            type:
+            - string
+            - 'null'
+          autoCreated:
+            type: boolean
+          active:
+            type: boolean
+          createDateUtc:
+            type:
+            - string
+            - 'null'
+            format: date-time
+          numberOfMembers:
+            type: integer
+            format: int32
+    SorterModel:
+      type: object
+      additionalProperties: false
+      properties:
+        field:
+          type:
+          - string
+          - 'null'
+        order:
+          type:
+          - string
+          - 'null'
+    ConsumerStatus:
+      type: integer
+      description: ''
+      x-enumNames:
+      - Active
+      - Inactive
+      - Deleted
+      - Disabled
+      enum:
+      - 1
+      - 2
+      - 3
+      - 4
+    GroupModel:
+      allOf:
+      - $ref: '#/components/schemas/GroupDetailModel'
+      - type: object
+        additionalProperties: false
+        properties:
+          organizationalUnit:
+            type:
+            - string
+            - 'null'
+          corporateGroupKind:
+            type:
+            - string
+            - 'null'
+          distinguishedName:
+            type:
+            - string
+            - 'null'
+    GroupBaseModel:
+      type: object
+      additionalProperties: false
+      properties:
+        groupName:
+          type:
+          - string
+          - 'null'
+        comment:
+          type:
+          - string
+          - 'null'
+        corporateGroupKindId:
+          $ref: '#/components/schemas/ConsumerKind'
+    MachineBaseModel:
+      type: object
+      additionalProperties: false
+      properties:
+        status:
+          $ref: '#/components/schemas/ConsumerStatus'
+        deleted:
+          type: boolean
+        consumerId:
+          type: string
+          format: uuid
+        machineName:
+          type:
+          - string
+          - 'null'
+        fullName:
+          type:
+          - string
+          - 'null'
+        organisationId:
+          type: string
+          format: uuid
+        domainName:
+          type:
+          - string
+          - 'null'
+        userNotes:
+          type:
+          - string
+          - 'null'
+        autoCreated:
+          type: boolean
+    UserModel:
+      allOf:
+      - $ref: '#/components/schemas/UserBaseModel'
+      - type: object
+        additionalProperties: false
+        properties:
+          userPrincipalName:
+            type:
+            - string
+            - 'null'
+          userNotes:
+            type:
+            - string
+            - 'null'
+          lastConnectedMachine:
+            type:
+            - string
+            - 'null'
+          lastConnectedPlatform:
+            type:
+            - string
+            - 'null'
+          lastOsVersion:
+            type:
+            - string
+            - 'null'
+          lastClientVersion:
+            type:
+            - string
+            - 'null'
+          status:
+            $ref: '#/components/schemas/ConsumerStatus'
+          isVerified:
+            type: boolean
+          organizationalUnit:
+            type:
+            - string
+            - 'null'
+          dataSourceName:
+            type:
+            - string
+            - 'null'
+          numberOfGroups:
+            type: integer
+            format: int32
+          autoCreated:
+            type: boolean
+          comment:
+            type:
+            - string
+            - 'null'
+          corporateConsumerKindId:
+            $ref: '#/components/schemas/ConsumerKind'
+          corporateConsumerKind:
+            type:
+            - string
+            - 'null'
+          firstConnectDateUtc:
+            type:
+            - string
+            - 'null'
+            format: date-time
+          lastConnectDateUtc:
+            type:
+            - string
+            - 'null'
+            format: date-time
+          createdTimeUtc:
+            type:
+            - string
+            - 'null'
+            format: date-time
+          distinguishedName:
+            type:
+            - string
+            - 'null'
+          lastUpdateUtc:
+            type:
+            - string
+            - 'null'
+            format: date-time
+          mobileUsername:
+            type:
+            - string
+            - 'null'
+          sms:
+            type:
+            - string
+            - 'null'
+          machineId:
+            type: string
+            format: uuid
+    MachineModel:
+      allOf:
+      - $ref: '#/components/schemas/MachineBaseModel'
+      - type: object
+        additionalProperties: false
+        properties:
+          firstConnectDateUtc:
+            type:
+            - string
+            - 'null'
+            format: date-time
+          lastConnectDateUtc:
+            type:
+            - string
+            - 'null'
+            format: date-time
+          appVersion:
+            type:
+            - string
+            - 'null'
+          osPlatform:
+            type:
+            - string
+            - 'null'
+          osVersion:
+            type:
+            - string
+            - 'null'
+          consumerKind:
+            type:
+            - string
+            - 'null'
+          dataSourceName:
+            type:
+            - string
+            - 'null'
+          lastConnectedConsumerId:
+            type:
+            - string
+            - 'null'
+            format: uuid
+          lastConnectedDomainName:
+            type:
+            - string
+            - 'null'
+          lastConnectedFullName:
+            type:
+            - string
+            - 'null'
+          lastConnectedUserName:
+            type:
+            - string
+            - 'null'
+          comment:
+            type:
+            - string
+            - 'null'
+          organizationalUnit:
+            type:
+            - string
+            - 'null'
+          numberOfGroups:
+            type: integer
+            format: int32
+          numberOfUsers:
+            type: integer
+            format: int32
+    UserBaseModel:
+      type: object
+      additionalProperties: false
+      properties:
+        consumerId:
+          type: string
+          format: uuid
+        organisationId:
+          type: string
+          format: uuid
+        userName:
+          type:
+          - string
+          - 'null'
+        domainName:
+          type:
+          - string
+          - 'null'
+        fullName:
+          type:
+          - string
+          - 'null'
+        email:
+          type:
+          - string
+          - 'null'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

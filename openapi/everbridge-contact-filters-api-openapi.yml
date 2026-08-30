@@ -1,0 +1,1025 @@
+openapi: 3.2.0
+info:
+  description: EB Suite APIs.
+  title: EB Suite Contact Filters API
+  version: '1.0'
+servers:
+- url: https://api.everbridge.net/rest
+- url: https://api.everbridge.eu/rest
+tags:
+- description: EB Suites - Contact filter Management
+  name: Contact Filters
+paths:
+  /contactFilters/{organizationId}:
+    get:
+      description: Retrieve all contact filters for an organization
+      operationId: EBS List Contact Filters
+      parameters:
+      - description: The ID of the organization containing the contact filters
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: The page number of contactFilters to return.
+        in: query
+        name: pageNumber
+        required: false
+        schema:
+          default: 1
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Success:
+                  summary: Success
+                  value:
+                    firstPageUri: https://api-dev3.everbridge.net/rest/contactFilters/1536984111644674?pageNumber=1
+                    lastPageUri: https://api-dev3.everbridge.net/rest/contactFilters/1536984111644674?pageNumber=1
+                    message: OK
+                    page:
+                      currentPageNo: 1
+                      data:
+                      - accountId: 0
+                        contactFilterRules:
+                        - columnName: userId
+                          columnValue: 123
+                          contactFieldId: 10
+                          dataType: NUMBER
+                          type: SYSTEM
+                        contactFilterType: ContactRule
+                        createdId: 0
+                        dirty: true
+                        id: 2576226073968652
+                        lastModifiedDate: 1729578075203
+                        lastModifiedId: 0
+                        lastModifiedName: Nandish API Access
+                        lastModifiedTime: 0
+                        lastSynchronizedTime: 0
+                        name: Test Filter- Vishal8
+                        organizationId: 0
+                        resourceBundleId: 1536984111644675
+                      - accountId: 0
+                        contactFilterRules:
+                        - columnName: userId
+                          columnValue: 123
+                          contactFieldId: 10
+                          dataType: NUMBER
+                          type: SYSTEM
+                        contactFilterType: ContactRule
+                        createdId: 0
+                        dirty: true
+                        id: 2576226073968650
+                        lastModifiedDate: 1729577976623
+                        lastModifiedId: 0
+                        lastModifiedName: Nandish API Access
+                        lastModifiedTime: 0
+                        lastSynchronizedTime: 0
+                        name: Test Filter- Vishal5
+                        organizationId: 0
+                        resourceBundleId: 1536984111644675
+                      - accountId: 0
+                        contactFilterRules:
+                        - attributeId: 123
+                          columnName: userId
+                          columnValue: 123
+                          contactFieldId: 10
+                          dataType: NUMBER
+                          type: SYSTEM_SCHEDULING
+                        contactFilterType: ContactRule
+                        createdId: 0
+                        dirty: true
+                        id: 2576260433707016
+                        lastModifiedDate: 1729577263606
+                        lastModifiedId: 0
+                        lastModifiedName: Nandish API Access
+                        lastModifiedTime: 0
+                        lastSynchronizedTime: 0
+                        name: Test Filter- Vishal4
+                        organizationId: 0
+                        resourceBundleId: 1536984111644675
+                      - accountId: 0
+                        contactFilterRules:
+                        - columnName: city
+                          columnValue: cal
+                          contactFieldId: 106
+                          contactFilterOption: LIKE
+                          dataType: STRING
+                          embeddedColumnName: address
+                          operator: LIKE
+                          type: SYSTEM_OBJECT
+                        contactFilterType: ContactRule
+                        createdId: 0
+                        dirty: true
+                        id: 425409531347333
+                        lastModifiedDate: 1729576957312
+                        lastModifiedId: 0
+                        lastModifiedName: Vishal Agrawal
+                        lastModifiedTime: 0
+                        lastSynchronizedTime: 0
+                        name: qwe
+                        organizationId: 0
+                        resourceBundleId: 1536984111644675
+                      - accountId: 0
+                        contactFilterRules:
+                        - attributeId: 123
+                          attributeValues:
+                          - DBA
+                          columnName: userId
+                          contactFieldId: 10
+                          dataType: NUMBER
+                          type: CUSTOM
+                        contactFilterType: ContactRule
+                        createdId: 0
+                        dirty: true
+                        id: 2576260433707015
+                        lastModifiedDate: 1729576765380
+                        lastModifiedId: 0
+                        lastModifiedName: Nandish API Access
+                        lastModifiedTime: 0
+                        lastSynchronizedTime: 0
+                        name: Test Filter- Vishal3
+                        organizationId: 0
+                        resourceBundleId: 1536984111644675
+                      - accountId: 0
+                        contactFilterRules:
+                        - columnName: userId
+                          columnValue: 123
+                          contactFieldId: 10
+                          dataType: NUMBER
+                          type: SYSTEM
+                        contactFilterType: ContactRule
+                        createdId: 0
+                        dirty: true
+                        id: 2576260433707014
+                        lastModifiedDate: 1729576183474
+                        lastModifiedId: 0
+                        lastModifiedName: Nandish API Access
+                        lastModifiedTime: 0
+                        lastSynchronizedTime: 0
+                        name: Test Filter- Vishal1
+                        organizationId: 0
+                        resourceBundleId: 1536984111644675
+                      - accountId: 0
+                        contactFilterRules:
+                        - columnName: userId
+                          contactFieldId: 10
+                          contactFilterOption: NOTNULL
+                          dataType: NUMBER
+                          operator: NOTNULL
+                          type: SYSTEM
+                        contactFilterType: ContactRule
+                        createdId: 0
+                        dirty: true
+                        id: 425409531347320
+                        lastModifiedDate: 1729519996201
+                        lastModifiedId: 0
+                        lastModifiedName: Vishal Agrawal
+                        lastModifiedTime: 0
+                        lastSynchronizedTime: 0
+                        name: Test Filter- Vishal
+                        organizationId: 0
+                        resourceBundleId: 1536984111644675
+                      - accountId: 0
+                        contactFilterRules:
+                        - columnName: calendar
+                          columnValue: 2343267047833601
+                          contactFieldId: 200
+                          contactFilterOption: E
+                          dataType: NUMBER
+                          operator: E
+                          type: SYSTEM_SCHEDULING
+                        - columnName: shift
+                          columnValue: 2343267047833601
+                          contactFieldId: 201
+                          contactFilterOption: E
+                          dataType: NUMBER
+                          operator: E
+                          type: SYSTEM_SCHEDULING
+                        - columnName: shiftDate
+                          columnValue:
+                          - BETWEEN
+                          - 1729508400000
+                          - 1729681200000
+                          contactFieldId: 202
+                          contactFilterOption: BETWEEN
+                          dataType: DATE
+                          operator: BETWEEN
+                          type: SYSTEM_SCHEDULING
+                        - columnName: externalId
+                          columnValue: Pre
+                          contactFieldId: 7
+                          contactFilterOption: STARTWITH
+                          dataType: STRING
+                          operator: STARTWITH
+                          type: SYSTEM
+                        contactFilterType: ContactRule
+                        createdId: 0
+                        dirty: true
+                        id: 595799473914751
+                        lastModifiedDate: 1729501644475
+                        lastModifiedId: 0
+                        lastModifiedName: Nandish API Access
+                        lastModifiedTime: 0
+                        lastSynchronizedTime: 0
+                        name: Pre Test 1
+                        organizationId: 0
+                        resourceBundleId: 1536984111644675
+                      - accountId: 0
+                        contactFilterRules:
+                        - columnName: externalId
+                          columnValue: Nandish
+                          contactFieldId: 7
+                          contactFilterOption: E
+                          dataType: STRING
+                          operator: E
+                          type: SYSTEM
+                        contactFilterType: ContactRule
+                        createdId: 0
+                        dirty: true
+                        id: 595799473914732
+                        lastModifiedDate: 1729501143846
+                        lastModifiedId: 0
+                        lastModifiedName: Nandish API Access
+                        lastModifiedTime: 0
+                        lastSynchronizedTime: 0
+                        name: Pre Test Contact Filter
+                        organizationId: 0
+                        resourceBundleId: 1536984111644675
+                      - accountId: 0
+                        contactFilterRules:
+                        - columnName: externalId
+                          columnValue: hjhj
+                          contactFieldId: 7
+                          contactFilterOption: ENDWITH
+                          dataType: STRING
+                          operator: ENDWITH
+                          type: SYSTEM
+                        contactFilterType: ContactRule
+                        createdId: 0
+                        dirty: true
+                        id: 595799473914726
+                        lastModifiedDate: 1729501012785
+                        lastModifiedId: 0
+                        lastModifiedName: Nandish API Access
+                        lastModifiedTime: 0
+                        lastSynchronizedTime: 0
+                        name: test
+                        organizationId: 0
+                        resourceBundleId: 1536984111644675
+                      - accountId: 0
+                        contactFilterRules:
+                        - columnName: postalCode
+                          columnValue: 01803
+                          contactFieldId: 108
+                          contactFilterOption: STARTWITH
+                          dataType: STRING
+                          embeddedColumnName: address
+                          operator: STARTWITH
+                          type: SYSTEM_OBJECT
+                        contactFilterType: ContactRule
+                        createdId: 0
+                        dirty: true
+                        id: 443139156345205
+                        lastModifiedDate: 1719312882291
+                        lastModifiedId: 0
+                        lastModifiedName: Nandish API Access
+                        lastModifiedTime: 0
+                        lastSynchronizedTime: 0
+                        name: Pre Test
+                        organizationId: 0
+                        resourceBundleId: 1536984111644675
+                      - accountId: 0
+                        contactFilterRules:
+                        - attributeId: 3549227829428287
+                          attributeValues:
+                          - DBA
+                          contactFilterOption: LIKE
+                          dataType: STRING
+                          operator: LIKE
+                          type: CUSTOM
+                        - columnName: firstName
+                          columnValue: Mike
+                          contactFieldId: 1
+                          contactFilterOption: NLIKE
+                          dataType: STRING
+                          operator: NLIKE
+                          type: SYSTEM
+                        contactFilterType: ContactRule
+                        createdId: 0
+                        dirty: true
+                        id: 2346909180100612
+                        lastModifiedDate: 1717639901877
+                        lastModifiedId: 0
+                        lastModifiedName: Nandish API Access
+                        lastModifiedTime: 0
+                        lastSynchronizedTime: 0
+                        name: DBATest2
+                        organizationId: 0
+                        resourceBundleId: 1536984111644675
+                      - accountId: 0
+                        contactFilterRules:
+                        - attributeId: 3549227829428287
+                          attributeValues:
+                          - DBA
+                          contactFilterOption: LIKE
+                          dataType: STRING
+                          operator: LIKE
+                          type: CUSTOM
+                        - columnName: firstName
+                          columnValue: Mike
+                          contactFieldId: 1
+                          contactFilterOption: NLIKE
+                          dataType: STRING
+                          operator: NLIKE
+                          type: SYSTEM
+                        contactFilterType: ContactRule
+                        createdId: 0
+                        dirty: true
+                        id: 2318390597255174
+                        lastModifiedDate: 1716877968818
+                        lastModifiedId: 0
+                        lastModifiedName: Nandish API Access
+                        lastModifiedTime: 0
+                        lastSynchronizedTime: 0
+                        name: DBATest
+                        organizationId: 0
+                        resourceBundleId: 1536984111644675
+                      - accountId: 0
+                        contactFilterRules:
+                        - columnName: userId
+                          columnValue: 123
+                          contactFieldId: 10
+                          dataType: NUMBER
+                          type: SYSTEM
+                        contactFilterType: ContactRule
+                        createdId: 0
+                        dirty: true
+                        id: 2316157214261250
+                        lastModifiedDate: 1729580818688
+                        lastModifiedId: 0
+                        lastModifiedName: Nandish API Access
+                        lastModifiedTime: 0
+                        lastSynchronizedTime: 0
+                        name: DBAs
+                        organizationId: 0
+                        resourceBundleId: 1536984111644675
+                      pageSize: 100
+                      start: 0
+                      totalCount: 14
+                      totalPageCount: 1
+              schema:
+                $ref: '#/components/schemas/ContactFilterListResponseRuleWrapper'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '500':
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: List Contact Filters
+      tags:
+      - Contact Filters
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/contactFilters/{organizationId}
+    post:
+      description: Create a new contact filter within an organization
+      operationId: EBS Create Contact Filter
+      parameters:
+      - description: The ID of the organization containing the contactFilters
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Add Filter With Additional Detail (Multiple Attribute Values):
+                summary: Add Filter With Additional Detail (Multiple Attribute Values)
+                value:
+                  contactFilterRules:
+                  - attributeId: 620263607631905
+                    attributeValues:
+                    - IT
+                    - Database
+                    - Network
+                    contactFilterOption: E
+                    dataType: STRING
+                    operator: E
+                    type: CUSTOM
+                  name: PreTestFilter4
+              Add Filter With Additional Information:
+                summary: Add Filter With Additional Information
+                value:
+                  contactFilterRules:
+                  - attributeId: 613426019696641
+                    attributeValues:
+                    - 5
+                    contactFilterOption: E
+                    dataType: NUMBER
+                    operator: E
+                    type: CUSTOM
+                  name: PreTestFilter3
+              Add Filter With Contact Detail:
+                summary: Add Filter With Contact Detail
+                value:
+                  contactFilterRules:
+                  - columnName: firstName
+                    columnValue: Mike
+                    contactFieldId: 1
+                    contactFilterOption: NLIKE
+                    dataType: STRING
+                    operator: NLIKE
+                    type: SYSTEM
+                  name: PreTestFilter1
+              Add Filter With Location Detail:
+                summary: Add Filter With Location Detail
+                value:
+                  contactFilterRules:
+                  - columnName: locationName
+                    columnValue: A
+                    contactFieldId: 103
+                    contactFilterOption: NLIKE
+                    dataType: STRING
+                    embeddedColumnName: address
+                    operator: STARTWITH
+                    type: SYSTEM_OBJECT
+                  name: PreTestFilter2
+            schema:
+              $ref: '#/components/schemas/ContactFilterRequestRuleWrapper'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Success:
+                  summary: success
+                  value:
+                    baseUri: https://api-dev3.everbridge.net/rest/contactFilters/1536984111644674
+                    id: 2638073603031058
+                    instanceUri: https://api-dev3.everbridge.net/rest/contactFilters/1536984111644674/2638073603031058
+                    message: OK
+              schema:
+                $ref: '#/components/schemas/ContactFilterResponseRuleWrapper'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '500':
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Create Contact Filter
+      tags:
+      - Contact Filters
+      x-amazon-apigateway-integration:
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/contactFilters/{organizationId}
+  /contactFilters/{organizationId}/{contactFilterIdOrQueryFilter}:
+    delete:
+      description: Delete the specified contactFilter from an organization
+      operationId: EBS Delete Contact Filter
+      parameters:
+      - description: The ID of the organization containing the contactFilters
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: The ID of the contactFilter (Contact Filter Id) to delete
+        in: path
+        name: contactFilterIdOrQueryFilter
+        required: true
+        schema:
+          format: int64
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Success:
+                  summary: Success
+                  value:
+                    baseUri: https://api-dev3.everbridge.net/rest/contactFilters/1536984111644674
+                    id: 2638073603031055
+                    instanceUri: https://api-dev3.everbridge.net/rest/contactFilters/1536984111644674/2638073603031055
+                    message: OK
+              schema:
+                $ref: '#/components/schemas/ContactFilterResponseRuleWrapper'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '404':
+          description: ContactFilter not found
+        '500':
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Delete Contact Filter
+      tags:
+      - Contact Filters
+      x-amazon-apigateway-integration:
+        httpMethod: DELETE
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.contactFilterIdOrQueryFilter: method.request.path.contactFilterIdOrQueryFilter
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/contactFilters/{organizationId}/{contactFilterIdOrQueryFilter}
+    get:
+      description: Retrieve the specified contactFilter within an organization
+      operationId: EBS Get Contact Filter
+      parameters:
+      - description: The ID of the organization containing the contactFilters
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: Whether to search by contactFilter.id or contactFilter.name.
+        in: query
+        name: queryType
+        required: false
+        schema:
+          default: id
+          enum:
+          - id
+          - name
+          type: string
+      - description: The ID or name of the Contact Filter (Contact Filter Id)
+        in: path
+        name: contactFilterIdOrQueryFilter
+        required: true
+        schema:
+          oneOf:
+          - type: string
+          - type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Success:
+                  summary: success
+                  value:
+                    message: OK
+                    result:
+                      accountId: 1536846672691202
+                      contactFilterRules:
+                      - columnName: firstName
+                        columnValue: Mike
+                        contactFieldId: 1
+                        contactFilterOption: NLIKE
+                        dataType: STRING
+                        operator: NLIKE
+                        type: SYSTEM
+                      contactFilterType: ContactRule
+                      createdDate: 1731928528659
+                      createdId: 2200330536222721
+                      createdName: Nandish API Access
+                      dirty: true
+                      id: 2638073603031055
+                      lastModifiedDate: 1731929282107
+                      lastModifiedId: 2200330536222721
+                      lastModifiedName: Nandish API Access
+                      lastModifiedTime: 0
+                      lastSynchronizedTime: 0
+                      name: DBAsss1135
+                      organizationId: 1536984111644674
+                      resourceBundleId: 1536984111644675
+                      status: A
+              schema:
+                $ref: '#/components/schemas/ContactFilterGetResponseRuleWrapper'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '404':
+          description: ContactFilter not found
+        '500':
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Get Contact Filter
+      tags:
+      - Contact Filters
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.contactFilterIdOrQueryFilter: method.request.path.contactFilterIdOrQueryFilter
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/contactFilters/{organizationId}/{contactFilterIdOrQueryFilter}
+    put:
+      description: Update a contact filter within an organization
+      operationId: EBS Update Contact Filter
+      parameters:
+      - description: The ID of the organization containing the contactFilters
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: The ID of the contactFilter (Contact Filter Id) to update
+        in: path
+        name: contactFilterIdOrQueryFilter
+        required: true
+        schema:
+          format: int64
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Add/Delete Filter:
+                summary: Add/Delete Filter [Request Body Identical to POST /contactFilter]
+                value:
+                  contactFilterRules:
+                  - columnName: firstName
+                    columnValue: Mike
+                    contactFieldId: 1
+                    contactFilterOption: NLIKE
+                    dataType: STRING
+                    operator: NLIKE
+                    type: SYSTEM
+                  name: PreTestFilter
+            schema:
+              $ref: '#/components/schemas/ContactFilterRequestRuleWrapper'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Success:
+                  summary: success
+                  value:
+                    baseUri: https://api-dev3.everbridge.net/rest/contactFilters/1536984111644674
+                    id: 2638073603031058
+                    instanceUri: https://api-dev3.everbridge.net/rest/contactFilters/1536984111644674/2638073603031058
+                    message: OK
+              schema:
+                $ref: '#/components/schemas/ContactFilterResponseRuleWrapper'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '404':
+          description: ContactFilter not found
+        '500':
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Update Contact Filter
+      tags:
+      - Contact Filters
+      x-amazon-apigateway-integration:
+        httpMethod: PUT
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.contactFilterIdOrQueryFilter: method.request.path.contactFilterIdOrQueryFilter
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/contactFilters/{organizationId}/{contactFilterIdOrQueryFilter}
+components:
+  schemas:
+    ContactFilterListResponseRuleWrapper:
+      properties:
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        page:
+          properties:
+            currentPageNo:
+              type: number
+            data:
+              items:
+                properties:
+                  accountId:
+                    type: number
+                  contactFilterRules:
+                    items:
+                      properties:
+                        columnName:
+                          type: string
+                        columnValue:
+                          type: number
+                        contactFieldId:
+                          type: number
+                        dataType:
+                          type: string
+                        type:
+                          type: string
+                      required:
+                      - contactFieldId
+                      - type
+                      - dataType
+                      - columnName
+                      - columnValue
+                      type: object
+                    type: array
+                  contactFilterType:
+                    type: string
+                  createdId:
+                    type: number
+                  dirty:
+                    type: boolean
+                  id:
+                    type: number
+                  lastModifiedDate:
+                    type: number
+                  lastModifiedId:
+                    type: number
+                  lastModifiedName:
+                    type: string
+                  lastModifiedTime:
+                    type: number
+                  lastSynchronizedTime:
+                    type: number
+                  name:
+                    type: string
+                  organizationId:
+                    type: number
+                  resourceBundleId:
+                    type: number
+                required:
+                - lastModifiedTime
+                - accountId
+                - resourceBundleId
+                - contactFilterType
+                - organizationId
+                - id
+                - name
+                - lastModifiedDate
+                - lastModifiedId
+                - createdId
+                - lastSynchronizedTime
+                - lastModifiedName
+                - contactFilterRules
+                - dirty
+                type: object
+              type: array
+            pageSize:
+              type: number
+            start:
+              type: number
+            totalCount:
+              type: number
+            totalPageCount:
+              type: number
+          required:
+          - pageSize
+          - start
+          - data
+          - totalCount
+          - totalPageCount
+          - currentPageNo
+          type: object
+      required:
+      - message
+      - firstPageUri
+      - lastPageUri
+      - page
+      type: object
+    ContactFilterGetResponseRuleWrapper:
+      properties:
+        message:
+          type: string
+        result:
+          properties:
+            accountId:
+              type: number
+            contactFilterRules:
+              items:
+                properties:
+                  columnName:
+                    type: string
+                  columnValue:
+                    type: number
+                  contactFieldId:
+                    type: number
+                  dataType:
+                    type: string
+                  type:
+                    type: string
+                required:
+                - contactFieldId
+                - type
+                - dataType
+                - columnName
+                - columnValue
+                type: object
+              type: array
+            contactFilterType:
+              type: string
+            createdDate:
+              type: number
+            createdId:
+              type: number
+            createdName:
+              type: string
+            dirty:
+              type: boolean
+            id:
+              type: number
+            lastModifiedDate:
+              type: number
+            lastModifiedId:
+              type: number
+            lastModifiedName:
+              type: string
+            lastModifiedTime:
+              type: number
+            lastSynchronizedTime:
+              type: number
+            name:
+              type: string
+            organizationId:
+              type: number
+            resourceBundleId:
+              type: number
+            status:
+              type: string
+          required:
+          - createdName
+          - lastModifiedTime
+          - accountId
+          - status
+          - resourceBundleId
+          - contactFilterType
+          - organizationId
+          - id
+          - name
+          - lastModifiedDate
+          - lastModifiedId
+          - createdId
+          - createdDate
+          - lastSynchronizedTime
+          - lastModifiedName
+          - contactFilterRules
+          - dirty
+          type: object
+      required:
+      - message
+      - result
+      type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
+    ContactFilterResponseRuleWrapper:
+      properties:
+        baseUri:
+          type: string
+        id:
+          format: int64
+          type: integer
+        instanceUri:
+          type: string
+        message:
+          type: string
+      type: object
+    ContactFilterRequestRuleWrapper:
+      properties:
+        contactFilterRules:
+          items:
+            properties:
+              attributeId: {}
+              attributeValues: {}
+              clazz: {}
+              columnName:
+                type: string
+              columnValue: {}
+              contactFieldId:
+                type: number
+              contactFilterId:
+                type: number
+              contactFilterOption: {}
+              dataType:
+                type: string
+              defaultValue: {}
+              displayFieldName:
+                type: string
+              displayName:
+                type: string
+              embeddedColumnName: {}
+              fieldName:
+                type: string
+              fieldType: {}
+              fieldValue:
+                type: string
+              moduleType: {}
+              operator:
+                type: string
+              operators: {}
+              searchFieldDisplayType: {}
+              searchName:
+                type: string
+              seq:
+                type: number
+              showType:
+                type: string
+              tableName: {}
+              type:
+                type: string
+              valueCategory: {}
+              variableId: {}
+            required:
+            - type
+            - contactFieldId
+            - operator
+            - dataType
+            - columnName
+            - columnValue
+            type: object
+          type: array
+        contactFilterType:
+          type: string
+        name:
+          type: string
+      required:
+      - name
+      - contactFilterRules
+      type: object
+  securitySchemes:
+    API_Authorizer:
+      description: oAuth Token
+      in: header
+      name: Authorization
+      type: apiKey
+      x-amazon-apigateway-authorizer:
+        authorizerCredentials: arn:aws:iam::214792946631:role/oas-rest-api-gw-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+      x-amazon-apigateway-authtype: custom
+    BasicAuth:
+      description: Basic Authentication Token
+      scheme: basic
+      type: http
+    api_key:
+      description: API Key - For System Use
+      in: header
+      name: x-api-key
+      type: apiKey
+x-amazon-apigateway-binary-media-types:
+- audio/wav
+- audio/x-wav
+- application/octet-stream
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

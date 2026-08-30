@@ -1,0 +1,120 @@
+openapi: 3.2.0
+info:
+  title: SnapComms API Reference Targeting API
+  description: Targeting related API's
+  version: v1
+servers:
+- description: API Url
+  url: https://api.snapcomms.com/v1
+- description: API Sandbox Url
+  url: https://api.snapcomms.com/mock
+security:
+- bearerAuth: []
+tags:
+- name: Targeting
+  description: Targeting related API's
+paths:
+  /targeting/attribute:
+    get:
+      tags:
+      - Targeting
+      summary: Attributes
+      description: Get all the available targeting attributes
+      operationId: targeting-attributes
+      parameters: []
+      responses:
+        '200':
+          description: List of targeting attributes
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TargetingAttributeResponse'
+              example:
+              - id: 28a0db3c-e075-4c05-8078-13a91fe2e6fb
+                name: Department
+                type: User
+              - id: 719aa2fa-2286-4d84-8a60-2d576875fb76
+                name: Machine Role
+                type: Machine
+        '429':
+          description: Failed - Rate limit is exceeded
+  /targeting/group:
+    get:
+      tags:
+      - Targeting
+      summary: Targeting Groups
+      description: Get all the available groups
+      operationId: targeting-groups
+      parameters: []
+      responses:
+        '200':
+          description: List of groups
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupResponse'
+              example:
+              - id: 28a0db3c-e075-4c05-8078-13a91fe2e6fb
+                name: Auckland-Office
+                memberCount: 42
+                description: All Auckland users
+              - id: 719aa2fa-2286-4d84-8a60-2d576875fb76
+                name: Outlook-Users
+                memberCount: 150
+                description: All users
+        '429':
+          description: Failed - Rate limit is exceeded
+components:
+  schemas:
+    Group:
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the group
+          example: d300f1ee-6c54-4b01-90e6-d701748f0843
+        name:
+          type: string
+          description: Group Name
+          example: NZ-Auckland
+        memberCount:
+          type: integer
+          description: Number of recipients.
+          example: 42
+        description:
+          type:
+          - string
+          - 'null'
+          description: Group Description
+          example: All Auckland users
+    TargetingAttribute:
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the attribute
+          example: d300f1ee-6c54-4b01-90e6-d701748f0843
+        name:
+          type: string
+          description: Attribute Name
+          example: Department
+        type:
+          type: string
+          description: Type of attribute
+          enum:
+          - User
+          - Machine
+    TargetingAttributeResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/TargetingAttribute'
+    GroupResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/Group'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

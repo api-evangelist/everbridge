@@ -1,0 +1,723 @@
+openapi: 3.2.0
+info:
+  description: EB Suite APIs.
+  title: EB Suite Incident Scenarios API
+  version: '1.0'
+servers:
+- url: https://api.everbridge.net/rest
+- url: https://api.everbridge.eu/rest
+tags:
+- description: EB Suites - Incident Scenario Management
+  name: Incident Scenarios
+paths:
+  /incidentScenarios/{organizationId}:
+    get:
+      operationId: EBS List Incident Scenarios
+      parameters:
+      - description: The ID of the organization containing the incidents
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: Whether to sort data by name or lastModifiedDate.
+        in: query
+        name: sortBy
+        required: false
+        schema:
+          default: name
+          enum:
+          - name
+          - lastModifiedDate
+          type: string
+      - description: Whether to sort data as ASC or DESC.
+        in: query
+        name: direction
+        required: false
+        schema:
+          default: DESC
+          enum:
+          - ASC
+          - DESC
+          type: string
+      - description: The page number of scenarios to return.
+        in: query
+        name: pageNumber
+        required: false
+        schema:
+          default: 1
+          format: int32
+          type: integer
+      - description: The page size of scenarios to return.
+        in: query
+        name: pageSize
+        required: false
+        schema:
+          default: 10
+          format: int32
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestfulCollectionResult'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '500':
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: List Incident Scenarios
+      tags:
+      - Incident Scenarios
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/incidentScenarios/{organizationId}
+    post:
+      operationId: EBS Launch Incident Scenario
+      parameters:
+      - description: The organization from which to launch the incident
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      requestBody:
+        content:
+          application/json:
+            examples:
+              success:
+                summary: success
+                value: {}
+            schema:
+              $ref: '#/components/schemas/IncidentScenarioWrapper'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: success
+                  value: {}
+              schema:
+                $ref: '#/components/schemas/RestfulModificationResult'
+          description: OK
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Launch Incident Scenario
+      tags:
+      - Incident Scenarios
+      x-amazon-apigateway-integration:
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/incidentScenarios/{organizationId}
+  /incidentScenarios/{organizationId}/{queryValueOrscenarioIncidentId}:
+    get:
+      operationId: EBS Get Incident Scenario
+      parameters:
+      - description: The ID of the organization containing the incident
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: The scenario Id or custom scenario Id of the organization containing the incident
+        in: path
+        name: queryValueOrscenarioIncidentId
+        required: true
+        schema:
+          type: string
+      - description: To indicate the ID type.
+        in: query
+        name: queryType
+        required: false
+        schema:
+          default: scenarioId
+          enum:
+          - scenarioId
+          - customScenarioId
+          type: string
+      - description: To retrieve the variables of the specific phase
+        in: query
+        name: phase
+        required: false
+        schema:
+          default: New
+          enum:
+          - New
+          - Update
+          - Close
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: success
+                  value: {}
+              schema:
+                $ref: '#/components/schemas/RestfulInstanceResult'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '500':
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Get Incident Scenario
+      tags:
+      - Incident Scenarios
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+          integration.request.path.queryValueOrscenarioIncidentId: method.request.path.queryValueOrscenarioIncidentId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/incidentScenarios/{organizationId}/{queryValueOrscenarioIncidentId}
+    put:
+      operationId: EBS Update Incident Scenario
+      parameters:
+      - description: The organization from which to update the incident
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: The ID of the incident to update
+        in: path
+        name: queryValueOrscenarioIncidentId
+        required: true
+        schema:
+          format: int64
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            examples:
+              success:
+                summary: success
+                value: {}
+            schema:
+              $ref: '#/components/schemas/IncidentScenarioWrapper'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestfulModificationResult'
+          description: OK
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Update Incident Scenario
+      tags:
+      - Incident Scenarios
+      x-amazon-apigateway-integration:
+        httpMethod: PUT
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+          integration.request.path.queryValueOrscenarioIncidentId: method.request.path.queryValueOrscenarioIncidentId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/incidentScenarios/{organizationId}/{queryValueOrscenarioIncidentId}
+components:
+  schemas:
+    VariableOption:
+      properties:
+        accountId:
+          format: int64
+          type: integer
+        createdAmsRoleId:
+          type: string
+        createdDate:
+          format: date-time
+          type: string
+        createdId:
+          format: int64
+          type: integer
+        createdName:
+          type: string
+        createdProxyName:
+          type: string
+        id:
+          format: int64
+          type: integer
+        isSelected:
+          type: boolean
+        lastModifiedAmsRoleId:
+          type: string
+        lastModifiedDate:
+          format: date-time
+          type: string
+        lastModifiedId:
+          format: int64
+          type: integer
+        lastModifiedName:
+          type: string
+        lastModifiedProxyName:
+          type: string
+        organizationId:
+          format: int64
+          type: integer
+        resourceBundleId:
+          format: int64
+          type: integer
+        seq:
+          format: int32
+          type: integer
+        shortId:
+          type: string
+        status:
+          enum:
+          - A
+          - D
+          type: string
+        txt:
+          type: string
+        val:
+          type: string
+        variableId:
+          format: int64
+          type: integer
+      type: object
+    RestfulInstanceResult:
+      properties:
+        message:
+          type: string
+        result:
+          type: object
+      title: RestfulInstanceResult
+      type: object
+    RestfulModificationResult:
+      properties:
+        baseUri:
+          type: string
+        id:
+          format: int64
+          type: integer
+        instanceUri:
+          type: string
+        message:
+          type: string
+      title: RestfulModificationResult
+      type: object
+    CascadingSetting:
+      properties:
+        cascadingLevels:
+          items:
+            type: string
+          type: array
+        cascadingOptions:
+          items:
+            $ref: '#/components/schemas/Option'
+          type: array
+      type: object
+    Option:
+      properties:
+        name:
+          type: string
+      type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
+    RestfulCollectionResult:
+      properties:
+        currentPageUri:
+          type: string
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        nextPageUri:
+          type: string
+        page:
+          $ref: '#/components/schemas/DataPageObject'
+        previousPageUri:
+          type: string
+      title: RestfulCollectionResult
+      type: object
+    FormCascadingItem:
+      properties:
+        cascadingVars:
+          items:
+            $ref: '#/components/schemas/Option'
+          type: array
+        requiredLevel:
+          format: int32
+          type: integer
+        selectedLevel:
+          format: int32
+          type: integer
+      type: object
+    IncidentTemplateBO:
+      properties:
+        id:
+          format: int64
+          type: integer
+        name:
+          type: string
+        status:
+          type: string
+        sysVarCurrentTimeFormat:
+          type: string
+        sysVarTodayDateFormat:
+          type: string
+      type: object
+    VariableItem:
+      properties:
+        accountId:
+          format: int64
+          type: integer
+        cascadingSetting:
+          $ref: '#/components/schemas/CascadingSetting'
+        cascadingSettingStr:
+          type: string
+        createdAmsRoleId:
+          type: string
+        createdDate:
+          format: date-time
+          type: string
+        createdId:
+          format: int64
+          type: integer
+        createdName:
+          type: string
+        createdProxyName:
+          type: string
+        extProperties:
+          additionalProperties:
+            type: string
+          type: object
+        id:
+          format: int64
+          type: integer
+        lastModifiedAmsRoleId:
+          type: string
+        lastModifiedDate:
+          format: date-time
+          type: string
+        lastModifiedId:
+          format: int64
+          type: integer
+        lastModifiedName:
+          type: string
+        lastModifiedProxyName:
+          type: string
+        module:
+          type: string
+        name:
+          type: string
+        organizationId:
+          format: int64
+          type: integer
+        resourceBundleId:
+          format: int64
+          type: integer
+        seq:
+          format: int32
+          type: integer
+        shortId:
+          type: string
+        status:
+          enum:
+          - A
+          - D
+          type: string
+        token:
+          type: string
+        tooltip:
+          type: string
+        topType:
+          type: string
+        uniqueKey:
+          type: string
+        validation:
+          type: string
+        varType:
+          enum:
+          - Textbox
+          - Textarea
+          - Date
+          - DateRange
+          - Single
+          - Multiple
+          - ComboBox
+          - LocationGeoPoint
+          - LocationGeoShapes
+          - SingleRadio
+          - Cascading
+          type: string
+        variableOptions:
+          items:
+            $ref: '#/components/schemas/VariableOption'
+          type: array
+      type: object
+    FormVariableItem:
+      properties:
+        accountId:
+          format: int64
+          type: integer
+        createdAmsRoleId:
+          type: string
+        createdDate:
+          format: date-time
+          type: string
+        createdId:
+          format: int64
+          type: integer
+        createdName:
+          type: string
+        createdProxyName:
+          type: string
+        editValueOnUI:
+          type: boolean
+        extProperties:
+          additionalProperties:
+            type: string
+          type: object
+        formCascadingItem:
+          $ref: '#/components/schemas/FormCascadingItem'
+        formId:
+          format: int64
+          type: integer
+        id:
+          deprecated: true
+          format: int64
+          type: integer
+        incidentId:
+          deprecated: true
+          format: int64
+          type: integer
+        incidentPhaseId:
+          deprecated: true
+          format: int64
+          type: integer
+        isRequired:
+          type: boolean
+        isSys:
+          type: boolean
+        isUsed:
+          type: boolean
+        lastModifiedAmsRoleId:
+          type: string
+        lastModifiedDate:
+          format: date-time
+          type: string
+        lastModifiedId:
+          format: int64
+          type: integer
+        lastModifiedName:
+          type: string
+        lastModifiedProxyName:
+          type: string
+        organizationId:
+          format: int64
+          type: integer
+        phaseTemplateId:
+          deprecated: true
+          format: int64
+          type: integer
+        prefixName:
+          type: string
+        previousVal:
+          items:
+            type: string
+          type: array
+        required:
+          type: boolean
+        resourceBundleId:
+          format: int64
+          type: integer
+        seq:
+          format: int32
+          type: integer
+        shortId:
+          type: string
+        status:
+          enum:
+          - A
+          - D
+          type: string
+        sys:
+          type: boolean
+        templateFormId:
+          deprecated: true
+          format: int64
+          type: integer
+        templateId:
+          deprecated: true
+          format: int64
+          type: integer
+        url:
+          type: boolean
+        used:
+          type: boolean
+          writeOnly: true
+        val:
+          items:
+            type: string
+          type: array
+        validateMaxLen:
+          type: boolean
+        variableId:
+          format: int64
+          type: integer
+        variableItem:
+          $ref: '#/components/schemas/VariableItem'
+        variableName:
+          type: string
+        variableValue:
+          deprecated: true
+          type: string
+      type: object
+    DataPageObject:
+      properties:
+        currentPageNo:
+          format: int32
+          type: integer
+        data:
+          items:
+            type: object
+          type: array
+        dataPageList:
+          items:
+            $ref: '#/components/schemas/DataPageObject'
+          type: array
+        pageSize:
+          format: int32
+          type: integer
+        scrollId:
+          type: string
+        start:
+          format: int32
+          type: integer
+        totalCount:
+          format: int64
+          type: integer
+        totalPageCount:
+          format: int32
+          type: integer
+      title: DataPage«object»
+      type: object
+    IncidentScenarioWrapper:
+      description: An incidentScenario object to launch.
+      properties:
+        customScenarioId:
+          type: string
+        enableMessageTruncate:
+          type: boolean
+        formVariables:
+          items:
+            $ref: '#/components/schemas/FormVariableItem'
+          type: array
+        incidentAction:
+          enum:
+          - Launch
+          - LaunchThenClose
+          - Update
+          - Close
+          - UpdateThenClose
+          - CloseWithNotification
+          - CloseWithoutNotification
+          type: string
+        incidentMode:
+          type: string
+        incidentName:
+          type: string
+        incidentNotificationPropertyBag:
+          additionalProperties:
+            type: string
+          type: object
+        name:
+          type: string
+        pinCode:
+          type: string
+        pushCustomFields:
+          additionalProperties:
+            type: string
+          type: object
+        scenarioId:
+          format: int64
+          type: integer
+        skipVariableRequiredCheck:
+          type: boolean
+        templateIds:
+          items:
+            format: int64
+            type: integer
+          type: array
+        templates:
+          items:
+            $ref: '#/components/schemas/IncidentTemplateBO'
+          type: array
+      type: object
+  securitySchemes:
+    API_Authorizer:
+      description: oAuth Token
+      in: header
+      name: Authorization
+      type: apiKey
+      x-amazon-apigateway-authorizer:
+        authorizerCredentials: arn:aws:iam::214792946631:role/oas-rest-api-gw-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+      x-amazon-apigateway-authtype: custom
+    BasicAuth:
+      description: Basic Authentication Token
+      scheme: basic
+      type: http
+    api_key:
+      description: API Key - For System Use
+      in: header
+      name: x-api-key
+      type: apiKey
+x-amazon-apigateway-binary-media-types:
+- audio/wav
+- audio/x-wav
+- application/octet-stream
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

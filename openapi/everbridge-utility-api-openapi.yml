@@ -1,0 +1,84 @@
+openapi: 3.2.0
+info:
+  title: SnapComms API Reference Utility API
+  description: Utility related API's
+  version: v1
+servers:
+- description: API Url
+  url: https://api.snapcomms.com/v1
+- description: API Sandbox Url
+  url: https://api.snapcomms.com/mock
+security:
+- bearerAuth: []
+tags:
+- name: Utility
+  description: Utility related API's
+paths:
+  /utility/status:
+    get:
+      tags:
+      - Utility
+      summary: Status
+      description: Get the current status of snapcomms services
+      operationId: status
+      parameters: []
+      responses:
+        '200':
+          description: Current status of backend services
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusResponse'
+              example:
+                isOperational: true
+                timestamp: '2021-05-20T23:29:59.156Z'
+                onlineServices:
+                - Database
+                - Login Services
+                - Push Notification Service
+                offlineServices:
+                - name: CommService
+                  error: 'Error: The operation has timed out'
+        '429':
+          description: Failed - Rate limit is exceeded
+components:
+  schemas:
+    OfflineService:
+      properties:
+        name:
+          type: string
+          description: Value indicating whether the backend server is operational
+          example: CommService
+        error:
+          type: string
+          description: Error message for the offline service
+          example: 'Error: The operation has timed out'
+    StatusResponse:
+      properties:
+        isOperational:
+          type: boolean
+          description: Value indicating whether the backend server is operational
+          example: 'true'
+        timeStamp:
+          type: string
+          format: date-time
+          example: '2020-07-21T17:32:28Z'
+        onlineServices:
+          type: array
+          items:
+            type: string
+          example:
+          - Login Services
+          - Push Notification Service
+        offlineServices:
+          type: array
+          items:
+            $ref: '#/components/schemas/OfflineService'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

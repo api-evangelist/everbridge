@@ -1,0 +1,226 @@
+openapi: 3.2.0
+info:
+  description: EB Suite APIs.
+  title: EB Suite Attachments API
+  version: '1.0'
+servers:
+- url: https://api.everbridge.net/rest
+- url: https://api.everbridge.eu/rest
+tags:
+- description: EB Suites - Attachment Management
+  name: Attachments
+paths:
+  /attachments/{organizationId}:
+    post:
+      operationId: EBS Upload Attachment
+      parameters:
+      - description: The ID of the organization containing the attachment
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                file:
+                  description: Multipart file upload body
+                  format: binary
+                  type: string
+              required:
+              - file
+              type: object
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: success
+                  value:
+                    fileId: 693130c83532a1f3d9c3ef0c
+                    fileName: testfile-smallfile.csv
+                    image: false
+                    message: OK
+                    size: 4503
+              schema:
+                $ref: '#/components/schemas/AttachmentRestfulModificationResult'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '500':
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Upload Attachment
+      tags:
+      - Attachments
+      x-amazon-apigateway-integration:
+        contentHandling: CONVERT_TO_BINARY
+        credentials: arn:aws:iam::214792946631:role/apigateway_invoke_lambda
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: aws_proxy
+        uri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:apigw-large-file-handler-us-east-1-prod/invocations
+  /attachments/{organizationId}/{fileId}:
+    get:
+      operationId: EBS Get Attachment
+      parameters:
+      - description: The ID of the organization in which to find the attachment
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: The ID of the attachment
+        in: path
+        name: fileId
+        required: true
+        schema:
+          type: string
+      - description: Return the raw attachment file or the record associated with that file.
+        in: query
+        name: returnType
+        required: false
+        schema:
+          default: data
+          enum:
+          - data
+          - file
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: success
+                  value:
+                    message: OK
+                    result:
+                      fileId: 6931311349c6c32c2f485528
+                      fileName: testfile-largefile.csv
+                      image: false
+                      mimeType: application/octet-stream
+                      size: 11060172
+              schema:
+                $ref: '#/components/schemas/FileAttachmentWrapperInstanceResult'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '500':
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Get Attachment
+      tags:
+      - Attachments
+      x-amazon-apigateway-integration:
+        contentHandling: CONVERT_TO_BINARY
+        credentials: arn:aws:iam::214792946631:role/apigateway_invoke_lambda
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.fileId: method.request.path.fileId
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: aws_proxy
+        uri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:apigw-large-file-handler-us-east-1-prod/invocations
+components:
+  schemas:
+    FileAttachmentWrapperInstanceResult:
+      properties:
+        message:
+          type: string
+        result:
+          $ref: '#/components/schemas/FileAttachmentWrapper'
+      type: object
+    AttachmentRestfulModificationResult:
+      properties:
+        fileId:
+          type: string
+        fileName:
+          type: string
+        image:
+          type: boolean
+        message:
+          type: string
+        mimeType:
+          type: string
+        size:
+          format: int64
+          type: integer
+      type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
+    FileAttachmentWrapper:
+      properties:
+        base64DataValue:
+          type: string
+        fileData:
+          items:
+            format: byte
+            type: string
+          type: array
+        fileId:
+          type: string
+        fileName:
+          type: string
+        image:
+          type: boolean
+        mimeType:
+          type: string
+        size:
+          format: int64
+          type: integer
+      type: object
+  securitySchemes:
+    API_Authorizer:
+      description: oAuth Token
+      in: header
+      name: Authorization
+      type: apiKey
+      x-amazon-apigateway-authorizer:
+        authorizerCredentials: arn:aws:iam::214792946631:role/oas-rest-api-gw-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+      x-amazon-apigateway-authtype: custom
+    BasicAuth:
+      description: Basic Authentication Token
+      scheme: basic
+      type: http
+    api_key:
+      description: API Key - For System Use
+      in: header
+      name: x-api-key
+      type: apiKey
+x-amazon-apigateway-binary-media-types:
+- audio/wav
+- audio/x-wav
+- application/octet-stream
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

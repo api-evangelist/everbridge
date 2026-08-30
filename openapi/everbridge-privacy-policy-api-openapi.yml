@@ -1,0 +1,939 @@
+openapi: 3.2.0
+info:
+  description: EB Suite APIs.
+  title: EB Suite Privacy Policy API
+  version: '1.0'
+servers:
+- url: https://api.everbridge.net/rest
+- url: https://api.everbridge.eu/rest
+tags:
+- description: EB Suites - Privacy Policy Management
+  name: Privacy Policy
+paths:
+  /privacy-policy/organizations/{organizationId}/policies:
+    get:
+      description: Retrieve all Privacy Policies for an organization.
+      operationId: EBS List Privacy Policies
+      parameters:
+      - description: The ID of the organization.
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: The page number of roles to return.
+        in: query
+        name: pageNumber
+        required: false
+        schema:
+          default: 1
+          example: 1
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Users in an account:
+                summary: Roles in an organization
+                value:
+                  pageNumber: '1'
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Success:
+                  summary: Success
+                  value:
+                    firstPageUri: https://api-dev3.everbridge.net/rest/privacy-policy/organizations/295910361798546/policies?pageNumber=1
+                    lastPageUri: https://api-dev3.everbridge.net/rest/privacy-policy/organizations/295910361798546/policies?pageNumber=1
+                    message: OK
+                    page:
+                      currentPageNo: 1
+                      data:
+                      - policyId: 1954967644536947
+                        policyItems:
+                        - category: contactSection
+                          nameIdentity: GENERAL_INFORMATION
+                          permission: VIEW_AND_EDIT
+                        - category: contactSection
+                          nameIdentity: DELIVERY_METHODS
+                          permission: VIEW_ONLY
+                        - category: contactSection
+                          nameIdentity: STATIC_LOCATIONS
+                          permission: VIEW_AND_EDIT
+                        - category: contactSection
+                          nameIdentity: EXPECTED_LOCATIONS
+                          permission: VIEW_ONLY
+                        - category: contactSection
+                          nameIdentity: LAST_KNOWN_LOCATIONS
+                          permission: NO_ACCESS
+                        - category: contactSection
+                          nameIdentity: TRAVEL_ARRANGER
+                          permission: VIEW_AND_EDIT
+                        policyName: demo
+                      pageSize: 10
+                      start: 0
+                      totalCount: 1
+                      totalPageCount: 1
+              schema:
+                $ref: '#/components/schemas/getPrivacyPolicies'
+          description: Success
+        '400':
+          content:
+            application/json:
+              examples:
+                Invalid Request Input:
+                  summary: Invalid Input
+                  value:
+                    message: type mismatch exception
+                    status: 400
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Missing or invalid request input
+                    enum:
+                    - '400'
+                    type: string
+                type: object
+          description: Invalid request input
+        '401':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Invalid Credentials
+                  value:
+                    message: 'Invalid credentials: Password invalid'
+                    status: 401
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Invalid or missing credentials
+                    enum:
+                    - '401'
+                    type: string
+                type: object
+          description: Invalid Credentials
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: List Privacy Policies
+      tags:
+      - Privacy Policy
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/privacy-policy/organizations/{organizationId}/policies
+    post:
+      description: Create a privacy policy for an organization.
+      operationId: EBS Create Privacy Policy
+      parameters:
+      - description: The ID of the organization.
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Create privacy policy:
+                summary: Create privacy policy
+                value:
+                  policyItems:
+                    category: contactSection
+                    nameIdentity: GENERAL_INFORMATION
+                    permission: NO_ACCESS
+                  policyName: example_privacy_policy_name
+            schema:
+              $ref: '#/components/schemas/privacyPolicy'
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Updated:
+                  summary: Success
+                  value:
+                    baseUri: https://api-dev3.everbridge.net/rest/privacy-policy/organizations/295910361798546/policies
+                    id: 1954967644536948
+                    instanceUri: https://api-dev3.everbridge.net/rest/privacy-policy/organizations/295910361798546/policies/1954967644536948
+                    message: OK
+              schema:
+                $ref: '#/components/schemas/postUpdateResponse'
+          description: Success
+        '400':
+          content:
+            application/json:
+              examples:
+                Invalid Request Input:
+                  summary: Invalid Input
+                  value:
+                    message: type mismatch exception
+                    status: 400
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Missing or invalid request input
+                    enum:
+                    - '400'
+                    type: string
+                type: object
+          description: Invalid request input
+        '401':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: 'Invalid credentials: Invalid or missing Authorization header'
+                  value:
+                    message: 'Invalid credentials: Invalid or missing Authorization header'
+                    status: 401
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: 'Invalid credentials: Invalid or missing Authorization header'
+                    enum:
+                    - '401'
+                    type: string
+                type: object
+          description: 'Invalid credentials: Invalid or missing Authorization header'
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Create Privacy Policy
+      tags:
+      - Privacy Policy
+      x-amazon-apigateway-integration:
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/privacy-policy/organizations/{organizationId}/policies
+  /privacy-policy/organizations/{organizationId}/policies/{policyId}:
+    delete:
+      description: Delete a privacy policy by id.
+      operationId: EBS Delete Privacy Policy
+      parameters:
+      - description: The ID of the organization.
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: The ID of the privacy policy to update.
+        in: path
+        name: policyId
+        required: true
+        schema:
+          $ref: '#/components/schemas/policyId'
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Success:
+                  summary: Success
+                  value:
+                    baseUri: https://api-dev3.everbridge.net/rest/privacy-policy/organizations/295910361798546/policies
+                    id: 1954967644536949
+                    instanceUri: https://api-dev3.everbridge.net/rest/privacy-policy/organizations/295910361798546/policies/1954967644536949
+                    message: OK
+              schema:
+                $ref: '#/components/schemas/postUpdateResponse'
+          description: Success
+        '400':
+          content:
+            application/json:
+              examples:
+                Invalid Request Input:
+                  summary: Invalid Input
+                  value:
+                    message: type mismatch exception
+                    status: 400
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Missing or invalid request input
+                    enum:
+                    - '400'
+                    type: string
+                type: object
+          description: Invalid request input
+        '401':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Invalid Credentials
+                  value:
+                    message: 'Invalid credentials: Password invalid'
+                    status: 401
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Invalid or missing credentials
+                    enum:
+                    - '401'
+                    type: string
+                type: object
+          description: Invalid Credentials
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Delete Privacy Policy
+      tags:
+      - Privacy Policy
+      x-amazon-apigateway-integration:
+        httpMethod: DELETE
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+          integration.request.path.policyId: method.request.path.policyId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/privacy-policy/organizations/{organizationId}/policies/{policyId}
+    get:
+      description: Query privacy policy by ID.
+      operationId: EBS Get Privacy Policy
+      parameters:
+      - description: The ID of the organization.
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: The privacy policy Id.
+        in: path
+        name: policyId
+        required: true
+        schema:
+          $ref: '#/components/schemas/policyId'
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Success:
+                  summary: Success
+                  value:
+                    message: OK
+                    result:
+                      policyId: 1954967644536949
+                      policyItems:
+                      - category: contactSection
+                        nameIdentity: GENERAL_INFORMATION
+                        permission: NO_ACCESS
+                      - category: contactSection
+                        nameIdentity: DELIVERY_METHODS
+                        permission: VIEW_AND_EDIT
+                      - category: contactSection
+                        nameIdentity: STATIC_LOCATIONS
+                        permission: VIEW_AND_EDIT
+                      - category: contactSection
+                        nameIdentity: EXPECTED_LOCATIONS
+                        permission: VIEW_AND_EDIT
+                      - category: contactSection
+                        nameIdentity: LAST_KNOWN_LOCATIONS
+                        permission: VIEW_AND_EDIT
+                      - category: contactSection
+                        nameIdentity: TRAVEL_ARRANGER
+                        permission: VIEW_AND_EDIT
+                      policyName: readmePolicy
+              schema:
+                $ref: '#/components/schemas/privacyPolicy'
+          description: Success
+        '400':
+          content:
+            application/json:
+              examples:
+                Invalid Request Input:
+                  summary: Invalid Input
+                  value:
+                    message: type mismatch exception
+                    status: 400
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Missing or invalid request input
+                    enum:
+                    - '400'
+                    type: string
+                type: object
+          description: Invalid request input
+        '401':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Invalid Credentials
+                  value:
+                    message: 'Invalid credentials: Password invalid'
+                    status: 401
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Invalid or missing credentials
+                    enum:
+                    - '401'
+                    type: string
+                type: object
+          description: Invalid Credentials
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Get Privacy Policy
+      tags:
+      - Privacy Policy
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+          integration.request.path.policyId: method.request.path.policyId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/privacy-policy/organizations/{organizationId}/policies/{policyId}
+    put:
+      description: Update a privacy policy for an organization.
+      operationId: EBS Update Privacy Policy
+      parameters:
+      - description: The ID of the organization.
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: The ID of the privacy policy to update.
+        in: path
+        name: policyId
+        required: true
+        schema:
+          $ref: '#/components/schemas/policyId'
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Update a privacy policy:
+                summary: Update a privacy policy
+                value:
+                  policyItems:
+                    category: contactSection
+                    nameIdentity: GENERAL_INFORMATION
+                    permission: NO_ACCESS
+                  policyName: example_privacy_policy_name
+            schema:
+              $ref: '#/components/schemas/privacyPolicy'
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Updated:
+                  summary: Success
+                  value:
+                    baseUri: https://api-dev3.everbridge.net/rest/privacy-policy/organizations/295910361798546/policies
+                    id: 1954967644536949
+                    instanceUri: https://api-dev3.everbridge.net/rest/privacy-policy/organizations/295910361798546/policies/1954967644536949
+                    message: OK
+              schema:
+                $ref: '#/components/schemas/postUpdateResponse'
+          description: Success
+        '400':
+          content:
+            application/json:
+              examples:
+                Invalid Request Input:
+                  summary: Invalid Input
+                  value:
+                    message: type mismatch exception
+                    status: 400
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Missing or invalid request input
+                    enum:
+                    - '400'
+                    type: string
+                type: object
+          description: Invalid request input
+        '401':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Invalid Credentials
+                  value:
+                    message: 'Invalid credentials: Password invalid'
+                    status: 401
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Invalid or missing credentials
+                    enum:
+                    - '401'
+                    type: string
+                type: object
+          description: Invalid Credentials
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Update Privacy Policy
+      tags:
+      - Privacy Policy
+      x-amazon-apigateway-integration:
+        httpMethod: PUT
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+          integration.request.path.policyId: method.request.path.policyId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/privacy-policy/organizations/{organizationId}/policies/{policyId}
+  /privacy-policy/organizations/{organizationId}/policies/{policyId}/policy-assignment:
+    post:
+      description: Assign or un-assign the policy to some roles of the organization.
+      operationId: EBS assign or un-assign Privacy Policy
+      parameters:
+      - description: The ID of the organization.
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: The ID of the privacy policy.
+        in: path
+        name: policyId
+        required: true
+        schema:
+          $ref: '#/components/schemas/policyId'
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Create privacy policy:
+                summary: Assign or un-assign privacy policy
+                value:
+                  baseUri: https://api-dev3.everbridge.net/rest/privacy-policy/organizations/295910361798546/policies
+                  id: 1954967644536964
+                  instanceUri: https://api-dev3.everbridge.net/rest/privacy-policy/organizations/295910361798546/policies/1954967644536964
+                  message: OK
+            schema:
+              $ref: '#/components/schemas/assignOrUnassignPrivacy'
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Updated:
+                  summary: Success
+                  value:
+                    baseUri: https://api-dev3.everbridge.net/rest/privacy-policy/organizations/295910361798546/policies
+                    id: 1954967644536948
+                    instanceUri: https://api-dev3.everbridge.net/rest/privacy-policy/organizations/295910361798546/policies/1954967644536948
+                    message: OK
+              schema:
+                $ref: '#/components/schemas/postUpdateResponse'
+          description: Success
+        '400':
+          content:
+            application/json:
+              examples:
+                Invalid Request Input:
+                  summary: Invalid Input
+                  value:
+                    message: type mismatch exception
+                    status: 400
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Missing or invalid request input
+                    enum:
+                    - '400'
+                    type: string
+                type: object
+          description: Invalid request input
+        '401':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: 'Invalid credentials: Invalid or missing Authorization header'
+                  value:
+                    message: 'Invalid credentials: Invalid or missing Authorization header'
+                    status: 401
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: 'Invalid credentials: Invalid or missing Authorization header'
+                    enum:
+                    - '401'
+                    type: string
+                type: object
+          description: 'Invalid credentials: Invalid or missing Authorization header'
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: assign or un-assign Privacy Policy
+      tags:
+      - Privacy Policy
+      x-amazon-apigateway-integration:
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+          integration.request.path.policyId: method.request.path.policyId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/privacy-policy/organizations/{organizationId}/policies/{policyId}/policy-assignment
+  /privacy-policy/organizations/{organizationId}/policy-assignment/bypolicy:
+    get:
+      description: Retrieve all privacy policies with assigned roles for an organization.
+      operationId: EBS Get Privacy Policy Assigment
+      parameters:
+      - description: The ID of the organization.
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: The page number of privacy policies to return.
+        in: query
+        name: pageNumber
+        required: false
+        schema:
+          default: 1
+          example: 1
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Success:
+                  summary: Success
+                  value:
+                    firstPageUri: https://api-dev3.everbridge.net/rest/privacy-policy/organizations/295910361798546/policy-assignment/bypolicy?pageNumber=1
+                    lastPageUri: https://api-dev3.everbridge.net/rest/privacy-policy/organizations/295910361798546/policy-assignment/bypolicy?pageNumber=1
+                    message: OK
+                    page:
+                      currentPageNo: 1
+                      data:
+                      - policyId: 1954967644536955
+                        policyName: testreadmepp
+                      - policyId: 1954967644536948
+                        policyName: testname
+                      - policyId: 1954967644536947
+                        policyName: demo-00
+                      - assignedRoles:
+                        - roleId: 2202326085402642
+                          roleName: GM-rest-api3
+                          roleType: GROUP_LEADER
+                        - roleId: 569582993539119
+                          roleName: gm
+                          roleType: GROUP_LEADER
+                        policyId: 2508127756877894
+                        policyName: edit
+                      - assignedRoles:
+                        - roleId: 2202326085402643
+                          roleName: GM-rest-api4
+                          roleType: GROUP_LEADER
+                        - roleId: 625692446294168
+                          roleName: ~!@#$%^&*()_+
+                          roleType: GROUP_LEADER
+                        policyId: 2348148815036604
+                        policyName: Demo
+                      - assignedRoles:
+                        - roleId: 569582993539116
+                          roleName: remove feature
+                          roleType: GROUP_LEADER
+                        policyId: 2508127756877895
+                        policyName: view
+                      pageSize: 10
+                      start: 0
+                      totalCount: 6
+                      totalPageCount: 1
+              schema:
+                $ref: '#/components/schemas/privacyAssignment'
+          description: Success
+        '400':
+          content:
+            application/json:
+              examples:
+                Invalid Request Input:
+                  summary: Invalid Input
+                  value:
+                    message: type mismatch exception
+                    status: 400
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Missing or invalid request input
+                    enum:
+                    - '400'
+                    type: string
+                type: object
+          description: Invalid request input
+        '401':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Invalid Credentials
+                  value:
+                    message: 'Invalid credentials: Password invalid'
+                    status: 401
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Invalid or missing credentials
+                    enum:
+                    - '401'
+                    type: string
+                type: object
+          description: Invalid Credentials
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Get Privacy Policy Assigment
+      tags:
+      - Privacy Policy
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/privacy-policy/organizations/{organizationId}/policy-assignment/bypolicy
+components:
+  schemas:
+    postUpdateResponse:
+      properties:
+        baseUri:
+          type: string
+        id:
+          type: integer
+        instanceUri:
+          type: string
+        message:
+          type: string
+      type: object
+    getPrivacyPolicies:
+      properties:
+        summary:
+          type: string
+        value:
+          properties:
+            currentPageUri:
+              type: string
+            firstPageUri:
+              type: string
+            lastPageUri:
+              type: string
+            message:
+              type: string
+            nextPageUri:
+              type: string
+            page:
+              properties:
+                currentPageNo:
+                  type: integer
+                data:
+                  items:
+                    properties:
+                      policyItems:
+                        properties:
+                          category:
+                            description: Whether the data privacy policy work for 'contactSection' or 'contactField'
+                            type: string
+                          nameIdentity:
+                            description: The data privacy policy will work when it be GENERAL_INFORMATION,DELIVERY_METHODS,STATIC_LOCATIONS,EXPECTED_LOCATIONS,LAST_KNOWN_LOCATIONS,TRAVEL_ARRANGER
+                            type: string
+                          permission:
+                            description: The permission details of the privacy policy:NO_ACCESS,VIEW_ONLY,VIEW_AND_EDIT
+                            type: string
+                        type: object
+                      policyName:
+                        description: The name of the privacy policy
+                        type: string
+                    type: object
+                  type: array
+                dataPageList:
+                  items:
+                    type: string
+                  type: array
+                pageSize:
+                  type: integer
+                scrollId:
+                  type: string
+                start:
+                  type: integer
+                totalCount:
+                  type: integer
+                totalPageCount:
+                  type: integer
+              type: object
+          type: object
+      type: object
+    privacyPolicy:
+      properties:
+        policyItems:
+          items:
+            properties:
+              category:
+                description: Whether the data privacy policy work for 'contactSection' or 'contactField'
+                type: string
+              nameIdentity:
+                description: The data privacy policy will work when it be GENERAL_INFORMATION,DELIVERY_METHODS,STATIC_LOCATIONS,EXPECTED_LOCATIONS,LAST_KNOWN_LOCATIONS,TRAVEL_ARRANGER
+                type: string
+              permission:
+                description: The permission details of the privacy policy:NO_ACCESS,VIEW_ONLY,VIEW_AND_EDIT
+                type: string
+            type: object
+          type: array
+        policyName:
+          description: The name of the privacy policy
+          type: string
+      type: object
+    privacyAssignment:
+      properties:
+        assignedRoles:
+          items:
+            properties:
+              roleId:
+                type: integer
+              roleName:
+                type: string
+              roleType:
+                type: string
+            type: object
+          type: array
+        policyId:
+          type: integer
+        policyName:
+          type: string
+      type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
+    policyId:
+      default: '0'
+      description: privacy policy ID
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
+    assignOrUnassignPrivacy:
+      properties:
+        assignRoleIds:
+          items:
+            type: integer
+          type: array
+        unassignRoleIds:
+          items:
+            type: integer
+          type: array
+      type: object
+  securitySchemes:
+    API_Authorizer:
+      description: oAuth Token
+      in: header
+      name: Authorization
+      type: apiKey
+      x-amazon-apigateway-authorizer:
+        authorizerCredentials: arn:aws:iam::214792946631:role/oas-rest-api-gw-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+      x-amazon-apigateway-authtype: custom
+    BasicAuth:
+      description: Basic Authentication Token
+      scheme: basic
+      type: http
+    api_key:
+      description: API Key - For System Use
+      in: header
+      name: x-api-key
+      type: apiKey
+x-amazon-apigateway-binary-media-types:
+- audio/wav
+- audio/x-wav
+- application/octet-stream
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

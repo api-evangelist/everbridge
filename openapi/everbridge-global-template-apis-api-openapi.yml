@@ -1,0 +1,497 @@
+openapi: 3.2.0
+info:
+  title: Communications Global Template APIs API
+  description: Unified Communications APIs
+  version: '1.0'
+servers:
+- url: https://api.everbridge.net/managerapps/communications/v1
+tags:
+- name: Global Template APIs
+paths:
+  /global-templates/:
+    get:
+      tags:
+      - Global Template APIs
+      operationId: getGlobalTemplates
+      summary: List global templates
+      description: List available global templates from the Global Template Library. Returns 200 with empty array if no templates found.
+      parameters:
+      - in: query
+        name: category
+        schema:
+          type: string
+        description: Filter global templates by category name.
+      - in: query
+        name: eventType
+        schema:
+          type: string
+        description: Filter global templates by event type. Returns templates whose eventTypes array contains the specified value.
+      responses:
+        '200':
+          description: List of global templates (empty array if none found)
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GlobalTemplateResponse'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        connectionId: 11ofco
+        httpMethod: GET
+        uri: https://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/cem-comms/communications/global-templates
+        responses:
+          default:
+            statusCode: '200'
+        passthroughBehavior: when_no_match
+        connectionType: VPC_LINK
+    post:
+      tags:
+      - Global Template APIs
+      operationId: createGlobalTemplate
+      summary: Publish a template to the Global Template Library
+      description: Creates a new global template by publishing an org template to the global library.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GlobalTemplateImportRequest'
+      responses:
+        '201':
+          description: Global template created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalTemplateResponse'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '409':
+          description: Conflict - template already published
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        connectionId: 11ofco
+        httpMethod: POST
+        uri: https://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/cem-comms/communications/global-templates
+        responses:
+          default:
+            statusCode: '200'
+        passthroughBehavior: when_no_match
+        connectionType: VPC_LINK
+  /global-templates/categories:
+    get:
+      tags:
+      - Global Template APIs
+      operationId: getGlobalTemplateCategories
+      summary: List global template categories
+      description: Returns a list of distinct category names from the Global Template Library for use in filter dropdowns.
+      responses:
+        '200':
+          description: List of distinct category names
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                example:
+                - Weather
+                - Security
+                - IT Outage
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        connectionId: 11ofco
+        httpMethod: GET
+        uri: https://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/cem-comms/communications/global-templates/categories
+        responses:
+          default:
+            statusCode: '200'
+        passthroughBehavior: when_no_match
+        connectionType: VPC_LINK
+  /global-templates/event-types:
+    get:
+      tags:
+      - Global Template APIs
+      operationId: getGlobalTemplateEventTypes
+      summary: List global template event types
+      description: Returns a list of distinct event type names from the Global Template Library for use in filter dropdowns.
+      responses:
+        '200':
+          description: List of distinct event type names
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                example:
+                - Hurricane
+                - Earthquake
+                - Active Shooter
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        connectionId: 11ofco
+        httpMethod: GET
+        uri: https://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/cem-comms/communications/global-templates/event-types
+        responses:
+          default:
+            statusCode: '200'
+        passthroughBehavior: when_no_match
+        connectionType: VPC_LINK
+  /global-templates/import:
+    post:
+      tags:
+      - Global Template APIs
+      operationId: importGlobalTemplateToOrg
+      summary: Import a global template to the org
+      description: Creates a new org template from a global template in the library.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GlobalTemplateImportToOrgRequest'
+      responses:
+        '200':
+          description: Template imported successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalTemplateImportToOrgResponse'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Global template not found
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        connectionId: 11ofco
+        httpMethod: POST
+        uri: https://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/cem-comms/communications/global-templates/import
+        responses:
+          default:
+            statusCode: '200'
+        passthroughBehavior: when_no_match
+        connectionType: VPC_LINK
+  /global-templates/{id}:
+    get:
+      tags:
+      - Global Template APIs
+      operationId: getGlobalTemplateById
+      summary: Get a global template by ID
+      description: Returns a single global template by its UUID.
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The UUID of the global template.
+      responses:
+        '200':
+          description: Global template found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalTemplateResponse'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Global template not found
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        connectionId: 11ofco
+        httpMethod: GET
+        uri: https://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/cem-comms/communications/global-templates/{id}
+        requestParameters:
+          integration.request.path.id: method.request.path.id
+        responses:
+          default:
+            statusCode: '200'
+        passthroughBehavior: when_no_match
+        connectionType: VPC_LINK
+    delete:
+      tags:
+      - Global Template APIs
+      operationId: deleteGlobalTemplate
+      summary: Delete a global template
+      description: Deletes a global template by its ID. Performs a hard delete.
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The UUID of the global template to delete.
+      responses:
+        '204':
+          description: Global template deleted successfully
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Global template not found
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        connectionId: 11ofco
+        httpMethod: DELETE
+        uri: https://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/cem-comms/communications/global-templates/{id}
+        requestParameters:
+          integration.request.path.id: method.request.path.id
+        responses:
+          default:
+            statusCode: '204'
+        passthroughBehavior: when_no_match
+        connectionType: VPC_LINK
+  /global-templates/{id}/import-status:
+    get:
+      tags:
+      - Global Template APIs
+      operationId: getGlobalTemplateImportStatus
+      summary: Check import status of a global template
+      description: Returns whether a global template has already been imported into the current org and how many times.
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The UUID of the global template.
+      responses:
+        '200':
+          description: Import status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalTemplateImportStatusResponse'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        connectionId: 11ofco
+        httpMethod: GET
+        uri: https://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/cem-comms/communications/global-templates/{id}/import-status
+        requestParameters:
+          integration.request.path.id: method.request.path.id
+        responses:
+          default:
+            statusCode: '200'
+        passthroughBehavior: when_no_match
+        connectionType: VPC_LINK
+components:
+  schemas:
+    GlobalTemplateImportToOrgRequest:
+      type: object
+      description: Request to import a global template into an organization.
+      properties:
+        globalTemplateId:
+          type: string
+          format: uuid
+          description: The ID of the global template to import.
+        category:
+          type: object
+          properties:
+            id:
+              type: string
+              description: The org category ID to assign to the imported template.
+            name:
+              type: string
+              description: The org category name.
+          required:
+          - id
+          - name
+      required:
+      - globalTemplateId
+      - category
+    GlobalTemplateImportToOrgResponse:
+      type: object
+      description: Response after importing a global template to an org.
+      properties:
+        templateId:
+          type: string
+          format: uuid
+          description: The ID of the newly created org template.
+        templateName:
+          type: string
+          description: The name of the newly created org template.
+        message:
+          type: string
+          description: Success message.
+      required:
+      - templateId
+      - templateName
+      - message
+    GlobalTemplateImportRequest:
+      type: object
+      description: Request to publish/create a global template from an org template.
+      properties:
+        templateId:
+          type: string
+          format: uuid
+          description: The ID of the org template to publish to the global library.
+      required:
+      - templateId
+    GlobalTemplateResponse:
+      type: object
+      description: A global template from the Global Template Library.
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the global template.
+        name:
+          type: string
+          description: Name of the global template.
+        description:
+          type: string
+          description: Description of the global template.
+        category:
+          type: string
+          description: Category of the global template.
+        eventTypes:
+          type: array
+          items:
+            type: string
+          description: Event types associated with the global template.
+        status:
+          type: string
+          description: Status of the template (e.g., DRAFT, LIVE).
+        priority:
+          type: string
+          description: Priority level of the template.
+        type:
+          type: string
+          description: Type of the template (e.g., COMMS).
+        tags:
+          type: array
+          items:
+            type: string
+          description: Tags associated with the template.
+        variables:
+          type: object
+          description: Template variables (CONTEXT type only).
+        message:
+          type:
+          - object
+          - 'null'
+          description: Message content including subject and body for each channel (available on GET by ID only).
+        sourceTemplateId:
+          type: string
+          description: Original template ID from which this was imported.
+        importedFromOrgId:
+          type: string
+          description: Organization ID from which the template was imported.
+        importedByUserId:
+          type: string
+          description: User ID who imported the template.
+        importedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the template was imported.
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the global template was created.
+        createdBy:
+          type: string
+          description: User ID who created the global template.
+      required:
+      - id
+      - name
+      - category
+      - status
+      - priority
+      - type
+      - sourceTemplateId
+      - importedFromOrgId
+      - importedByUserId
+      - importedAt
+      - createdAt
+      - createdBy
+    GlobalTemplateImportStatusResponse:
+      type: object
+      description: Import status of a global template in the current org.
+      properties:
+        alreadyImported:
+          type: boolean
+          description: Whether this global template has been imported into the current org.
+        importCount:
+          type: integer
+          description: Number of times this global template has been imported.
+        existingTemplates:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+              name:
+                type: string
+          description: List of existing org templates created from this global template.
+      required:
+      - alreadyImported
+      - importCount
+      - existingTemplates
+  securitySchemes:
+    API_Authorizer:
+      type: apiKey
+      name: Authorization
+      in: header
+      x-amazon-apigateway-authtype: custom
+      x-amazon-apigateway-authorizer:
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        authorizerCredentials: arn:aws:iam::214792946631:role/comms-unified-gateway-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+    api_key:
+      type: apiKey
+      name: x-api-key
+      in: header
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

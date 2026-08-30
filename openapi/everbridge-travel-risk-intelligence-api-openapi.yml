@@ -1,0 +1,349 @@
+openapi: 3.2.0
+info:
+  title: Travel Risk Intelligence API
+  description: Travel APIs for external integrations.
+  version: v1
+servers:
+- url: https://api.everbridge.net/travel/v1
+- url: https://api.everbridge.eu/travel/v1
+tags:
+- name: Travel Risk Intelligence
+  description: Travel risk intelligence operations
+paths:
+  /risk-intelligence/ratings/countries:
+    get:
+      tags:
+      - Travel Risk Intelligence
+      summary: List All Country Risk Ratings
+      description: "This method will return a risk rating for all known countries with a risk value assigned\n> \U0001F4D8 Supported Authentication Types\n> \n> This method only Supports Client Credential OAuth workflow.  \n> See our [Getting started guide](https://developers.everbridge.net/home/docs/ebs-gs-guide-authentication-types#oauth-20-authentication) for tips on how to authenticate and our [Token method](https://developers.everbridge.net/reference/generate-token) for requesting the token"
+      operationId: travel-risk-intelligence-list-country-ratings
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CountryRiskRatingResponse'
+              examples:
+                default:
+                  summary: Country ratings
+                  value:
+                    data:
+                    - countryCode: AF
+                      countryName: Afghanistan
+                      rating: '4'
+                      lastUpdated: '2025-05-08T08:30:06.032Z'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                invalid-parameter:
+                  value:
+                    message: Invalid parameter.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GatewayGeneratedErrorResponse'
+              examples:
+                authorization-failure:
+                  summary: Authorization failure.
+                  value:
+                    title: ACCESS_DENIED
+                    status: '403'
+                    detail: Authorization failure.
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - LambdaAuthorizer: []
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        uri: http://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/trm/country-report/{organizationId}/travel/ratings
+        requestParameters:
+          integration.request.path.organizationId: context.authorizer.org_id
+          integration.request.header.X-EB-From-AWS-APIGateway: '''true'''
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        passthroughBehavior: when_no_match
+        connectionId: 11ofco
+        connectionType: VPC_LINK
+  /risk-intelligence/ratings/countries/{country-code}:
+    get:
+      tags:
+      - Travel Risk Intelligence
+      summary: Retrieve A Risk Rating For A Specific Country
+      description: "This method will return a risk rating for a specific country based on the ISO 3166-1 alpha-2 country codes: https://www.iso.org/obp/ui/#search\n> \U0001F4D8 Supported Authentication Types\n> \n> This method only Supports Client Credential OAuth workflow.  \n> See our [Getting started guide](https://developers.everbridge.net/home/docs/ebs-gs-guide-authentication-types#oauth-20-authentication) for tips on how to authenticate and our [Token method](https://developers.everbridge.net/reference/generate-token) for requesting the token"
+      operationId: travel-risk-intelligence-get-country-rating
+      parameters:
+      - name: country-code
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[A-Za-z]{2}$
+        description: ISO 3166-1 alpha-2 country code.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CountryRiskRatingByCodeResponse'
+              examples:
+                default:
+                  summary: Single country rating
+                  value:
+                    data:
+                      countryCode: AF
+                      countryName: Afghanistan
+                      rating: '4'
+                      lastUpdated: '2025-05-08T08:30:06.032Z'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                invalid-parameter:
+                  value:
+                    message: Invalid parameter.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GatewayGeneratedErrorResponse'
+              examples:
+                authorization-failure:
+                  summary: Authorization failure.
+                  value:
+                    title: ACCESS_DENIED
+                    status: '403'
+                    detail: Authorization failure.
+        '404':
+          description: Country code not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                country-code-not-found:
+                  value:
+                    message: Invalid country in the country report.
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - LambdaAuthorizer: []
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        uri: http://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/trm/country-report/{organizationId}/travel/ratings/{countryCodeIso2}
+        requestParameters:
+          integration.request.path.organizationId: context.authorizer.org_id
+          integration.request.header.X-EB-From-AWS-APIGateway: '''true'''
+          integration.request.path.countryCodeIso2: method.request.path.country-code
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        passthroughBehavior: when_no_match
+        connectionId: 11ofco
+        connectionType: VPC_LINK
+  /risk-intelligence/ratings/countries/{country-code}/cities:
+    get:
+      tags:
+      - Travel Risk Intelligence
+      summary: List City Risk Ratings For A Country
+      description: "This method will return all rated cities for a valid ISO 3166-1 alpha-2 country code. Optionally provide `cityName` for an accent-insensitive, case-insensitive exact city lookup within that country.\n> \U0001F4D8 Supported Authentication Types\n> \n> This method only Supports Client Credential OAuth workflow.  \n> See our [Getting started guide](https://developers.everbridge.net/home/docs/ebs-gs-guide-authentication-types#oauth-20-authentication) for tips on how to authenticate and our [Token method](https://developers.everbridge.net/reference/generate-token) for requesting the token"
+      operationId: travel-risk-intelligence-list-city-ratings-by-country
+      parameters:
+      - name: country-code
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[A-Za-z]{2}$
+        description: ISO 3166-1 alpha-2 country code.
+      - name: cityName
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Optional city name filter. Matching is case-insensitive and accent-insensitive while preserving exact punctuation and internal spacing.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CityRiskRatingResponse'
+              examples:
+                default:
+                  summary: City ratings
+                  value:
+                    data:
+                    - countryCode: US
+                      cityName: Boston
+                      stateProvince: Massachusetts
+                      rating: '2'
+                      lastUpdated: '2025-05-08T08:30:06.032Z'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                invalid-parameter:
+                  value:
+                    message: Invalid parameter.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GatewayGeneratedErrorResponse'
+              examples:
+                authorization-failure:
+                  summary: Authorization failure.
+                  value:
+                    title: ACCESS_DENIED
+                    status: '403'
+                    detail: Authorization failure.
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - LambdaAuthorizer: []
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        uri: http://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/trm/city-report/{organizationId}/travel/ratings/countries/{countryCodeIso2}/cities
+        requestParameters:
+          integration.request.path.organizationId: context.authorizer.org_id
+          integration.request.header.X-EB-From-AWS-APIGateway: '''true'''
+          integration.request.path.countryCodeIso2: method.request.path.country-code
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        passthroughBehavior: when_no_match
+        connectionId: 11ofco
+        connectionType: VPC_LINK
+components:
+  schemas:
+    CountryRiskRating:
+      type: object
+      properties:
+        countryCode:
+          type: string
+          description: ISO 3166-1 alpha-2 country code.
+        countryName:
+          type: string
+          description: Country name.
+        rating:
+          type: string
+          description: Risk rating score from 1 (low) to 5 (high).
+        lastUpdated:
+          type: string
+          description: UTC timestamp string in ISO 8601 format.
+          example: '2026-03-08T08:30:06.032Z'
+    CityRiskRating:
+      type: object
+      properties:
+        countryCode:
+          type: string
+          description: ISO 3166-1 alpha-2 country code.
+        cityName:
+          type: string
+          description: City name.
+        stateProvince:
+          type: string
+          description: State or province when available.
+        rating:
+          type: string
+          description: Risk rating score from 1 (low) to 5 (high).
+        lastUpdated:
+          type: string
+          description: UTC timestamp string in ISO 8601 format.
+          example: '2026-03-08T08:30:06.032Z'
+    GatewayGeneratedErrorResponse:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Error title.
+          example: ACCESS_DENIED
+        status:
+          type: string
+          description: HTTP status code.
+          example: '403'
+        detail:
+          type: string
+          description: Error detail message.
+          example: Authorization failure.
+    CountryRiskRatingResponse:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CountryRiskRating'
+    ErrorResponse:
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        reason:
+          type: string
+    CountryRiskRatingByCodeResponse:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          $ref: '#/components/schemas/CountryRiskRating'
+    CityRiskRatingResponse:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CityRiskRating'
+  securitySchemes:
+    LambdaAuthorizer:
+      type: apiKey
+      name: Authorization
+      in: header
+      x-amazon-apigateway-authtype: custom
+      x-amazon-apigateway-authorizer:
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        authorizerCredentials: arn:aws:iam::214792946631:role/trm-service-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 0
+        identitySource: method.request.header.Authorization
+        type: request
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

@@ -1,0 +1,744 @@
+openapi: 3.2.0
+info:
+  title: Digital Apps Internal Mobile Organizations API
+  description: 'Digital Apps APIs bring Everbridge notification functionality to your company''s mobile, desktop or web applications. '
+  version: v1
+servers:
+- url: https://api.everbridge.net/digitalapps/v2
+tags:
+- name: Internal Mobile Organizations
+  description: Organizations operations
+paths:
+  /organizations:
+    get:
+      tags:
+      - Internal Mobile Organizations
+      summary: List Organizations
+      description: List organizations information by search term.
+      operationId: ebs-daa-list-organizations
+      parameters:
+      - name: searchTerm
+        in: query
+        description: Organization search term
+        required: true
+        schema:
+          type: string
+      - name: dataType
+        in: query
+        description: Search data type
+        required: false
+        schema:
+          type: string
+          enum:
+          - Organization
+          - Keyword
+          - All
+        example: Keyword
+      responses:
+        '200':
+          description: Retrieve organization search results.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MobileOrganizationSetting'
+      security:
+      - {}
+      x-amazon-apigateway-integration:
+        httpMethod: get
+        uri: https://mobilemember.everbridge.net/api/v2/organizations
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        passthroughBehavior: when_no_match
+  /organizations/information/{organizationId}:
+    get:
+      tags:
+      - Internal Mobile Organizations
+      summary: Get Organization
+      description: Get Organization information by Id.
+      operationId: ebs-daa-get-organizations-information
+      parameters:
+      - name: organizationId
+        in: path
+        description: Organization ID
+        required: true
+        schema:
+          pattern: ^\d+$
+          type: string
+        example: 295910361798625
+      responses:
+        '200':
+          description: Retrieve organization information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationV2Response'
+        '404':
+          description: Not found organization.
+          content:
+            application/json: {}
+      security:
+      - {}
+      x-amazon-apigateway-integration:
+        httpMethod: get
+        uri: https://mobilemember.everbridge.net/api/v2/organizations/information/{organizationId}
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        passthroughBehavior: when_no_match
+  /organizations/settings:
+    post:
+      tags:
+      - Internal Mobile Organizations
+      summary: Get Organizations Settings
+      description: Get Organization settings.
+      operationId: ebs-daa-get-organizations-settings
+      parameters:
+      - name: EVBG-Application-Type
+        in: header
+        required: false
+        schema:
+          type: string
+      - name: Client-Id
+        in: header
+        description: Custom app client id
+        required: true
+        schema:
+          type: string
+        example: 3efb35a2-fdee-44bb-b476-2a45cada8b00
+      - name: Authorization
+        in: header
+        description: Access token
+        required: true
+        schema:
+          type: string
+        example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyLXRlc3QiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MDAwMDAwMDAsImV4cCI6MjAwMDAwMDAwMH0.MEUCIQDRrT_U-WXmq9sdlqZQw4y1GiI4Pp2tJSrKzWSi8vBslgIgQzRSce6h7RkF70ZcQnFX6Zry8FSX8U5CggV2-3OyuVE
+      responses:
+        '200':
+          description: Retrieve organization settings.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MobileOrganizationSetting'
+        '404':
+          description: Not found organization settings.
+          content:
+            application/json: {}
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        httpMethod: post
+        uri: https://mobilemember.everbridge.net/api/v2/organizations/settings
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        passthroughBehavior: when_no_match
+  /organizations/keywords:
+    get:
+      tags:
+      - Internal Mobile Organizations
+      summary: List Keyword response
+      description: List search response from keyword.
+      operationId: ebs-daa-search-keyword
+      parameters:
+      - name: name
+        in: query
+        description: Keyword name
+        required: true
+        schema:
+          type: string
+      - name: Authorization
+        in: header
+        description: Access token
+        required: true
+        schema:
+          type: string
+        example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyLXRlc3QiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MDAwMDAwMDAsImV4cCI6MjAwMDAwMDAwMH0.MEUCIQDRrT_U-WXmq9sdlqZQw4y1GiI4Pp2tJSrKzWSi8vBslgIgQzRSce6h7RkF70ZcQnFX6Zry8FSX8U5CggV2-3OyuVE
+      responses:
+        '200':
+          description: Retrieve organization from search keyword.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/KeywordSearchResponse'
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        httpMethod: get
+        uri: https://mobilemember.everbridge.net/api/v2/organizations/keywords
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        passthroughBehavior: when_no_match
+  /organizations/keywords/subscriptions:
+    get:
+      tags:
+      - Internal Mobile Organizations
+      summary: List Keyword Subscriptions
+      description: Get all keyword subscriptions.
+      operationId: ebs-daa-list-keyword-subscriptions
+      parameters:
+      - name: uuid
+        in: query
+        description: The device unique id
+        required: true
+        schema:
+          type: string
+      - name: Authorization
+        in: header
+        description: Access token
+        required: true
+        schema:
+          type: string
+        example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyLXRlc3QiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MDAwMDAwMDAsImV4cCI6MjAwMDAwMDAwMH0.MEUCIQDRrT_U-WXmq9sdlqZQw4y1GiI4Pp2tJSrKzWSi8vBslgIgQzRSce6h7RkF70ZcQnFX6Zry8FSX8U5CggV2-3OyuVE
+      responses:
+        '200':
+          description: Retrieve organization from search keyword.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/KeywordSubscriptionResponse'
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        httpMethod: get
+        uri: https://mobilemember.everbridge.net/api/v2/organizations/keywords/subscriptions
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        passthroughBehavior: when_no_match
+  /organizations/keywords/images/{image-id}:
+    get:
+      tags:
+      - Internal Mobile Organizations
+      summary: Get Keyword Image
+      description: Get keyword image.
+      operationId: ebs-daa-get-keyword-image
+      parameters:
+      - name: image-id
+        in: path
+        description: Keyword image id
+        required: true
+        schema:
+          type: string
+      - name: Authorization
+        in: header
+        description: Access token
+        required: true
+        schema:
+          type: string
+        example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyLXRlc3QiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MDAwMDAwMDAsImV4cCI6MjAwMDAwMDAwMH0.MEUCIQDRrT_U-WXmq9sdlqZQw4y1GiI4Pp2tJSrKzWSi8vBslgIgQzRSce6h7RkF70ZcQnFX6Zry8FSX8U5CggV2-3OyuVE
+      responses:
+        '200':
+          description: Return download output stream
+          content:
+            application/octet-stream: {}
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        httpMethod: get
+        uri: https://mobilemember.everbridge.net/api/v2/organizations/keywords/images/{image-id}
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        passthroughBehavior: when_no_match
+  /organizations/keywords/{keyword-id}:
+    patch:
+      tags:
+      - Internal Mobile Organizations
+      summary: Update Keyword
+      description: Subscribe or Unsubscribe a keyword.
+      operationId: ebs-daa-update-keyword
+      parameters:
+      - name: keyword-id
+        in: path
+        description: Keyword id
+        required: true
+        schema:
+          type: integer
+          format: int64
+        example: 1539455328453094
+      - name: Authorization
+        in: header
+        description: Access token
+        required: true
+        schema:
+          type: string
+        example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyLXRlc3QiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MDAwMDAwMDAsImV4cCI6MjAwMDAwMDAwMH0.MEUCIQDRrT_U-WXmq9sdlqZQw4y1GiI4Pp2tJSrKzWSi8vBslgIgQzRSce6h7RkF70ZcQnFX6Zry8FSX8U5CggV2-3OyuVE
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KeywordV2Request'
+        required: true
+      responses:
+        '200':
+          description: Retrieve organization from search keyword.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KeywordSearchResponse'
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        httpMethod: patch
+        uri: https://mobilemember.everbridge.net/api/v2/organizations/keywords/{keyword-id}
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        passthroughBehavior: when_no_match
+  /organization-code-data/{organizationCode}:
+    get:
+      tags:
+      - Internal Mobile Organizations
+      summary: Get Organization Code
+      description: Get Organization Code.
+      operationId: ebs-daa-get-organization-code
+      parameters:
+      - name: organizationCode
+        in: path
+        description: Organization Code
+        required: true
+        schema:
+          pattern: ^\d+$
+          type: string
+        example: Everbridge
+      responses:
+        '200':
+          description: Retrieve organization code.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationCode'
+        '404':
+          description: Not found organization code.
+          content:
+            application/json: {}
+      security:
+      - {}
+      x-amazon-apigateway-integration:
+        httpMethod: get
+        uri: https://mobilemember.everbridge.net/api/v2/orgcode/{organizationCode}
+        requestParameters:
+          integration.request.path.organizationCode: method.request.path.organizationCode
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        passthroughBehavior: when_no_match
+components:
+  schemas:
+    ButtonFrequency:
+      type: object
+      properties:
+        timeUnit:
+          type: string
+          enum:
+          - SECONDS
+          - MINUTES
+          - HOURS
+        duration:
+          type: integer
+          format: int32
+        customized:
+          type: boolean
+    Geofence:
+      type: object
+      properties:
+        name:
+          type: string
+        circle:
+          $ref: '#/components/schemas/GeoCircle'
+    MobileLocationTracingSetting:
+      type: object
+      properties:
+        enableLocationTracingInsideGeofence:
+          type: boolean
+        enteringGeofenceMessage:
+          $ref: '#/components/schemas/EnteringGeofenceMessage'
+        exitingGeofenceMessage:
+          $ref: '#/components/schemas/ExitingGeofenceMessage'
+        geofences:
+          type: array
+          items:
+            $ref: '#/components/schemas/Geofence'
+        accountLocationTracingSettings:
+          type: array
+          items:
+            $ref: '#/components/schemas/MobileAccountLocationTracingSetting'
+    SmartPing:
+      type: object
+      properties:
+        available:
+          type: boolean
+        enableSmartPing:
+          type: boolean
+    MobileAccountLocationTracingSetting:
+      type: object
+      properties:
+        individualAccountId:
+          type: string
+    KeywordSearchResponse:
+      type: object
+      properties:
+        keywordId:
+          type: integer
+          format: int64
+        keywordName:
+          type: string
+        organizationId:
+          type: integer
+          format: int64
+        organizationName:
+          type: string
+        organizationLogoFileId:
+          type: string
+        appBrandedFileId:
+          type: string
+        createdTime:
+          type: string
+          format: date-time
+        enableAnonymousSubscribe:
+          type: boolean
+    ExitingGeofenceMessage:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        message:
+          type: string
+    MobileContactTracingSetting:
+      type: object
+      properties:
+        enableBlueToothProximity:
+          type: boolean
+        anonymousReport:
+          type: boolean
+        exposureEventNotification:
+          $ref: '#/components/schemas/ExposureEventNotification'
+        exposureEventIncident:
+          $ref: '#/components/schemas/ExposureEventIncident'
+        accountContactTracingSettings:
+          type: array
+          items:
+            $ref: '#/components/schemas/MobileAccountContactTracingSetting'
+    MobileOrganizationSetting:
+      type: object
+      properties:
+        organizationId:
+          type: integer
+          format: int64
+        organizationName:
+          type: string
+        enableSelfServiceReplacement:
+          type: boolean
+        enableScheduling:
+          type: boolean
+        organizationSafetySetting:
+          $ref: '#/components/schemas/MobileOrganizationSafetySetting'
+        contactTracingSetting:
+          $ref: '#/components/schemas/MobileContactTracingSetting'
+        locationTracingSetting:
+          $ref: '#/components/schemas/MobileLocationTracingSetting'
+        useSafetyAwareness:
+          type: boolean
+        enablePrivateIncidentZone:
+          type: boolean
+        incidentZoneAgency:
+          $ref: '#/components/schemas/IncidentZoneAgency'
+        enableThreatDetection:
+          type: boolean
+        enableIncidentContainer:
+          type: boolean
+        enableIncidentChat:
+          type: boolean
+        enableDirectoryChat:
+          type: boolean
+        enableSecureChat:
+          type: boolean
+        enableITADashBoard:
+          type: boolean
+        appCustomBrandedFileId:
+          type: string
+        enableAppleWatch:
+          type: boolean
+        enableITag:
+          type: boolean
+        passcodeSetting:
+          $ref: '#/components/schemas/PasscodeSetting'
+        enableCrisisManagement:
+          type: boolean
+        enableCrisisSmartDashboard:
+          type: boolean
+        allowShareFilesInChat:
+          type: boolean
+        allowAccessDeviceCameraRollInChat:
+          type: boolean
+        enableVideoChat:
+          type: boolean
+        enableChatReceipt:
+          type: boolean
+    GeoPoint:
+      type: object
+      properties:
+        x:
+          type: number
+          format: double
+        y:
+          type: number
+          format: double
+    GeoCircle:
+      type: object
+      properties:
+        center:
+          $ref: '#/components/schemas/GeoPoint'
+        radius:
+          type: number
+          format: double
+        geoLengthUnit:
+          type: string
+          enum:
+          - KILOMETER
+          - METER
+          - MILE
+          - FOOT
+    ExposureEventIncident:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        templateId:
+          type: integer
+          format: int64
+    KeywordV2Request:
+      required:
+      - individualAccountInfoVo
+      - operation
+      type: object
+      properties:
+        operation:
+          type: string
+          description: The operation must be either SUBSCRIBE or UNSUBSCRIBE
+          enum:
+          - SUBSCRIBE
+          - UNSUBSCRIBE
+        individualAccountInfoVo:
+          $ref: '#/components/schemas/IndividualAccountInfoVo'
+    OrganizationCode:
+      type: object
+      properties:
+        region:
+          type: string
+        organizationId:
+          type: string
+        organizationCode:
+          type: string
+        isEnabled:
+          type: boolean
+    IndividualAccountInfoVo:
+      type: object
+      properties:
+        uuid:
+          type: string
+        individualAccountId:
+          type: string
+        contactId:
+          type: integer
+          format: int64
+        contactFirstName:
+          type: string
+        contactLastName:
+          type: string
+    EmergencyPhoneNumber:
+      type: object
+      properties:
+        country:
+          type: string
+        countryCode:
+          type: string
+        phoneNumber:
+          type: string
+        authority:
+          type: boolean
+        ignoreValidation:
+          type: boolean
+    OrganizationV2Response:
+      type: object
+      properties:
+        organizationId:
+          type: string
+          description: Organization Id
+        organizationName:
+          type: string
+          description: Organization name
+        organizationLogoId:
+          type: string
+          description: Organization logo
+        ssoSetting:
+          type: object
+          additionalProperties:
+            type: string
+            description: Organization's SSO settings
+          description: Organization's SSO settings
+    PasscodeSetting:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        interval:
+          type: integer
+          format: int32
+    MobileAccountSafetySetting:
+      type: object
+      properties:
+        individualAccountId:
+          type: string
+        useCheckIn:
+          type: boolean
+        usePanicAndSafeCorridor:
+          type: boolean
+        useEmergencyCall:
+          type: boolean
+        useSOS:
+          type: boolean
+        useSafeCorridor:
+          type: boolean
+        activeForSOS:
+          type: boolean
+        customButtons:
+          type: array
+          items:
+            $ref: '#/components/schemas/MobileCustomButton'
+    ExposureEventNotification:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        message:
+          type: string
+    IncidentZoneAgency:
+      type: object
+      properties:
+        name:
+          type: string
+        designation:
+          type: string
+        logoFileId:
+          type: string
+        smartPing:
+          $ref: '#/components/schemas/SmartPing'
+    KeywordSubscriptionResponse:
+      type: object
+      properties:
+        organizationId:
+          type: integer
+          format: int64
+        organizationName:
+          type: string
+        organizationLogoFileId:
+          type: string
+        appBrandedFileId:
+          type: string
+        keywordId:
+          type: integer
+          format: int64
+        keywordName:
+          type: string
+        individualAccountInfo:
+          $ref: '#/components/schemas/IndividualAccountInfoVo'
+    MobileCustomButton:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        type:
+          type: string
+        subtype:
+          type: string
+        image:
+          type: string
+        frequency:
+          $ref: '#/components/schemas/ButtonFrequency'
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/MobileAction'
+        classic:
+          type: boolean
+    MobileOrganizationSafetySetting:
+      type: object
+      properties:
+        enableSafetyFeature:
+          type: boolean
+        duration:
+          type: integer
+          format: int32
+        unit:
+          type: string
+          enum:
+          - SECONDS
+          - MINUTES
+          - HOURS
+        allowCustomDuration:
+          type: boolean
+        accountSafetySettings:
+          type: array
+          items:
+            $ref: '#/components/schemas/MobileAccountSafetySetting'
+        emergencyPhoneNumbers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EmergencyPhoneNumber'
+        defaultEmergencyPhoneNumber:
+          $ref: '#/components/schemas/EmergencyPhoneNumber'
+        enableLandingPage:
+          type: boolean
+    MobileAction:
+      type: object
+      properties:
+        name:
+          type: string
+    EnteringGeofenceMessage:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        message:
+          type: string
+    MobileAccountContactTracingSetting:
+      type: object
+      properties:
+        individualAccountId:
+          type: string
+  securitySchemes:
+    API_Authorizer:
+      type: apiKey
+      name: Authorization
+      in: header
+      x-amazon-apigateway-authtype: custom
+      x-amazon-apigateway-authorizer:
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        authorizerCredentials: arn:aws:iam::214792946631:role/ebs-mobile-member-api-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true
+  samples-enabled: true

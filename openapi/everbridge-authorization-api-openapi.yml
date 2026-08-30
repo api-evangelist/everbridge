@@ -1,0 +1,335 @@
+openapi: 3.2.0
+info:
+  title: Digital Apps Authorization API
+  description: 'Digital Apps APIs bring Everbridge notification functionality to your company''s mobile, desktop or web applications. '
+  version: v1
+servers:
+- url: https://api.everbridge.net/digitalapps/v2
+tags:
+- name: Authorization
+  description: Authorization operations
+paths:
+  /authorizations/token:
+    post:
+      tags:
+      - Authorization
+      summary: Generate Token(client)
+      description: A server-side request to retrieve an Authorization on behalf of a Contact. Use OAuth 2.0 Client Credentials grant.
+      operationId: ebs-daa-client-generate-token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServerClientAuthorizeRequest'
+        required: true
+      responses:
+        '200':
+          description: Return Authorization including Access Token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerClientAuthorizeResponse'
+        '400':
+          description: 'Bad request
+
+            1) Invalid Client ID or Key.
+
+            2) Invalid Organization ID.
+
+            3) The custom app delivery path was not found in the requested Organization.
+
+            4) Invalid External Attribute Name or External Attribute Value: no Contact was found.
+
+            5) Invalid External Attribute Name or External Attribute Value: found multiple Contacts.'
+          content:
+            application/json: {}
+      security:
+      - {}
+      x-amazon-apigateway-integration:
+        httpMethod: post
+        uri: https://mobilemember.everbridge.net/api/v2/authorizations/token
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        passthroughBehavior: when_no_match
+  /authorizations/oauth2/token:
+    post:
+      tags:
+      - Authorization
+      summary: Generate Token(password)
+      description: Login with username and password. Use OAuth 2.0 Resource Owner Password Credentials Grant.
+      operationId: ebs-daa-password-generate-token
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AuthorizeV2Request'
+      responses:
+        '200':
+          description: Return Authorization including Access Token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthorizeV2Response'
+      security:
+      - {}
+      x-amazon-apigateway-integration:
+        httpMethod: post
+        uri: https://mobilemember.everbridge.net/api/v2/authorizations/oauth2/token
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        passthroughBehavior: when_no_match
+  /authorizations/token/refresh:
+    get:
+      tags:
+      - Authorization
+      summary: Refresh Token
+      description: Generate a new Access Token and Refresh Token using the existing Refresh token.
+      operationId: ebs-daa-refresh-token
+      parameters:
+      - name: Client-Id
+        in: header
+        description: Custom app client id
+        required: true
+        schema:
+          type: string
+        example: 3efb35a2-fdee-44bb-b476-2a45cada8b00
+      - name: Authorization
+        in: header
+        description: Refresh token
+        required: true
+        schema:
+          type: string
+        example: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxODQzNzQ3ODU1Nzk0MTc4IiwibmJmIjoxNjUzNDk2ODg4LCJJU19SRUZSRVNIX1RPS0VOIjp0cnVlLCJpc3MiOiJodHRwczpcL1wvZXZlcmJyaWRnZS5jb20iLCJleHAiOjE2NjkzOTQ1NDgsImlhdCI6MTY1MzQ5Njk0OCwidXNlciI6IjQwYzM2N2FlLWEwOTgtNDY4ZS1iZDE5LWY1MjIzMjYwZjdjNyIsIkFVVEhPUklaQVRJT05fSUQiOiI2MjhlNWM3NDBmOTA5NDcwNDQyMTFmZWEifQ.WUelPXQrhVxCmLG6IgY0I2-ElVA-dRqiUUGRtQ9ZKKY
+      responses:
+        '200':
+          description: Return new Access Token and Refresh Token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerClientAuthorizeResponse'
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        httpMethod: get
+        uri: https://mobilemember.everbridge.net/api/v2/authorizations/token/refresh
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        passthroughBehavior: when_no_match
+  /authorizations/logout:
+    delete:
+      tags:
+      - Authorization
+      summary: Logout
+      description: User logs out of the system
+      operationId: ebs-daa-logout
+      parameters:
+      - name: Client-Id
+        in: header
+        description: Custom app client id
+        required: true
+        schema:
+          type: string
+        example: 3efb35a2-fdee-44bb-b476-2a45cada8b00
+      - name: Authorization
+        in: header
+        description: Access token
+        required: true
+        schema:
+          type: string
+        example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyLXRlc3QiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MDAwMDAwMDAsImV4cCI6MjAwMDAwMDAwMH0.MEUCIQDRrT_U-WXmq9sdlqZQw4y1GiI4Pp2tJSrKzWSi8vBslgIgQzRSce6h7RkF70ZcQnFX6Zry8FSX8U5CggV2-3OyuVE
+      responses:
+        '200':
+          description: Return the Logout response containing the Contact's Individual Account ID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogoutResponse'
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        httpMethod: delete
+        uri: https://mobilemember.everbridge.net/api/v2/authorizations/logout
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        passthroughBehavior: when_no_match
+  /authorizations/token/validate:
+    get:
+      tags:
+      - Authorization
+      summary: Validate Token
+      description: Validate the authorization token.
+      operationId: ebs-daa-authorize-validate
+      parameters:
+      - name: Client-Id
+        in: header
+        description: Custom app client id
+        required: true
+        schema:
+          type: string
+        example: 3efb35a2-fdee-44bb-b476-2a45cada8b00
+      - name: Authorization
+        in: header
+        description: Access token
+        required: true
+        schema:
+          type: string
+        example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyLXRlc3QiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MDAwMDAwMDAsImV4cCI6MjAwMDAwMDAwMH0.MEUCIQDRrT_U-WXmq9sdlqZQw4y1GiI4Pp2tJSrKzWSi8vBslgIgQzRSce6h7RkF70ZcQnFX6Zry8FSX8U5CggV2-3OyuVE
+      responses:
+        '200':
+          description: Token is valid
+        '401':
+          description: Token is invalid
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        httpMethod: get
+        uri: https://mobilemember.everbridge.net/api/v2/authorizations/token/validate
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        passthroughBehavior: when_no_match
+components:
+  schemas:
+    LogoutResponse:
+      required:
+      - individualAccountId
+      type: object
+      properties:
+        individualAccountId:
+          type: string
+          description: Individual account ID
+          example: '1843747855794178'
+    ServerClientAuthorizeRequest:
+      required:
+      - clientId
+      - clientKey
+      - externalAttributeValue
+      - organizationId
+      type: object
+      properties:
+        clientId:
+          type: string
+          description: App Client ID
+          example: 3efb35a2-fdee-44bb-b476-2a45cada8b00
+        clientKey:
+          type: string
+          description: App Client Key
+          example: ZZ6cQ5a0txW4gFjbHe8DNtsSjRPIo8PCU6zm3RmYdvHREO8QYNseWdsUOvoWQxvllOsexRDam0rSiDSWfrv1hQaWr2moAtMtQszYZNlH2N6m6WBV3luv9XW83QJ+ePG8
+        organizationId:
+          pattern: ^\d+$
+          type: string
+          description: The Organization ID of the Contact the request is being made on behalf of
+          example: '1328214341321073'
+        externalAttributeName:
+          maxLength: 50
+          minLength: 1
+          type: string
+          description: The name of the Attribute stored on the Everbridge Contact to match the External Attribute Value against. If this parameter is blank or is not provided then the External ID attribute will be used to search for the contact.
+          example: uniqueAttributeName
+        externalAttributeValue:
+          maxLength: 50
+          minLength: 1
+          type: string
+          description: The External Attribute value. This value should be unique for each Contact across the Organization.If the External Attribute Name parameter is blank or not provided then the External ID attribute will be used to search for the contact.
+          example: uuid
+    AuthorizeV2Request:
+      required:
+      - grant_type
+      - password
+      - username
+      type: object
+      properties:
+        username:
+          type: string
+          description: The resource owner username.
+          example: username
+        password:
+          type: string
+          description: The resource owner password.
+          example: password
+        grant_type:
+          type: string
+          description: Value MUST be set to "password".
+          example: password
+        scope:
+          type: string
+          description: The scope of the access request.
+        organizationId:
+          type: string
+          description: The user's organization id.
+    ResponseToken:
+      required:
+      - expireDate
+      - grantDate
+      - value
+      type: object
+      properties:
+        grantDate:
+          type: string
+          format: date-time
+        expireDate:
+          type: string
+          format: date-time
+        value:
+          type: string
+    ServerClientAuthorizeResponse:
+      required:
+      - accessToken
+      - clientId
+      - individualAccountId
+      - refreshToken
+      type: object
+      properties:
+        clientId:
+          type: string
+        accessToken:
+          $ref: '#/components/schemas/ResponseToken'
+        refreshToken:
+          $ref: '#/components/schemas/ResponseToken'
+        individualAccountId:
+          type: string
+    AuthorizeV2Response:
+      required:
+      - accessToken
+      - clientId
+      - individualAccountId
+      - refreshToken
+      type: object
+      properties:
+        clientId:
+          type: string
+        accessToken:
+          $ref: '#/components/schemas/ResponseToken'
+        refreshToken:
+          $ref: '#/components/schemas/ResponseToken'
+        individualAccountId:
+          type: string
+        organizationId:
+          type: string
+          description: Organization id
+          example: '295910361798625'
+  securitySchemes:
+    API_Authorizer:
+      type: apiKey
+      name: Authorization
+      in: header
+      x-amazon-apigateway-authtype: custom
+      x-amazon-apigateway-authorizer:
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        authorizerCredentials: arn:aws:iam::214792946631:role/ebs-mobile-member-api-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true
+  samples-enabled: true

@@ -1,0 +1,1043 @@
+openapi: 3.2.0
+info:
+  title: Everbridge Reports API
+  version: '1.0'
+  description: 'Operations tagged Reports across 2 of this provider''s published API definitions: everbridge-eb-suite-openapi.json, everbridge-snapcomms-openapi.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.everbridge.net/rest
+- url: https://api.everbridge.eu/rest
+- description: API Url
+  url: https://api.snapcomms.com/v1
+- description: API Sandbox Url
+  url: https://api.snapcomms.com/mock
+tags:
+- description: EB Suites - Reports Management
+  name: Reports
+paths:
+  /notificationReports/{organizationId}/{notificationId}:
+    get:
+      deprecated: false
+      description: Retrieve the report of a notification within an organization
+      operationId: EBS Get Notification Report
+      parameters:
+      - description: Everbridge Organization id. Available on manager portal (Settings --> Organization --> Base Information)
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: The ID of the notification containing the notification reports
+        in: path
+        name: notificationId
+        required: true
+        schema:
+          example: '609886966644738'
+          type: integer
+      - allowEmptyValue: false
+        description: Filter notification by contact status
+        in: query
+        name: contactStatus
+        required: false
+        schema:
+          enum:
+          - CONFIRMED
+          - CONFIRMEDLATE
+          - NOTCONFIRMED
+          - UNREACHABLE
+          type: string
+      - allowEmptyValue: false
+        description: The page number of the notification reports to return.
+        in: query
+        name: pageNumber
+        required: false
+        schema:
+          example: '1'
+          type: integer
+      - allowEmptyValue: false
+        description: The page size of notification reports to return
+        in: query
+        name: pageSize
+        required: false
+        schema:
+          default: '100'
+          example: '100'
+          type: integer
+      - allowEmptyValue: false
+        description: "If queryType is set to `pageQuery`, client needs to specify a page number in the request. \n Keep in mind when using “scroll” that the report has about a 5 minute delay. It is always preferred to use `pageQuery` if you want to get the report earlier."
+        in: query
+        name: queryType
+        required: false
+        schema:
+          default: pageQuery
+          enum:
+          - pageQuery
+          - scroll
+          type: string
+      - allowEmptyValue: false
+        description: If queryType is set to scroll, then we will return a scrollId in each response.
+        in: query
+        name: scrollId
+        required: false
+        schema:
+          type: string
+      - allowEmptyValue: false
+        description: Retrieve data modified since that date time, like '1526986170000'
+        in: query
+        name: sinceDate
+        required: false
+        schema:
+          example: '1526986170000'
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Success:
+                  summary: Default
+                  value:
+                    firstPageUri: https://api-dev3.everbridge.net/rest/notificationReports/1536984111644674/609886966644738/?pageSize=100&queryType=pageQuery&pageNumber=1
+                    lastPageUri: https://api-dev3.everbridge.net/rest/notificationReports/1536984111644674/609886966644738/?pageSize=100&queryType=pageQuery&pageNumber=1
+                    message: OK
+                    page:
+                      currentPageNo: 1
+                      data:
+                      - attempt: 0
+                        attemptTime: 1675782977471
+                        callResultByPaths:
+                        - attemptId: 63e26b40898a4046ffd1ac81
+                          attemptOrder: 1
+                          attemptTime: 1675782977471
+                          callResult: Sent
+                          confirmed: false
+                          countryCode: US
+                          cycleSeq: 1
+                          firstName: Ajay
+                          journalId: 0
+                          lastName: Goel
+                          path: Email
+                          pathText: ajay.goel@everbridge.com
+                          waitTime: 0
+                        confirmed: false
+                        contactId: 595799473913944
+                        createdId: 1530249602924607
+                        externalId: ajay.goel@everbridge.com
+                        firstAttemptTime: 1675782977471
+                        firstName: Ajay
+                        fullName: Ajay Goel
+                        id: 0
+                        lastName: Goel
+                        notificationId: 609886966644738
+                        result: Sent
+                      pageSize: 100
+                      start: 0
+                      totalCount: 1
+                      totalPageCount: 1
+              schema:
+                properties:
+                  message:
+                    description: Request status
+                    enum:
+                    - OK
+                    type: string
+                type: object
+          description: Accepted
+        '400':
+          content:
+            application/json:
+              examples:
+                Invalid Request Input:
+                  summary: Invalid Input
+                  value:
+                    message: type mismatch exception
+                    status: 400
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Missing or invalid request input
+                    enum:
+                    - '400'
+                    type: string
+                type: object
+          description: Invalid request input
+        '401':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Invalid Credentials
+                  value:
+                    message: 'Invalid credentials: Password invalid'
+                    status: 401
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Invalid or missing credentials
+                    enum:
+                    - '401'
+                    type: string
+                type: object
+          description: Invalid Credentials
+        '500':
+          content:
+            application/json:
+              examples:
+                Internal error:
+                  summary: Internal Error
+                  value:
+                    message: Internal Error
+                    status: 500
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Internal Error
+                    enum:
+                    - '500'
+                    type: string
+                type: object
+          description: Internal Error
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      summary: Get Notification Report
+      tags:
+      - Reports
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.notificationId: method.request.path.notificationId
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/notificationReports/{organizationId}/{notificationId}
+    servers:
+    - url: https://api.everbridge.net/rest
+    - url: https://api.everbridge.eu/rest
+  /notifications/{organizationId}/reports:
+    get:
+      description: Retrieve all mass notifications ids for an organization.
+      operationId: EBS Mass Notification Report
+      parameters:
+      - description: The ID of the organization containing the notification reports
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: The range of notification start date begin time (Epoch time)
+        in: query
+        name: startTime
+        required: false
+        schema:
+          default: -1
+          format: int64
+          type: integer
+      - description: The range of notification start date end time (Epoch time)
+        in: query
+        name: endTime
+        required: false
+        schema:
+          default: -1
+          format: int64
+          type: integer
+      - description: The status of notification processing
+        in: query
+        name: notificationStatus
+        required: false
+        schema:
+          enum:
+          - Active
+          - Inactive
+          type: string
+      - description: The page number of the notification reports to return.
+        in: query
+        name: pageNumber
+        required: false
+        schema:
+          default: 1
+          format: int32
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Default:
+                summary: Default Template Values
+                value:
+                  incidentAction: Launch
+                  incidentPhases:
+                  - phaseTemplate:
+                      templateId: 1536984111644674
+            schema: {}
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestfulCollectionResult'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Org is invalid
+        '404':
+          description: Not a valid resource
+        '500':
+          description: Internal Error
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      summary: Mass Notification Report
+      tags:
+      - Reports
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/notifications/{organizationId}/reports
+    servers:
+    - url: https://api.everbridge.net/rest
+    - url: https://api.everbridge.eu/rest
+  /reports/publishingstatistics:
+    get:
+      tags:
+      - Reports
+      summary: Report - Publishing Statistics
+      description: ''
+      operationId: report-publishing-statistics
+      parameters:
+      - name: startDate
+        in: query
+        description: Defaults to UTC minus 7 days (e.g. 2023-05-08T04:24:56.463Z)
+        schema:
+          type: string
+      - name: endDate
+        in: query
+        description: Defaults  to UTC (e.g. 2023-05-08T04:24:56.463Z)
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportPublishingStatisticsResponse'
+              example:
+                content:
+                - publishDate: '2023-05-08T04:24:56.4630000+00:00'
+                  name: CEO Update Video Alert
+                  version: '1'
+                  channel: Video Alert
+                  folder: FolderName
+                  templateName: Video Alert
+                  publisher: publisher@company.com
+                  creator: creator@company.com
+                  successPercentage: '100.00'
+                  targetedCount: '1'
+                  reachCount: '1'
+                  totalReadCount: '1'
+                  readCount: '1'
+                  completedCount: '0'
+                  totalReadLaterCount: '0'
+                  totalDismissedCount: '0'
+                  totalPopupCount: '1'
+                  clientID: bf732195-5825-4de1-ae8e-2d532ed5da54
+                  campaignID: bf732195-5825-4de1-ae8e-2d532ed5da54
+                  assetTypeID: '101'
+                  assetID: bf732195-5825-4de1-ae8e-2d532ed5da54
+                  templateID: bf732195-5825-4de1-ae8e-2d532ed5da54
+                  itemId: bf732195-5825-4de1-ae8e-2d532ed5da54
+                  lastUpdated: '2023-05-08T04:25:50.1800000+00:00'
+                  startDate: '2023-05-08T04:24:56.4630000+00:00'
+                  startDateFormat: UTC
+                  endDate: '2023-05-15T04:24:54.1800000+00:00'
+                  endDateFormat: UTC
+                successSummary:
+                  contentTypes:
+                  - label: Video Alert
+                    value: '100.00'
+                  folders:
+                  - label: Test
+                    value: '100.00'
+                  publishers:
+                  - label: publisher@company.com
+                    value: '100.00'
+        '429':
+          description: Failed - Rate limit is exceeded
+      security:
+      - bearerAuth: []
+    servers:
+    - description: API Url
+      url: https://api.snapcomms.com/v1
+    - description: API Sandbox Url
+      url: https://api.snapcomms.com/mock
+  /reports/users:
+    get:
+      tags:
+      - Reports
+      summary: Report - Users
+      operationId: report-users
+      responses:
+        '200':
+          description: ''
+      security:
+      - bearerAuth: []
+    servers:
+    - description: API Url
+      url: https://api.snapcomms.com/v1
+    - description: API Sandbox Url
+      url: https://api.snapcomms.com/mock
+  /reports/successreport/{assetid}:
+    get:
+      tags:
+      - Reports
+      summary: Report - Success Report
+      description: ''
+      operationId: report-success-report
+      parameters:
+      - name: assetid
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: startDate
+        in: query
+        description: Defaults to UTC minus 2 years (e.g. 2023-05-08T04:24:56.463Z)
+        schema:
+          type: string
+      - name: endDate
+        in: query
+        description: Defaults to UTC (e.g. 2023-05-08T04:24:56.463Z)
+        schema:
+          type: string
+      - name: version
+        in: query
+        description: Defaults to -1 which is equivalent to "consolidated". -2 means all versions, any positive value limit the result to a specific content version
+        schema:
+          enum:
+          - '-1'
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportSuccesReportResponse'
+              example:
+                details:
+                - userName: Demo.User
+                  contentVersion: (consolidated)
+                  reached: 'false'
+                  success: 'false'
+                  totalSuccess: '0'
+                  consumerId: bf732195-5825-4de1-ae8e-2d532ed5da54
+                  domainName: CORP
+                  itemID: bf732195-5825-4de1-ae8e-2d532ed5da54
+                  lastConnectDate: '2023-05-16T04:05:57.0000000+00:00'
+                  completedCount: '0'
+                  dismissedCount: '0'
+                  alertPopupCount: '0'
+                  readLaterCount: '0'
+                  timeOutCount: '0'
+                  urgentDisplayCount: '0'
+                  organizationalUnit: null
+                  popupOnScreenTime: '0'
+                  alertOnScreenTime: '0'
+                  urgentOnScreenTime: '0'
+                summary:
+                  _AssetType: '101'
+                  assetName: Test Content
+                  _AssetTypeId: '101'
+                  assetType: Desktop Alert
+                  assetTypeName: infoalert
+                  _AssetStatus: P
+                  lastPublishDate: '2023-05-16T02:30:56.8200000+00:00'
+                  publishCount: '1'
+                  targetCount: '2'
+                  publishDate: '2023-05-16T02:30:56.8200000+00:00'
+                  campaignName: FolderName
+        '404':
+          description: Content not found
+        '429':
+          description: Failed - Rate limit is exceeded
+      security:
+      - bearerAuth: []
+    servers:
+    - description: API Url
+      url: https://api.snapcomms.com/v1
+    - description: API Sandbox Url
+      url: https://api.snapcomms.com/mock
+  /reports/QuestionnaireSummary/{assetid}:
+    get:
+      tags:
+      - Reports
+      summary: Report - Questionnaire Summary
+      description: ''
+      operationId: report-questionnaire-summary
+      parameters:
+      - name: assetid
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: startDate
+        in: query
+        description: Defaults to UTC minus 2 years (e.g. 2023-05-08T04:24:56.463Z)
+        schema:
+          type: string
+      - name: endDate
+        in: query
+        description: Defaults to UTC (e.g. 2023-05-08T04:24:56.463Z)
+        schema:
+          type: string
+      - name: version
+        in: query
+        description: Defaults to 1, any positive value limit the result to a specific content version
+        schema:
+          enum:
+          - '1'
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportQuestionnaireSummaryResponse'
+              example:
+                assetId: bf732195-5825-4de1-ae8e-2d532ed5da54
+                questions:
+                - name: Q1
+                  number: 1
+                  numberOfSubmissions: 1
+                  numberOfRespondents: 0
+                  numberOfNotAnswered: 0
+                  mandatory: false
+                  questionType: 6
+                  responses:
+                  - number: 1
+                    text: A1
+                    count: 1
+                    percentage: 100
+                    isCorrect: null
+                    submissionTime: null
+                  - number: 2
+                    text: A3
+                    count: 1
+                    percentage: 100
+                    isCorrect: null
+                    submissionTime: null
+                version: 2
+                startDate: '2021-06-01T01:26:50.0000000+00:00'
+                endDate: '2023-06-01T01:26:50.0000000+00:00'
+        '404':
+          description: Content not found
+        '429':
+          description: Failed - Rate limit is exceeded
+      security:
+      - bearerAuth: []
+    servers:
+    - description: API Url
+      url: https://api.snapcomms.com/v1
+    - description: API Sandbox Url
+      url: https://api.snapcomms.com/mock
+  /reports/QuestionnaireResponses/{assetid}:
+    get:
+      tags:
+      - Reports
+      summary: Report - Questionnaire Responses
+      description: ''
+      operationId: report-questionnaire-responses
+      parameters:
+      - name: assetid
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: startDate
+        in: query
+        description: Defaults to UTC minus 2 years (e.g. 2023-05-08T04:24:56.463Z)
+        schema:
+          type: string
+      - name: endDate
+        in: query
+        description: Defaults to UTC (e.g. 2023-05-08T04:24:56.463Z)
+        schema:
+          type: string
+      - name: version
+        in: query
+        description: Defaults to -2 which is equivalent to "all content versions", any positive value limit the result to a specific content version.
+        schema:
+          enum:
+          - '-2'
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportQuestionnaireResponsesResponse'
+              example:
+                responses:
+                - version: '2'
+                  questionNo: '1'
+                  questionText: Q1
+                  submissionTime: '2023-06-01T00:56:04.8100000+00:00'
+                  completionTime: '6.39'
+                  consumerId: 5bca85dd-05f4-453e-8d40-e4e1d727aaa3
+                  userName: user@company.com
+                  fullName: FirstName LastName
+                  response: A1, A3
+                  score: '0'
+                  type: '6'
+                version: '-2'
+                startDate: '2021-06-01T01:06:06.0000000+00:00'
+                endDate: '2023-06-01T01:06:06.0000000+00:00'
+        '404':
+          description: Content not found
+        '429':
+          description: Failed - Rate limit is exceeded
+      security:
+      - bearerAuth: []
+    servers:
+    - description: API Url
+      url: https://api.snapcomms.com/v1
+    - description: API Sandbox Url
+      url: https://api.snapcomms.com/mock
+components:
+  schemas:
+    DataPageObject:
+      properties:
+        currentPageNo:
+          format: int32
+          type: integer
+        data:
+          items:
+            type: object
+          type: array
+        dataPageList:
+          items:
+            $ref: '#/components/schemas/DataPageObject'
+          type: array
+        pageSize:
+          format: int32
+          type: integer
+        scrollId:
+          type: string
+        start:
+          format: int32
+          type: integer
+        totalCount:
+          format: int64
+          type: integer
+        totalPageCount:
+          format: int32
+          type: integer
+      title: DataPage«object»
+      type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
+    RestfulCollectionResult:
+      properties:
+        currentPageUri:
+          type: string
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        nextPageUri:
+          type: string
+        page:
+          $ref: '#/components/schemas/DataPageObject'
+        previousPageUri:
+          type: string
+      title: RestfulCollectionResult
+      type: object
+    ReportQuestionnaireSummaryResponse:
+      type: object
+      properties:
+        assetId:
+          type: string
+        questions:
+          type: array
+          items:
+            required:
+            - name
+            - number
+            - numberOfSubmissions
+            - numberOfRespondents
+            - numberOfNotAnswered
+            - mandatory
+            - questionType
+            - responses
+            type: object
+            properties:
+              name:
+                type: string
+              number:
+                type: integer
+              numberOfSubmissions:
+                type: integer
+              numberOfRespondents:
+                type: integer
+              numberOfNotAnswered:
+                type: integer
+              mandatory:
+                type: boolean
+              questionType:
+                type: integer
+              responses:
+                type: array
+                items:
+                  required:
+                  - number
+                  - text
+                  - count
+                  - percentage
+                  - isCorrect
+                  - submissionTime
+                  type: object
+                  properties:
+                    number:
+                      type: integer
+                    text:
+                      type: string
+                    count:
+                      type: integer
+                    percentage:
+                      type: integer
+                    isCorrect: {}
+                    submissionTime: {}
+        version:
+          type: integer
+        startDate:
+          type: string
+        endDate:
+          type: string
+    ReportSuccesReportResponse:
+      type: object
+      properties:
+        details:
+          type: array
+          items:
+            required:
+            - userName
+            - contentVersion
+            - reached
+            - success
+            - totalSuccess
+            - consumerId
+            - domainName
+            - itemID
+            - lastConnectDate
+            - completedCount
+            - dismissedCount
+            - alertPopupCount
+            - readLaterCount
+            - timeOutCount
+            - urgentDisplayCount
+            - organizationalUnit
+            - popupOnScreenTime
+            - alertOnScreenTime
+            - urgentOnScreenTime
+            type: object
+            properties:
+              userName:
+                type: string
+              contentVersion:
+                type: string
+              reached:
+                type: string
+              success:
+                type: string
+              totalSuccess:
+                type: string
+              consumerId:
+                type: string
+              domainName:
+                type: string
+              itemID:
+                type: string
+              lastConnectDate:
+                type: string
+              completedCount:
+                type: string
+              dismissedCount:
+                type: string
+              alertPopupCount:
+                type: string
+              readLaterCount:
+                type: string
+              timeOutCount:
+                type: string
+              urgentDisplayCount:
+                type: string
+              organizationalUnit: {}
+              popupOnScreenTime:
+                type: string
+              alertOnScreenTime:
+                type: string
+              urgentOnScreenTime:
+                type: string
+        summary:
+          type: object
+          properties:
+            _AssetType:
+              type: string
+            assetName:
+              type: string
+            _AssetTypeId:
+              type: string
+            assetType:
+              type: string
+            assetTypeName:
+              type: string
+            _AssetStatus:
+              type: string
+            lastPublishDate:
+              type: string
+            publishCount:
+              type: string
+            targetCount:
+              type: string
+            publishDate:
+              type: string
+            campaignName:
+              type: string
+    ReportQuestionnaireResponsesResponse:
+      type: object
+      properties:
+        responses:
+          type: array
+          items:
+            required:
+            - version
+            - questionNo
+            - questionText
+            - submissionTime
+            - completionTime
+            - consumerId
+            - userName
+            - fullName
+            - response
+            - score
+            - type
+            type: object
+            properties:
+              version:
+                type: string
+              questionNo:
+                type: string
+              questionText:
+                type: string
+              submissionTime:
+                type: string
+              completionTime:
+                type: string
+              consumerId:
+                type: string
+              userName:
+                type: string
+              fullName:
+                type: string
+              response:
+                type: string
+              score:
+                type: string
+              type:
+                type: string
+        version:
+          type: string
+        startDate:
+          type: string
+        endDate:
+          type: string
+    ReportPublishingStatisticsResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            required:
+            - publishDate
+            - name
+            - version
+            - channel
+            - folder
+            - templateName
+            - publisher
+            - creator
+            - successPercentage
+            - targetedCount
+            - reachCount
+            - totalReadCount
+            - readCount
+            - completedCount
+            - totalReadLaterCount
+            - totalDismissedCount
+            - totalPopupCount
+            - clientID
+            - campaignID
+            - assetTypeID
+            - assetID
+            - templateID
+            - itemId
+            - startDate
+            - startDateFormat
+            - endDate
+            - endDateFormat
+            type: object
+            properties:
+              publishDate:
+                type: string
+              name:
+                type: string
+              version:
+                type: string
+              channel:
+                type: string
+              folder:
+                type: string
+              templateName:
+                type: string
+              publisher:
+                type: string
+              creator:
+                type: string
+              successPercentage:
+                type: string
+              targetedCount:
+                type: string
+              reachCount:
+                type: string
+              totalReadCount:
+                type: string
+              readCount:
+                type: string
+              completedCount:
+                type: string
+              totalReadLaterCount:
+                type: string
+              totalDismissedCount:
+                type: string
+              totalPopupCount:
+                type: string
+              clientID:
+                type: string
+              campaignID:
+                type: string
+              assetTypeID:
+                type: string
+              assetID:
+                type: string
+              templateID:
+                type: string
+              itemId:
+                type: string
+              lastUpdated:
+                type: string
+              startDate:
+                type: string
+              startDateFormat:
+                type: string
+              endDate:
+                type: string
+              endDateFormat:
+                type: string
+        types:
+          type: array
+          items:
+            required:
+            - label
+            - value
+            type: object
+            properties:
+              label:
+                type: string
+              value:
+                type: string
+        folders:
+          type: array
+          items:
+            required:
+            - label
+            - value
+            type: object
+            properties:
+              label:
+                type: string
+              value:
+                type: string
+        admins:
+          type: array
+          items:
+            required:
+            - label
+            - value
+            type: object
+            properties:
+              label:
+                type: string
+              value:
+                type: string
+  securitySchemes:
+    API_Authorizer:
+      description: oAuth Token
+      in: header
+      name: Authorization
+      type: apiKey
+      x-amazon-apigateway-authorizer:
+        authorizerCredentials: arn:aws:iam::214792946631:role/oas-rest-api-gw-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+      x-amazon-apigateway-authtype: custom
+    BasicAuth:
+      description: Basic Authentication Token
+      scheme: basic
+      type: http
+    api_key:
+      description: API Key - For System Use
+      in: header
+      name: x-api-key
+      type: apiKey
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- everbridge-eb-suite-openapi.json
+- everbridge-snapcomms-openapi.json
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

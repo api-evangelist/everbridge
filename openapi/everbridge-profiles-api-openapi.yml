@@ -1,0 +1,98 @@
+openapi: 3.2.0
+info:
+  description: EB Suite APIs.
+  title: EB Suite Profiles API
+  version: '1.0'
+servers:
+- url: https://api.everbridge.net/rest
+- url: https://api.everbridge.eu/rest
+tags:
+- description: EB Suites - Profile Management
+  name: Profiles
+paths:
+  /profiles/{organizationId}:
+    get:
+      description: Retrieve a list of Profiles within an organization
+      operationId: EBS List Profiles
+      parameters:
+      - description: The id of the organization containing the Profile
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - description: Comma delimited list of fields to sort by.<p> +/- can precede the field Name to indicate direction (ascending/descending).</p><p> + is the default direction</p><p> Ex. sort=name,-createdDate sorts by name ascending and createdDate descending </p>
+        in: query
+        name: sort
+        required: false
+        schema:
+          type: string
+      - description: The number of records per page to be included in the response
+        in: query
+        name: pageSize
+        required: false
+        schema:
+          format: int32
+          type: integer
+      - description: The page to be returned.
+        in: query
+        name: pageNo
+        required: false
+        schema:
+          format: int32
+          type: integer
+      responses:
+        '200':
+          content:
+            '*/*':
+              schema:
+                type: object
+          description: OK
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: List Profiles
+      tags:
+      - Profiles
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/profiles/{organizationId}
+components:
+  securitySchemes:
+    API_Authorizer:
+      description: oAuth Token
+      in: header
+      name: Authorization
+      type: apiKey
+      x-amazon-apigateway-authorizer:
+        authorizerCredentials: arn:aws:iam::214792946631:role/oas-rest-api-gw-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+      x-amazon-apigateway-authtype: custom
+    BasicAuth:
+      description: Basic Authentication Token
+      scheme: basic
+      type: http
+    api_key:
+      description: API Key - For System Use
+      in: header
+      name: x-api-key
+      type: apiKey
+x-amazon-apigateway-binary-media-types:
+- audio/wav
+- audio/x-wav
+- application/octet-stream
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

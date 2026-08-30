@@ -1,0 +1,85 @@
+openapi: 3.2.0
+info:
+  description: EB Suite APIs.
+  title: EB Suite Response Subscription Profiles API
+  version: '1.0'
+servers:
+- url: https://api.everbridge.net/rest
+- url: https://api.everbridge.eu/rest
+tags:
+- description: EB Suites - Response Subscription Profiles.
+  name: Response Subscription Profiles
+paths:
+  /profiles/{organizationId}/{profileId}:
+    get:
+      description: Retrieve a Profile by id within an organization
+      operationId: EBS Get Profiles
+      parameters:
+      - description: The id of the organization containing the Profile
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - description: The id of the Profile
+        in: path
+        name: profileId
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            '*/*':
+              schema:
+                type: object
+          description: OK
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Get Profiles
+      tags:
+      - Response Subscription Profiles
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+          integration.request.path.profileId: method.request.path.profileId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/profiles/{organizationId}/{profileId}
+components:
+  securitySchemes:
+    API_Authorizer:
+      description: oAuth Token
+      in: header
+      name: Authorization
+      type: apiKey
+      x-amazon-apigateway-authorizer:
+        authorizerCredentials: arn:aws:iam::214792946631:role/oas-rest-api-gw-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+      x-amazon-apigateway-authtype: custom
+    BasicAuth:
+      description: Basic Authentication Token
+      scheme: basic
+      type: http
+    api_key:
+      description: API Key - For System Use
+      in: header
+      name: x-api-key
+      type: apiKey
+x-amazon-apigateway-binary-media-types:
+- audio/wav
+- audio/x-wav
+- application/octet-stream
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

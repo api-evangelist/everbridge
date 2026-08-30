@@ -1,0 +1,385 @@
+openapi: 3.2.0
+info:
+  description: EB Suite APIs.
+  title: EB Suite Locations API
+  version: '1.0'
+servers:
+- url: https://api.everbridge.net/rest
+- url: https://api.everbridge.eu/rest
+tags:
+- description: EB Suites - Location Source Data Management
+  name: Locations
+paths:
+  /locationSource/{organizationId}:
+    get:
+      description: Retrieve Location Source Data.
+      operationId: EBS List Location Source Data
+      parameters:
+      - description: Organization ID.
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: Passenger Name Record
+        in: query
+        name: PNR
+        required: false
+        schema:
+          type: string
+      - description: Flight/Rail code, exact match
+        in: query
+        name: supplierCode
+        required: false
+        schema:
+          type: string
+      - description: Flight/Rail number, exact match
+        in: query
+        name: number
+        required: false
+        schema:
+          type: string
+      - description: Supplier name, fuzzy search, at least 3 characters
+        in: query
+        name: supplierName
+        required: false
+        schema:
+          type: string
+      - description: IATA code, exact match
+        in: query
+        name: IATA
+        required: false
+        schema:
+          type: string
+      - description: The start of the search time range
+        in: query
+        name: startTime
+        required: false
+        schema:
+          type: string
+      - description: The end of the search time range, which must be after startTime
+        in: query
+        name: endTime
+        required: false
+        schema:
+          type: string
+      - description: Returns the top records (0, 1,000), default 1000
+        in: query
+        name: top
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: success
+                  value:
+                    address: 123 Main St, New York, NY 10001
+                    fromDate: '2024-01-15T10:00:00Z'
+                    fromIata: JFK
+                    locationIds:
+                    - 12345
+                    - 67890
+                    number: FL123
+                    organizationId: 1001
+                    pnr: ABC123
+                    source: airline
+                    supplier: Delta Airlines
+                    supplierCode: DL
+                    supplierName: Delta Airlines Inc.
+                    toDate: '2024-01-15T18:00:00Z'
+                    toIata: LAX
+                    type: flight
+              schema:
+                $ref: '#/components/schemas/LocationSourceDataCollectionResult'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: List Location Source Data
+      tags:
+      - Locations
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/locationSource/{organizationId}
+  /locationSource/{organizationId}/BatchGet:
+    post:
+      description: "Batch Get Location Source Data. \nNOTE: The maximum number of IDs is 4096."
+      operationId: EBS List BatchLocation Source Data
+      parameters:
+      - description: Organization ID
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      requestBody:
+        content:
+          application/json:
+            examples:
+              success:
+                summary: basic
+                value:
+                  locationIds:
+                  - 12345
+                  - 67890
+                  - 54321
+            schema:
+              $ref: '#/components/schemas/LocationSourceDataParameterModel'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: success
+                  value:
+                    locationSources:
+                    - address: 123 Main St, New York, NY 10001
+                      fromDate: '2024-01-15T10:00:00Z'
+                      fromIata: JFK
+                      locationIds:
+                      - 12345
+                      - 67890
+                      number: FL123
+                      organizationId: 1001
+                      pnr: ABC123
+                      source: airline
+                      supplier: Delta Airlines
+                      supplierCode: DL
+                      supplierName: Delta Airlines Inc.
+                      toDate: '2024-01-15T18:00:00Z'
+                      toIata: LAX
+                      type: flight
+                    - address: 456 Oak Ave, Los Angeles, CA 90210
+                      fromDate: '2024-01-20T14:30:00Z'
+                      fromIata: LAX
+                      locationIds:
+                      - 54321
+                      - 98765
+                      number: FL456
+                      organizationId: 1002
+                      pnr: DEF456
+                      source: airline
+                      supplier: United Airlines
+                      supplierCode: UA
+                      supplierName: United Airlines Inc.
+                      toDate: '2024-01-20T22:45:00Z'
+                      toIata: ORD
+                      type: flight
+              schema:
+                $ref: '#/components/schemas/LocationSourceDataCollectionResult'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: List BatchLocation Source Data
+      tags:
+      - Locations
+      x-amazon-apigateway-integration:
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/locationSource/{organizationId}/BatchGet
+  /locationSource/{organizationId}/{locationId}:
+    get:
+      description: Retrieve Location Source Data by ID.
+      operationId: EBS Get Location Source Data
+      parameters:
+      - description: Organization ID
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: Expected location ID
+        in: path
+        name: locationId
+        required: true
+        schema:
+          format: int64
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: success
+                  value:
+                    message: Location source data retrieved successfully
+                    result:
+                      address: 123 Main St, New York, NY 10001
+                      fromDate: '2024-01-15T10:00:00Z'
+                      fromIata: JFK
+                      locationIds:
+                      - 12345
+                      - 67890
+                      number: FL123
+                      organizationId: 1001
+                      pnr: ABC123
+                      source: airline
+                      supplier: Delta Airlines
+                      supplierCode: DL
+                      supplierName: Delta Airlines Inc.
+                      toDate: '2024-01-15T18:00:00Z'
+                      toIata: LAX
+                      type: flight
+              schema:
+                $ref: '#/components/schemas/LocationSourceDataInstanceResult'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Get Location Source Data
+      tags:
+      - Locations
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.locationId: method.request.path.locationId
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/locationSource/{organizationId}/{locationId}
+components:
+  schemas:
+    LocationSourceDataWrapper:
+      properties:
+        address:
+          type: string
+        fromDate:
+          type: string
+        fromIata:
+          type: string
+        locationIds:
+          items:
+            format: int64
+            type: integer
+          type: array
+        number:
+          type: string
+        organizationId:
+          format: int64
+          type: integer
+        pnr:
+          type: string
+        source:
+          type: string
+        supplier:
+          type: string
+        supplierCode:
+          type: string
+        supplierName:
+          type: string
+        toDate:
+          type: string
+        toIata:
+          type: string
+        type:
+          type: string
+      type: object
+    LocationSourceDataCollectionResult:
+      properties:
+        locationSources:
+          items:
+            $ref: '#/components/schemas/LocationSourceDataWrapper'
+          type: array
+      type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
+    LocationSourceDataInstanceResult:
+      properties:
+        message:
+          type: string
+        result:
+          $ref: '#/components/schemas/LocationSourceDataWrapper'
+      type: object
+    LocationSourceDataParameterModel:
+      description: Array object of the Location ID.
+      properties:
+        locationIds:
+          items:
+            format: int64
+            type: integer
+          type: array
+      type: object
+  securitySchemes:
+    API_Authorizer:
+      description: oAuth Token
+      in: header
+      name: Authorization
+      type: apiKey
+      x-amazon-apigateway-authorizer:
+        authorizerCredentials: arn:aws:iam::214792946631:role/oas-rest-api-gw-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+      x-amazon-apigateway-authtype: custom
+    BasicAuth:
+      description: Basic Authentication Token
+      scheme: basic
+      type: http
+    api_key:
+      description: API Key - For System Use
+      in: header
+      name: x-api-key
+      type: apiKey
+x-amazon-apigateway-binary-media-types:
+- audio/wav
+- audio/x-wav
+- application/octet-stream
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

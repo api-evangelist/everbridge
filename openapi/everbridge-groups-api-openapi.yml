@@ -1,0 +1,923 @@
+openapi: 3.2.0
+info:
+  description: EB Suite APIs.
+  title: EB Suite Groups API
+  version: '1.0'
+servers:
+- url: https://api.everbridge.net/rest
+- url: https://api.everbridge.eu/rest
+tags:
+- description: EB Suites - Group Management
+  name: Groups
+paths:
+  /groups/{organizationId}:
+    get:
+      deprecated: false
+      description: Retrieve all groups for an organization
+      operationId: EBS List Groups
+      parameters:
+      - description: The ID of the organization containing the groups
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Response Model:
+                  summary: Response Model
+                  value:
+                    firstPageUri: https://api-dev3.everbridge.net/rest/groups/1536984111644674/?pageNumber=1
+                    lastPageUri: https://api-dev3.everbridge.net/rest/groups/1536984111644674/?pageNumber=1
+                    message: OK
+                    page:
+                      currentPageNo: 1
+                      data:
+                      - accountId: 0
+                        createdId: 0
+                        dirty: true
+                        enableSequencedContact: false
+                        id: 2451915224907929
+                        lastModifiedDate: 1676531655419
+                        lastModifiedId: 0
+                        lastModifiedName: Vishal Agrawal
+                        lastModifiedTime: 0
+                        lastSynchronizedTime: 0
+                        name: Admin
+                        organizationId: 0
+                        parentId: -1
+                        resourceBundleId: 0
+                      - accountId: 0
+                        createdId: 0
+                        dirty: true
+                        enableSequencedContact: false
+                        id: 2455763515605121
+                        lastModifiedDate: 1676531610211
+                        lastModifiedId: 0
+                        lastModifiedName: Vishal Agrawal
+                        lastModifiedTime: 0
+                        lastSynchronizedTime: 0
+                        name: Top group from API
+                        organizationId: 0
+                        parentId: -1
+                        resourceBundleId: 0
+                      pageSize: 2
+                      start: 0
+                      totalCount: 2
+                      totalPageCount: 1
+              schema:
+                $ref: '#/components/schemas/groups'
+          description: Model
+        '404':
+          content:
+            application/json:
+              examples:
+                Missing Contact Id:
+                  summary: Missing Organization Id
+                  value:
+                    message: Org 153698411164467 is invalid.
+                    status: 401
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Missing Organization Id
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: List Groups
+      tags:
+      - Groups
+      x-amazon-apigateway-integration:
+        contentHandling: CONVERT_TO_TEXT
+        credentials: arn:aws:iam::214792946631:role/apigateway_invoke_lambda
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: aws_proxy
+        uri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:apigw-large-file-handler-us-east-1-prod/invocations
+    post:
+      description: Create a new group within an organization
+      operationId: EBS Create Group
+      parameters:
+      - description: The ID of the organization where the group is created
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Group with Parent:
+                summary: Group with Parent
+                value:
+                  name: api-limits-service
+                  parentId: 2477891187114081
+              Group with Parent & Calendar:
+                summary: Group with Parent & Calendar
+                value:
+                  calendarId: 7986856759132166
+                  name: api-limits-service
+                  parentId: 2477891187114081
+              Group with Parent, Calendar & Description:
+                summary: Group with Parent, Calendar & Description
+                value:
+                  calendarId: 7986856759132166
+                  description: This is group api-limits-service
+                  name: api-limits-service
+                  parentId: 2477891187114081
+              Group with minimum properties:
+                summary: Request with minimum properties
+                value:
+                  name: API Created Group
+            schema:
+              $ref: '#/components/schemas/groupsRequest'
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Response Model:
+                  summary: Response Model
+                  value:
+                    baseUri: https://api.everbridge.net/rest/groups/1536984111644674/
+                    id: 444211287561988
+                    instanceUri: https://api.everbridge.net/rest/groups/1536984111644674/444211287561988
+                    message: OK
+              schema:
+                $ref: '#/components/schemas/postUpdateResponse'
+          description: Model
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Create Group
+      tags:
+      - Groups
+      x-amazon-apigateway-integration:
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/groups/{organizationId}
+  /groups/{organizationId}/contacts:
+    delete:
+      operationId: EBS Delete Contacts Group
+      parameters:
+      - description: The ID of the organization containing the groups
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: 'Whether to delete by id or name of group '
+        in: query
+        name: byType
+        required: false
+        schema:
+          default: id
+          enum:
+          - id
+          - name
+          type: string
+      - description: The ID of the group to remove contacts.
+        in: query
+        name: groupId
+        required: false
+        schema:
+          default: 0
+          format: int64
+          type: integer
+      - description: The name of the group to remove contacts
+        in: query
+        name: groupName
+        required: false
+        schema:
+          default: ''
+          type: string
+      - description: Whether to delete by contact.id or contact.externalId.
+        in: query
+        name: idType
+        required: false
+        schema:
+          default: id
+          enum:
+          - externalId
+          - id
+          type: string
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Add contacts to a group:
+                value:
+                - 2414322986778856
+                - 1536846672691205
+            schema:
+              $ref: '#/components/schemas/contactGroupsRequest'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestfulBatchOperationResult'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '500':
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Delete Contacts Group
+      tags:
+      - Groups
+      x-amazon-apigateway-integration:
+        httpMethod: DELETE
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/groups/{organizationId}/contacts
+    post:
+      operationId: EBS Add Contacts Group
+      parameters:
+      - description: The ID of the organization containing the groups
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: 'Whether to select by id or name '
+        in: query
+        name: byType
+        required: false
+        schema:
+          default: id
+          enum:
+          - id
+          - name
+          type: string
+      - description: The ID of the group to add contacts.
+        in: query
+        name: groupId
+        required: false
+        schema:
+          default: 0
+          format: int64
+          type: integer
+      - description: The name of the group to add contacts
+        in: query
+        name: groupName
+        required: false
+        schema:
+          default: ''
+          type: string
+      - description: Whether to add by contact.id or contact.externalId.
+        in: query
+        name: idType
+        required: false
+        schema:
+          default: id
+          enum:
+          - externalId
+          - id
+          type: string
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Add contacts to a group:
+                value:
+                - '2414322986778856'
+                - '1536846672691205'
+            schema:
+              $ref: '#/components/schemas/contactGroupsRequest'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestfulBatchOperationResult'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '500':
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Add Contacts Group
+      tags:
+      - Groups
+      x-amazon-apigateway-integration:
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/groups/{organizationId}/contacts
+  /groups/{organizationId}/contacts/sequence:
+    post:
+      operationId: EBS Replace Contacts SeqGroup
+      parameters:
+      - description: The ID of the organization containing the groups
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: 'Whether to select by id or name '
+        in: query
+        name: byType
+        required: false
+        schema:
+          default: id
+          enum:
+          - id
+          - name
+          type: string
+      - description: The ID of the group to replace contacts.
+        in: query
+        name: groupId
+        required: false
+        schema:
+          default: 0
+          format: int64
+          type: integer
+      - description: The name of the group to add contacts
+        in: query
+        name: groupName
+        required: false
+        schema:
+          default: ''
+          type: string
+      - description: Whether to add by contact.id or contact.externalId.
+        in: query
+        name: idType
+        required: false
+        schema:
+          default: id
+          enum:
+          - externalId
+          - id
+          type: string
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Add contacts to a group:
+                value:
+                - 2414322986778856
+                - 1536846672691205
+            schema:
+              $ref: '#/components/schemas/contactGroupsRequest'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestfulBatchOperationResult'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '500':
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Replace Contacts Sequenced Group
+      tags:
+      - Groups
+      x-amazon-apigateway-integration:
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/groups/{organizationId}/contacts/sequence
+  /groups/{organizationId}/pagination:
+    get:
+      description: Retrieve all groups by page for an organization
+      operationId: EBS List Groups By Page
+      parameters:
+      - description: The ID of the organization in which to find the group
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: The page number of groups to return.
+        in: query
+        name: pageNumber
+        required: false
+        schema:
+          default: 1
+          format: int32
+          type: integer
+      - description: The page size of groups to return.
+        in: query
+        name: pageSize
+        required: false
+        schema:
+          default: 100
+          format: int32
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Response Model:
+                  summary: Response Model
+                  value:
+                    firstPageUri: https://api-dev3.everbridge.net/rest/groups/1536984111644674/pagination?pageNumber=1
+                    lastPageUri: https://api-dev3.everbridge.net/rest/groups/1536984111644674/pagination?pageNumber=1
+                    message: OK
+                    page:
+                      currentPageNo: 1
+                      data:
+                      - accountId: 0
+                        createdId: 0
+                        dirty: true
+                        enableSequencedContact: false
+                        id: 2451915224907929
+                        lastModifiedDate: 1676531655419
+                        lastModifiedId: 0
+                        lastModifiedName: Vishal Agrawal
+                        lastModifiedTime: 0
+                        lastSynchronizedTime: 0
+                        name: Admin
+                        organizationId: 0
+                        parentId: -1
+                        resourceBundleId: 0
+                      - accountId: 0
+                        createdId: 0
+                        dirty: true
+                        enableSequencedContact: false
+                        id: 2455763515605121
+                        lastModifiedDate: 1676531610211
+                        lastModifiedId: 0
+                        lastModifiedName: Vishal Agrawal
+                        lastModifiedTime: 0
+                        lastSynchronizedTime: 0
+                        name: Top group from API
+                        organizationId: 0
+                        parentId: -1
+                        resourceBundleId: 0
+                      pageSize: 2
+                      start: 0
+                      totalCount: 2
+                      totalPageCount: 1
+              schema:
+                $ref: '#/components/schemas/groups'
+          description: Model
+        '404':
+          content:
+            application/json:
+              examples:
+                Missing Contact Id:
+                  summary: Missing Organization Id
+                  value:
+                    message: Org 153698411164467 is invalid.
+                    status: 401
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Missing Organization Id
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: List Groups By Page
+      tags:
+      - Groups
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/groups/{organizationId}/pagination
+  /groups/{organizationId}/{groupIdOrQueryValue}:
+    delete:
+      deprecated: false
+      description: Delete the specified group from an organization
+      operationId: EBS Delete Group
+      parameters:
+      - description: The ID of the organization where the group exists
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: The ID of the group to delete
+        in: path
+        name: groupIdOrQueryValue
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Response Model:
+                  summary: Response Model
+                  value:
+                    baseUri: https://api.everbridge.net/rest/groups/1536984111644674/
+                    id: 444211287561988
+                    instanceUri: https://api.everbridge.net/rest/groups/1536984111644674/444211287561988
+                    message: OK
+              schema:
+                $ref: '#/components/schemas/postUpdateResponse'
+          description: Model
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Delete Group
+      tags:
+      - Groups
+      x-amazon-apigateway-integration:
+        httpMethod: DELETE
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.groupIdOrQueryValue: method.request.path.groupIdOrQueryValue
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/groups/{organizationId}/{groupIdOrQueryValue}
+    get:
+      description: Retrieve a specific group within an organization
+      operationId: EBS Get Group
+      parameters:
+      - description: The ID of the organization in which to find the group
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: The ID or Name of the group to get
+        in: path
+        name: groupIdOrQueryValue
+        required: true
+        schema:
+          type: string
+      - description: Whether to search by group.id or group.name.
+        in: query
+        name: queryType
+        required: false
+        schema:
+          default: id
+          enum:
+          - id
+          - name
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupResponseWrapper'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '500':
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Get Group
+      tags:
+      - Groups
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.groupIdOrQueryValue: method.request.path.groupIdOrQueryValue
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/groups/{organizationId}/{groupIdOrQueryValue}
+    put:
+      deprecated: false
+      description: Update a group within an organization
+      operationId: EBS Update Group
+      parameters:
+      - description: The ID of the organization where the group exists
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: The ID or Name of the group to update
+        in: path
+        name: groupIdOrQueryValue
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Group with Parent:
+                summary: Group with Parent
+                value:
+                  name: api-limits-service
+                  parentId: 2455763515605121
+              Group with Parent & Calendar:
+                summary: Group with Parent & Calendar
+                value:
+                  calendarId: 7986856759132166
+                  name: api-limits-service
+                  parentId: 2455763515605121
+              Group with minimum properties:
+                summary: Request with minimum properties
+                value:
+                  name: API Created Group
+            schema:
+              $ref: '#/components/schemas/groupsRequest'
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Response Model:
+                  summary: To be added
+                  value:
+                    baseUri: https://api.everbridge.net/rest/groups/1536984111644674/
+                    id: 444211287561988
+                    instanceUri: https://api.everbridge.net/rest/groups/1536984111644674/444211287561988
+                    message: OK
+              schema:
+                $ref: '#/components/schemas/postUpdateResponse'
+          description: Model
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Update Group
+      tags:
+      - Groups
+      x-amazon-apigateway-integration:
+        httpMethod: PUT
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.groupIdOrQueryValue: method.request.path.groupIdOrQueryValue
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/groups/{organizationId}/{groupIdOrQueryValue}
+components:
+  schemas:
+    GroupResponseWrapper:
+      properties:
+        message:
+          type: string
+        result:
+          properties:
+            accountId:
+              type: number
+            createdDate:
+              type: number
+            createdId:
+              type: number
+            createdName:
+              type: string
+            dirty:
+              type: boolean
+            enableSequencedContact:
+              type: boolean
+            id:
+              type: number
+            lastModifiedDate:
+              type: number
+            lastModifiedId:
+              type: number
+            lastModifiedName:
+              type: string
+            lastModifiedTime:
+              type: number
+            lastSynchronizedTime:
+              type: number
+            name:
+              type: string
+            organizationId:
+              type: number
+            parentId:
+              type: number
+            resourceBundleId:
+              type: number
+            status:
+              type: string
+          required:
+          - createdName
+          - lastModifiedTime
+          - accountId
+          - status
+          - resourceBundleId
+          - organizationId
+          - id
+          - parentId
+          - name
+          - lastModifiedDate
+          - lastModifiedId
+          - createdId
+          - createdDate
+          - lastSynchronizedTime
+          - lastModifiedName
+          - enableSequencedContact
+          - dirty
+          type: object
+      required:
+      - message
+      - result
+      type: object
+    postUpdateResponse:
+      properties:
+        baseUri:
+          type: string
+        id:
+          type: integer
+        instanceUri:
+          type: string
+        message:
+          type: string
+      type: object
+    error:
+      properties:
+        message:
+          type: string
+        status:
+          type: integer
+      required:
+      - status
+      - message
+      type: object
+    RestfulBatchOperationResult:
+      properties:
+        code:
+          format: int64
+          type: integer
+        data:
+          items:
+            type: string
+          type: array
+        message:
+          type: string
+      type: object
+    contactGroupsRequest:
+      description: Contact id
+      items:
+        type: string
+      type: array
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
+    groups:
+      properties:
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        page:
+          properties:
+            currentPageNo:
+              type: integer
+            data:
+              items:
+                properties:
+                  accountId:
+                    type: integer
+                  createdId:
+                    type: integer
+                  dirty:
+                    type: boolean
+                  enableSequencedContact:
+                    type: boolean
+                  id:
+                    type: integer
+                  lastModifiedDate:
+                    type: integer
+                  lastModifiedId:
+                    type: integer
+                  lastModifiedName:
+                    type: string
+                  lastModifiedTime:
+                    type: integer
+                  lastSynchronizedTime:
+                    type: integer
+                  name:
+                    type: string
+                  organizationId:
+                    type: integer
+                  parentId:
+                    type: integer
+                  resourceBundleId:
+                    type: integer
+                type: object
+              type: array
+            pageSize:
+              type: integer
+            start:
+              type: integer
+            totalCount:
+              type: integer
+            totalPageCount:
+              type: integer
+          type: object
+      type: object
+    groupsRequest:
+      properties:
+        calendarId:
+          description: Id of the scheduled calendar event
+          type: integer
+        description:
+          description: The description for this group
+          type: string
+        name:
+          description: The name of the group
+          example: ''
+          type: string
+        parentId:
+          description: The ID of the parent group. This value is -1 if there is no parent
+          type: integer
+      required:
+      - name
+      type: object
+  securitySchemes:
+    API_Authorizer:
+      description: oAuth Token
+      in: header
+      name: Authorization
+      type: apiKey
+      x-amazon-apigateway-authorizer:
+        authorizerCredentials: arn:aws:iam::214792946631:role/oas-rest-api-gw-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+      x-amazon-apigateway-authtype: custom
+    BasicAuth:
+      description: Basic Authentication Token
+      scheme: basic
+      type: http
+    api_key:
+      description: API Key - For System Use
+      in: header
+      name: x-api-key
+      type: apiKey
+x-amazon-apigateway-binary-media-types:
+- audio/wav
+- audio/x-wav
+- application/octet-stream
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

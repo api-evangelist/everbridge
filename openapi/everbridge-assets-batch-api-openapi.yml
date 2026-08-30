@@ -1,0 +1,358 @@
+openapi: 3.2.0
+info:
+  title: Asset Management Assets Batch API
+  description: This is the Asset Management Rest API Documentation
+  contact:
+    name: CAMS Team
+  version: 1.0.0
+servers:
+- url: https://api.everbridge.net/rest/v2/asset-management
+tags:
+- name: Assets Batch
+  description: Batch asset management operations
+paths:
+  /assets/batch:
+    put:
+      tags:
+      - Assets Batch
+      operationId: EBS AM Update Batch Assets
+      summary: Update Batch Assets
+      description: Update Batch Assets
+      parameters:
+      - name: X-EB-Organization-Id
+        in: header
+        description: Organization Id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/AssetUpdateRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchResponse'
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: PUT
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-management/assets/batch
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters:
+          integration.request.header.Authorization: context.authorizer.override_token
+        passthroughBehavior: when_no_match
+    post:
+      tags:
+      - Assets Batch
+      operationId: EBS AM Create Batch Assets
+      summary: Create Batch Assets
+      description: Create Batch Assets
+      parameters:
+      - name: X-EB-Organization-Id
+        in: header
+        description: Organization Id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/AssetRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchResponse'
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: POST
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-management/assets/batch
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters:
+          integration.request.header.Authorization: context.authorizer.override_token
+        passthroughBehavior: when_no_match
+    delete:
+      tags:
+      - Assets Batch
+      operationId: EBS AM Delete batch Assets
+      summary: Delete batch Assets
+      description: Delete batch Assets
+      parameters:
+      - name: X-EB-Organization-Id
+        in: header
+        description: Organization Id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchResponse'
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: DELETE
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-management/assets/batch
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters:
+          integration.request.header.Authorization: context.authorizer.override_token
+        passthroughBehavior: when_no_match
+components:
+  schemas:
+    AssetUpdateRequest:
+      required:
+      - assetTypeId
+      - externalId
+      - id
+      - name
+      type: object
+      properties:
+        externalId:
+          maxLength: 200
+          minLength: 1
+          type: string
+        assetTypeId:
+          maxLength: 2147483647
+          minLength: 1
+          type: string
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+        address:
+          $ref: '#/components/schemas/Address'
+        iconId:
+          type: string
+        startTimestamp:
+          type: integer
+          format: int64
+        endTimestamp:
+          type: integer
+          format: int64
+        notes:
+          maxLength: 2000
+          minLength: 0
+          type: string
+        properties:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetPropertyValue'
+        category:
+          maxLength: 200
+          minLength: 0
+          type: string
+        geometry:
+          type: string
+        geocodingAddressRequired:
+          type: boolean
+        associations:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetAssociation'
+        id:
+          maxLength: 2147483647
+          minLength: 1
+          type: string
+    Error:
+      type: object
+      properties:
+        field:
+          type: string
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+    AssetPropertyValue:
+      type: object
+      properties:
+        propertyId:
+          maxLength: 2147483647
+          minLength: 1
+          type: string
+        value:
+          type: object
+        name:
+          type: string
+    AssetRequest:
+      required:
+      - assetTypeId
+      - externalId
+      - name
+      type: object
+      properties:
+        externalId:
+          maxLength: 200
+          minLength: 1
+          type: string
+        assetTypeId:
+          maxLength: 2147483647
+          minLength: 1
+          type: string
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+        address:
+          $ref: '#/components/schemas/Address'
+        iconId:
+          type: string
+        startTimestamp:
+          type: integer
+          format: int64
+        endTimestamp:
+          type: integer
+          format: int64
+        notes:
+          maxLength: 2000
+          minLength: 0
+          type: string
+        properties:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetPropertyValue'
+        category:
+          maxLength: 200
+          minLength: 0
+          type: string
+        geometry:
+          type: string
+        geocodingAddressRequired:
+          type: boolean
+        associations:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetAssociation'
+    IndividualResponse:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+        id:
+          type: string
+    AssetAssociation:
+      type: object
+      properties:
+        associationDefinitionId:
+          maxLength: 2147483647
+          minLength: 1
+          type: string
+        entityType:
+          type: string
+          enum:
+          - Contact
+          - ContactGroup
+          - ContactFilter
+        entityIds:
+          type: array
+          items:
+            type: string
+    Address:
+      type: object
+      properties:
+        country:
+          type: string
+        state:
+          maxLength: 100
+          minLength: 0
+          type: string
+        city:
+          maxLength: 100
+          minLength: 0
+          type: string
+        postalCode:
+          maxLength: 20
+          minLength: 0
+          type: string
+        streetAddress1:
+          maxLength: 200
+          minLength: 0
+          type: string
+        streetAddress2:
+          maxLength: 200
+          minLength: 0
+          type: string
+    BatchResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+        individualResponses:
+          type: array
+          items:
+            $ref: '#/components/schemas/IndividualResponse'
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+      description: Basic Authentication Token
+    API_Authorizer:
+      type: apiKey
+      name: Authorization
+      description: oAuth Token
+      in: header
+      x-amazon-apigateway-authtype: custom
+      x-amazon-apigateway-authorizer:
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        authorizerCredentials: arn:aws:iam::214792946631:role/asset-management-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+    api_key:
+      type: apiKey
+      name: x-api-key
+      description: API Key - For System Use
+      in: header
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

@@ -1,0 +1,515 @@
+openapi: 3.2.0
+info:
+  title: SnapComms API Reference Content API
+  description: Content related API's
+  version: v1
+servers:
+- description: API Url
+  url: https://api.snapcomms.com/v1
+- description: API Sandbox Url
+  url: https://api.snapcomms.com/mock
+security:
+- bearerAuth: []
+tags:
+- name: Content
+  description: Content related API's
+paths:
+  /content/template:
+    get:
+      tags:
+      - Content
+      summary: Templates
+      description: Get a list of available content templates
+      operationId: content-templates
+      responses:
+        '200':
+          description: List of templates
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ContentTemplates'
+                example:
+                - id: a3f798a0-8e5c-4648-a1aa-5c2c7fb67153
+                  name: Weather Warning
+                  status: active
+                  description: Weather Warning Emergency Alert
+                  type: Emergency Alert
+                  tags:
+                  - Emergency
+                  previewImageUrl: https://test01.snapcomms.tech/SnapComms.API/v1/template/preview/c919d429-fb76-4210-8ee1-87828acda3d6/alert_preview.png
+                - id: a3f798a0-8e5c-4648-a1aa-5c2a8fb67153
+                  name: Unplanned Service Disruption
+                  status: active
+                  description: Current Unplanned IT outage ticker with message
+                  type: Ticker with Message Window
+                  tags:
+                  - ITCommunications
+                  previewImageUrl: https://test01.content.snapcomms.tech/SnapComms.API/v1/template/preview/245a07e0-8576-46a5-b892-a7f28e39f465/alert_preview.png
+        '429':
+          description: Failed - Rate limit is exceeded
+  /content/template/{templateId}:
+    get:
+      tags:
+      - Content
+      summary: Template
+      description: Get the details of a specified content template
+      operationId: content-template
+      parameters:
+      - name: templateId
+        in: path
+        description: Format - uuid. the ID of the template
+        required: true
+        schema:
+          type: string
+        example: 6e335920-2fe0-42b0-aee5-dfb866137d1a
+      responses:
+        '200':
+          description: Template details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentTemplate'
+              example:
+                id: 6e335920-2fe0-42b0-aee5-dfb866137d1a
+                name: Weather Warning
+                status: active
+                description: Weather Warning Emergency Alert
+                type: Emergency Alert
+                tags:
+                - Emergency
+                previewImageUrl: https://test01.snapcomms.tech/SnapComms.API/v1/template/preview/c919d429-fb76-4210-8ee1-87828acda3d6/alert_preview.png
+                fields:
+                - name: title
+                  displayName: Title
+                  description: Emergency short title
+                  type: text
+                  required: false
+                - name: description
+                  displayName: Message
+                  description: Emergency description
+                  type: textarea
+                  required: false
+                hasDefaultTargeting: true
+                targetingSummary: Developers (21 Users), Qa (12 Users), IT (15 Users), John Doe, Bob Dylan, nofullname@email.com
+                targetedCount: 42
+        '400':
+          description: Bad Request - Template ID is an invalid format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestTemplateId'
+              example:
+                message: The request is invalid.
+        '404':
+          description: Not Found - TemplateId was not found
+        '429':
+          description: Failed - Rate limit is exceeded
+  /content/previewFromTemplate:
+    post:
+      tags:
+      - Content
+      summary: Preview From Template
+      description: Create and return a preview from a specified template
+      operationId: preview-from-template
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PreviewFromTemplateRequest'
+            example:
+              templateId: 6e335920-2fe0-42b0-aee5-dfb866137d1a
+              fields:
+              - name: title
+                value: Storm incoming
+              - name: description
+                value: Do not go outside and stay safe.
+      responses:
+        '201':
+          description: Preview
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PreviewFromTemplateResponse'
+              example:
+                previewUrl: https://everbridge7.content.snapcomms.tech/SnapComms.API/v1/view/SharedPreview/P2SKbTJE[2bEI781BQAQaWhzYqOisRqpRuqTA9en0ZKJZM19ZyTW6u10yAuj0rmSKA
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentPublish400'
+        '429':
+          description: Failed - Rate limit is exceeded
+  /content/publishFromTemplate:
+    post:
+      tags:
+      - Content
+      summary: Publish From Template
+      description: Create and publish a new content from a specified template
+      operationId: publish-from-template
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublishFromTemplateRequest'
+            example:
+              templateId: 6e335920-2fe0-42b0-aee5-dfb866137d1a
+              externalId: UniqueExternalId
+              contentName: Incoming Storm - 27/04/2022 08:00 am
+              durationInMinutes: 60
+              startTime: '2022-04-31T15:00:28+13:00'
+              targets:
+              - type: group
+                id: d300f1ee-6c54-4b01-90e6-d701748f0843
+              fields:
+              - name: title
+                value: Storm incoming
+              - name: description
+                value: Do not go outside and stay safe.
+      responses:
+        '201':
+          description: Created - content has been published
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublishFromTemplateResponse'
+              example:
+                contentId: e1231960-da4d-4f30-aea8-742bf538d7f3
+                status: published
+                targetedUsers: 1
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentPublish400'
+        '403':
+          description: Failed - Quota is exceeded
+        '409':
+          description: Failed - Duplicate Content Name
+        '429':
+          description: Failed - Rate limit is exceeded
+  /content/disable/{contentId}:
+    put:
+      tags:
+      - Content
+      summary: Disable
+      description: Disable a published content
+      operationId: content-disable
+      parameters:
+      - name: contentId
+        in: path
+        description: Format - uuid. the id of the content
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: e1231960-da4d-4f30-aea8-742bf538d7f3
+      responses:
+        '204':
+          description: No Content - content has been disabled
+        '400':
+          description: Bad Request - ContentId is invalid format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestTemplateId'
+              example:
+                message: The request is invalid.
+        '404':
+          description: Not Found - ContentId was not found
+        '429':
+          description: Failed - Rate limit is exceeded
+  /content/statistics/{contentId}:
+    get:
+      tags:
+      - Content
+      summary: Statistics
+      description: Get published content statistics (resulting statistics may have a delay of up to 10 minutes)
+      operationId: content-statistics
+      parameters:
+      - name: contentId
+        in: path
+        description: Format - uuid. the id of the content
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: e1231960-da4d-4f30-aea8-742bf538d7f3
+      responses:
+        '200':
+          description: OK - Content Statistics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentStatistics'
+              example:
+                contentId: e1231960-da4d-4f30-aea8-742bf538d7f3
+                contentStatus: published
+                targetedCount: 42
+                reachedCount: 38
+                successCount: 30
+        '400':
+          description: Bad Request - ContentId is invalid format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestTemplateId'
+              example:
+                message: The request is invalid.
+        '403':
+          description: Failed - Quota is exceeded
+        '404':
+          description: Not Found - ContentId was not found
+        '429':
+          description: Failed - Rate limit is exceeded
+components:
+  schemas:
+    PublishingTarget:
+      properties:
+        type:
+          type: string
+          description: Target type
+        id:
+          type:
+          - string
+          - 'null'
+          description: 'Target Id relevant to the target type (eg: GroupId). Null if irrelevant for the type'
+    ContentTemplates:
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d300f1ee-6c54-4b01-90e6-d701748f0843
+        name:
+          type: string
+          example: Active Shooter!
+        status:
+          enum:
+          - active
+          type: string
+          example: active
+        type:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        description:
+          type: string
+          example: Use this for shooter alert
+        previewImageUrl:
+          type: string
+          example: Preview Image URL of a template
+    BadRequestTemplateId:
+      properties:
+        message:
+          type: string
+          example: The request is invalid.
+    PreviewFromTemplateResponse:
+      type: object
+      properties:
+        previewUrl:
+          type: string
+    ContentPublish400:
+      properties:
+        message:
+          enum:
+          - TemplateId is invalid
+          - TemplateId could not be found or is not available
+          - BodyFormat is invalid
+          - DurationInMinutes must be greater than 0
+          - The end date must be in the future
+          - ContentName must not exceed 150 charaters
+          - Account does not have permissions to all targeted groups
+          - Invalid targeting type
+          - Invalid attribute ID
+          - Account does not have permissions to target by attributes
+          - Account does not have permissions to target groups
+          type: string
+          example: TemplateId is invalid
+    ContentStatus:
+      type: string
+      enum:
+      - draft
+      - published
+      - disabled
+      - deleted
+      - expired
+    ContentStatistics:
+      type: object
+      properties:
+        contentId:
+          type: string
+          format: uuid
+          example: e1231960-da4d-4f30-aea8-742bf538d7f3
+        contentStatus:
+          type: string
+          $ref: '#/components/schemas/ContentStatus'
+          example: published
+        targetedCount:
+          type: integer
+        reachedCount:
+          type: integer
+        successCount:
+          type: integer
+    PreviewFromTemplateRequest:
+      required:
+      - templateId
+      type: object
+      properties:
+        templateId:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        fields:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/FieldValue'
+    TemplateField:
+      type: object
+      properties:
+        name:
+          type: string
+        displayName:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        type:
+          type: string
+          description: Type of field as a guidance for building a UI. Enums values can be added in the future; therefore, the client should default to text if the value is unknown.
+          enum:
+          - text
+          - textarea
+        required:
+          type: boolean
+          description: True if the field is required for publishing
+    PublishFromTemplateRequest:
+      required:
+      - templateId
+      - durationInMinutes
+      type: object
+      properties:
+        templateId:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        externalId:
+          type:
+          - string
+          - 'null'
+          example: externalId1
+        contentName:
+          type:
+          - string
+          - 'null'
+          example: Incoming Storm - 27/04/2022 08:00 am
+          description: Unique content name with a maximum number of 150 characters. This name must be unique and it is recommended to leave this field null to let the system automatically generate a unique name.
+        durationInMinutes:
+          type: integer
+          example: 60
+        startTime:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: '2020-07-21T17:32:28Z'
+          description: Optional date and time for the message to be publish to the targeted users. Null to publish the message immediately. Date format folowing https://en.wikipedia.org/wiki/ISO_8601 including date, time and timezone.
+        targets:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PublishingTarget'
+          description: Recipients of the content
+        fields:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/FieldValue'
+    FieldValue:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type:
+          - string
+          - 'null'
+    PublishFromTemplateResponse:
+      type: object
+      properties:
+        contentId:
+          type: string
+          format: uuid
+          example: 86854452-a1d9-4c44-9bbe-07c93a46021c
+        status:
+          type: string
+          $ref: '#/components/schemas/ContentStatus'
+          example: published
+        targetedUsers:
+          type: integer
+          example: 1
+    ContentTemplate:
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d300f1ee-6c54-4b01-90e6-d701748f0843
+        type:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        name:
+          type: string
+          example: Active Shooter!
+        status:
+          enum:
+          - active
+          type: string
+          example: active
+        description:
+          type: string
+          example: Use this for shooter alert
+        previewImageUrl:
+          type: string
+          example: Preview Image URL of a template
+        fields:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TemplateField'
+        hasDefaultTargeting:
+          type: boolean
+          description: True if the template has a valid default targeting, otherwise false
+          example: true
+        targetingSummary:
+          type:
+          - string
+          - 'null'
+          description: Summary of the template default targeting
+          example: Developers (21 Users), Qa (12 Users), IT (15 Users), John Doe, Bob Dylan, nofullname@email.com
+        targetedCount:
+          type:
+          - integer
+          - 'null'
+          description: Estimated total number of targeted users by the template default targeting
+          example: 42
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

@@ -1,0 +1,378 @@
+openapi: 3.2.0
+info:
+  title: Asset Management Column Mappings API
+  description: This is the Asset Management Rest API Documentation
+  contact:
+    name: CAMS Team
+  version: 1.0.0
+servers:
+- url: https://api.everbridge.net/rest/v2/asset-management
+tags:
+- name: Column Mappings
+  description: Column mapping management operations
+paths:
+  /column-mappings:
+    get:
+      tags:
+      - Column Mappings
+      operationId: EB AM List Column Mappings
+      summary: List Column Mappings
+      description: List Column Mappings
+      parameters:
+      - name: X-EB-Organization-Id
+        in: header
+        description: Organization Id
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                success:
+                  summary: success
+                  value:
+                  - id: 691af5264cca16096703bf88
+                    organizationId: 1536984111644674
+                    createdId: 1
+                    createdName: EBSuiteRestApiAdmin-Gateway
+                    lastModifiedId: 1
+                    lastModifiedName: EBSuiteRestApiAdmin-Gateway
+                    createdTimestamp: 1763374374760
+                    lastModifiedTimestamp: 1763374374760
+                    from: Name
+                    to: id
+                    seq: 0
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: GET
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-management/column-mappings
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters:
+          integration.request.header.Authorization: context.authorizer.override_token
+        passthroughBehavior: when_no_match
+    post:
+      tags:
+      - Column Mappings
+      operationId: EB AM Create Column Mapping
+      summary: Create Column Mapping
+      description: Create Column Mapping
+      parameters:
+      - name: X-EB-Organization-Id
+        in: header
+        description: Organization Id
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ColumnMappingRequest'
+            examples:
+              basic:
+                summary: basic
+                value:
+                  from: Name
+                  to: id
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ColumnMapping'
+              examples:
+                success:
+                  summary: success
+                  value:
+                    id: 691af5264cca16096703bf88
+                    organizationId: 1536984111644674
+                    createdId: 1
+                    createdName: EBSuiteRestApiAdmin-Gateway
+                    lastModifiedId: 1
+                    lastModifiedName: EBSuiteRestApiAdmin-Gateway
+                    createdTimestamp: 1763374374760
+                    lastModifiedTimestamp: 1763374374760
+                    from: Name
+                    to: id
+                    seq: 0
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: POST
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-management/column-mappings
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters:
+          integration.request.header.Authorization: context.authorizer.override_token
+        passthroughBehavior: when_no_match
+  /column-mappings/{id}:
+    get:
+      tags:
+      - Column Mappings
+      operationId: EB AM Get Column Mapping
+      summary: Get Column Mapping
+      description: Get Column Mapping
+      parameters:
+      - name: X-EB-Organization-Id
+        in: header
+        description: Organization Id
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ColumnMapping'
+              examples:
+                success:
+                  summary: success
+                  value:
+                    id: 691af5264cca16096703bf88
+                    organizationId: 1536984111644674
+                    createdId: 1
+                    createdName: EBSuiteRestApiAdmin-Gateway
+                    lastModifiedId: 1
+                    lastModifiedName: EBSuiteRestApiAdmin-Gateway
+                    createdTimestamp: 1763374374760
+                    lastModifiedTimestamp: 1763374374760
+                    from: Name
+                    to: id
+                    seq: 0
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: GET
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-management/column-mappings/{id}
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters:
+          integration.request.path.id: method.request.path.id
+          integration.request.header.Authorization: context.authorizer.override_token
+        passthroughBehavior: when_no_match
+    put:
+      tags:
+      - Column Mappings
+      operationId: EB AM Update Column Mapping
+      summary: Update Column Mapping
+      description: Update Column Mapping
+      parameters:
+      - name: X-EB-Organization-Id
+        in: header
+        description: Organization Id
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ColumnMappingRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ColumnMapping'
+              examples:
+                success:
+                  summary: success
+                  value:
+                    id: 691af5264cca16096703bf88
+                    organizationId: 1536984111644674
+                    createdId: 1
+                    createdName: EBSuiteRestApiAdmin-Gateway
+                    lastModifiedId: 1
+                    lastModifiedName: EBSuiteRestApiAdmin-Gateway
+                    createdTimestamp: 1763374374760
+                    lastModifiedTimestamp: 1763374374760
+                    from: Name
+                    to: id
+                    seq: 0
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: PUT
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-management/column-mappings/{id}
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters:
+          integration.request.path.id: method.request.path.id
+          integration.request.header.Authorization: context.authorizer.override_token
+        passthroughBehavior: when_no_match
+    delete:
+      tags:
+      - Column Mappings
+      operationId: EB AM Delete Column Mapping
+      summary: Delete Column Mapping
+      description: Delete Column Mapping
+      parameters:
+      - name: X-EB-Organization-Id
+        in: header
+        description: Organization Id
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ColumnMapping'
+              examples:
+                success:
+                  summary: success
+                  value:
+                    id: 691af5264cca16096703bf88
+                    organizationId: 1536984111644674
+                    createdId: 1
+                    createdName: EBSuiteRestApiAdmin-Gateway
+                    lastModifiedId: 1
+                    lastModifiedName: EBSuiteRestApiAdmin-Gateway
+                    createdTimestamp: 1763374374760
+                    lastModifiedTimestamp: 1763374374760
+                    from: Name
+                    to: id
+                    seq: 0
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: DELETE
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-management/column-mappings/{id}
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters:
+          integration.request.path.id: method.request.path.id
+          integration.request.header.Authorization: context.authorizer.override_token
+        passthroughBehavior: when_no_match
+components:
+  schemas:
+    ColumnMappingRequest:
+      required:
+      - from
+      - to
+      type: object
+      properties:
+        from:
+          maxLength: 200
+          minLength: 1
+          type: string
+        to:
+          maxLength: 200
+          minLength: 1
+          type: string
+    organizationId:
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      maxLength: 16
+      type: integer
+      example: '1536984111644674'
+      default: '1536984111644674'
+    ColumnMapping:
+      type: object
+      properties:
+        id:
+          type: string
+        organizationId:
+          type: integer
+          format: int64
+        createdId:
+          type: integer
+          format: int64
+        createdName:
+          type: string
+        createdProxyName:
+          type: string
+        lastModifiedId:
+          type: integer
+          format: int64
+        lastModifiedName:
+          type: string
+        lastModifiedProxyName:
+          type: string
+        createdTimestamp:
+          type: string
+          format: date-time
+        lastModifiedTimestamp:
+          type: string
+          format: date-time
+        from:
+          type: string
+        to:
+          type: string
+        seq:
+          type: integer
+          format: int32
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+      description: Basic Authentication Token
+    API_Authorizer:
+      type: apiKey
+      name: Authorization
+      description: oAuth Token
+      in: header
+      x-amazon-apigateway-authtype: custom
+      x-amazon-apigateway-authorizer:
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        authorizerCredentials: arn:aws:iam::214792946631:role/asset-management-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+    api_key:
+      type: apiKey
+      name: x-api-key
+      description: API Key - For System Use
+      in: header
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

@@ -1,0 +1,1102 @@
+openapi: 3.2.0
+info:
+  description: EB Suite APIs.
+  title: EB Suite Roles API
+  version: '1.0'
+servers:
+- url: https://api.everbridge.net/rest
+- url: https://api.everbridge.eu/rest
+tags:
+- description: EB Suites - Roles Management
+  name: Roles
+paths:
+  /roles/{organizationId}:
+    get:
+      description: Retrieve all roles for an organization.
+      operationId: EBS List Roles
+      parameters:
+      - description: The ID of the organization.
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: The page of roles data to return. Page size is 10, and pageNumber is assumed to be 1 if not provided.
+        in: query
+        name: pageNumber
+        required: false
+        schema:
+          default: 1
+          example: 1
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Users in an account:
+                summary: Roles in an organization
+                value:
+                  pageNumber: '1'
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Success:
+                  summary: Success
+                  value:
+                    firstPageUri: https://api-dev3.everbridge.net/rest/roles/1503449006997506/?pageNumber=1
+                    lastPageUri: https://api-dev3.everbridge.net/rest/roles/1503449006997506/?pageNumber=1
+                    message: OK
+                    page:
+                      currentPageNo: 1
+                      data:
+                      - id: 1927857810964481
+                        name: gm_1
+                        permissionScope:
+                          accessToAllNotificationFeatures: true
+                          addContactsToGroups: false
+                          createContacts: true
+                          createEditDeleteGroups: false
+                          createEditDeleteSchedules: true
+                          createEditViewCockpitWorkFlows: false
+                          deleteContacts: true
+                          incidentZones: true
+                          incidentZonesRegistered: false
+                          moveRemoveContactsFromGroups: false
+                          onlyEditRulesWithSameRole: false
+                          reopenIncident: false
+                          restrictToIncidentSimulationOnly: false
+                          restrictToSimulationOnly: false
+                          viewCockpitWorkFlows: false
+                          viewDownloadAllContacts: true
+                          viewDownloadEditAllContacts: true
+                        roleDataScope:
+                          broadcastTemplateIds:
+                          - -1
+                          dynamicGroupIds:
+                          - 1669475262792058
+                          groupIds:
+                          - 1662603315118183
+                        roleTemplate: GROUP_MANAGER
+                      - id: 1830966033121292
+                        name: gm1
+                        permissionScope:
+                          accessToAllNotificationFeatures: true
+                          addContactsToGroups: false
+                          createContacts: true
+                          createEditDeleteGroups: false
+                          createEditDeleteSchedules: true
+                          createEditViewCockpitWorkFlows: false
+                          deleteContacts: true
+                          incidentZones: true
+                          incidentZonesRegistered: false
+                          moveRemoveContactsFromGroups: false
+                          onlyEditRulesWithSameRole: false
+                          reopenIncident: false
+                          restrictToIncidentSimulationOnly: false
+                          restrictToSimulationOnly: false
+                          viewCockpitWorkFlows: false
+                          viewDownloadAllContacts: true
+                          viewDownloadEditAllContacts: true
+                        roleDataScope:
+                          broadcastTemplateIds:
+                          - -1
+                          groupIds:
+                          - 1662603315118183
+                        roleTemplate: GROUP_MANAGER
+                      pageSize: 10
+                      start: 0
+                      totalCount: 2
+                      totalPageCount: 1
+              schema:
+                $ref: '#/components/schemas/getRoles'
+          description: Success
+        '400':
+          content:
+            application/json:
+              examples:
+                Invalid Request Input:
+                  summary: Invalid Input
+                  value:
+                    message: type mismatch exception
+                    status: 400
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Missing or invalid request input
+                    enum:
+                    - '400'
+                    type: string
+                type: object
+          description: Invalid request input
+        '401':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Invalid Credentials
+                  value:
+                    message: 'Invalid credentials: Password invalid'
+                    status: 401
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Invalid or missing credentials
+                    enum:
+                    - '401'
+                    type: string
+                type: object
+          description: Invalid Credentials
+        '404':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Invalid Role
+                  value:
+                    message: Invalid Role
+                    status: 404
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Invalid Role
+                    enum:
+                    - '404'
+                    type: string
+                type: object
+          description: Invalid Role
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: List Roles
+      tags:
+      - Roles
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/roles/{organizationId}
+    post:
+      description: Create a role for an organization.
+      operationId: EBS Create Role
+      parameters:
+      - description: The ID of the organization.
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Create role with dynamicGroupIds and groupIds:
+                summary: Create role with dynamicGroupIds and groupIds
+                value:
+                  name: example_role_name
+                  roleDataScope:
+                    dynamicGroupIds:
+                    - 0
+                    groupIds:
+                    - 0
+                  roleTemplate: GROUP_MANAGER
+              Create role with groupIds:
+                summary: Create role with groupIds
+                value:
+                  name: example_role_name
+                  roleDataScope:
+                    groupIds:
+                    - 0
+                  roleTemplate: GROUP_MANAGER
+              Create role with most properties:
+                summary: Create role with most properties
+                value:
+                  name: example_role_name
+                  permissionScope:
+                    accessToAllNotificationFeatures: true
+                    addContactsToGroups: true
+                    createContacts: true
+                    createEditDeleteGroups: true
+                    createEditDeleteSchedules: true
+                    createEditViewCockpitWorkFlows: true
+                    deleteContacts: true
+                    incidentZones: true
+                    incidentZonesRegistered: true
+                    moveRemoveContactsFromGroups: true
+                    onlyEditRulesWithSameRole: true
+                    reopenIncident: true
+                    restrictToIncidentSimulationOnly: true
+                    restrictToSimulationOnly: true
+                    restrictionEditDeleteTemplates: true
+                    uploadContacts: true
+                    viewCockpitWorkFlows: true
+                    viewDownloadAllContacts: true
+                    viewDownloadEditAllContacts: true
+                  roleDataScope:
+                    dynamicGroupIds:
+                    - 0
+                    groupIds:
+                    - 0
+                  roleTemplate: GROUP_MANAGER
+              Create role with permission scope:
+                summary: Create role with permission scope
+                value:
+                  name: example_role_name
+                  permissionScope:
+                    accessToAllNotificationFeatures: true
+                    addContactsToGroups: true
+                    createContacts: true
+                    createEditDeleteGroups: true
+                    createEditDeleteSchedules: true
+                    createEditViewCockpitWorkFlows: true
+                    deleteContacts: true
+                    incidentZones: true
+                    incidentZonesRegistered: true
+                    moveRemoveContactsFromGroups: true
+                    onlyEditRulesWithSameRole: true
+                    reopenIncident: true
+                    restrictToIncidentSimulationOnly: true
+                    restrictToSimulationOnly: true
+                    restrictionEditDeleteTemplates: true
+                    uploadContacts: true
+                    viewCockpitWorkFlows: true
+                    viewDownloadAllContacts: true
+                    viewDownloadEditAllContacts: true
+                  roleTemplate: GROUP_MANAGER
+            schema:
+              $ref: '#/components/schemas/roleRequest'
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Updated:
+                  summary: Success
+                  value:
+                    baseUri: https://api-dev3.everbridge.net/rest/roles/1503449006997506/
+                    id: 1992557198311425
+                    instanceUri: https://api-dev3.everbridge.net/rest/roles/1503449006997506/1992557198311425
+                    message: OK
+              schema:
+                $ref: '#/components/schemas/postUpdateResponse'
+          description: Success
+        '400':
+          content:
+            application/json:
+              examples:
+                Invalid Request Input:
+                  summary: Invalid Input
+                  value:
+                    message: type mismatch exception
+                    status: 400
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Missing or invalid request input
+                    enum:
+                    - '400'
+                    type: string
+                type: object
+          description: Invalid request input
+        '401':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Invalid Credentials
+                  value:
+                    message: 'Invalid credentials: Password invalid'
+                    status: 401
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Invalid or missing credentials
+                    enum:
+                    - '401'
+                    type: string
+                type: object
+          description: Invalid Credentials
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Create Role
+      tags:
+      - Roles
+      x-amazon-apigateway-integration:
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/roles/{organizationId}
+  /roles/{organizationId}/{roleId}:
+    delete:
+      description: Delete a role for an organization.
+      operationId: EBS Delete Role
+      parameters:
+      - description: The ID of the organization containing the role.
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: The ID of the role to delete.
+        in: path
+        name: roleId
+        required: true
+        schema:
+          $ref: '#/components/schemas/roleId'
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Success:
+                  summary: Success
+                  value:
+                    baseUri: https://api-dev3.everbridge.net/rest/roles/
+                    id: 1972869068226561
+                    instanceUri: https://api-dev3.everbridge.net/rest/roles/1972869068226561
+                    message: OK
+              schema:
+                $ref: '#/components/schemas/postUpdateResponse'
+          description: Success
+        '400':
+          content:
+            application/json:
+              examples:
+                Invalid Request Input:
+                  summary: Invalid Input
+                  value:
+                    message: type mismatch exception
+                    status: 400
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Missing or invalid request input
+                    enum:
+                    - '400'
+                    type: string
+                type: object
+          description: Invalid request input
+        '401':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Invalid Credentials
+                  value:
+                    message: 'Invalid credentials: Password invalid'
+                    status: 401
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Invalid or missing credentials
+                    enum:
+                    - '401'
+                    type: string
+                type: object
+          description: Invalid Credentials
+        '404':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Invalid Role
+                  value:
+                    message: Invalid Role
+                    status: 404
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Invalid Role
+                    enum:
+                    - '404'
+                    type: string
+                type: object
+          description: Invalid Role
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Delete Role
+      tags:
+      - Roles
+      x-amazon-apigateway-integration:
+        httpMethod: DELETE
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+          integration.request.path.roleId: method.request.path.roleId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/roles/{organizationId}/{roleId}
+    get:
+      description: Get a role for an organization.
+      operationId: EBS Get Role
+      parameters:
+      - description: The ID of the organization containing the role.
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: The ID of the role to return.
+        in: path
+        name: roleId
+        required: true
+        schema:
+          $ref: '#/components/schemas/roleId'
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Success:
+                  summary: Success
+                  value:
+                    message: OK
+                    result:
+                      id: 1992557198311425
+                      name: readme-role
+                      permissionScope:
+                        createContacts: true
+                        createEditViewCockpitWorkFlows: false
+                        deleteContacts: true
+                        onlyEditRulesWithSameRole: true
+                        reopenIncident: true
+                        restrictToIncidentSimulationOnly: true
+                        restrictionEditDeleteTemplates: false
+                        uploadContacts: true
+                        viewCockpitWorkFlows: false
+                        viewDownloadEditAllContacts: true
+                      roleTemplate: INCIDENT_ADMIN
+              schema:
+                $ref: '#/components/schemas/getRole'
+          description: Success
+        '400':
+          content:
+            application/json:
+              examples:
+                Invalid Request Input:
+                  summary: Invalid Input
+                  value:
+                    message: type mismatch exception
+                    status: 400
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Missing or invalid request input
+                    enum:
+                    - '400'
+                    type: string
+                type: object
+          description: Invalid request input
+        '401':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Invalid Credentials
+                  value:
+                    message: 'Invalid credentials: Password invalid'
+                    status: 401
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Invalid or missing credentials
+                    enum:
+                    - '401'
+                    type: string
+                type: object
+          description: Invalid Credentials
+        '404':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Invalid Role
+                  value:
+                    message: Invalid Role
+                    status: 404
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Invalid Role
+                    enum:
+                    - '404'
+                    type: string
+                type: object
+          description: Invalid Role
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Get Role
+      tags:
+      - Roles
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+          integration.request.path.roleId: method.request.path.roleId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/roles/{organizationId}/{roleId}
+    put:
+      description: Update a role for an organization.
+      operationId: EBS Update Role
+      parameters:
+      - description: The ID of the organization.
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: The ID of the role to update.
+        in: path
+        name: roleId
+        required: true
+        schema:
+          $ref: '#/components/schemas/roleId'
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Update role with dynamicGroupIds and groupIds:
+                summary: Update role with dynamicGroupIds and groupIds
+                value:
+                  name: example_role_name
+                  roleDataScope:
+                    dynamicGroupIds:
+                    - 0
+                    groupIds:
+                    - 0
+                  roleTemplate: GROUP_MANAGER
+              Update role with groupIds:
+                summary: Update role with groupIds
+                value:
+                  name: example_role_name
+                  roleDataScope:
+                    groupIds:
+                    - 0
+                  roleTemplate: GROUP_MANAGER
+              Update role with most properties:
+                summary: Update role with most properties
+                value:
+                  name: example_role_name
+                  permissionScope:
+                    accessToAllNotificationFeatures: true
+                    addContactsToGroups: true
+                    createContacts: true
+                    createEditDeleteGroups: true
+                    createEditDeleteSchedules: true
+                    createEditViewCockpitWorkFlows: true
+                    deleteContacts: true
+                    incidentZones: true
+                    incidentZonesRegistered: true
+                    moveRemoveContactsFromGroups: true
+                    onlyEditRulesWithSameRole: true
+                    reopenIncident: true
+                    restrictToIncidentSimulationOnly: true
+                    restrictToSimulationOnly: true
+                    restrictionEditDeleteTemplates: true
+                    uploadContacts: true
+                    viewCockpitWorkFlows: true
+                    viewDownloadAllContacts: true
+                    viewDownloadEditAllContacts: true
+                  roleDataScope:
+                    dynamicGroupIds:
+                    - 0
+                    groupIds:
+                    - 0
+                  roleTemplate: GROUP_MANAGER
+              Update role with permission scope:
+                summary: Update role with permission scope
+                value:
+                  name: example_role_name
+                  permissionScope:
+                    accessToAllNotificationFeatures: true
+                    addContactsToGroups: true
+                    createContacts: true
+                    createEditDeleteGroups: true
+                    createEditDeleteSchedules: true
+                    createEditViewCockpitWorkFlows: true
+                    deleteContacts: true
+                    incidentZones: true
+                    incidentZonesRegistered: true
+                    moveRemoveContactsFromGroups: true
+                    onlyEditRulesWithSameRole: true
+                    reopenIncident: true
+                    restrictToIncidentSimulationOnly: true
+                    restrictToSimulationOnly: true
+                    restrictionEditDeleteTemplates: true
+                    uploadContacts: true
+                    viewCockpitWorkFlows: true
+                    viewDownloadAllContacts: true
+                    viewDownloadEditAllContacts: true
+                  roleTemplate: GROUP_MANAGER
+            schema:
+              $ref: '#/components/schemas/roleRequest'
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Updated:
+                  summary: Success
+                  value:
+                    baseUri: https://api-dev3.everbridge.net/rest/roles/1503449006997506/
+                    id: 1992557198311425
+                    instanceUri: https://api-dev3.everbridge.net/rest/roles/1503449006997506/1992557198311425
+                    message: OK
+              schema:
+                $ref: '#/components/schemas/postUpdateResponse'
+          description: Success
+        '400':
+          content:
+            application/json:
+              examples:
+                Invalid Request Input:
+                  summary: Invalid Input
+                  value:
+                    message: type mismatch exception
+                    status: 400
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Missing or invalid request input
+                    enum:
+                    - '400'
+                    type: string
+                type: object
+          description: Invalid request input
+        '401':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Invalid Credentials
+                  value:
+                    message: 'Invalid credentials: Password invalid'
+                    status: 401
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Invalid or missing credentials
+                    enum:
+                    - '401'
+                    type: string
+                type: object
+          description: Invalid Credentials
+        '404':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Invalid Role
+                  value:
+                    message: Invalid Role
+                    status: 404
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Invalid Role
+                    enum:
+                    - '404'
+                    type: string
+                type: object
+          description: Invalid Role
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Update Role
+      tags:
+      - Roles
+      x-amazon-apigateway-integration:
+        httpMethod: PUT
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+          integration.request.path.roleId: method.request.path.roleId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/roles/{organizationId}/{roleId}
+components:
+  schemas:
+    postUpdateResponse:
+      properties:
+        baseUri:
+          type: string
+        id:
+          type: integer
+        instanceUri:
+          type: string
+        message:
+          type: string
+      type: object
+    getRoles:
+      properties:
+        summary:
+          type: string
+        value:
+          properties:
+            currentPageUri:
+              type: string
+            firstPageUri:
+              type: string
+            lastPageUri:
+              type: string
+            message:
+              type: string
+            nextPageUri:
+              type: string
+            page:
+              properties:
+                currentPageNo:
+                  type: integer
+                data:
+                  items:
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                      permissionScope:
+                        properties:
+                          accessToAllNotificationFeatures:
+                            type: boolean
+                          addContactsToGroups:
+                            type: boolean
+                          createContacts:
+                            type: boolean
+                          createEditDeleteGroups:
+                            type: boolean
+                          createEditDeleteSchedules:
+                            type: boolean
+                          createEditViewCockpitWorkFlows:
+                            type: boolean
+                          deleteContacts:
+                            type: boolean
+                          incidentZones:
+                            type: boolean
+                          incidentZonesRegistered:
+                            type: boolean
+                          moveRemoveContactsFromGroups:
+                            type: boolean
+                          onlyEditRulesWithSameRole:
+                            type: boolean
+                          reopenIncident:
+                            type: boolean
+                          restrictToIncidentSimulationOnly:
+                            type: boolean
+                          restrictToSimulationOnly:
+                            type: boolean
+                          restrictionEditDeleteTemplates:
+                            type: boolean
+                          uploadContacts:
+                            type: boolean
+                          viewCockpitWorkFlows:
+                            type: boolean
+                          viewDownloadAllContacts:
+                            type: boolean
+                          viewDownloadEditAllContacts:
+                            type: boolean
+                        type: object
+                      roleDataScope:
+                        properties:
+                          broadcastTemplateIds:
+                            items:
+                              type: integer
+                            type: array
+                          dynamicGroupIds:
+                            items:
+                              type: integer
+                            type: array
+                          groupIds:
+                            items:
+                              type: integer
+                            type: array
+                          incidentTemplateIds:
+                            items:
+                              type: integer
+                            type: array
+                          isEmpty:
+                            type: boolean
+                          organizationId:
+                            type: integer
+                          referenceId:
+                            type: integer
+                          referenceType:
+                            type: string
+                          roleId:
+                            type: integer
+                        type: object
+                      roleTemplate:
+                        type: string
+                    type: object
+                  type: array
+                dataPageList:
+                  items:
+                    type: string
+                  type: array
+                pageSize:
+                  type: integer
+                scrollId:
+                  type: string
+                start:
+                  type: integer
+                totalCount:
+                  type: integer
+                totalPageCount:
+                  type: integer
+              type: object
+          type: object
+      type: object
+    getRole:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        permissionScope:
+          properties:
+            accessToAllNotificationFeatures:
+              type: boolean
+            addContactsToGroups:
+              type: boolean
+            createContacts:
+              type: boolean
+            createEditDeleteGroups:
+              type: boolean
+            createEditDeleteSchedules:
+              type: boolean
+            createEditViewCockpitWorkFlows:
+              type: boolean
+            deleteContacts:
+              type: boolean
+            incidentZones:
+              type: boolean
+            incidentZonesRegistered:
+              type: boolean
+            moveRemoveContactsFromGroups:
+              type: boolean
+            onlyEditRulesWithSameRole:
+              type: boolean
+            reopenIncident:
+              type: boolean
+            restrictToIncidentSimulationOnly:
+              type: boolean
+            restrictToSimulationOnly:
+              type: boolean
+            restrictionEditDeleteTemplates:
+              type: boolean
+            uploadContacts:
+              type: boolean
+            viewCockpitWorkFlows:
+              type: boolean
+            viewDownloadAllContacts:
+              type: boolean
+            viewDownloadEditAllContacts:
+              type: boolean
+          type: object
+        roleDataScope:
+          properties:
+            broadcastTemplateIds:
+              items:
+                type: integer
+              type: array
+            dynamicGroupIds:
+              items:
+                type: integer
+              type: array
+            groupIds:
+              items:
+                type: integer
+              type: array
+            incidentTemplateIds:
+              items:
+                type: integer
+              type: array
+            isEmpty:
+              type: boolean
+            organizationId:
+              type: integer
+            referenceId:
+              type: integer
+            referenceType:
+              type: string
+            roleId:
+              type: integer
+          type: object
+        roleTemplate:
+          type: string
+      type: object
+    roleRequest:
+      properties:
+        name:
+          description: The role's name
+          maxLength: 100
+          type: string
+        permissionScope:
+          properties:
+            accessToAllNotificationFeatures:
+              type: boolean
+            addContactsToGroups:
+              type: boolean
+            createContacts:
+              type: boolean
+            createEditDeleteGroups:
+              type: boolean
+            createEditDeleteSchedules:
+              type: boolean
+            createEditViewCockpitWorkFlows:
+              type: boolean
+            deleteContacts:
+              type: boolean
+            incidentZones:
+              type: boolean
+            incidentZonesRegistered:
+              type: boolean
+            moveRemoveContactsFromGroups:
+              type: boolean
+            onlyEditRulesWithSameRole:
+              type: boolean
+            reopenIncident:
+              type: boolean
+            restrictToIncidentSimulationOnly:
+              type: boolean
+            restrictToSimulationOnly:
+              type: boolean
+            restrictionEditDeleteTemplates:
+              type: boolean
+            uploadContacts:
+              type: boolean
+            viewCockpitWorkFlows:
+              type: boolean
+            viewDownloadAllContacts:
+              type: boolean
+            viewDownloadEditAllContacts:
+              type: boolean
+          type: object
+        roleDataScope:
+          properties:
+            dynamicGroupIds:
+              items:
+                type: integer
+              type: array
+            groupIds:
+              items:
+                type: integer
+              type: array
+          type: object
+        roleTemplate:
+          description: The role's template, supports:INCIDENT_OPERATOR, DISPATCHER, INCIDENT_ADMIN, GROUP_MANAGER
+          maxLength: 100
+          type: string
+      required:
+      - name
+      - roleTemplate
+      type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
+    roleId:
+      default: '0'
+      description: Role ID
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
+  securitySchemes:
+    API_Authorizer:
+      description: oAuth Token
+      in: header
+      name: Authorization
+      type: apiKey
+      x-amazon-apigateway-authorizer:
+        authorizerCredentials: arn:aws:iam::214792946631:role/oas-rest-api-gw-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+      x-amazon-apigateway-authtype: custom
+    BasicAuth:
+      description: Basic Authentication Token
+      scheme: basic
+      type: http
+    api_key:
+      description: API Key - For System Use
+      in: header
+      name: x-api-key
+      type: apiKey
+x-amazon-apigateway-binary-media-types:
+- audio/wav
+- audio/x-wav
+- application/octet-stream
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

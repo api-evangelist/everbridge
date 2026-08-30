@@ -1,0 +1,1896 @@
+openapi: 3.2.0
+info:
+  description: EB Suite APIs.
+  title: EB Suite Incident Notifications API
+  version: '1.0'
+servers:
+- url: https://api.everbridge.net/rest
+- url: https://api.everbridge.eu/rest
+tags:
+- description: EB Suites - Incident Notifications Management
+  name: Incident Notifications
+paths:
+  /incidentNotifications/{organizationId}/scenario:
+    get:
+      operationId: EBS List Incident Notifications
+      parameters:
+      - description: The ID of the organization containing the incidents
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: The ID of the scenario to return
+        in: query
+        name: scenarioId
+        required: false
+        schema:
+          default: -1
+          format: int64
+          type: integer
+      - description: The customSenarioID of the scenario to return
+        in: query
+        name: customScenarioId
+        required: false
+        schema:
+          type: string
+      - description: The page number of scenario notifications to return.
+        in: query
+        name: pageNumber
+        required: false
+        schema:
+          default: 1
+          format: int32
+          type: integer
+      - description: The page size of scenario notifications to return.
+        in: query
+        name: pageSize
+        required: false
+        schema:
+          default: 10
+          format: int32
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: success
+                  value:
+                    firstPageUri: https://api-dev3.everbridge.net/rest/incidentNotifications/1536984111644674/scenario?pageSize=10&scenarioId=3358700395823262&pageNumber=1
+                    lastPageUri: https://api-dev3.everbridge.net/rest/incidentNotifications/1536984111644674/scenario?pageSize=10&scenarioId=3358700395823262&pageNumber=1
+                    message: OK
+                    page:
+                      currentPageNo: 1
+                      data:
+                      - accountId: 1536846672691202
+                        batchNotificationId: 0
+                        broadcastSettings:
+                          bookConference: false
+                          confirm: false
+                          contactCycles: 1
+                          cycleInterval: 0
+                          deliverPaths:
+                          - accountId: 1536846672691202
+                            awarePathId: 0
+                            createdDate: 1674823177533
+                            createdId: 1530249602924607
+                            createdName: Vishal Agrawal
+                            default: true
+                            displayFlag: false
+                            editable: false
+                            expose: false
+                            extRequired: false
+                            id: 589820879437825
+                            isDefault: true
+                            lastModifiedDate: 1720788191359
+                            lastModifiedId: 1530249602924608
+                            lastModifiedName: Nandish Siddaiah
+                            mandatory: false
+                            organizationId: 1536984111644674
+                            pathId: 241901148045316
+                            prompt: Email
+                            resourceBundleId: 1536984111644675
+                            seq: 1
+                            status: A
+                          deliveryMethodInterval: 0
+                          deliveryPathOrder: Contact
+                          duration: 1
+                          durationTimeUnit: HOURS
+                          enableBeep: true
+                          enableRecord: false
+                          enableSecureNotification: false
+                          enableSmartConferenceConfirmationText: true
+                          language: en_US
+                          mobileSettings:
+                            allowShare: false
+                            pushAlertEnabled: false
+                            requestComment: false
+                            requestImage: false
+                            requestLocation: false
+                            requireConfirm: false
+                          quietTimeOverride: false
+                          recipientApp: false
+                          requirePinForMessage: false
+                          senderCallerInfos:
+                          - accountId: 0
+                            callerId: '7818646213'
+                            countryCode: US
+                            countryName: United States
+                            createdId: 0
+                            id: 0
+                            isDefault: true
+                            lastModifiedId: 0
+                            organizationId: 0
+                            resourceBundleId: 0
+                          senderEmail: SORCH Dev3
+                          throttlDefaultAmount: 0
+                          throttle: false
+                          validateContacts: true
+                          validateContactsByOrganization: false
+                          voiceMailOption: MESSAGE_ONLY
+                        createdDate: 1759245408450
+                        createdId: 2200330536222721
+                        createdName: Nandish API Access
+                        enableLifeSafety: false
+                        enableMessageTruncate: false
+                        endDate: 1759249008512
+                        escalatedNotification: false
+                        escalationConfirmedCount: 0
+                        hasNotification: true
+                        id: 3358700395834162
+                        incident:
+                          accountId: 1536846672691202
+                          createdDate: 1759245407984
+                          createdId: 2200330536222721
+                          createdName: Nandish API Access
+                          duration: 0
+                          enableMessageTruncate: false
+                          hasJournal: false
+                          id: 3358700395829386
+                          incidentMode: Live
+                          incidentStatus: Open
+                          incidentType: Scenario
+                          lastModifiedDate: 1759245407984
+                          lastModifiedId: 2200330536222721
+                          lastModifiedName: Nandish API Access
+                          name: Pre-test-scenario
+                          organizationId: 1536984111644674
+                          phaseStatus:
+                            id: 1001
+                            incidentStatus: Open
+                            isDefault: true
+                            name: New
+                            phaseNodeType: Begin
+                            seq: 100
+                            status: A
+                          resourceBundleId: 1536984111644675
+                          status: A
+                          useTemplateVarValue: false
+                        incidentPhase:
+                          accountId: 1536846672691202
+                          createdDate: 1759245408337
+                          createdId: 2200330536222721
+                          createdName: Nandish API Access
+                          id: 10012
+                          incidentId: 3358700395829386
+                          lastModifiedDate: 1759245408337
+                          lastModifiedId: 2200330536222721
+                          lastModifiedName: Nandish API Access
+                          name: New
+                          notificationId: -1
+                          organizationId: 1536984111644674
+                          phaseDefinition:
+                            id: 1001
+                            incidentStatus: Open
+                            isDefault: true
+                            name: New
+                            phaseNodeType: Begin
+                            seq: 100
+                            status: A
+                          phaseTemplate:
+                            broadcastTemplate:
+                              accountId: 0
+                              broadcastContacts:
+                                contactIds:
+                                - 426680841666562
+                                contactSearchType: AllOr
+                                defaultSeqGroupQuota: 1
+                                enableGroupCalendar: false
+                                enableSendToSubscribers: false
+                                sequenceGroupEnabled: false
+                                sequenceGroupInterval: 5
+                              broadcastSettings:
+                                bookConference: false
+                                confirm: false
+                                contactCycles: 1
+                                cycleInterval: 0
+                                deliverPaths:
+                                - accountId: 1536846672691202
+                                  awarePathId: 0
+                                  createdDate: 1674823177533
+                                  createdId: 1530249602924607
+                                  createdName: Vishal Agrawal
+                                  default: true
+                                  displayFlag: false
+                                  editable: false
+                                  expose: false
+                                  extRequired: false
+                                  id: 589820879437825
+                                  isDefault: true
+                                  lastModifiedDate: 1720788191359
+                                  lastModifiedId: 1530249602924608
+                                  lastModifiedName: Nandish Siddaiah
+                                  mandatory: false
+                                  organizationId: 1536984111644674
+                                  pathId: 241901148045316
+                                  prompt: Email
+                                  resourceBundleId: 1536984111644675
+                                  seq: 1
+                                  status: A
+                                deliveryMethodInterval: 0
+                                deliveryPathOrder: Contact
+                                duration: 1
+                                durationTimeUnit: HOURS
+                                enableBeep: true
+                                enableRecord: false
+                                enableSecureNotification: false
+                                enableSmartConferenceConfirmationText: true
+                                language: en_US
+                                mobileSettings:
+                                  allowShare: false
+                                  pushAlertEnabled: false
+                                  requestComment: false
+                                  requestImage: false
+                                  requestLocation: false
+                                  requireConfirm: false
+                                quietTimeOverride: false
+                                recipientApp: false
+                                requirePinForMessage: false
+                                senderCallerInfos:
+                                - accountId: 0
+                                  callerId: '7818646213'
+                                  countryCode: US
+                                  countryName: United States
+                                  createdId: 0
+                                  id: 0
+                                  isDefault: true
+                                  lastModifiedId: 0
+                                  organizationId: 0
+                                  resourceBundleId: 0
+                                senderEmail: SORCH Dev3
+                                throttlDefaultAmount: 0
+                                throttle: false
+                                validateContacts: true
+                                validateContactsByOrganization: false
+                                voiceMailOption: MESSAGE_ONLY
+                              createdId: 0
+                              enableLifeSafety: false
+                              id: 0
+                              lastModifiedId: 0
+                              message:
+                                accountId: 1536846672691202
+                                conferenceBridgeId: 0
+                                contentType: Text
+                                createdDate: 1759245408392
+                                createdId: 2200330536222721
+                                createdName: Nandish API Access
+                                id: 0
+                                lastModifiedDate: 1759245408392
+                                lastModifiedId: 2200330536222721
+                                lastModifiedName: Nandish API Access
+                                organizationId: 1536984111644674
+                                resourceBundleId: 1536984111644675
+                                rtfContent: '<style>body {font-family: ''arial''}</style>New incident
+
+                                  <pre style="display: inline; font-family: Arial; font-size: 16px;">3358700395829386 launched:<br><br></pre>
+
+                                  <table border="1" style="border-collapse: collapse; width: 100%;">
+
+                                  <tbody>
+
+                                  <tr>
+
+                                  <td style="width: 48.1356%;">Status</td>
+
+                                  <td style="width: 48.1356%;">
+
+                                  <pre style="display: inline; font-family: Arial; font-size: 16px;"></pre>
+
+                                  </td>
+
+                                  </tr>
+
+                                  <tr>
+
+                                  <td style="width: 48.1356%;">Priority</td>
+
+                                  <td style="width: 48.1356%;"></td>
+
+                                  </tr>
+
+                                  </tbody>
+
+                                  </table>'
+                                status: A
+                                textMessage: "New incident3358700395829386 launched:\n\nStatus\t\nPriority\t\nPriority:    \nStatus:    "
+                                title: Incident launched for Read Doc - NEW 3358700395829386
+                                useCustomEmail: true
+                                useCustomSms: false
+                              organizationId: 0
+                              priority: NonPriority
+                              publicMessages: {}
+                              resourceBundleId: 0
+                              type: Standard
+                              useEscalation: false
+                            contactsFlag: 3
+                            evaluateAll: false
+                            formTemplate:
+                              formVariableItems:
+                              - isRequired: false
+                                seq: 0
+                                variableId: 591470146879516
+                                variableName: Priority
+                              - isRequired: false
+                                seq: 1
+                                variableId: 591470146879515
+                                variableName: Status
+                              preMessage: "New incident3358700395829386 launched:\n\nStatus\t\nPriority\t"
+                              subject: Incident launched for Read Doc - NEW 3358700395829386
+                              sysVarCurrentTimeFormat: HH:mm:ss
+                              sysVarTodayDateFormat: mm-dd-yyyy
+                            id: 1
+                            ignoreVariable: false
+                            incidentNotificationPropertyBag:
+                              enableExerciseMode: 'false'
+                            messageFlag: 3
+                            name: New
+                            phaseDefinitions:
+                            - id: 1001
+                              isDefault: false
+                              name: New
+                              seq: 0
+                              status: A
+                            publishOptionsFlag:
+                              abb: 1
+                              alertUs: 1
+                              desktopAlerts: 1
+                              ipawsCap: 1
+                              memberPortal: 1
+                              network: 1
+                              nixleChannel: 1
+                              socialMedia: 1
+                              webPosting: 1
+                              webWidget: 1
+                            settingsFlag: 3
+                            templateId: 593978407780353
+                            templateName: Readme Testing-Copy
+                          resourceBundleId: 1536984111644675
+                          scenarioId: 3358700395823262
+                          status: A
+                        lastModifiedDate: 1759249020044
+                        lastModifiedId: 2200330536222721
+                        lastModifiedName: Nandish API Access
+                        launchtype: SendNow
+                        message:
+                          accountId: 1536846672691202
+                          conferenceBridgeId: 0
+                          contentType: Text
+                          createdDate: 1759245408392
+                          createdId: 2200330536222721
+                          createdName: Nandish API Access
+                          id: 0
+                          lastModifiedDate: 1759245408392
+                          lastModifiedId: 2200330536222721
+                          lastModifiedName: Nandish API Access
+                          organizationId: 1536984111644674
+                          resourceBundleId: 1536984111644675
+                          rtfContent: '<style>body {font-family: ''arial''}</style>New incident
+
+                            <pre style="display: inline; font-family: Arial; font-size: 16px;">3358700395829386 launched:<br><br></pre>
+
+                            <table border="1" style="border-collapse: collapse; width: 100%;">
+
+                            <tbody>
+
+                            <tr>
+
+                            <td style="width: 48.1356%;">Status</td>
+
+                            <td style="width: 48.1356%;">
+
+                            <pre style="display: inline; font-family: Arial; font-size: 16px;"></pre>
+
+                            </td>
+
+                            </tr>
+
+                            <tr>
+
+                            <td style="width: 48.1356%;">Priority</td>
+
+                            <td style="width: 48.1356%;"></td>
+
+                            </tr>
+
+                            </tbody>
+
+                            </table>'
+                          status: A
+                          textMessage: "New incident3358700395829386 launched:\n\nStatus\t\nPriority\t\nPriority:    \nStatus:    "
+                          title: Incident launched for Read Doc - NEW 3358700395829386
+                          useCustomEmail: true
+                          useCustomSms: false
+                        notificationMode: Live
+                        notificationName: Incident launched for Read Doc - NEW 3358700395829386
+                        notificationResult:
+                          confirmedCount: 0
+                          confirmedLateCount: 0
+                          notConfirmedCount: 0
+                          notificationId: 3358700395834162
+                          totalCount: 0
+                          unreachableCount: 0
+                        notificationStatus: Completed
+                        oldAwareCAMPID: 0
+                        organizationId: 1536984111644674
+                        priority: NonPriority
+                        processedBy: ebs-schedule-task-5869855666-bgvhs
+                        productSource: Matrix
+                        publicMessages: {}
+                        resourceBundleId: 1536984111644675
+                        source: Web
+                        sourceTemplateId: 0
+                        startDate: 1759245408512
+                        status: A
+                        stoppedBy: 0
+                        transformed: true
+                        type: Standard
+                      - accountId: 1536846672691202
+                        batchNotificationId: 0
+                        broadcastSettings:
+                          bookConference: false
+                          confirm: true
+                          contactCycles: 1
+                          cycleInterval: 0
+                          deliverPaths:
+                          - accountId: 1536846672691202
+                            awarePathId: 0
+                            createdDate: 1674823177533
+                            createdId: 1530249602924607
+                            createdName: Vishal Agrawal
+                            default: true
+                            displayFlag: false
+                            editable: false
+                            expose: false
+                            extRequired: false
+                            id: 589820879437825
+                            isDefault: true
+                            lastModifiedDate: 1720788191359
+                            lastModifiedId: 1530249602924608
+                            lastModifiedName: Nandish Siddaiah
+                            mandatory: false
+                            organizationId: 1536984111644674
+                            pathId: 241901148045316
+                            prompt: Email
+                            resourceBundleId: 1536984111644675
+                            seq: 1
+                            status: A
+                          deliveryMethodInterval: 0
+                          deliveryPathOrder: Contact
+                          duration: 1
+                          durationTimeUnit: HOURS
+                          enableBeep: true
+                          enableRecord: false
+                          enableSecureNotification: false
+                          enableSmartConferenceConfirmationText: true
+                          language: en_US
+                          mobileSettings:
+                            allowShare: false
+                            pushAlertEnabled: false
+                            requestComment: false
+                            requestImage: false
+                            requestLocation: false
+                            requireConfirm: false
+                          quietTimeOverride: false
+                          recipientApp: false
+                          requirePinForMessage: false
+                          responseSetting:
+                            profileId: 63f9025e74afd050981becae
+                            type: EVERY
+                          senderCallerInfos:
+                          - accountId: 0
+                            callerId: '7818646213'
+                            countryCode: US
+                            countryName: United States
+                            createdId: 0
+                            id: 0
+                            isDefault: true
+                            lastModifiedId: 0
+                            organizationId: 0
+                            resourceBundleId: 0
+                          senderEmail: SORCH Dev3
+                          throttlDefaultAmount: 0
+                          throttle: false
+                          validateContacts: true
+                          validateContactsByOrganization: false
+                          voiceMailOption: MESSAGE_ONLY
+                        createdDate: 1759245408138
+                        createdId: 2200330536222721
+                        createdName: Nandish API Access
+                        enableLifeSafety: false
+                        enableMessageTruncate: false
+                        endDate: 1759249008217
+                        escalatedNotification: false
+                        escalationConfirmedCount: 0
+                        hasNotification: true
+                        id: 3358700395834161
+                        incident:
+                          accountId: 1536846672691202
+                          createdDate: 1759245407984
+                          createdId: 2200330536222721
+                          createdName: Nandish API Access
+                          duration: 0
+                          enableMessageTruncate: false
+                          hasJournal: false
+                          id: 3358700395829386
+                          incidentMode: Live
+                          incidentStatus: Open
+                          incidentType: Scenario
+                          lastModifiedDate: 1759245407984
+                          lastModifiedId: 2200330536222721
+                          lastModifiedName: Nandish API Access
+                          name: Pre-test-scenario
+                          organizationId: 1536984111644674
+                          phaseStatus:
+                            id: 1001
+                            incidentStatus: Open
+                            isDefault: true
+                            name: New
+                            phaseNodeType: Begin
+                            seq: 100
+                            status: A
+                          resourceBundleId: 1536984111644675
+                          status: A
+                          useTemplateVarValue: false
+                        incidentPhase:
+                          accountId: 1536846672691202
+                          createdDate: 1759245407989
+                          createdId: 2200330536222721
+                          createdName: Nandish API Access
+                          id: 10011
+                          incidentId: 3358700395829386
+                          lastModifiedDate: 1759245407989
+                          lastModifiedId: 2200330536222721
+                          lastModifiedName: Nandish API Access
+                          name: New
+                          notificationId: -1
+                          organizationId: 1536984111644674
+                          phaseDefinition:
+                            id: 1001
+                            incidentStatus: Open
+                            isDefault: true
+                            name: New
+                            phaseNodeType: Begin
+                            seq: 100
+                            status: A
+                          phaseTemplate:
+                            broadcastTemplate:
+                              accountId: 0
+                              broadcastContacts:
+                                answerNeeded: 'Yes'
+                                contactIds:
+                                - 426680841666562
+                                contactSearchType: AllOr
+                                defaultSeqGroupQuota: 1
+                                enableGroupCalendar: false
+                                enableSendToSubscribers: false
+                                sequenceGroupEnabled: false
+                                sequenceGroupInterval: 5
+                              broadcastSettings:
+                                bookConference: false
+                                confirm: true
+                                contactCycles: 1
+                                cycleInterval: 0
+                                deliverPaths:
+                                - accountId: 1536846672691202
+                                  awarePathId: 0
+                                  createdDate: 1674823177533
+                                  createdId: 1530249602924607
+                                  createdName: Vishal Agrawal
+                                  default: true
+                                  displayFlag: false
+                                  editable: false
+                                  expose: false
+                                  extRequired: false
+                                  id: 589820879437825
+                                  isDefault: true
+                                  lastModifiedDate: 1720788191359
+                                  lastModifiedId: 1530249602924608
+                                  lastModifiedName: Nandish Siddaiah
+                                  mandatory: false
+                                  organizationId: 1536984111644674
+                                  pathId: 241901148045316
+                                  prompt: Email
+                                  resourceBundleId: 1536984111644675
+                                  seq: 1
+                                  status: A
+                                deliveryMethodInterval: 0
+                                deliveryPathOrder: Contact
+                                duration: 1
+                                durationTimeUnit: HOURS
+                                enableBeep: true
+                                enableRecord: false
+                                enableSecureNotification: false
+                                enableSmartConferenceConfirmationText: true
+                                language: en_US
+                                mobileSettings:
+                                  allowShare: false
+                                  pushAlertEnabled: false
+                                  requestComment: false
+                                  requestImage: false
+                                  requestLocation: false
+                                  requireConfirm: false
+                                quietTimeOverride: false
+                                recipientApp: false
+                                requirePinForMessage: false
+                                responseSetting:
+                                  profileId: 63f9025e74afd050981becae
+                                  type: EVERY
+                                senderCallerInfos:
+                                - accountId: 0
+                                  callerId: '7818646213'
+                                  countryCode: US
+                                  countryName: United States
+                                  createdId: 0
+                                  id: 0
+                                  isDefault: true
+                                  lastModifiedId: 0
+                                  organizationId: 0
+                                  resourceBundleId: 0
+                                senderEmail: SORCH Dev3
+                                throttlDefaultAmount: 0
+                                throttle: false
+                                validateContacts: true
+                                validateContactsByOrganization: false
+                                voiceMailOption: MESSAGE_ONLY
+                              createdId: 0
+                              enableLifeSafety: false
+                              id: 0
+                              lastModifiedId: 0
+                              message:
+                                accountId: 1536846672691202
+                                conferenceBridgeId: 0
+                                contentType: Text
+                                createdDate: 1759245408051
+                                createdId: 2200330536222721
+                                createdName: Nandish API Access
+                                id: 0
+                                lastModifiedDate: 1759245408051
+                                lastModifiedId: 2200330536222721
+                                lastModifiedName: Nandish API Access
+                                organizationId: 1536984111644674
+                                resourceBundleId: 1536984111644675
+                                rtfContent: '<style>body {font-family: ''arial''}</style>New incident
+
+                                  <pre style="display: inline; font-family: Arial; font-size: 16px;">3358700395829386 launched:<br><br></pre>
+
+                                  <table border="1" style="border-collapse: collapse; width: 100%;">
+
+                                  <tbody>
+
+                                  <tr>
+
+                                  <td style="width: 48.1356%;">Status</td>
+
+                                  <td style="width: 48.1356%;">
+
+                                  <pre style="display: inline; font-family: Arial; font-size: 16px;"></pre>
+
+                                  </td>
+
+                                  </tr>
+
+                                  <tr>
+
+                                  <td style="width: 48.1356%;">Priority</td>
+
+                                  <td style="width: 48.1356%;"></td>
+
+                                  </tr>
+
+                                  </tbody>
+
+                                  </table>'
+                                status: A
+                                textMessage: "New incident3358700395829386 launched:\n\nStatus\t\nPriority\t\nStatus:    \nPriority:    "
+                                title: Incident launched for Read Doc - NEW 3358700395829386
+                                useCustomEmail: true
+                                useCustomSms: false
+                              organizationId: 0
+                              priority: NonPriority
+                              publicMessages: {}
+                              resourceBundleId: 0
+                              type: Standard
+                              useEscalation: false
+                            contactsFlag: 3
+                            evaluateAll: false
+                            formTemplate:
+                              formVariableItems:
+                              - isRequired: false
+                                seq: 1
+                                variableId: 591470146879515
+                                variableName: Status
+                              - isRequired: false
+                                seq: 0
+                                variableId: 591470146879516
+                                variableName: Priority
+                              preMessage: "New incident3358700395829386 launched:\n\nStatus\t\nPriority\t"
+                              subject: Incident launched for Read Doc - NEW 3358700395829386
+                              sysVarCurrentTimeFormat: HH:mm:ss
+                              sysVarTodayDateFormat: mm-dd-yyyy
+                            id: 1
+                            ignoreVariable: false
+                            incidentNotificationPropertyBag:
+                              enableExerciseMode: 'false'
+                            messageFlag: 3
+                            name: New
+                            phaseDefinitions:
+                            - id: 1001
+                              isDefault: false
+                              name: New
+                              seq: 0
+                              status: A
+                            publishOptionsFlag:
+                              abb: 1
+                              alertUs: 1
+                              desktopAlerts: 1
+                              ipawsCap: 1
+                              memberPortal: 1
+                              network: 1
+                              nixleChannel: 1
+                              socialMedia: 1
+                              webPosting: 1
+                              webWidget: 1
+                            settingsFlag: 3
+                            templateId: 1536984111644674
+                            templateName: Readme Testing
+                          resourceBundleId: 1536984111644675
+                          scenarioId: 3358700395823262
+                          status: A
+                        lastModifiedDate: 1759249020044
+                        lastModifiedId: 2200330536222721
+                        lastModifiedName: Nandish API Access
+                        launchtype: SendNow
+                        message:
+                          accountId: 1536846672691202
+                          conferenceBridgeId: 0
+                          contentType: Text
+                          createdDate: 1759245408051
+                          createdId: 2200330536222721
+                          createdName: Nandish API Access
+                          id: 0
+                          lastModifiedDate: 1759245408051
+                          lastModifiedId: 2200330536222721
+                          lastModifiedName: Nandish API Access
+                          organizationId: 1536984111644674
+                          resourceBundleId: 1536984111644675
+                          rtfContent: '<style>body {font-family: ''arial''}</style>New incident
+
+                            <pre style="display: inline; font-family: Arial; font-size: 16px;">3358700395829386 launched:<br><br></pre>
+
+                            <table border="1" style="border-collapse: collapse; width: 100%;">
+
+                            <tbody>
+
+                            <tr>
+
+                            <td style="width: 48.1356%;">Status</td>
+
+                            <td style="width: 48.1356%;">
+
+                            <pre style="display: inline; font-family: Arial; font-size: 16px;"></pre>
+
+                            </td>
+
+                            </tr>
+
+                            <tr>
+
+                            <td style="width: 48.1356%;">Priority</td>
+
+                            <td style="width: 48.1356%;"></td>
+
+                            </tr>
+
+                            </tbody>
+
+                            </table>'
+                          status: A
+                          textMessage: "New incident3358700395829386 launched:\n\nStatus\t\nPriority\t\nStatus:    \nPriority:    "
+                          title: Incident launched for Read Doc - NEW 3358700395829386
+                          useCustomEmail: true
+                          useCustomSms: false
+                        notificationMode: Live
+                        notificationName: Incident launched for Read Doc - NEW 3358700395829386
+                        notificationResult:
+                          confirmedCount: 0
+                          confirmedLateCount: 0
+                          notConfirmedCount: 0
+                          notificationId: 3358700395834161
+                          totalCount: 0
+                          unreachableCount: 0
+                        notificationStatus: Completed
+                        oldAwareCAMPID: 0
+                        organizationId: 1536984111644674
+                        priority: NonPriority
+                        processedBy: ebs-schedule-task-5869855666-vfxm8
+                        productSource: Matrix
+                        publicMessages: {}
+                        resourceBundleId: 1536984111644675
+                        source: Web
+                        sourceTemplateId: 0
+                        startDate: 1759245408217
+                        status: A
+                        stoppedBy: 0
+                        transformed: true
+                        type: Standard
+                      pageSize: 10
+                      start: 0
+                      totalCount: 2
+                      totalPageCount: 1
+              schema:
+                $ref: '#/components/schemas/RestfulCollectionResult'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '500':
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: List Incident Notifications
+      tags:
+      - Incident Notifications
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/incidentNotifications/{organizationId}/scenario
+  /incidentNotifications/{organizationId}/{incidentId}:
+    get:
+      operationId: EBS Get Notifications By Incident
+      parameters:
+      - description: The ID of the organization containing the incidents
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: The ID of the Incident to return
+        in: path
+        name: incidentId
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - description: The page number of incident notifications to return.
+        in: query
+        name: pageNumber
+        required: false
+        schema:
+          default: 1
+          format: int32
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: success
+                  value:
+                    firstPageUri: https://api-dev3.everbridge.net/rest/incidentNotifications/1536984111644674/3236688964878470?pageNumber=1
+                    lastPageUri: https://api-dev3.everbridge.net/rest/incidentNotifications/1536984111644674/3236688964878470?pageNumber=1
+                    message: OK
+                    page:
+                      currentPageNo: 1
+                      data:
+                      - accountId: 1536846672691202
+                        batchNotificationId: 0
+                        broadcastSettings:
+                          bookConference: false
+                          confirm: true
+                          contactCycles: 1
+                          cycleInterval: 0
+                          deliverPaths:
+                          - accountId: 1536846672691202
+                            awarePathId: 0
+                            createdDate: 1674823177533
+                            createdId: 1530249602924607
+                            createdName: Vishal Agrawal
+                            default: true
+                            displayFlag: false
+                            editable: false
+                            expose: false
+                            extRequired: false
+                            id: 589820879437825
+                            isDefault: true
+                            lastModifiedDate: 1720788191359
+                            lastModifiedId: 1530249602924608
+                            lastModifiedName: Nandish Siddaiah
+                            mandatory: false
+                            organizationId: 1536984111644674
+                            pathId: 241901148045316
+                            prompt: Email
+                            resourceBundleId: 1536984111644675
+                            seq: 1
+                            status: A
+                          deliveryMethodInterval: 0
+                          deliveryPathOrder: Contact
+                          duration: 1
+                          durationTimeUnit: HOURS
+                          enableBeep: true
+                          enableRecord: false
+                          enableSecureNotification: false
+                          enableSmartConferenceConfirmationText: true
+                          language: en_US
+                          mobileSettings:
+                            allowShare: false
+                            pushAlertEnabled: false
+                            requestComment: false
+                            requestImage: false
+                            requestLocation: false
+                            requireConfirm: false
+                          quietTimeOverride: false
+                          recipientApp: false
+                          requirePinForMessage: false
+                          responseSetting:
+                            profileId: 63f9025e74afd050981becae
+                            type: EVERY
+                          senderCallerInfos:
+                          - accountId: 0
+                            callerId: '7818646213'
+                            countryCode: US
+                            countryName: United States
+                            createdId: 0
+                            id: 0
+                            isDefault: true
+                            lastModifiedId: 0
+                            organizationId: 0
+                            resourceBundleId: 0
+                          senderEmail: SORCH Dev3
+                          throttlDefaultAmount: 0
+                          throttle: false
+                          validateContacts: true
+                          validateContactsByOrganization: false
+                          voiceMailOption: MESSAGE_ONLY
+                        createdDate: 1754391424969
+                        createdId: 1530249602924607
+                        createdName: Vishal Agrawal
+                        enableLifeSafety: false
+                        enableMessageTruncate: false
+                        endDate: 1754395025338
+                        escalatedNotification: false
+                        escalationConfirmedCount: 0
+                        hasNotification: true
+                        id: 3236688964878528
+                        incident:
+                          accountId: 1536846672691202
+                          createdDate: 1754391424032
+                          createdId: 1530249602924607
+                          createdName: Vishal Agrawal
+                          duration: 0
+                          enableMessageTruncate: false
+                          hasJournal: false
+                          id: 3236688964878470
+                          incidentMode: Live
+                          incidentStatus: Open
+                          incidentType: Incident
+                          lastModifiedDate: 1754391424032
+                          lastModifiedId: 1530249602924607
+                          lastModifiedName: Vishal Agrawal
+                          name: Incident launched for Read Doc - NEW 3236688964878470
+                          organizationId: 1536984111644674
+                          phaseStatus:
+                            id: 1001
+                            incidentStatus: Open
+                            isDefault: true
+                            name: New
+                            phaseNodeType: Begin
+                            seq: 100
+                            status: A
+                          resourceBundleId: 1536984111644675
+                          status: A
+                          useTemplateVarValue: false
+                        incidentPhase:
+                          accountId: 1536846672691202
+                          createdDate: 1754391424103
+                          createdId: 1530249602924607
+                          createdName: Vishal Agrawal
+                          id: 10011
+                          incidentId: 3236688964878470
+                          lastModifiedDate: 1754391424103
+                          lastModifiedId: 1530249602924607
+                          lastModifiedName: Vishal Agrawal
+                          name: New
+                          notificationId: -1
+                          organizationId: 1536984111644674
+                          phaseDefinition:
+                            id: 1001
+                            incidentStatus: Open
+                            isDefault: true
+                            name: New
+                            phaseNodeType: Begin
+                            seq: 100
+                            status: A
+                          phaseTemplate:
+                            broadcastTemplate:
+                              accountId: 0
+                              broadcastContacts:
+                                answerNeeded: 'Yes'
+                                contactIds:
+                                - 3085815353704521
+                                contactSearchType: AllOr
+                                defaultSeqGroupQuota: 1
+                                enableGroupCalendar: false
+                                enableSendToSubscribers: false
+                                sequenceGroupEnabled: false
+                                sequenceGroupInterval: 5
+                              broadcastSettings:
+                                bookConference: false
+                                confirm: true
+                                contactCycles: 1
+                                cycleInterval: 0
+                                deliverPaths:
+                                - accountId: 1536846672691202
+                                  awarePathId: 0
+                                  createdDate: 1674823177533
+                                  createdId: 1530249602924607
+                                  createdName: Vishal Agrawal
+                                  default: true
+                                  displayFlag: false
+                                  editable: false
+                                  expose: false
+                                  extRequired: false
+                                  id: 589820879437825
+                                  isDefault: true
+                                  lastModifiedDate: 1720788191359
+                                  lastModifiedId: 1530249602924608
+                                  lastModifiedName: Nandish Siddaiah
+                                  mandatory: false
+                                  organizationId: 1536984111644674
+                                  pathId: 241901148045316
+                                  prompt: Email
+                                  resourceBundleId: 1536984111644675
+                                  seq: 1
+                                  status: A
+                                deliveryMethodInterval: 0
+                                deliveryPathOrder: Contact
+                                duration: 1
+                                durationTimeUnit: HOURS
+                                enableBeep: true
+                                enableRecord: false
+                                enableSecureNotification: false
+                                enableSmartConferenceConfirmationText: true
+                                language: en_US
+                                mobileSettings:
+                                  allowShare: false
+                                  pushAlertEnabled: false
+                                  requestComment: false
+                                  requestImage: false
+                                  requestLocation: false
+                                  requireConfirm: false
+                                quietTimeOverride: false
+                                recipientApp: false
+                                requirePinForMessage: false
+                                responseSetting:
+                                  profileId: 63f9025e74afd050981becae
+                                  type: EVERY
+                                senderCallerInfos:
+                                - accountId: 0
+                                  callerId: '7818646213'
+                                  countryCode: US
+                                  countryName: United States
+                                  createdId: 0
+                                  id: 0
+                                  isDefault: true
+                                  lastModifiedId: 0
+                                  organizationId: 0
+                                  resourceBundleId: 0
+                                senderEmail: SORCH Dev3
+                                throttlDefaultAmount: 0
+                                throttle: false
+                                validateContacts: true
+                                validateContactsByOrganization: false
+                                voiceMailOption: MESSAGE_ONLY
+                              createdId: 0
+                              enableLifeSafety: false
+                              id: 0
+                              lastModifiedId: 0
+                              message:
+                                accountId: 1536846672691202
+                                conferenceBridgeId: 0
+                                contentType: Text
+                                createdDate: 1754391424514
+                                createdId: 1530249602924607
+                                createdName: Vishal Agrawal
+                                id: 0
+                                lastModifiedDate: 1754391424514
+                                lastModifiedId: 1530249602924607
+                                lastModifiedName: Vishal Agrawal
+                                organizationId: 1536984111644674
+                                resourceBundleId: 1536984111644675
+                                rtfContent: '<style>body {font-family: ''arial''}</style><p>New incident</p>
+
+                                  <pre style="display: inline; font-family: Arial; font-size: 16px;">3236688964878470 launched:<br /><br /></pre>
+
+                                  <table border="1" style="border-collapse: collapse; width: 100%;">
+
+                                  <tbody>
+
+                                  <tr>
+
+                                  <td style="width: 48.1356%;">Status</td>
+
+                                  <td style="width: 48.1356%;">
+
+                                  <pre style="display: inline; font-family: Arial; font-size: 16px;">Active</pre>
+
+                                  </td>
+
+                                  </tr>
+
+                                  <tr>
+
+                                  <td style="width: 48.1356%;">Priority</td>
+
+                                  <td style="width: 48.1356%;">Low</td>
+
+                                  </tr>
+
+                                  </tbody>
+
+                                  </table>'
+                                status: A
+                                textMessage: "New incident3236688964878470 launched:\n\nStatus\tActive\nPriority\tLow\nStatus: Active   \nPriority: Low   "
+                                title: Incident launched for Read Doc - NEW 3236688964878470
+                                useCustomEmail: true
+                                useCustomSms: false
+                              organizationId: 0
+                              priority: NonPriority
+                              publicMessages: {}
+                              resourceBundleId: 0
+                              type: Standard
+                              useEscalation: false
+                            contactsFlag: 3
+                            evaluateAll: false
+                            formTemplate:
+                              formVariableItems:
+                              - isRequired: false
+                                prefixName: '1'
+                                seq: 1
+                                val:
+                                - Active
+                                variableId: 591470146879515
+                                variableName: Status
+                              - isRequired: false
+                                prefixName: '1'
+                                seq: 2
+                                val:
+                                - Low
+                                variableId: 591470146879516
+                                variableName: Priority
+                              preMessage: "New incident3236688964878470 launched:\n\nStatus\tActive\nPriority\tLow"
+                              subject: Incident launched for Read Doc - NEW 3236688964878470
+                              sysVarCurrentTimeFormat: HH:mm:ss
+                              sysVarTodayDateFormat: mm-dd-yyyy
+                            id: 1
+                            ignoreVariable: false
+                            incidentNotificationPropertyBag:
+                              enableExerciseMode: 'false'
+                            messageFlag: 3
+                            name: New
+                            phaseDefinitions:
+                            - id: 1001
+                              isDefault: false
+                              name: New
+                              seq: 0
+                              status: A
+                            publishOptionsFlag:
+                              abb: 1
+                              alertUs: 1
+                              desktopAlerts: 1
+                              ipawsCap: 1
+                              memberPortal: 1
+                              network: 1
+                              nixleChannel: 1
+                              socialMedia: 1
+                              webPosting: 1
+                              webWidget: 1
+                            settingsFlag: 3
+                            templateId: 1536984111644674
+                            templateName: Readme Testing
+                          resourceBundleId: 1536984111644675
+                          status: A
+                        lastModifiedDate: 1754395050072
+                        lastModifiedId: 1530249602924607
+                        lastModifiedName: Vishal Agrawal
+                        launchtype: SendNow
+                        message:
+                          accountId: 1536846672691202
+                          conferenceBridgeId: 0
+                          contentType: Text
+                          createdDate: 1754391424514
+                          createdId: 1530249602924607
+                          createdName: Vishal Agrawal
+                          id: 0
+                          lastModifiedDate: 1754391424514
+                          lastModifiedId: 1530249602924607
+                          lastModifiedName: Vishal Agrawal
+                          organizationId: 1536984111644674
+                          resourceBundleId: 1536984111644675
+                          rtfContent: '<style>body {font-family: ''arial''}</style><p>New incident</p>
+
+                            <pre style="display: inline; font-family: Arial; font-size: 16px;">3236688964878470 launched:<br /><br /></pre>
+
+                            <table border="1" style="border-collapse: collapse; width: 100%;">
+
+                            <tbody>
+
+                            <tr>
+
+                            <td style="width: 48.1356%;">Status</td>
+
+                            <td style="width: 48.1356%;">
+
+                            <pre style="display: inline; font-family: Arial; font-size: 16px;">Active</pre>
+
+                            </td>
+
+                            </tr>
+
+                            <tr>
+
+                            <td style="width: 48.1356%;">Priority</td>
+
+                            <td style="width: 48.1356%;">Low</td>
+
+                            </tr>
+
+                            </tbody>
+
+                            </table>'
+                          status: A
+                          textMessage: "New incident3236688964878470 launched:\n\nStatus\tActive\nPriority\tLow\nStatus: Active   \nPriority: Low   "
+                          title: Incident launched for Read Doc - NEW 3236688964878470
+                          useCustomEmail: true
+                          useCustomSms: false
+                        notificationMode: Live
+                        notificationName: Incident launched for Read Doc - NEW 3236688964878470
+                        notificationResult:
+                          confirmedCount: 0
+                          confirmedLateCount: 0
+                          notConfirmedCount: 0
+                          notificationId: 3236688964878528
+                          totalCount: 0
+                          unreachableCount: 0
+                        notificationStatus: Completed
+                        oldAwareCAMPID: 0
+                        organizationId: 1536984111644674
+                        priority: NonPriority
+                        processedBy: ebs-schedule-task-64cf6b4fd6-f788r
+                        productSource: Matrix
+                        publicMessages: {}
+                        resourceBundleId: 1536984111644675
+                        source: Web
+                        sourceTemplateId: 0
+                        startDate: 1754391425338
+                        status: A
+                        stoppedBy: 0
+                        transformed: true
+                        type: Standard
+                      pageSize: 10
+                      start: 0
+                      totalCount: 1
+                      totalPageCount: 1
+              schema:
+                $ref: '#/components/schemas/RestfulCollectionResult'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '500':
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Get Notifications By Incident
+      tags:
+      - Incident Notifications
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.incidentId: method.request.path.incidentId
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/incidentNotifications/{organizationId}/{incidentId}
+  /incidentNotifications/{organizationId}/{incidentId}/notification:
+    get:
+      operationId: EBS Get Incident Notification
+      parameters:
+      - description: The ID of the organization containing the incident notification
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - description: The ID of the incident to return
+        in: path
+        name: incidentId
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - description: The ID of the incident notification to return
+        in: query
+        name: notificationId
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - description: A boolean indicating whether to return detailed results
+        in: query
+        name: verbose
+        required: false
+        schema:
+          default: false
+          example: false
+          type: boolean
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: success
+                  value:
+                    message: OK
+                    result:
+                      accountId: 1536846672691202
+                      batchNotificationId: 0
+                      broadcastContacts:
+                        answerNeeded: 'Yes'
+                        contactIds:
+                        - 3085815353704521
+                        contactSearchType: AllOr
+                        defaultSeqGroupQuota: 1
+                        enableGroupCalendar: false
+                        enableSendToSubscribers: false
+                        sequenceGroupEnabled: false
+                        sequenceGroupInterval: 5
+                      broadcastSettings:
+                        bookConference: false
+                        confirm: true
+                        contactCycles: 1
+                        cycleInterval: 0
+                        deliverPaths:
+                        - accountId: 1536846672691202
+                          awarePathId: 0
+                          createdDate: 1674823177533
+                          createdId: 1530249602924607
+                          createdName: Vishal Agrawal
+                          default: true
+                          displayFlag: false
+                          editable: false
+                          expose: false
+                          extRequired: false
+                          id: 589820879437825
+                          isDefault: true
+                          lastModifiedDate: 1720788191359
+                          lastModifiedId: 1530249602924608
+                          lastModifiedName: Nandish Siddaiah
+                          mandatory: false
+                          organizationId: 1536984111644674
+                          pathId: 241901148045316
+                          prompt: Email
+                          resourceBundleId: 1536984111644675
+                          seq: 1
+                          status: A
+                        deliveryMethodInterval: 0
+                        deliveryPathOrder: Contact
+                        duration: 1
+                        durationTimeUnit: HOURS
+                        enableBeep: true
+                        enableRecord: false
+                        enableSecureNotification: false
+                        enableSmartConferenceConfirmationText: true
+                        language: en_US
+                        mobileSettings:
+                          allowShare: false
+                          pushAlertEnabled: false
+                          requestComment: false
+                          requestImage: false
+                          requestLocation: false
+                          requireConfirm: false
+                        quietTimeOverride: false
+                        recipientApp: false
+                        requirePinForMessage: false
+                        responseSetting:
+                          profileId: 63f9025e74afd050981becae
+                          type: EVERY
+                        senderCallerInfos:
+                        - accountId: 0
+                          callerId: '7818646213'
+                          countryCode: US
+                          countryName: United States
+                          createdId: 0
+                          id: 0
+                          isDefault: true
+                          lastModifiedId: 0
+                          organizationId: 0
+                          resourceBundleId: 0
+                        senderEmail: SORCH Dev3
+                        throttlDefaultAmount: 0
+                        throttle: false
+                        validateContacts: true
+                        validateContactsByOrganization: false
+                        voiceMailOption: MESSAGE_ONLY
+                      createdDate: 1754391424969
+                      createdId: 1530249602924607
+                      createdName: Vishal Agrawal
+                      enableLifeSafety: false
+                      enableMessageTruncate: false
+                      endDate: 1754395025338
+                      escalatedNotification: false
+                      escalationConfirmedCount: 0
+                      hasNotification: true
+                      id: 3236688964878528
+                      incident:
+                        accountId: 1536846672691202
+                        createdDate: 1754391424032
+                        createdId: 1530249602924607
+                        createdName: Vishal Agrawal
+                        duration: 0
+                        enableMessageTruncate: false
+                        hasJournal: false
+                        id: 3236688964878470
+                        incidentMode: Live
+                        incidentStatus: Open
+                        incidentType: Incident
+                        lastModifiedDate: 1754391424032
+                        lastModifiedId: 1530249602924607
+                        lastModifiedName: Vishal Agrawal
+                        name: Incident launched for Read Doc - NEW 3236688964878470
+                        organizationId: 1536984111644674
+                        phaseStatus:
+                          id: 1001
+                          incidentStatus: Open
+                          isDefault: true
+                          name: New
+                          phaseNodeType: Begin
+                          seq: 100
+                          status: A
+                        resourceBundleId: 1536984111644675
+                        status: A
+                        useTemplateVarValue: false
+                      incidentPhase:
+                        accountId: 1536846672691202
+                        createdDate: 1754391424103
+                        createdId: 1530249602924607
+                        createdName: Vishal Agrawal
+                        id: 10011
+                        incidentId: 3236688964878470
+                        lastModifiedDate: 1754391424103
+                        lastModifiedId: 1530249602924607
+                        lastModifiedName: Vishal Agrawal
+                        name: New
+                        notificationId: -1
+                        organizationId: 1536984111644674
+                        phaseDefinition:
+                          id: 1001
+                          incidentStatus: Open
+                          isDefault: true
+                          name: New
+                          phaseNodeType: Begin
+                          seq: 100
+                          status: A
+                        phaseTemplate:
+                          broadcastTemplate:
+                            accountId: 0
+                            broadcastContacts:
+                              answerNeeded: 'Yes'
+                              contactIds:
+                              - 3085815353704521
+                              contactSearchType: AllOr
+                              defaultSeqGroupQuota: 1
+                              enableGroupCalendar: false
+                              enableSendToSubscribers: false
+                              sequenceGroupEnabled: false
+                              sequenceGroupInterval: 5
+                            broadcastSettings:
+                              bookConference: false
+                              confirm: true
+                              contactCycles: 1
+                              cycleInterval: 0
+                              deliverPaths:
+                              - accountId: 1536846672691202
+                                awarePathId: 0
+                                createdDate: 1674823177533
+                                createdId: 1530249602924607
+                                createdName: Vishal Agrawal
+                                default: true
+                                displayFlag: false
+                                editable: false
+                                expose: false
+                                extRequired: false
+                                id: 589820879437825
+                                isDefault: true
+                                lastModifiedDate: 1720788191359
+                                lastModifiedId: 1530249602924608
+                                lastModifiedName: Nandish Siddaiah
+                                mandatory: false
+                                organizationId: 1536984111644674
+                                pathId: 241901148045316
+                                prompt: Email
+                                resourceBundleId: 1536984111644675
+                                seq: 1
+                                status: A
+                              deliveryMethodInterval: 0
+                              deliveryPathOrder: Contact
+                              duration: 1
+                              durationTimeUnit: HOURS
+                              enableBeep: true
+                              enableRecord: false
+                              enableSecureNotification: false
+                              enableSmartConferenceConfirmationText: true
+                              language: en_US
+                              mobileSettings:
+                                allowShare: false
+                                pushAlertEnabled: false
+                                requestComment: false
+                                requestImage: false
+                                requestLocation: false
+                                requireConfirm: false
+                              quietTimeOverride: false
+                              recipientApp: false
+                              requirePinForMessage: false
+                              responseSetting:
+                                profileId: 63f9025e74afd050981becae
+                                type: EVERY
+                              senderCallerInfos:
+                              - accountId: 0
+                                callerId: '7818646213'
+                                countryCode: US
+                                countryName: United States
+                                createdId: 0
+                                id: 0
+                                isDefault: true
+                                lastModifiedId: 0
+                                organizationId: 0
+                                resourceBundleId: 0
+                              senderEmail: SORCH Dev3
+                              throttlDefaultAmount: 0
+                              throttle: false
+                              validateContacts: true
+                              validateContactsByOrganization: false
+                              voiceMailOption: MESSAGE_ONLY
+                            createdId: 0
+                            enableLifeSafety: false
+                            id: 0
+                            lastModifiedId: 0
+                            message:
+                              accountId: 1536846672691202
+                              conferenceBridgeId: 0
+                              contentType: Text
+                              createdDate: 1754391424514
+                              createdId: 1530249602924607
+                              createdName: Vishal Agrawal
+                              id: 0
+                              lastModifiedDate: 1754391424514
+                              lastModifiedId: 1530249602924607
+                              lastModifiedName: Vishal Agrawal
+                              organizationId: 1536984111644674
+                              resourceBundleId: 1536984111644675
+                              rtfContent: '<style>body {font-family: ''arial''}</style><p>New incident</p>
+
+                                <pre style="display: inline; font-family: Arial; font-size: 16px;">3236688964878470 launched:<br /><br /></pre>
+
+                                <table border="1" style="border-collapse: collapse; width: 100%;">
+
+                                <tbody>
+
+                                <tr>
+
+                                <td style="width: 48.1356%;">Status</td>
+
+                                <td style="width: 48.1356%;">
+
+                                <pre style="display: inline; font-family: Arial; font-size: 16px;">Active</pre>
+
+                                </td>
+
+                                </tr>
+
+                                <tr>
+
+                                <td style="width: 48.1356%;">Priority</td>
+
+                                <td style="width: 48.1356%;">Low</td>
+
+                                </tr>
+
+                                </tbody>
+
+                                </table>'
+                              status: A
+                              textMessage: "New incident3236688964878470 launched:\n\nStatus\tActive\nPriority\tLow\nStatus: Active   \nPriority: Low   "
+                              title: Incident launched for Read Doc - NEW 3236688964878470
+                              useCustomEmail: true
+                              useCustomSms: false
+                            organizationId: 0
+                            priority: NonPriority
+                            publicMessages: {}
+                            resourceBundleId: 0
+                            type: Standard
+                            useEscalation: false
+                          contactsFlag: 3
+                          evaluateAll: false
+                          formTemplate:
+                            formVariableItems:
+                            - isRequired: false
+                              prefixName: '1'
+                              seq: 1
+                              val:
+                              - Active
+                              variableId: 591470146879515
+                              variableName: Status
+                            - isRequired: false
+                              prefixName: '1'
+                              seq: 2
+                              val:
+                              - Low
+                              variableId: 591470146879516
+                              variableName: Priority
+                            preMessage: "New incident3236688964878470 launched:\n\nStatus\tActive\nPriority\tLow"
+                            subject: Incident launched for Read Doc - NEW 3236688964878470
+                            sysVarCurrentTimeFormat: HH:mm:ss
+                            sysVarTodayDateFormat: mm-dd-yyyy
+                          id: 1
+                          ignoreVariable: false
+                          incidentNotificationPropertyBag:
+                            enableExerciseMode: 'false'
+                          messageFlag: 3
+                          name: New
+                          phaseDefinitions:
+                          - id: 1001
+                            isDefault: false
+                            name: New
+                            seq: 0
+                            status: A
+                          publishOptionsFlag:
+                            abb: 1
+                            alertUs: 1
+                            desktopAlerts: 1
+                            ipawsCap: 1
+                            memberPortal: 1
+                            network: 1
+                            nixleChannel: 1
+                            socialMedia: 1
+                            webPosting: 1
+                            webWidget: 1
+                          settingsFlag: 3
+                          templateId: 1536984111644674
+                          templateName: Readme Testing
+                        resourceBundleId: 1536984111644675
+                        status: A
+                      lastModifiedDate: 1754395050072
+                      lastModifiedId: 1530249602924607
+                      lastModifiedName: Vishal Agrawal
+                      launchtype: SendNow
+                      message:
+                        accountId: 1536846672691202
+                        conferenceBridgeId: 0
+                        contentType: Text
+                        createdDate: 1754391424514
+                        createdId: 1530249602924607
+                        createdName: Vishal Agrawal
+                        id: 0
+                        lastModifiedDate: 1754391424514
+                        lastModifiedId: 1530249602924607
+                        lastModifiedName: Vishal Agrawal
+                        organizationId: 1536984111644674
+                        resourceBundleId: 1536984111644675
+                        rtfContent: '<style>body {font-family: ''arial''}</style><p>New incident</p>
+
+                          <pre style="display: inline; font-family: Arial; font-size: 16px;">3236688964878470 launched:<br /><br /></pre>
+
+                          <table border="1" style="border-collapse: collapse; width: 100%;">
+
+                          <tbody>
+
+                          <tr>
+
+                          <td style="width: 48.1356%;">Status</td>
+
+                          <td style="width: 48.1356%;">
+
+                          <pre style="display: inline; font-family: Arial; font-size: 16px;">Active</pre>
+
+                          </td>
+
+                          </tr>
+
+                          <tr>
+
+                          <td style="width: 48.1356%;">Priority</td>
+
+                          <td style="width: 48.1356%;">Low</td>
+
+                          </tr>
+
+                          </tbody>
+
+                          </table>'
+                        status: A
+                        textMessage: "New incident3236688964878470 launched:\n\nStatus\tActive\nPriority\tLow\nStatus: Active   \nPriority: Low   "
+                        title: Incident launched for Read Doc - NEW 3236688964878470
+                        useCustomEmail: true
+                        useCustomSms: false
+                      notificationMode: Live
+                      notificationName: Incident launched for Read Doc - NEW 3236688964878470
+                      notificationResult:
+                        confirmedCount: 0
+                        confirmedLateCount: 0
+                        notConfirmedCount: 0
+                        notificationId: 3236688964878528
+                        totalCount: 0
+                        unreachableCount: 0
+                      notificationStatus: Completed
+                      oldAwareCAMPID: 0
+                      organizationId: 1536984111644674
+                      priority: NonPriority
+                      processedBy: ebs-schedule-task-64cf6b4fd6-f788r
+                      productSource: Matrix
+                      publicMessages: {}
+                      resourceBundleId: 1536984111644675
+                      source: Web
+                      sourceTemplateId: 0
+                      startDate: 1754391425338
+                      status: A
+                      stoppedBy: 0
+                      transformed: true
+                      type: Standard
+              schema:
+                $ref: '#/components/schemas/RestfulInstanceResult'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '500':
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Get Incident Notification
+      tags:
+      - Incident Notifications
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.incidentId: method.request.path.incidentId
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/incidentNotifications/{organizationId}/{incidentId}/notification
+components:
+  schemas:
+    RestfulInstanceResult:
+      properties:
+        message:
+          type: string
+        result:
+          type: object
+      title: RestfulInstanceResult
+      type: object
+    DataPageObject:
+      properties:
+        currentPageNo:
+          format: int32
+          type: integer
+        data:
+          items:
+            type: object
+          type: array
+        dataPageList:
+          items:
+            $ref: '#/components/schemas/DataPageObject'
+          type: array
+        pageSize:
+          format: int32
+          type: integer
+        scrollId:
+          type: string
+        start:
+          format: int32
+          type: integer
+        totalCount:
+          format: int64
+          type: integer
+        totalPageCount:
+          format: int32
+          type: integer
+      title: DataPage«object»
+      type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
+    RestfulCollectionResult:
+      properties:
+        currentPageUri:
+          type: string
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        nextPageUri:
+          type: string
+        page:
+          $ref: '#/components/schemas/DataPageObject'
+        previousPageUri:
+          type: string
+      title: RestfulCollectionResult
+      type: object
+  securitySchemes:
+    API_Authorizer:
+      description: oAuth Token
+      in: header
+      name: Authorization
+      type: apiKey
+      x-amazon-apigateway-authorizer:
+        authorizerCredentials: arn:aws:iam::214792946631:role/oas-rest-api-gw-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+      x-amazon-apigateway-authtype: custom
+    BasicAuth:
+      description: Basic Authentication Token
+      scheme: basic
+      type: http
+    api_key:
+      description: API Key - For System Use
+      in: header
+      name: x-api-key
+      type: apiKey
+x-amazon-apigateway-binary-media-types:
+- audio/wav
+- audio/x-wav
+- application/octet-stream
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

@@ -1,0 +1,358 @@
+openapi: 3.2.0
+info:
+  description: EB Suite APIs.
+  title: EB Suite Staff API
+  version: '1.0'
+servers:
+- url: https://api.everbridge.net/rest
+- url: https://api.everbridge.eu/rest
+tags:
+- description: EB Suites - Scheduling Assignment Management
+  name: Staff
+paths:
+  /staff/{organizationId}/assignment/{externalId}:
+    get:
+      operationId: EBS Get Staff Assigned By Calendar ExternalId
+      parameters:
+      - description: The ID of the organization containing the contacts
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - description: The external id of calendar
+        in: path
+        name: externalId
+        required: true
+        schema:
+          type: string
+      - description: The name of the shift
+        in: query
+        name: shiftName
+        required: true
+        schema:
+          type: string
+      - description: The beginning date time range, leaving empty will use the current time.
+        in: query
+        name: from
+        required: true
+        schema:
+          type: string
+      - description: The ending date time range, leaving empty will use the current time.
+        in: query
+        name: to
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CalendarStaffShiftAssignmentsWrapperInstanceResult'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '404':
+          description: Resource not found
+        '500':
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Get Staff Assigned By Calendar ExternalId
+      tags:
+      - Staff
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.externalId: method.request.path.externalId
+          integration.request.path.organizationId: method.request.path.organizationId
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/staff/{organizationId}/assignment/{externalId}
+components:
+  schemas:
+    CalendarWrapper:
+      properties:
+        accountId:
+          format: int64
+          type: integer
+        active:
+          type: boolean
+        createdDate:
+          format: date-time
+          type: string
+        createdDateString:
+          type: string
+        createdId:
+          format: int64
+          type: integer
+        createdName:
+          type: string
+        createdProxyName:
+          type: string
+        emailNotificationEnabled:
+          type: boolean
+        emailNotificationList:
+          items:
+            type: string
+          type: array
+        externalId:
+          type: string
+        id:
+          format: int64
+          type: integer
+        lastModifiedDate:
+          format: date-time
+          type: string
+        lastModifiedDateString:
+          type: string
+        lastModifiedId:
+          format: int64
+          type: integer
+        lastModifiedName:
+          type: string
+        lastModifiedProxyName:
+          type: string
+        name:
+          type: string
+        organizationId:
+          format: int64
+          type: integer
+        resourceBundleId:
+          format: int64
+          type: integer
+        shiftIds:
+          items:
+            format: int64
+            type: integer
+          type: array
+        status:
+          enum:
+          - A
+          - D
+          type: string
+      type: object
+    CalendarStaffShiftAssignmentsWrapper:
+      properties:
+        calendar:
+          $ref: '#/components/schemas/CalendarWrapper'
+        staffAssignments:
+          items:
+            $ref: '#/components/schemas/StaffShiftAssignmentsWrapper'
+          type: array
+          uniqueItems: true
+      type: object
+    ShiftExceptions:
+      properties:
+        accountId:
+          format: int64
+          type: integer
+        createdAmsRoleId:
+          type: string
+        createdDate:
+          format: date-time
+          type: string
+        createdId:
+          format: int64
+          type: integer
+        createdName:
+          type: string
+        createdProxyName:
+          type: string
+        eventRecurrenceType:
+          enum:
+          - ONCE
+          - RANGE
+          - ROTATION_WEEK
+          type: string
+        eventRecurrenceValue:
+          format: int32
+          type: integer
+        id:
+          format: int64
+          type: integer
+        lastModifiedAmsRoleId:
+          type: string
+        lastModifiedDate:
+          format: date-time
+          type: string
+        lastModifiedId:
+          format: int64
+          type: integer
+        lastModifiedName:
+          type: string
+        lastModifiedProxyName:
+          type: string
+        organizationId:
+          format: int64
+          type: integer
+        resourceBundleId:
+          format: int64
+          type: integer
+        schedulingCalendarId:
+          format: int64
+          type: integer
+        shiftApplicabilityIntervals:
+          items:
+            $ref: '#/components/schemas/TimingInterval'
+          type: array
+        shiftIntervals:
+          items:
+            enum:
+            - MONDAY
+            - TUESDAY
+            - WEDNESDAY
+            - THURSDAY
+            - FRIDAY
+            - SATURDAY
+            - SUNDAY
+            - EVERYDAY
+            type: string
+          type: array
+          uniqueItems: true
+        shortId:
+          type: string
+        staffId:
+          format: int64
+          type: integer
+        status:
+          enum:
+          - A
+          - D
+          type: string
+      type: object
+    ShiftAssignmentWrapper:
+      properties:
+        dayOfShift:
+          enum:
+          - MONDAY
+          - TUESDAY
+          - WEDNESDAY
+          - THURSDAY
+          - FRIDAY
+          - SATURDAY
+          - SUNDAY
+          - EVERYDAY
+          type: string
+        shiftApplicabilityInterval:
+          $ref: '#/components/schemas/TimingInterval'
+        shiftApplicabilityIntervalFrom:
+          type: string
+        shiftApplicabilityIntervalTo:
+          type: string
+        shiftExceptions:
+          items:
+            $ref: '#/components/schemas/ShiftExceptions'
+          type: array
+        shiftId:
+          format: int64
+          type: integer
+        shiftName:
+          type: string
+        staffContactid:
+          format: int64
+          type: integer
+        staffMember:
+          $ref: '#/components/schemas/Staff'
+        staffShiftAssignmentId:
+          format: int64
+          type: integer
+      type: object
+    StaffShiftAssignmentsWrapper:
+      properties:
+        externalId:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        middleInitial:
+          type: string
+        shiftAssignments:
+          items:
+            $ref: '#/components/schemas/ShiftAssignmentWrapper'
+          type: array
+        staffId:
+          format: int64
+          type: integer
+        suffix:
+          type: string
+      type: object
+    TimingInterval:
+      properties:
+        from:
+          format: date-time
+          type: string
+        fromDate:
+          format: date-time
+          type: string
+        to:
+          format: date-time
+          type: string
+        toDate:
+          format: date-time
+          type: string
+      type: object
+    Staff:
+      properties:
+        externalId:
+          type: string
+        firstName:
+          type: string
+        id:
+          format: int64
+          type: integer
+        lastName:
+          type: string
+        middleInitial:
+          type: string
+        suffix:
+          type: string
+        unavailable:
+          type: boolean
+      type: object
+    CalendarStaffShiftAssignmentsWrapperInstanceResult:
+      properties:
+        message:
+          type: string
+        result:
+          $ref: '#/components/schemas/CalendarStaffShiftAssignmentsWrapper'
+      type: object
+  securitySchemes:
+    API_Authorizer:
+      description: oAuth Token
+      in: header
+      name: Authorization
+      type: apiKey
+      x-amazon-apigateway-authorizer:
+        authorizerCredentials: arn:aws:iam::214792946631:role/oas-rest-api-gw-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+      x-amazon-apigateway-authtype: custom
+    BasicAuth:
+      description: Basic Authentication Token
+      scheme: basic
+      type: http
+    api_key:
+      description: API Key - For System Use
+      in: header
+      name: x-api-key
+      type: apiKey
+x-amazon-apigateway-binary-media-types:
+- audio/wav
+- audio/x-wav
+- application/octet-stream
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

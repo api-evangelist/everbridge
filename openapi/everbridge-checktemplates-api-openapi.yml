@@ -1,0 +1,276 @@
+openapi: 3.2.0
+info:
+  title: PNR Check Service Check Templates API
+  description: Universal Travel Connector API to interface with MongoDB to perform CRUD actions for itinerary checks
+  version: v1
+servers:
+- url: https://api.everbridge.net//travel-connector/v1/checks
+tags:
+- name: CheckTemplates
+  description: API endpoints for check template management
+paths:
+  /checktemplates:
+    post:
+      tags:
+      - CheckTemplates
+      summary: Create a new check template
+      requestBody:
+        description: The check template to create
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCheckTemplateRequest'
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+      security:
+      - API_Authorizer: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        connectionId: 11ofco
+        httpMethod: POST
+        uri: http://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/utc/utc-pnr-check-service/checktemplates
+        responses:
+          default:
+            statusCode: '200'
+        passthroughBehavior: when_no_match
+        connectionType: VPC_LINK
+    get:
+      tags:
+      - CheckTemplates
+      summary: Get all check templates
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CheckTemplate'
+        '500':
+          description: Internal Server Error
+      security:
+      - API_Authorizer: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        connectionId: 11ofco
+        httpMethod: GET
+        uri: http://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/utc/utc-pnr-check-service/checktemplates
+        responses:
+          default:
+            statusCode: '200'
+        passthroughBehavior: when_no_match
+        connectionType: VPC_LINK
+  /checktemplates/{id}:
+    get:
+      tags:
+      - CheckTemplates
+      summary: Get a check template by ID
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckTemplate'
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      security:
+      - API_Authorizer: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        connectionId: 11ofco
+        httpMethod: GET
+        uri: http://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/utc/utc-pnr-check-service/checktemplates/{id}
+        responses:
+          default:
+            statusCode: '200'
+        passthroughBehavior: when_no_match
+        connectionType: VPC_LINK
+    put:
+      tags:
+      - CheckTemplates
+      summary: Update an existing check template
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: The check template to update
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCheckTemplateRequest'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      security:
+      - API_Authorizer: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        connectionId: 11ofco
+        httpMethod: PUT
+        uri: http://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/utc/utc-pnr-check-service/checktemplates/{id}
+        responses:
+          default:
+            statusCode: '200'
+        passthroughBehavior: when_no_match
+        connectionType: VPC_LINK
+    delete:
+      tags:
+      - CheckTemplates
+      summary: Delete a check template by ID
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      security:
+      - API_Authorizer: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        connectionId: 11ofco
+        httpMethod: DELETE
+        uri: http://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/utc/utc-pnr-check-service/checktemplates/{id}
+        responses:
+          default:
+            statusCode: '200'
+        passthroughBehavior: when_no_match
+        connectionType: VPC_LINK
+  /checktemplates/source/{sourceId}:
+    get:
+      tags:
+      - CheckTemplates
+      summary: Get check templates by source ID
+      parameters:
+      - name: sourceId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CheckTemplate'
+        '500':
+          description: Internal Server Error
+      security:
+      - API_Authorizer: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        connectionId: 11ofco
+        httpMethod: GET
+        uri: http://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/utc/utc-pnr-check-service/checktemplates/source/{sourceId}
+        responses:
+          default:
+            statusCode: '200'
+        passthroughBehavior: when_no_match
+        connectionType: VPC_LINK
+components:
+  schemas:
+    CreateCheckTemplateRequest:
+      type: object
+      properties:
+        sourceId:
+          type: string
+        sourceName:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        path:
+          type: string
+    CheckTemplate:
+      type: object
+      properties:
+        id:
+          type: string
+        sourceId:
+          type: string
+        sourceName:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        path:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    UpdateCheckTemplateRequest:
+      type: object
+      properties:
+        sourceId:
+          type: string
+        sourceName:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        path:
+          type: string
+  securitySchemes:
+    API_Authorizer:
+      type: apiKey
+      name: Authorization
+      in: header
+      x-amazon-apigateway-authtype: custom
+      x-amazon-apigateway-authorizer:
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        authorizerCredentials: arn:aws:iam::214792946631:role/utc-pnr-check-service-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+    api_key:
+      type: apiKey
+      name: x-api-key
+      in: header
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

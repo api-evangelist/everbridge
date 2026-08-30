@@ -1,0 +1,266 @@
+openapi: 3.2.0
+info:
+  title: Communications Message Builder APIs API
+  description: Unified Communications APIs
+  version: '1.0'
+servers:
+- url: https://api.everbridge.net/managerapps/communications/v1
+tags:
+- name: Message Builder APIs
+paths:
+  /message-builder:
+    post:
+      tags:
+      - Message Builder APIs
+      operationId: GenerateMessage
+      summary: Generate Message
+      description: Generate a message by applying operations to source content with optional message context.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateMessageRequest'
+            examples:
+              Basic message generation:
+                summary: Basic message generation
+                value:
+                  sourceContent: Hello this is a test!
+                  contentType: text/plain
+                  operations:
+                  - type: length
+                    value: Shortest
+                  - type: tone
+                    value: Critical
+                  - type: rectify
+                  maxChars: 1024
+                  sessionId: session-example
+              Message generation with context:
+                summary: Message generation with  message context
+                value:
+                  sourceContent: Welcome to our service{{{custom.[name]}}}!
+                  contentType: text/plain
+                  operations:
+                  - type: length
+                    value: Longer
+                  - type: tone
+                    value: Critical
+                  - type: rectify
+                  messageContext:
+                    eventType: flood
+                    templateId: CommTemplate://xxx
+                    context:
+                      variables:
+                        id: '111111'
+                        value: mary
+                  maxChars: 1024
+                  sessionId: example-session-id
+        required: true
+      responses:
+        '200':
+          description: Message generated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateMessageResponse'
+        '400':
+          description: The request failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+        '401':
+          description: The token provided does not have permission to access this API.
+        '500':
+          description: An internal error has occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+      security:
+      - API_Authorizer: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        connectionId: 11ofco
+        httpMethod: POST
+        uri: https://prod-us-us-east-1-0-os-nginx.ue1-0.prod-us.prod.us-east-1.evbg.io/cem-comms/message-builder
+        responses:
+          default:
+            statusCode: '200'
+        passthroughBehavior: when_no_match
+        connectionType: VPC_LINK
+components:
+  schemas:
+    GenerateMessageOperation:
+      type: object
+      description: An operation to apply to the source content
+      oneOf:
+      - $ref: '#/components/schemas/ToneOperation'
+      - $ref: '#/components/schemas/RectifyOperation'
+      - $ref: '#/components/schemas/LengthOperation'
+    ToneOperation:
+      type: object
+      required:
+      - type
+      - value
+      properties:
+        type:
+          type: string
+          enum:
+          - Tone
+        value:
+          type: string
+          enum:
+          - Urgent
+          - Directive
+          - Informational
+          - Reassuring
+          description: The tone to apply
+    GenerateMessageRequest:
+      type: object
+      required:
+      - operations
+      properties:
+        sourceContent:
+          type: string
+          description: The source input content to process.
+        contentType:
+          type: string
+          default: text/plain
+          description: Content type of the source content
+        contentChunkIndex:
+          type: integer
+          description: The chunk index. 0 is first chunk.-1 is the last chunk
+        operations:
+          type: array
+          items:
+            $ref: '#/components/schemas/GenerateMessageOperation'
+          description: Operations to apply to the source content
+        messageContext:
+          $ref: '#/components/schemas/GenerateMessageContext'
+        maxChars:
+          type: integer
+          description: Maximum character limit for the generated message
+        sessionId:
+          type: string
+          description: A unique session identifier used to maintain conversation state across multiple interactions。
+    GenerateMessageResponse:
+      type: object
+      properties:
+        content:
+          type: string
+          description: The final content.
+        sessionId:
+          type: string
+          description: A unique session identifier used to maintain conversation state across multiple interactions。
+    GenerateMessageContext:
+      type: object
+      properties:
+        eventType:
+          type: string
+          description: Type of event triggering the message
+        templateId:
+          type: string
+          description: 'An ID of a template to use for this communication. Supported template types:
+
+            - Communication Template: IDs of the form `commsTemplate://{id}`
+
+            - Notification Template (legacy): IDs of the form `legacyMN://{id}`
+
+            - Incident Template (legacy): IDs of the form `legacyIC://{id}/{phaseName}`
+
+            For legacy templates, you can retrieve template details via the `/templates/convert` API.'
+          example: commsTemplate://bdbc6a41-ce36-4c14-9add-36306a46c95f
+        context:
+          type: object
+          description: Various contextual properties to be used with `templateId`.
+          properties:
+            variables:
+              type: array
+              description: Variables to use within templates specified by `templateId`.
+              items:
+                type: object
+                description: An individual variable ID and its value. The `value` property may take on multiple forms depending on the type of the variable specified in the [Variable Library](https://developers.everbridge.net/internal/reference/get_v1).
+                properties:
+                  variableId:
+                    type: string
+                    description: The ID of the variable, as described by the Variable Library.
+                  value:
+                    oneOf:
+                    - type: string
+                      description: "A single string value for a variable. This would include single selection variables, textbox variables, textarea variables, and date variables. \n\n*Note:* It is recommended to send the value for date variables as an ISO 8601 date and time string (`2024-11-19T14:01:31Z`). The Communications API will automatically format the value based on the specified formatting of the variable in the Variable Library."
+                    - type: array
+                      description: Specifies multiple values for a variable. This is intended to be used with the multiple selection variable only.
+                      items:
+                        type: string
+            contextIds:
+              type: array
+              description: IDs of contextual objects to use in the template. Each ID takes the form of `shortName://sourceID` where `shortName` is the property of the same name from the Context APIs and the `sourceID` is the identifier from the context source. Please see the documentation on the Context APIs for more information.
+              maxItems: 1
+              items:
+                type: string
+    LengthOperation:
+      type: object
+      required:
+      - type
+      - value
+      properties:
+        type:
+          type: string
+          enum:
+          - Length
+        value:
+          type: string
+          enum:
+          - Shortest
+          - Shorter
+          - Same
+          - Longer
+          - Longest
+          description: Value for length adjustment
+    RectifyOperation:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - Rectify
+    ProblemDetail:
+      type: object
+      description: An RFC-7807 compliant model for error details.
+      properties:
+        type:
+          type: string
+          description: A URI that identifies the problem type.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem type.
+        status:
+          type: integer
+          description: The HTTP response status code describing the error.
+        detail:
+          type: string
+          description: A human-readable explanation of the specific problem.
+        instance:
+          type: string
+          description: A URI that identifies the specific problem.
+  securitySchemes:
+    API_Authorizer:
+      type: apiKey
+      name: Authorization
+      in: header
+      x-amazon-apigateway-authtype: custom
+      x-amazon-apigateway-authorizer:
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        authorizerCredentials: arn:aws:iam::214792946631:role/comms-unified-gateway-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+    api_key:
+      type: apiKey
+      name: x-api-key
+      in: header
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

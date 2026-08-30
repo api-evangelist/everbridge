@@ -1,0 +1,241 @@
+openapi: 3.2.0
+info:
+  description: EB Suite APIs.
+  title: EB Suite Constants API
+  version: '1.0'
+servers:
+- url: https://api.everbridge.net/rest
+- url: https://api.everbridge.eu/rest
+tags:
+- description: EB Suites - Access System Constants
+  name: Constants
+paths:
+  /constants:
+    get:
+      operationId: EBS Get Constants
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestfulCollectionResultConstantValueWrapper'
+          description: OK
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Get Constants
+      tags:
+      - Constants
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters: {}
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/constants
+  /constants/{type}:
+    get:
+      description: Retrieve all constant values for a given type
+      operationId: EBS Query Constants
+      parameters:
+      - description: Type of constants to retrieve.
+        in: path
+        name: type
+        required: true
+        schema:
+          enum:
+          - STATE
+          - COUNTRY
+          - COUNTRY_NUMBER
+          - BC_LANGUAGE
+          - LANGUAGE
+          - PASSWORD_HINT
+          - ZOOM_LEVEL
+          - PROJECTION
+          - TIME_ZONE
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestfulCollectionResult'
+          description: OK
+        '400':
+          description: Missing or invalid request input
+        '401':
+          description: Invalid or missing credentials
+        '500':
+          description: Internal Error
+      security:
+      - BasicAuth: []
+      - API_Authorizer: []
+      - api_key: []
+      summary: Query Constants
+      tags:
+      - Constants
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.path.type: method.request.path.type
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/constants/{type}
+components:
+  schemas:
+    ConstantValueWrapper:
+      properties:
+        code:
+          type: string
+        id:
+          format: int64
+          type: integer
+        key:
+          type: string
+        language:
+          type: string
+        lookupType:
+          type: string
+        seq:
+          format: int32
+          type: integer
+        siteSpecific:
+          enum:
+          - Y
+          - N
+          type: string
+        status:
+          enum:
+          - A
+          - D
+          type: string
+        value:
+          type: string
+      type: object
+    RestfulCollectionResult:
+      properties:
+        currentPageUri:
+          type: string
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        nextPageUri:
+          type: string
+        page:
+          $ref: '#/components/schemas/DataPageObject'
+        previousPageUri:
+          type: string
+      title: RestfulCollectionResult
+      type: object
+    DataPageConstantValueWrapper:
+      properties:
+        currentPageNo:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/ConstantValueWrapper'
+          type: array
+        dataPageList:
+          items:
+            $ref: '#/components/schemas/DataPageConstantValueWrapper'
+          type: array
+        pageSize:
+          format: int32
+          type: integer
+        scrollId:
+          type: string
+        start:
+          format: int32
+          type: integer
+        totalCount:
+          format: int64
+          type: integer
+        totalPageCount:
+          format: int32
+          type: integer
+      type: object
+    RestfulCollectionResultConstantValueWrapper:
+      properties:
+        currentPageUri:
+          type: string
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        nextPageUri:
+          type: string
+        page:
+          $ref: '#/components/schemas/DataPageConstantValueWrapper'
+        previousPageUri:
+          type: string
+      type: object
+    DataPageObject:
+      properties:
+        currentPageNo:
+          format: int32
+          type: integer
+        data:
+          items:
+            type: object
+          type: array
+        dataPageList:
+          items:
+            $ref: '#/components/schemas/DataPageObject'
+          type: array
+        pageSize:
+          format: int32
+          type: integer
+        scrollId:
+          type: string
+        start:
+          format: int32
+          type: integer
+        totalCount:
+          format: int64
+          type: integer
+        totalPageCount:
+          format: int32
+          type: integer
+      title: DataPage«object»
+      type: object
+  securitySchemes:
+    API_Authorizer:
+      description: oAuth Token
+      in: header
+      name: Authorization
+      type: apiKey
+      x-amazon-apigateway-authorizer:
+        authorizerCredentials: arn:aws:iam::214792946631:role/oas-rest-api-gw-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+      x-amazon-apigateway-authtype: custom
+    BasicAuth:
+      description: Basic Authentication Token
+      scheme: basic
+      type: http
+    api_key:
+      description: API Key - For System Use
+      in: header
+      name: x-api-key
+      type: apiKey
+x-amazon-apigateway-binary-media-types:
+- audio/wav
+- audio/x-wav
+- application/octet-stream
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

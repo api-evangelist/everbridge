@@ -1,0 +1,1819 @@
+openapi: 3.2.0
+info:
+  description: EB Suite APIs.
+  title: EB Suite Users API
+  version: '1.0'
+servers:
+- url: https://api.everbridge.net/rest
+- url: https://api.everbridge.eu/rest
+tags:
+- description: EB Suites - Users Management
+  name: Users
+paths:
+  /users:
+    get:
+      description: Retrieve all users for an account.
+      operationId: EBS List Users
+      parameters:
+      - description: Filter users by roleId.
+        in: query
+        name: roleId
+        required: false
+        schema:
+          $ref: '#/components/schemas/roleId'
+      - description: Filter users by firstName.
+        in: query
+        name: firstName
+        required: false
+        schema:
+          type: string
+      - description: Filter users by lastName.
+        in: query
+        name: lastName
+        required: false
+        schema:
+          type: string
+      - description: Sort users by ASC or DESC.
+        in: query
+        name: orderDirection
+        required: false
+        schema:
+          enum:
+          - ASC
+          - DESC
+          type: string
+      - description: The page of user data to return. Page size is 10, and pageNumber is assumed to be 1 if not provided
+        in: query
+        name: pageNumber
+        required: false
+        schema:
+          default: 1
+          example: 1
+          type: integer
+      - description: The page size for users to return. Default value is 1000. Maximum value is 1000
+        in: query
+        name: pageSize
+        required: false
+        schema:
+          default: 1000
+          example: 1000
+          maximum: 1000
+          minimum: 1
+          type: integer
+      - description: 'Filter users by userStatus, allowable values: Active, Inactive.'
+        in: query
+        name: userStatus
+        required: false
+        schema:
+          enum:
+          - Active
+          - Inactive
+          type: string
+      - description: 'Sort users by column name, allowable values: firstName, lastName or lastModifiedDate.'
+        in: query
+        name: columnName
+        required: false
+        schema:
+          default: firstName
+          enum:
+          - firstName
+          - lastName
+          - lastModifiedDate
+          type: string
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Users in an account:
+                summary: Users in an account
+                value:
+                  columnName: firstName
+                  firstName: ''
+                  lastName: ''
+                  orderDirection: DESC
+                  roleId: '1503449006997507'
+                  userStatus: Active
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Success:
+                  summary: Response Model
+                  value:
+                    firstPageUri: https://api-dev3.everbridge.net/rest/users/?roleId=1503449006997507&orderDirection=ASC&userStatus=Active&columnName=firstName&pageNumber=1
+                    lastPageUri: https://api-dev3.everbridge.net/rest/users/?roleId=1503449006997507&orderDirection=ASC&userStatus=Active&columnName=firstName&pageNumber=1
+                    message: OK
+                    page:
+                      currentPageNo: 1
+                      data:
+                      - apiAccess: true
+                        autoProvisionForEBU: false
+                        contactId: 0
+                        contactOrgId: 0
+                        defaultRoleId: 1830966033121292
+                        email: yuntao.guo@everbridge.com
+                        externalId: string
+                        firstName: yuntao02
+                        flowDesignerOrgs:
+                        - 111, 222, 333
+                        id: 560617786179585
+                        lastLoginDate: 1698116290282
+                        lastModifiedDate: 1698116282443
+                        lastModifiedName: yuntao guo
+                        lastModifiedProxyName: string
+                        lastName: guo
+                        locked: false
+                        middlename: string
+                        owner: yuntao
+                        roleIds:
+                        - 1503449006997507
+                        - 449704550727682
+                        - 1830966033121292
+                        roles:
+                        - id: 449704550727682
+                          name: Organization Admin
+                          roleTemplate: ORGANIZATION_ADMIN
+                        - id: 1503449006997507
+                          name: Organization Admin
+                          roleTemplate: ORGANIZATION_ADMIN
+                        - id: 1830966033121292
+                          name: gm1
+                          roleDataScope:
+                            broadcastTemplateIds:
+                            - -1
+                            groupIds:
+                            - 1662603315118183
+                          roleTemplate: GROUP_MANAGER
+                        secondaryEmail: string
+                        ssoUserId: string
+                        suffix: string
+                        userName: yuntao02
+                        userStatus: Active
+                      pageSize: 10
+                      start: 0
+                      totalCount: 1
+                      totalPageCount: 1
+              schema:
+                $ref: '#/components/schemas/getUsers'
+          description: Model
+        '400':
+          content:
+            application/json:
+              examples:
+                Invalid Request Input:
+                  summary: Invalid Input
+                  value:
+                    message: type mismatch exception
+                    status: 400
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Missing or invalid request input
+                    enum:
+                    - '400'
+                    type: string
+                type: object
+          description: Invalid request input
+        '401':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Invalid Credentials
+                  value:
+                    message: 'Invalid credentials: Password invalid'
+                    status: 401
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Invalid or missing credentials
+                    enum:
+                    - '401'
+                    type: string
+                type: object
+          description: Invalid Credentials
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      summary: List Users
+      tags:
+      - Users
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.header.Authorization: context.authorizer.override_token
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/users
+    post:
+      description: Create a user for an account.
+      operationId: EBS Create User
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Create user with basic properties:
+                summary: Create user with basic properties
+                value:
+                  email: example@everbridge.com
+                  firstName: example
+                  lastName: example
+              Create user with most properties:
+                summary: Create user with most properties
+                value:
+                  apiAccess: true
+                  autoProvisionForEBU: false
+                  contactId: 1814748236611732
+                  contactOrgId: 1814748236611733
+                  defaultRoleId: 1814748236611731
+                  email: example@everbridge.com
+                  externalId: exampleExternalId
+                  firstName: example
+                  flowDesignerOrgs:
+                  - 111, 222, 333
+                  lastName: example
+                  middlename: example
+                  roleIds:
+                  - 1503449006997507
+                  - 1814748236611731
+                  secondaryEmail: example2@everbridge.com
+                  ssoUserId: 'exampleSsoId '
+                  suffix: example
+                  timeZoneId: America/New_York
+              Create user with role:
+                summary: Create user with role
+                value:
+                  email: example@everbridge.com
+                  firstName: example
+                  lastName: example
+                  roleIds:
+                  - 1503449006997507
+                  - 1814748236611731
+            schema:
+              $ref: '#/components/schemas/userRequest'
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Updated:
+                  summary: Success
+                  value:
+                    baseUri: https://api-dev3.everbridge.net/rest/users/
+                    id: 1972869068226561
+                    instanceUri: https://api-dev3.everbridge.net/rest/users/1972869068226561
+                    message: OK
+              schema:
+                $ref: '#/components/schemas/postUpdateResponse'
+          description: Success
+        '400':
+          content:
+            application/json:
+              examples:
+                Invalid Request Input:
+                  summary: Invalid Input
+                  value:
+                    message: type mismatch exception
+                    status: 400
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Missing or invalid request input
+                    enum:
+                    - '400'
+                    type: string
+                type: object
+          description: Invalid request input
+        '401':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Invalid Credentials
+                  value:
+                    message: 'Invalid credentials: Password invalid'
+                    status: 401
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Invalid or missing credentials
+                    enum:
+                    - '401'
+                    type: string
+                type: object
+          description: Invalid Credentials
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      summary: Create User
+      tags:
+      - Users
+      x-amazon-apigateway-integration:
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.header.Authorization: context.authorizer.override_token
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/users
+  /users/list/basic:
+    get:
+      description: Internal endpoint (not published).
+      operationId: EBS List Users Basic
+      parameters:
+      - description: Page number.
+        in: query
+        name: page
+        required: true
+        schema:
+          default: 1
+          example: 1
+          type: integer
+      - description: Page size.
+        in: query
+        name: size
+        required: true
+        schema:
+          default: 20
+          example: 20
+          type: integer
+      - description: User keyword search.
+        in: query
+        name: keyword
+        required: false
+        schema:
+          type: string
+      - description: Sort column name.
+        in: query
+        name: sidx
+        required: false
+        schema:
+          type: string
+      - description: Sort direction (asc|desc).
+        in: query
+        name: sord
+        required: false
+        schema:
+          enum:
+          - asc
+          - desc
+          type: string
+      responses:
+        '200':
+          description: Paginated list of basic users.
+      security: []
+      summary: List basic users with pagination.
+      tags:
+      - Users
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/users/list/basic
+  /users/{id}:
+    delete:
+      deprecated: false
+      description: Delete the specified user
+      operationId: EBS Delete user
+      parameters:
+      - description: The ID/External ID of the user to delete
+        in: path
+        name: id
+        required: true
+        schema:
+          default: '0'
+          example: '595799473913944'
+          type: string
+      - allowEmptyValue: false
+        description: Whether to delete by user.id or user.externalId.
+        in: query
+        name: idType
+        required: false
+        schema:
+          default: id
+          enum:
+          - id
+          - externalId
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Response Model:
+                  summary: Success
+                  value:
+                    baseUri: https://api-dev3.everbridge.net/rest/users/
+                    id: 1972869068226561
+                    instanceUri: https://api-dev3.everbridge.net/rest/users/1972869068226561
+                    message: OK
+              schema:
+                $ref: '#/components/schemas/postUpdateResponse'
+          description: Success
+        '404':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: User {userID} not found
+                  value:
+                    message: User {userID} not found
+                    status: 404
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: User {userID} not found
+                    enum:
+                    - '404'
+                    type: string
+                type: object
+          description: User {userID} not found
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      summary: Delete user
+      tags:
+      - Users
+      x-amazon-apigateway-integration:
+        httpMethod: DELETE
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.header.Authorization: context.authorizer.override_token
+          integration.request.path.id: method.request.path.id
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/users/{id}
+    get:
+      deprecated: false
+      description: Retrieve details of an user by specific ID(user ID/SSO ID/External ID).
+      operationId: EBS Get User
+      parameters:
+      - description: The user identifier to return. Use idType to specify internal user ID, SSO ID, or external ID.
+        in: path
+        name: id
+        required: true
+        schema:
+          default: '0'
+          example: '595799473913944'
+          type: string
+      - allowEmptyValue: false
+        description: Whether to search by internal user ID, SSO ID, or external ID.
+        in: query
+        name: idType
+        required: false
+        schema:
+          default: id
+          enum:
+          - id
+          - ssoId
+          - externalId
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Response Model:
+                  summary: Success
+                  value:
+                    message: OK
+                    result:
+                      apiAccess: true
+                      autoProvisionForEBU: true
+                      contactId: 0
+                      contactOrgId: 0
+                      defaultRoleId: 0
+                      email: string
+                      firstName: string
+                      flowDesignerOrgs:
+                      - 111, 222, 333
+                      id: 0
+                      lastLoginDate: '2023-12-20T05:55:53.644Z'
+                      lastModifiedDate: '2023-12-20T05:55:53.644Z'
+                      lastModifiedName: string
+                      lastModifiedProxyName: string
+                      lastName: string
+                      locked: true
+                      middlename: string
+                      owner: string
+                      roleIds:
+                      - 0
+                      roles:
+                      - id: 0
+                        name: string
+                        permissionScope:
+                          accessToAllNotificationFeatures: true
+                          addContactsToGroups: true
+                          createContacts: true
+                          createEditDeleteGroups: true
+                          createEditDeleteSchedules: true
+                          createEditViewCockpitWorkFlows: true
+                          deleteContacts: true
+                          incidentZones: true
+                          incidentZonesRegistered: true
+                          moveRemoveContactsFromGroups: true
+                          onlyEditRulesWithSameRole: true
+                          reopenIncident: true
+                          restrictToIncidentSimulationOnly: true
+                          restrictToSimulationOnly: true
+                          restrictionEditDeleteTemplates: true
+                          uploadContacts: true
+                          viewCockpitWorkFlows: true
+                          viewDownloadAllContacts: true
+                          viewDownloadEditAllContacts: true
+                        roleDataScope:
+                          broadcastTemplateIds:
+                          - 0
+                          dynamicGroupIds:
+                          - 0
+                          groupIds:
+                          - 0
+                          incidentTemplateIds:
+                          - 0
+                          isEmpty: true
+                          organizationId: 0
+                          referenceId: 0
+                          referenceType: string
+                          roleId: 0
+                        roleTemplate: EB
+                      secondaryEmail: string
+                      ssoUserId: string
+                      suffix: string
+                      userName: string
+                      userStatus: Active
+              schema:
+                $ref: '#/components/schemas/getUser'
+          description: Success
+        '400':
+          content:
+            application/json:
+              examples:
+                Invalid Request Input:
+                  summary: Invalid Input
+                  value:
+                    message: type mismatch exception
+                    status: 400
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Missing or invalid request input
+                    enum:
+                    - '400'
+                    type: string
+                type: object
+          description: Invalid request input
+        '401':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Invalid Credentials
+                  value:
+                    message: 'Invalid credentials: Password invalid'
+                    status: 401
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Invalid or missing credentials
+                    enum:
+                    - '401'
+                    type: string
+                type: object
+          description: Invalid Credentials
+        '404':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: No matched user found
+                  value:
+                    message: Invalid User
+                    status: 404
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: No matched user found
+                    enum:
+                    - '404'
+                    type: string
+                type: object
+          description: No matched user found
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      summary: Get User
+      tags:
+      - Users
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.header.Authorization: context.authorizer.override_token
+          integration.request.path.id: method.request.path.id
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/users/{id}
+    patch:
+      description: Partially update a user. This can be used to add, update or remove a user property without passing the entire user object in the request.
+      operationId: EBS Update User Partial
+      parameters:
+      - description: The user identifier to update. Use idType to specify internal user ID, SSO ID, or external ID.
+        in: path
+        name: id
+        required: true
+        schema:
+          default: '0'
+          example: '595799473913944'
+          type: string
+      - allowEmptyValue: false
+        description: Whether to patch by internal user ID, SSO ID, or external ID.
+        in: query
+        name: idType
+        required: false
+        schema:
+          default: id
+          enum:
+          - id
+          - ssoId
+          - externalId
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            examples:
+              Assign a new role to user:
+                summary: Assign a new role to user
+                value:
+                - op: add
+                  path: /roleIds/-
+                  value: 1
+              Disable a user:
+                summary: Set user status to Inactive
+                value:
+                - op: replace
+                  path: /userStatus
+                  value: Inactive
+              Enable a user:
+                summary: Set user status to Active
+                value:
+                - op: replace
+                  path: /userStatus
+                  value: Active
+              Initiate roles for user:
+                summary: Initiate roles for given user
+                value:
+                - op: add
+                  path: /roleIds
+                  value:
+                  - 1
+                  - 22
+                  - 333
+              Replace a role by another role:
+                summary: Replace a role by another role
+                value:
+                - op: replace
+                  path: /roleIds/value:1
+                  value: 22
+              Unassign a role to user:
+                summary: Unassign a role to user
+                value:
+                - op: remove
+                  path: /roleIds/value:1
+              Update the linked contact:
+                summary: Update the linked contactId and orgId
+                value:
+                - op: add
+                  path: /contactId
+                  value: 123
+                - op: add
+                  path: /contactOrgId
+                  value: 123
+              Update user with most properties:
+                summary: Update an user with most properties
+                value:
+                - op: replace
+                  path: /firstname
+                  value: example
+                - op: replace
+                  path: /lastname
+                  value: example
+                - op: replace
+                  path: /middlename
+                  value: example
+                - op: replace
+                  path: /email
+                  value: example@everbridge.com
+                - op: replace
+                  path: /secondaryEmail
+                  value: example@everbridge.com
+                - op: replace
+                  path: /suffix
+                  value: III
+                - op: replace
+                  path: /samlIdentity
+                  value: '11'
+                - op: replace
+                  path: /timeZoneId
+                  value: Pacific/Auckland
+                - op: replace
+                  path: /autoProvisionForEBU
+                  value: true
+                - op: replace
+                  path: /apiAccess
+                  value: true
+                - op: replace
+                  path: /defaultRoleId
+                  value: 0
+                - op: replace
+                  path: /flowDesignerOrgs
+                  value:
+                  - '111'
+                  - '222'
+                  - '333'
+            schema:
+              items:
+                $ref: '#/components/schemas/patchEntity'
+              type: array
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Updated:
+                  summary: Success
+                  value:
+                    accountId: 1001
+                    apiAccess: false
+                    autoProvisionForEBU: true
+                    defaultRoleId: 1
+                    ebsupport: false
+                    email: example@everbridge.com
+                    firstname: example
+                    fullName: ''
+                    id: 10010101
+                    lastname: example
+                    middlename: ''
+                    roleIds:
+                    - 1
+                    roleItems:
+                    - defaultOrganization: true
+                      defaultRole: true
+                      organizationId: 100101
+                      roleId: 1
+                    samlIdentity: ''
+                    suffix: III
+                    timeZoneId: Pacific/Auckland
+                    userStatus: Active
+              schema:
+                $ref: '#/components/schemas/UserVO'
+          description: Success
+        '400':
+          content:
+            application/json:
+              examples:
+                Invalid Request Input:
+                  summary: Invalid Input
+                  value:
+                    code: 400
+                    details:
+                    - messages:
+                      - Invalid firstname
+                      - size must be between 1 and 40
+                      path: /firstname
+                    - messages:
+                      - Invalid lastname
+                      - size must be between 1 and 40
+                      path: /lastname
+                    - messages:
+                      - size must be between 0 and 1
+                      path: /middlename
+                    - messages:
+                      - Invalid email format
+                      - size must be between 5 and 100
+                      path: /email
+                    - messages:
+                      - Invalid email format
+                      - size must be between 0 and 100
+                      - Domain of Secondary Email needs to be different from Primary Email
+                      - Secondary email is disabled
+                      path: /secondaryEmail
+                    - messages:
+                      - The saml identity already exists
+                      path: /samlIdentity
+                    - messages:
+                      - Must be II or III or Jr. or Sr
+                      path: /suffix
+                    - messages:
+                      - Invalid contact id
+                      - contactId and contactOrgId must be provided together or omitted together
+                      path: /contactId
+                    - messages:
+                      - Invalid organization id
+                      - contactId and contactOrgId must be provided together or omitted together
+                      path: /contactOrgId
+                    - messages:
+                      - Account Admin can only have one role
+                      - The role does not belong to the account
+                      - This role <role ID> cannot be deleted or replaced because it is the only account administrator under the current account.
+                      - Invalid role
+                      path: /roleIds
+                    - messages:
+                      - Invalid timeZoneId
+                      path: /timeZoneId
+                    - messages:
+                      - Invalid default role id
+                      - Default role id is not applicable to account admin
+                      path: /defaultRoleId
+                    id: Request Id
+                    message: Bad Request
+                    status: 400
+              schema:
+                $ref: '#/components/schemas/CommonErrorResponse'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Invalid Credentials
+                  value:
+                    message: Invalid credentials
+                    status: 401
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Invalid or missing credentials
+                    enum:
+                    - '401'
+                    type: string
+                type: object
+          description: Invalid Credentials
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      summary: Update User (Partial)
+      tags:
+      - Users
+      x-amazon-apigateway-integration:
+        httpMethod: PATCH
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.header.Authorization: context.authorizer.override_token
+          integration.request.path.id: method.request.path.id
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/users/{id}
+    put:
+      description: Update a user for an account.
+      operationId: EBS Update User
+      parameters:
+      - description: The user identifier to update. Use idType to specify internal user ID, SSO ID, or external ID.
+        in: path
+        name: id
+        required: true
+        schema:
+          default: '0'
+          example: '595799473913944'
+          type: string
+      - allowEmptyValue: false
+        description: Whether to update by internal user ID, SSO ID, or external ID.
+        in: query
+        name: idType
+        required: false
+        schema:
+          default: id
+          enum:
+          - id
+          - ssoId
+          - externalId
+          type: string
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Update user with most properties:
+                summary: Update user with most properties by user ID or SSO ID
+                value:
+                  apiAccess: true
+                  autoProvisionForEBU: false
+                  contactId: 1814748236611732
+                  contactOrgId: 1814748236611733
+                  defaultRoleId: 1814748236611731
+                  email: example@everbridge.com
+                  externalId: exampleExternalId
+                  firstName: example
+                  flowDesignerOrgs:
+                  - 91020557549570
+                  - 72019622232081
+                  lastName: example
+                  middlename: example
+                  roleIds:
+                  - 1503449006997507
+                  - 1814748236611731
+                  secondaryEmail: example2@everbridge.com
+                  ssoUserId: exampleSsoId
+                  suffix: example
+                  timeZoneId: America/New_York
+                  userStatus: Active
+              Update user's SSO ID:
+                summary: Update user's SSO ID by user ID or SSO ID
+                value:
+                  email: example@everbridge.com
+                  firstName: example
+                  lastName: example
+                  ssoUserId: 'exampleSsoId '
+              Update user's basic properties:
+                summary: Update user's basic properties by user ID or SSO ID
+                value:
+                  email: example@everbridge.com
+                  firstName: example
+                  lastName: example
+                  secondaryEmail: example2@everbridge.com
+              Update user's default role ID:
+                summary: Update user's default role ID by user ID or SSO ID
+                value:
+                  defaultRoleId: 1814748236611731
+                  email: example@everbridge.com
+                  firstName: example
+                  lastName: example
+              Update user's role:
+                summary: Update user's role by user ID or SSO ID
+                value:
+                  email: example@everbridge.com
+                  firstName: example
+                  lastName: example
+                  roleIds:
+                  - 1503449006997507
+                  - 1814748236611731
+              Update user's status:
+                summary: Update user's status by user ID, SSO ID, or External ID
+                value:
+                  email: example@everbridge.com
+                  firstName: example
+                  lastName: example
+                  userStatus: Inactive
+            schema:
+              $ref: '#/components/schemas/userRequest'
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Updated:
+                  summary: Success
+                  value:
+                    baseUri: https://api-dev3.everbridge.net/rest/users/?idType=id
+                    id: 1972869068226561
+                    instanceUri: https://api-dev3.everbridge.net/rest/users/?idType=id1972869068226561
+                    message: OK
+              schema:
+                $ref: '#/components/schemas/postUpdateResponse'
+          description: Success
+        '400':
+          content:
+            application/json:
+              examples:
+                Invalid Request Input:
+                  summary: Invalid Input
+                  value:
+                  - message: type mismatch exception
+                    status: 400
+                  - message: Attribute must have a firstName
+                    status: 400
+                  - message: Attribute must have a lastName
+                    status: 400
+                  - message: Attribute must have a email
+                    status: 400
+                  - message: User status cannot be set to NotRegistered
+                    status: 400
+                  - message: User is already in the specified status
+                    status: 400
+                  - message: Invalid user status
+                    status: 400
+                  - message: User online or current is itself
+                    status: 400
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Missing or invalid request input
+                    enum:
+                    - '400'
+                    type: string
+                type: object
+          description: Invalid request input
+        '401':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Invalid Credentials
+                  value:
+                    message: 'Invalid credentials: Password invalid'
+                    status: 401
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Invalid or missing credentials
+                    enum:
+                    - '401'
+                    type: string
+                type: object
+          description: Invalid Credentials
+        '404':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: No matched user found
+                  value:
+                    message: User {id/ssoId/externalId} not found
+                    status: 404
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: No matched user found
+                    enum:
+                    - '404'
+                    type: string
+                type: object
+          description: No matched user found
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      summary: Update User
+      tags:
+      - Users
+      x-amazon-apigateway-integration:
+        httpMethod: PUT
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.header.Authorization: context.authorizer.override_token
+          integration.request.path.id: method.request.path.id
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/users/{id}
+  /users/{id}/sendEmail:
+    post:
+      description: Send registration email for an unregistered user.
+      operationId: EBS Send registration email
+      parameters:
+      - description: The user identifier to send the registration email. Use idType to specify internal user ID or external ID.
+        in: path
+        name: id
+        required: true
+        schema:
+          default: '0'
+          example: '595799473913944'
+          type: string
+      - allowEmptyValue: false
+        description: Whether to send by internal user ID or external ID.
+        in: query
+        name: idType
+        required: false
+        schema:
+          default: id
+          enum:
+          - id
+          - externalId
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Updated:
+                  summary: Success
+                  value:
+                    baseUri: https://api-dev3.everbridge.net/rest/users/1504411079671834/sendEmail
+                    id: 1504411079671834
+                    instanceUri: https://api-dev3.everbridge.net/rest/users/1504411079671834/sendEmail
+                    message: OK
+              schema:
+                $ref: '#/components/schemas/postUpdateResponse'
+          description: Success
+        '400':
+          content:
+            application/json:
+              examples:
+                Invalid Request Input:
+                  summary: Invalid Input
+                  value:
+                    message: type mismatch exception
+                    status: 400
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Missing or invalid request input
+                    enum:
+                    - '400'
+                    type: string
+                type: object
+          description: Invalid request input
+        '401':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: Invalid Credentials
+                  value:
+                    message: 'Invalid credentials: Password invalid'
+                    status: 401
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: Invalid or missing credentials
+                    enum:
+                    - '401'
+                    type: string
+                type: object
+          description: Invalid Credentials
+        '404':
+          content:
+            application/json:
+              examples:
+                Invalid Credentials:
+                  summary: No matched user found
+                  value:
+                    message: User {id/externalId} not found
+                    status: 404
+              schema:
+                properties:
+                  message:
+                    description: Error message
+                    type: string
+                  status:
+                    description: No matched user found
+                    enum:
+                    - '404'
+                    type: string
+                type: object
+          description: No matched user found
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      summary: Send registration email
+      tags:
+      - Users
+      x-amazon-apigateway-integration:
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        requestParameters:
+          integration.request.header.Authorization: context.authorizer.override_token
+          integration.request.path.id: method.request.path.id
+        responses:
+          default:
+            statusCode: '200'
+        type: http_proxy
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/users/{id}/sendEmail
+components:
+  schemas:
+    postUpdateResponse:
+      properties:
+        baseUri:
+          type: string
+        id:
+          type: integer
+        instanceUri:
+          type: string
+        message:
+          type: string
+      type: object
+    getUsers:
+      properties:
+        summary:
+          type: string
+        value:
+          properties:
+            currentPageUri:
+              type: string
+            firstPageUri:
+              type: string
+            lastPageUri:
+              type: string
+            message:
+              type: string
+            nextPageUri:
+              type: string
+            page:
+              properties:
+                currentPageNo:
+                  type: integer
+                data:
+                  items:
+                    properties:
+                      apiAccess:
+                        type: boolean
+                      autoProvisionForEBU:
+                        type: boolean
+                      contactId:
+                        type: integer
+                      contactOrgId:
+                        type: integer
+                      defaultRoleId:
+                        type: integer
+                      email:
+                        type: string
+                      externalId:
+                        type: string
+                      firstName:
+                        type: string
+                      flowDesignerOrgs:
+                        items:
+                          type: integer
+                        type: array
+                      id:
+                        type: integer
+                      lastLoginDate:
+                        type: integer
+                      lastModifiedDate:
+                        type: integer
+                      lastModifiedName:
+                        type: string
+                      lastModifiedProxyName:
+                        type: string
+                      lastName:
+                        type: string
+                      locked:
+                        type: boolean
+                      middlename:
+                        type: string
+                      owner:
+                        type: string
+                      roleIds:
+                        items:
+                          type: integer
+                        type: array
+                      roles:
+                        properties:
+                          id:
+                            type: integer
+                          name:
+                            type: string
+                          permissionScope:
+                            properties:
+                              accessToAllNotificationFeatures:
+                                type: boolean
+                              addContactsToGroups:
+                                type: boolean
+                              createContacts:
+                                type: boolean
+                              createEditDeleteGroups:
+                                type: boolean
+                              createEditDeleteSchedules:
+                                type: boolean
+                              createEditViewCockpitWorkFlows:
+                                type: boolean
+                              deleteContacts:
+                                type: boolean
+                              incidentZones:
+                                type: boolean
+                              incidentZonesRegistered:
+                                type: boolean
+                              moveRemoveContactsFromGroups:
+                                type: boolean
+                              onlyEditRulesWithSameRole:
+                                type: boolean
+                              reopenIncident:
+                                type: boolean
+                              restrictToIncidentSimulationOnly:
+                                type: boolean
+                              restrictToSimulationOnly:
+                                type: boolean
+                              restrictionEditDeleteTemplates:
+                                type: boolean
+                              uploadContacts:
+                                type: boolean
+                              viewCockpitWorkFlows:
+                                type: boolean
+                              viewDownloadAllContacts:
+                                type: boolean
+                              viewDownloadEditAllContacts:
+                                type: boolean
+                            type: object
+                          roleDataScope:
+                            properties:
+                              broadcastTemplateIds:
+                                items:
+                                  type: integer
+                                type: array
+                              dynamicGroupIds:
+                                items:
+                                  type: integer
+                                type: array
+                              groupIds:
+                                items:
+                                  type: integer
+                                type: array
+                              incidentTemplateIds:
+                                items:
+                                  type: integer
+                                type: array
+                              isEmpty:
+                                type: boolean
+                              organizationId:
+                                type: integer
+                              referenceId:
+                                type: integer
+                              referenceType:
+                                type: string
+                              roleId:
+                                type: integer
+                            type: object
+                          roleTemplate:
+                            type: string
+                        type: object
+                      secondaryEmail:
+                        type: string
+                      ssoUserId:
+                        type: string
+                      suffix:
+                        type: string
+                      userName:
+                        type: string
+                      userStatus:
+                        type: string
+                    type: object
+                  type: array
+                dataPageList:
+                  items:
+                    type: string
+                  type: array
+                pageSize:
+                  type: integer
+                scrollId:
+                  type: string
+                start:
+                  type: integer
+                totalCount:
+                  type: integer
+                totalPageCount:
+                  type: integer
+              type: object
+          type: object
+      type: object
+    CommonErrorResponse:
+      properties:
+        code:
+          format: int32
+          type: integer
+        details:
+          type: object
+        id:
+          type: string
+        message:
+          type: string
+        status:
+          format: int32
+          type: integer
+      type: object
+    UserVO:
+      properties:
+        accountId:
+          format: int64
+          type: integer
+        apiAccess:
+          type: boolean
+        autoProvisionForEBU:
+          type: boolean
+        contactId:
+          format: int64
+          type: integer
+        contactOrgId:
+          format: int64
+          type: integer
+        defaultRoleId:
+          format: int64
+          type: integer
+        departmentRole:
+          type: string
+        email:
+          type: string
+        firstname:
+          type: string
+        id:
+          format: int64
+          type: integer
+        lastname:
+          type: string
+        middlename:
+          type: string
+        numericPassword:
+          type: string
+        numericUsername:
+          type: string
+        orgIds:
+          items:
+            format: int64
+            type: integer
+          type: array
+        organizationId:
+          format: int64
+          type: integer
+        password:
+          type: string
+        roleIds:
+          items:
+            format: int64
+            type: integer
+          type: array
+        roleItems:
+          items:
+            $ref: '#/components/schemas/RoleItem'
+          type: array
+        samlIdentity:
+          type: string
+        secondaryEmail:
+          type: string
+        suffix:
+          type: string
+        timeZoneId:
+          type: string
+        userStatus:
+          description: Whether the user is Active or Inactive. NotRegistered is an obsolete legacy status.
+          enum:
+          - Active
+          - Inactive
+          type: string
+        username:
+          type: string
+        usernameLowerCase:
+          type: string
+      type: object
+    RoleItem:
+      properties:
+        defaultOrganization:
+          type: boolean
+        defaultRole:
+          type: boolean
+        groupIds:
+          items:
+            format: int64
+            type: integer
+          type: array
+        organizationId:
+          format: int64
+          type: integer
+        roleId:
+          format: int64
+          type: integer
+      type: object
+    roleId:
+      default: '0'
+      description: Role ID
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
+    patchEntity:
+      additionalProperties: false
+      properties:
+        op:
+          description: The operation to perform.
+          enum:
+          - add
+          - replace
+          - remove
+          type: string
+        path:
+          description: 'A JSON Pointer path. For example: ''/firstName'''
+          type: string
+        value:
+          description: The value to add or replace. This field is not required for remove operation
+          oneOf:
+          - title: string
+            type: string
+          - title: double
+            type: number
+          - title: integer or long
+            type: integer
+          - title: boolean
+            type: boolean
+          - title: object
+            type: object
+          - items:
+              type: integer
+            title: integer array
+            type: array
+          - items:
+              type: string
+            title: string array
+            type: array
+      required:
+      - op
+      - path
+      title: Add, Replace or Remove
+      type: object
+    userRequest:
+      properties:
+        apiAccess:
+          description: Whether the user has permission to access Rest API.
+          type: boolean
+        autoProvisionForEBU:
+          description: Whether auto provisioning an Everbridge University user.
+          type: boolean
+        contactId:
+          description: The existing contact ID within an organization to link to the user.
+          type: integer
+        contactOrgId:
+          description: The linked contact's organization ID.
+          type: integer
+        defaultRoleId:
+          description: The user's default role ID.
+          type: integer
+        email:
+          description: The user's email.
+          type: string
+        externalId:
+          description: An optional external identifier for the user. It may be set by an administrator in the web portal or by an integrating system through the API. The value must be unique within the account. It must start with a letter or digit and may contain letters, digits, '.', '_', '-', '@', '+', and ':'. External ID is case-insensitive and is normalized to lowercase when stored.
+          maxLength: 254
+          pattern: ^[a-zA-Z0-9][a-zA-Z0-9._\-@+:]*$
+          type: string
+        firstName:
+          description: The user's first name.
+          maxLength: 40
+          type: string
+        flowDesignerOrgs:
+          description: ID of the flow designer.
+          items:
+            type: integer
+          type: array
+        lastName:
+          description: The user's last name.
+          maxLength: 40
+          type: string
+        middlename:
+          description: The user's middle name.
+          maxLength: 1
+          type: string
+        roleIds:
+          description: The user's role IDs.
+          items:
+            type: integer
+          type: array
+        secondaryEmail:
+          description: The user's second email.
+          type: string
+        ssoUserId:
+          description: The user's SSO ID.
+          type: string
+        suffix:
+          description: 'The user''s suffix. Support: "II","III","Jr.","Sr."'
+          type: string
+        timeZoneId:
+          description: The user's IANA time zone identifier, for example America/New_York.
+          maxLength: 100
+          type: string
+      required:
+      - firstName
+      - lastName
+      - email
+      - timeZoneId
+      type: object
+    getUser:
+      properties:
+        apiAccess:
+          type: boolean
+        autoProvisionForEBU:
+          type: boolean
+        contactId:
+          type: integer
+        contactOrgId:
+          type: integer
+        createdDate:
+          description: Epoch milliseconds when this user account was created.
+          type: integer
+        createdName:
+          description: Display name of the user or proxy who created this account.
+          type: string
+        defaultRoleId:
+          type: integer
+        email:
+          type: string
+        externalId:
+          description: An optional external identifier for the user. It may be set by an administrator in the web portal or by an integrating system through the API. The value must be unique within the account. It must start with a letter or digit and may contain letters, digits, '.', '_', '-', '@', '+', and ':'. External ID is case-insensitive and is normalized to lowercase when stored.
+          type: string
+        firstName:
+          type: string
+        flowDesignerOrgs:
+          items:
+            type: integer
+          type: array
+        id:
+          type: integer
+        inviteDate:
+          description: Epoch milliseconds when the registration invitation was sent.
+          type: integer
+        lastLoginDate:
+          type: integer
+        lastModifiedDate:
+          type: integer
+        lastModifiedName:
+          type: string
+        lastModifiedProxyName:
+          type: string
+        lastName:
+          type: string
+        locked:
+          type: boolean
+        middlename:
+          type: string
+        owner:
+          type: string
+        passwordExpirationDate:
+          description: Epoch milliseconds when the user's password expires. Null if no expiration policy applies.
+          type: integer
+        registerSuccessDate:
+          description: Epoch milliseconds when the user successfully completed registration.
+          type: integer
+        roleIds:
+          items:
+            type: integer
+          type: array
+        roles:
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
+            permissionScope:
+              properties:
+                accessToAllNotificationFeatures:
+                  type: boolean
+                addContactsToGroups:
+                  type: boolean
+                createContacts:
+                  type: boolean
+                createEditDeleteGroups:
+                  type: boolean
+                createEditDeleteSchedules:
+                  type: boolean
+                createEditViewCockpitWorkFlows:
+                  type: boolean
+                deleteContacts:
+                  type: boolean
+                incidentZones:
+                  type: boolean
+                incidentZonesRegistered:
+                  type: boolean
+                moveRemoveContactsFromGroups:
+                  type: boolean
+                onlyEditRulesWithSameRole:
+                  type: boolean
+                reopenIncident:
+                  type: boolean
+                restrictToIncidentSimulationOnly:
+                  type: boolean
+                restrictToSimulationOnly:
+                  type: boolean
+                restrictionEditDeleteTemplates:
+                  type: boolean
+                uploadContacts:
+                  type: boolean
+                viewCockpitWorkFlows:
+                  type: boolean
+                viewDownloadAllContacts:
+                  type: boolean
+                viewDownloadEditAllContacts:
+                  type: boolean
+              type: object
+            roleDataScope:
+              properties:
+                broadcastTemplateIds:
+                  items:
+                    type: integer
+                  type: array
+                dynamicGroupIds:
+                  items:
+                    type: integer
+                  type: array
+                groupIds:
+                  items:
+                    type: integer
+                  type: array
+                incidentTemplateIds:
+                  items:
+                    type: integer
+                  type: array
+                isEmpty:
+                  type: boolean
+                organizationId:
+                  type: integer
+                referenceId:
+                  type: integer
+                referenceType:
+                  type: string
+                roleId:
+                  type: integer
+              type: object
+            roleTemplate:
+              type: string
+          type: object
+        secondaryEmail:
+          type: string
+        ssoUserId:
+          type: string
+        suffix:
+          type: string
+        timeZoneId:
+          description: The user's IANA time zone identifier, for example America/New_York.
+          type: string
+        userName:
+          type: string
+        userStatus:
+          description: Whether the user is Active or Inactive. NotRegistered is an obsolete legacy status.
+          type: string
+      type: object
+  securitySchemes:
+    API_Authorizer:
+      description: oAuth Token
+      in: header
+      name: Authorization
+      type: apiKey
+      x-amazon-apigateway-authorizer:
+        authorizerCredentials: arn:aws:iam::214792946631:role/oas-rest-api-gw-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+      x-amazon-apigateway-authtype: custom
+    BasicAuth:
+      description: Basic Authentication Token
+      scheme: basic
+      type: http
+    api_key:
+      description: API Key - For System Use
+      in: header
+      name: x-api-key
+      type: apiKey
+x-amazon-apigateway-binary-media-types:
+- audio/wav
+- audio/x-wav
+- application/octet-stream
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

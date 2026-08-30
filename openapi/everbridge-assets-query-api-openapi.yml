@@ -1,0 +1,1298 @@
+openapi: 3.2.0
+info:
+  title: Asset Query Assets Query API
+  description: This is the Asset Query Rest API Documentation
+  contact:
+    name: CAMS Team
+  version: 1.0.0
+servers:
+- url: https://api.everbridge.net/rest/v2/asset-query
+tags:
+- name: Assets Query
+  description: Asset Query Operations
+paths:
+  /assets/stream:
+    post:
+      tags:
+      - Assets Query
+      operationId: EBS AQ Assets Stream
+      summary: Assets Stream
+      description: Assets Stream
+      parameters:
+      - name: X-EB-Organization-Id
+        in: header
+        description: Organization Id
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: maxRecordsReturned
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json;charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/query'
+            examples:
+              basic:
+                summary: Basic
+                value:
+                  query:
+                    bool:
+                      and:
+                      - equal:
+                          field: assetTypeId
+                          value: assetTypeIdValue
+                      - equal:
+                          field: name
+                          value: assetNameValue
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/streamResponse'
+              examples:
+                Success:
+                  summary: Success
+                  value:
+                  - id: '2349176922832899'
+                    organizationId: 1536984111644674
+                    createdId: 2200330536222721
+                    createdName: Nandish API Access
+                    lastModifiedId: 2200330536222721
+                    lastModifiedName: Nandish API Access
+                    createdTimestamp: 1717670350862
+                    lastModifiedTimestamp: 1717670350862
+                    externalId: 809809@gm
+                    assetTypeId: 665ff8e1a1b61d39e577b9c6
+                    name: string
+                    address:
+                      country: IN
+                      state: string
+                      city: Bangalore
+                      postalCode: string
+                      streetAddress1: string
+                      streetAddress2: string
+                    iconId: '5'
+                    geometry: '{"coordinates":[0.0,0.0],"type":"Point"}'
+                    properties:
+                    - propertyId: 665ff8e1a1b61d39e577b9d5
+                      value: string
+                    - propertyId: 665ff8e1a1b61d39e577b9d6
+                      value: string
+                    geocodingAddressRequired: false
+                    smartEnabled: false
+                  - id: '2349245642309634'
+                    organizationId: 1536984111644674
+                    createdId: 2200330536222721
+                    createdName: Nandish API Access
+                    lastModifiedId: 2200330536222721
+                    lastModifiedName: Nandish API Access
+                    createdTimestamp: 1717670170855
+                    lastModifiedTimestamp: 1717670170855
+                    externalId: nandy@gmq
+                    assetTypeId: 665ff8e1a1b61d39e577b9c6
+                    name: string
+                    address:
+                      country: IN
+                      state: string
+                      city: Bangalore
+                      postalCode: string
+                      streetAddress1: string
+                      streetAddress2: string
+                    iconId: '5'
+                    geometry: '{"coordinates":[0.0,0.0],"type":"Point"}'
+                    properties:
+                    - propertyId: 665ff8e1a1b61d39e577b9d5
+                      value: string
+                    - propertyId: 665ff8e1a1b61d39e577b9d6
+                      value: string
+                    geocodingAddressRequired: false
+                    smartEnabled: false
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        credentials: arn:aws:iam::214792946631:role/apigateway_invoke_lambda
+        httpMethod: POST
+        uri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:apigw-large-file-handler-us-east-1-prod/invocations
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters: {}
+        passthroughBehavior: when_no_match
+        contentHandling: CONVERT_TO_TEXT
+        type: aws_proxy
+  /assets/quick-search:
+    post:
+      tags:
+      - Assets Query
+      operationId: EBS AQ List Assets
+      summary: List Assets
+      description: Get All Assets
+      parameters:
+      - name: X-EB-Organization-Id
+        in: header
+        description: Organization Id
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - name: assetTypeId
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: searchValue
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: searchBy
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - Name
+          - NameOrExternalId
+      - name: pageNumber
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: pageSize
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+            examples:
+              basic:
+                summary: Basic
+                value:
+                - '2349176922832899'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/DataPageAsset'
+              examples:
+                success:
+                  summary: success
+                  value:
+                    pageSize: 10
+                    start: 0
+                    totalCount: 1
+                    data:
+                    - id: '2349176922832899'
+                      organizationId: 1536984111644674
+                      createdId: 2200330536222721
+                      createdName: Nandish API Access
+                      lastModifiedId: 2200330536222721
+                      lastModifiedName: Nandish API Access
+                      createdTimestamp: 1717670350862
+                      lastModifiedTimestamp: 1717670350862
+                      externalId: 809809@gm
+                      assetTypeId: 665ff8e1a1b61d39e577b9c6
+                      name: string
+                      address:
+                        country: IN
+                        state: string
+                        city: Bangalore
+                        postalCode: string
+                        streetAddress1: string
+                        streetAddress2: string
+                      iconId: '5'
+                      geometry: '{"coordinates":[0.0,0.0],"type":"Point"}'
+                      assetTypeName: Buildings
+                      properties:
+                      - propertyId: 665ff8e1a1b61d39e577b9d5
+                        value: string
+                      - propertyId: 665ff8e1a1b61d39e577b9d6
+                        value: string
+                      geocodingAddressRequired: false
+                      smartEnabled: false
+                    currentPageNo: 1
+                    totalPageCount: 1
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: POST
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-query/assets/quick-search
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters: {}
+        passthroughBehavior: when_no_match
+  /assets/quick-search-across-asset-types:
+    post:
+      tags:
+      - Assets Query
+      operationId: EBS AQ List Assets Across Asset Types
+      summary: List Assets Across Asset Types
+      description: List Assets Across Asset Types
+      parameters:
+      - name: X-EB-Organization-Id
+        in: header
+        description: Organization Id
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - name: searchValue
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: searchBy
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - Name
+          - NameOrExternalId
+      - name: pageNumber
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: pageSize
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssetRequestBodyWrapper'
+            examples:
+              basic:
+                summary: Basic
+                value:
+                  allAssetTypes: true
+                  assetTypeIds:
+                  - 665ff8e1a1b61d39e577b9c6
+                  assetIds:
+                  - '2349176922832899'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/DataPageAsset'
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: POST
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-query/assets/quick-search-across-asset-types
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters: {}
+        passthroughBehavior: when_no_match
+  /assets/polygon:
+    post:
+      tags:
+      - Assets Query
+      operationId: EBS AQ Assets Polygon Aggregation
+      summary: Assets Polygon Aggregation
+      description: Assets Polygon Aggregation
+      parameters:
+      - name: X-EB-Organization-Id
+        in: header
+        description: Organization Id
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - name: polygons
+        in: query
+        required: true
+        schema:
+          uniqueItems: true
+          type: array
+          items:
+            type: integer
+            format: int32
+      requestBody:
+        content:
+          application/json;charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/query'
+            examples:
+              basic:
+                summary: Basic
+                value:
+                  query:
+                    bool:
+                      and:
+                      - equal:
+                          field: address.city
+                          value: Bangalore
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                type: object
+                additionalProperties:
+                  type: integer
+                  format: int64
+              examples:
+                Success:
+                  summary: Success
+                  value:
+                    '1': 0
+                    '2': 0
+                    '3': 0
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: POST
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-query/assets/polygon
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters: {}
+        passthroughBehavior: when_no_match
+  /assets/pagination:
+    post:
+      tags:
+      - Assets Query
+      operationId: EBS AQ Assets Pagination
+      summary: Assets Pagination
+      description: Assets Pagination
+      parameters:
+      - name: X-EB-Organization-Id
+        in: header
+        description: Organization Id
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - name: pageNumber
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: pageSize
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 100
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json;charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/query'
+            examples:
+              basic:
+                summary: Basic
+                value:
+                  query:
+                    bool:
+                      and:
+                      - equal:
+                          field: address.city
+                          value: Bangalore
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/DataPageAsset'
+              examples:
+                Success:
+                  summary: Success
+                  value:
+                    pageSize: 10
+                    start: 0
+                    totalCount: 12
+                    data:
+                    - id: 679b5dce0d138e71ca73578c
+                      organizationId: 1536984111644674
+                      createdId: 1530249602924607
+                      createdName: Vishal Agrawal
+                      lastModifiedId: 1530249602924607
+                      lastModifiedName: Vishal Agrawal
+                      createdTimestamp: 1738235342017
+                      lastModifiedTimestamp: 1738235342017
+                      externalId: c-vishal.agrawal01@everbridge.com
+                      assetTypeId: 665ff8e1a1b61d39e577b9c6
+                      name: Everbridge Bangalore Office
+                      address:
+                        country: IN
+                        state: Karnataka (IN)
+                        city: Bangalore
+                        postalCode: '560037'
+                        streetAddress1: 9th Cross Road
+                      iconId: '1'
+                      geometry: '{"coordinates":[77.71304049,12.95115784],"type":"Point"}'
+                      assetTypeName: Buildings
+                      properties:
+                      - propertyId: 665ff8e1a1b61d39e577b9d5
+                        value: 1st
+                      - propertyId: 665ff8e1a1b61d39e577b9d6
+                        value: '101'
+                      associations:
+                      - associationDefinitionId: 665857c05d59930bc2151643
+                        entityType: Contact
+                        entityIds:
+                        - '2668619410440194'
+                      geocodingAddressRequired: false
+                      smartEnabled: false
+                    - id: 67a4a6fc14e4d5199b7f4e56
+                      organizationId: 1536984111644674
+                      createdId: 2200330536222721
+                      createdName: Nandish API Access
+                      lastModifiedId: 2200330536222721
+                      lastModifiedName: Nandish API Access
+                      createdTimestamp: 1738843900415
+                      lastModifiedTimestamp: 1738843900415
+                      externalId: c-vishal.agrawal11@everbridge.com
+                      assetTypeId: 665ff8e1a1b61d39e577b9c6
+                      name: Everbridge Bangalore Office
+                      address:
+                        country: IN
+                        state: Karnataka (IN)
+                        city: Bangalore
+                        postalCode: '560037'
+                        streetAddress1: 9th Cross Road
+                      iconId: '1'
+                      geometry: '{"coordinates":[77.71304049,12.95115784],"type":"Point"}'
+                      assetTypeName: Buildings
+                      properties:
+                      - propertyId: 665ff8e1a1b61d39e577b9d5
+                        value: 1st
+                      - propertyId: 665ff8e1a1b61d39e577b9d6
+                        value: '101'
+                      associations:
+                      - associationDefinitionId: 665857c05d59930bc2151643
+                        entityType: Contact
+                        entityIds:
+                        - '2668619410440194'
+                      geocodingAddressRequired: false
+                      smartEnabled: false
+                    - id: 68076588eabaa238ce97be2b
+                      organizationId: 1536984111644674
+                      createdId: 1530249602924608
+                      createdName: Nandish Siddaiah
+                      lastModifiedId: 1530249602924608
+                      lastModifiedName: Nandish Siddaiah
+                      createdTimestamp: 1745315208213
+                      lastModifiedTimestamp: 1745315478195
+                      externalId: c-vishal.agrawal002@everbridge.com
+                      assetTypeId: 665ff8e1a1b61d39e577b9c6
+                      name: Office Address2
+                      address:
+                        country: IN
+                        state: Karnataka (IN)
+                        city: Bangalore
+                        postalCode: '560037'
+                        streetAddress1: 1st Floor, Everbridge Pvt Ltd
+                        streetAddress2: 9th cross road, Silver spring layout, Whitefield
+                      iconId: '1'
+                      startTimestamp: 1738175400000
+                      endTimestamp: 1738261800000
+                      notes: Everbridge Bangalore Office
+                      category: office
+                      assetTypeName: Buildings
+                      geocodingAddressRequired: false
+                      smartEnabled: false
+                    currentPageNo: 1
+                    totalPageCount: 2
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: POST
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-query/assets/pagination
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters: {}
+        passthroughBehavior: when_no_match
+  /assets/geohash:
+    post:
+      tags:
+      - Assets Query
+      operationId: EBS AQ Assets Geo Grid Aggregation
+      summary: Assets Geo Grid Aggregation
+      description: Assets Geo Grid Aggregation
+      parameters:
+      - name: X-EB-Organization-Id
+        in: header
+        description: Organization Id
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - name: level
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: geohash
+        in: query
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json;charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/query'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                type: object
+                additionalProperties:
+                  type: integer
+                  format: int64
+              examples:
+                Success:
+                  summary: Success
+                  value: {}
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: POST
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-query/assets/geohash
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters: {}
+        passthroughBehavior: when_no_match
+  /assets/count:
+    post:
+      tags:
+      - Assets Query
+      operationId: EBS AQ Assets Count
+      summary: Assets Count
+      description: Assets Count
+      parameters:
+      - name: X-EB-Organization-Id
+        in: header
+        description: Organization Id
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      requestBody:
+        content:
+          application/json;charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/query'
+            examples:
+              basic:
+                summary: Basic
+                value:
+                  query:
+                    bool:
+                      and:
+                      - equal:
+                          field: address.city
+                          value: Bangalore
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: number
+              examples:
+                Success:
+                  summary: Success
+                  value:
+                    count: 12
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: POST
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-query/assets/count
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters: {}
+        passthroughBehavior: when_no_match
+  /assets/bbox:
+    post:
+      tags:
+      - Assets Query
+      operationId: EBS AQ Assets Geo Bounds Aggregation
+      summary: Assets Geo Bounds Aggregation
+      description: Assets Geo Bounds Aggregation
+      parameters:
+      - name: X-EB-Organization-Id
+        in: header
+        description: Organization Id
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - name: wrap_longitude
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: true
+      requestBody:
+        content:
+          application/json;charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/query'
+            examples:
+              basic:
+                summary: Basic
+                value:
+                  query:
+                    bool:
+                      and:
+                      - equal:
+                          field: address.city
+                          value: Bangalore
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                type: object
+                properties:
+                  top:
+                    type: number
+                  left:
+                    type: number
+                  bottom:
+                    type: number
+                  right:
+                    type: number
+              examples:
+                Success:
+                  summary: Success
+                  value:
+                    top: 12.95912
+                    left: 0
+                    bottom: 0
+                    right: 77.71304
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: POST
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-query/assets/bbox
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters: {}
+        passthroughBehavior: when_no_match
+  /assets/attribute-value-max-min:
+    post:
+      tags:
+      - Assets Query
+      operationId: EBS AQ Assets Aggregate By Attribute Max And Min
+      summary: Assets Aggregate By Attribute Max And Min
+      description: Assets Aggregate By Attribute Max And Min
+      parameters:
+      - name: X-EB-Organization-Id
+        in: header
+        description: Organization Id
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - name: attributeName
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: attributeId
+        in: query
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json;charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/query'
+            examples:
+              basic:
+                summary: Basic
+                value:
+                  query:
+                    bool:
+                      and:
+                      - equal:
+                          field: address.city
+                          value: Bangalore
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/AggregationRangeResult'
+              examples:
+                Success:
+                  summary: Success
+                  value:
+                    min: 1717670170855
+                    max: 1745315208213
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: POST
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-query/assets/attribute-value-max-min
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters: {}
+        passthroughBehavior: when_no_match
+  /assets/attribute-value-list:
+    post:
+      tags:
+      - Assets Query
+      operationId: EBS AQ Assets Aggregate By Attribute
+      summary: Assets Aggregate By Attribute
+      description: Assets Aggregate By Attribute
+      parameters:
+      - name: X-EB-Organization-Id
+        in: header
+        description: Organization Id
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - name: attributeName
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: attributeId
+        in: query
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json;charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/query'
+            examples:
+              basic:
+                summary: Basic
+                value:
+                  query:
+                    bool:
+                      and:
+                      - equal:
+                          field: address.city
+                          value: Bangalore
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AggregationResult'
+              examples:
+                Success:
+                  summary: Success
+                  value:
+                  - key: string
+                    count: 7
+                    travelerCount: 0
+                  - key: everbridge bangalore office
+                    count: 2
+                    travelerCount: 0
+                  - key: office address2
+                    count: 2
+                    travelerCount: 0
+                  - key: vishal's home
+                    count: 1
+                    travelerCount: 0
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: POST
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-query/assets/attribute-value-list
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters: {}
+        passthroughBehavior: when_no_match
+  /assets/{id}:
+    get:
+      tags:
+      - Assets Query
+      operationId: EBS AQ Get Asset
+      summary: Get Asset
+      description: Get Asset
+      parameters:
+      - name: X-EB-Organization-Id
+        in: header
+        description: Organization Id
+        required: true
+        schema:
+          $ref: '#/components/schemas/organizationId'
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Asset'
+              examples:
+                success:
+                  summary: success
+                  value:
+                    id: '2349176922832899'
+                    organizationId: 1536984111644674
+                    createdId: 2200330536222721
+                    createdName: Nandish API Access
+                    lastModifiedId: 2200330536222721
+                    lastModifiedName: Nandish API Access
+                    createdTimestamp: 1717670350862
+                    lastModifiedTimestamp: 1717670350862
+                    externalId: 809809@gm
+                    assetTypeId: 665ff8e1a1b61d39e577b9c6
+                    name: string
+                    address:
+                      country: IN
+                      state: string
+                      city: Bangalore
+                      postalCode: string
+                      streetAddress1: string
+                      streetAddress2: string
+                    iconId: '5'
+                    geometry: '{"coordinates":[0.0,0.0],"type":"Point"}'
+                    properties:
+                    - propertyId: 665ff8e1a1b61d39e577b9d5
+                      value: string
+                    - propertyId: 665ff8e1a1b61d39e577b9d6
+                      value: string
+                    geocodingAddressRequired: false
+                    smartEnabled: false
+      security:
+      - API_Authorizer: []
+      - BasicAuth: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: GET
+        uri: https://ebs-restapi-prod-us.evbg.io/rest/v2/asset-query/assets/{id}
+        responses:
+          default:
+            statusCode: '200'
+        requestParameters:
+          integration.request.path.id: method.request.path.id
+        passthroughBehavior: when_no_match
+components:
+  schemas:
+    DataPageAsset:
+      type: object
+      properties:
+        pageSize:
+          type: integer
+          format: int32
+        start:
+          type: integer
+          format: int32
+        totalCount:
+          type: integer
+          format: int64
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Asset'
+        currentPageNo:
+          type: integer
+          format: int32
+        totalPageCount:
+          type: integer
+          format: int32
+    AssetPropertyValue:
+      type: object
+      properties:
+        propertyId:
+          maxLength: 2147483647
+          minLength: 1
+          type: string
+        value:
+          type: object
+        name:
+          type: string
+    AssetRequestBodyWrapper:
+      type: object
+      properties:
+        assetIds:
+          type: array
+          items:
+            type: string
+        assetTypeIds:
+          type: array
+          items:
+            type: string
+        allAssetTypes:
+          type: boolean
+    query:
+      type: object
+      properties:
+        query:
+          type: object
+          properties:
+            bool:
+              type: object
+              properties:
+                and:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      equal:
+                        type: object
+                        properties:
+                          field:
+                            type: string
+                          value:
+                            type: string
+                        required:
+                        - field
+                        - value
+    organizationId:
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      maxLength: 16
+      type: integer
+      example: '1536984111644674'
+      default: '1536984111644674'
+    streamResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+          organizationId:
+            type: number
+          createdId:
+            type: number
+          createdName:
+            type: string
+          lastModifiedId:
+            type: number
+          lastModifiedName:
+            type: string
+          createdTimestamp:
+            type: number
+          lastModifiedTimestamp:
+            type: number
+          externalId:
+            type: string
+          assetTypeId:
+            type: string
+          name:
+            type: string
+          address:
+            type: object
+            properties:
+              country:
+                type: string
+              state:
+                type: string
+              city:
+                type: string
+              postalCode:
+                type: string
+              streetAddress1:
+                type: string
+              streetAddress2:
+                type: string
+          iconId:
+            type: string
+          geometry:
+            type: string
+          properties:
+            type: array
+            items:
+              type: object
+              properties:
+                propertyId:
+                  type: string
+                value:
+                  type: string
+          geocodingAddressRequired:
+            type: boolean
+          smartEnabled:
+            type: boolean
+          associations:
+            type: array
+            items:
+              type: object
+              properties:
+                associationDefinitionId:
+                  type: string
+                entityType:
+                  type: string
+                entityIds:
+                  type: array
+                  items:
+                    type: string
+          startTimestamp:
+            type: number
+          endTimestamp:
+            type: number
+          notes:
+            type: string
+          category:
+            type: string
+    Asset:
+      type: object
+      properties:
+        id:
+          type: string
+        organizationId:
+          type: integer
+          format: int64
+        createdId:
+          type: integer
+          format: int64
+        createdName:
+          type: string
+        createdProxyName:
+          type: string
+        lastModifiedId:
+          type: integer
+          format: int64
+        lastModifiedName:
+          type: string
+        lastModifiedProxyName:
+          type: string
+        createdTimestamp:
+          type: string
+          format: date-time
+        lastModifiedTimestamp:
+          type: string
+          format: date-time
+        externalId:
+          type: string
+        assetTypeId:
+          type: string
+        name:
+          type: string
+        address:
+          $ref: '#/components/schemas/Address'
+        iconId:
+          type: string
+        startTimestamp:
+          type: integer
+          format: int64
+        endTimestamp:
+          type: integer
+          format: int64
+        notes:
+          type: string
+        category:
+          type: string
+        geometry:
+          type: string
+        assetTypeName:
+          type: string
+        properties:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetPropertyValue'
+        associations:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetAssociation'
+        geocodingAddressRequired:
+          type: boolean
+        geocodingStatus:
+          type: string
+          enum:
+          - Invalid
+          - RequestPending
+          - RequestSubmitted
+          - SubmissionFailed
+          - Succeeded
+          - Failed
+          - NotNeeded
+        smartEnabled:
+          type: boolean
+        icon:
+          $ref: '#/components/schemas/AssetIcon'
+        color:
+          type: string
+    AssetIcon:
+      type: object
+      properties:
+        source:
+          type: string
+          enum:
+          - SYSTEM
+          - CUSTOM
+        id:
+          type: string
+    AggregationRangeResult:
+      type: object
+      properties:
+        min:
+          type: number
+          format: double
+        max:
+          type: number
+          format: double
+    AggregationResult:
+      type: object
+      properties:
+        aggregationResults:
+          type: array
+          items:
+            $ref: '#/components/schemas/AggregationResult'
+        key:
+          type: string
+        count:
+          type: integer
+          format: int64
+        travelerCount:
+          type: integer
+          format: int64
+    AssetAssociation:
+      type: object
+      properties:
+        associationDefinitionId:
+          maxLength: 2147483647
+          minLength: 1
+          type: string
+        entityType:
+          type: string
+          enum:
+          - Contact
+          - ContactGroup
+          - ContactFilter
+        entityIds:
+          type: array
+          items:
+            type: string
+    Address:
+      type: object
+      properties:
+        country:
+          type: string
+        state:
+          maxLength: 100
+          minLength: 0
+          type: string
+        city:
+          maxLength: 100
+          minLength: 0
+          type: string
+        postalCode:
+          maxLength: 20
+          minLength: 0
+          type: string
+        streetAddress1:
+          maxLength: 200
+          minLength: 0
+          type: string
+        streetAddress2:
+          maxLength: 200
+          minLength: 0
+          type: string
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+      description: Basic Authentication Token
+    API_Authorizer:
+      type: apiKey
+      name: Authorization
+      description: oAuth Token
+      in: header
+      x-amazon-apigateway-authtype: custom
+      x-amazon-apigateway-authorizer:
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:API_Authorizer_us-east-1_prod:live/invocations
+        authorizerCredentials: arn:aws:iam::214792946631:role/asset-query-prod-us-us-east-1-0-us-east-1-gw
+        authorizerResultTtlInSeconds: 300
+        identitySource: method.request.header.Authorization,method.request.header.PathCacheKey,method.request.header.MethodCacheKey
+        type: request
+    api_key:
+      type: apiKey
+      name: x-api-key
+      description: API Key - For System Use
+      in: header
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true
