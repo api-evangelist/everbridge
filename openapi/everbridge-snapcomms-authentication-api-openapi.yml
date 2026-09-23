@@ -20,9 +20,7 @@ paths:
       - SnapComms Authentication
       security: []
       summary: Token
-      description: 'Gets an authentication token for the provided credentials
-
-        '
+      description: Gets an authentication token for the provided credentials
       operationId: token
       parameters:
       - name: x-tenant-id

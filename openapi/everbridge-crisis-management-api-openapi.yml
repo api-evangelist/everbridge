@@ -12,7 +12,7 @@ tags:
 paths:
   /cm/v1/crisisEvent:
     get:
-      description: 'Note: This page has not yet been fully converted to the new developer portal format. Request/response samples and details are missing.  Please use [Swagger](https://api.everbridge.net) to make API calls.'
+      description: 'Note: This page has not yet been fully converted to the new developer portal format. Request/response samples and details are missing. Please use Swagger to make API calls.'
       operationId: EBS List Critical Events
       responses:
         '200':

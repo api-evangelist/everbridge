@@ -215,7 +215,7 @@ paths:
     - url: https://api.everbridge.eu/rest
   /incidents/{organizationId}:
     get:
-      description: 'Retrieve all the incidents for an organization. '
+      description: Retrieve all the incidents for an organization.
       operationId: EBS List Incidents
       parameters:
       - in: path
@@ -454,7 +454,7 @@ paths:
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/incidents/{organizationId}
     post:
-      description: Creating a new incident results in launching one or more new notifications.  Incident can be launched with default values set up at the template level or various parameters defined at the template level can be overridden by sending it through this API.
+      description: Creating a new incident results in launching one or more new notifications. Incident can be launched with default values set up at the template level or various parameters defined at the template level can be overridden by sending it through this API.
       operationId: EBS Launch Incident
       parameters:
       - in: path
@@ -828,7 +828,7 @@ paths:
     - url: https://api.everbridge.eu/rest
   /incidents/{organizationId}/{incidentId}:
     get:
-      description: 'Retrieve details of an incident within an organization.  This also returns the list of notifications launched within a given incident. '
+      description: Retrieve details of an incident within an organization. This also returns the list of notifications launched within a given incident.
       operationId: EBS Get Incident
       parameters:
       - example: '591470146880507'
@@ -1002,7 +1002,7 @@ paths:
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/incidents/{organizationId}/{incidentId}
     put:
-      description: Update an existing incident to launch another notification within a given notification.  This can also be used to close an incident (with or without sending notification).
+      description: Update an existing incident to launch another notification within a given notification. This can also be used to close an incident (with or without sending notification).
       operationId: EBS Update Incident
       parameters:
       - in: path
@@ -1152,6 +1152,35 @@ components:
           type: boolean
           description: Indicates if the the message sender has requested confirmation.
       description: Additional message settings.
+    MessageState:
+      required:
+      - active
+      - confirmed
+      - read
+      - shared
+      type: object
+      properties:
+        read:
+          type: boolean
+          description: Indicates whether the message has been marked as read for the Contact.
+        shared:
+          type: boolean
+          description: Indicates whether the message has been marked as shared for the Contact.
+        confirmed:
+          type: boolean
+          description: Indicates whether the message has been marked as confirmed for the Contact.
+        confirmedAt:
+          type: integer
+          description: The time the message was marked as confirmed for the Contact.
+          format: int64
+        readAt:
+          type: integer
+          description: The time the message was marked as read for the Contact.
+          format: int64
+        active:
+          type: boolean
+          description: Indicates whether the message is still active.
+      description: Message state.
     Sender:
       required:
       - firstName
@@ -1169,46 +1198,6 @@ components:
           type: string
           description: The Sender's last name.
       description: Message sender.
-    IncidentV2response:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Incident ID.
-          format: int64
-        name:
-          type: string
-          description: Incident name.
-        incidentStatus:
-          type: string
-          description: Incident status.
-          enum:
-          - Open
-          - Closed
-          - All
-        incidentCreatedDate:
-          type: integer
-          description: Incident created date.
-          format: int64
-        incidentLastModifiedDate:
-          type: integer
-          description: Incident last modified date.
-          format: int64
-        incidentClosedDate:
-          type: integer
-          description: Incident closed date.
-          format: int64
-        incidentDuration:
-          type: integer
-          description: Incident duration.
-          format: int64
-        messages:
-          type: array
-          description: Notification messages belong to this incident.
-          items:
-            $ref: '#/components/schemas/MessageResponseForQuery'
     MessageResponseForQuery:
       required:
       - body
@@ -1249,35 +1238,46 @@ components:
           type: integer
           description: Message created time.
           format: int64
-    MessageState:
+    IncidentV2response:
       required:
-      - active
-      - confirmed
-      - read
-      - shared
+      - id
       type: object
       properties:
-        read:
-          type: boolean
-          description: Indicates whether the message has been marked as read for the Contact.
-        shared:
-          type: boolean
-          description: Indicates whether the message has been marked as shared for the Contact.
-        confirmed:
-          type: boolean
-          description: Indicates whether the message has been marked as confirmed for the Contact.
-        confirmedAt:
+        id:
           type: integer
-          description: The time the message was marked as confirmed for the Contact.
+          description: Incident ID.
           format: int64
-        readAt:
+        name:
+          type: string
+          description: Incident name.
+        incidentStatus:
+          type: string
+          description: Incident status.
+          enum:
+          - Open
+          - Closed
+          - All
+        incidentCreatedDate:
           type: integer
-          description: The time the message was marked as read for the Contact.
+          description: Incident created date.
           format: int64
-        active:
-          type: boolean
-          description: Indicates whether the message is still active.
-      description: Message state.
+        incidentLastModifiedDate:
+          type: integer
+          description: Incident last modified date.
+          format: int64
+        incidentClosedDate:
+          type: integer
+          description: Incident closed date.
+          format: int64
+        incidentDuration:
+          type: integer
+          description: Incident duration.
+          format: int64
+        messages:
+          type: array
+          description: Notification messages belong to this incident.
+          items:
+            $ref: '#/components/schemas/MessageResponseForQuery'
     incident:
       properties:
         incidentPhases:
@@ -1381,20 +1381,6 @@ components:
       example: '1536984111644674'
       maxLength: 16
       type: integer
-    createIncident:
-      allOf:
-      - properties:
-          incidentAction:
-            description: "Incident Action:\n * `Launch`: This is the most common use case for launching a new incident.\n * `LaunchThenClose`: This closes the incident right after launching the incident."
-            enum:
-            - Launch
-            - LaunchThenClose
-            type: string
-        required:
-        - incidentAction
-        - incidentPhases
-        type: object
-      - $ref: '#/components/schemas/incident'
     updateIncident:
       allOf:
       - properties:
@@ -1408,20 +1394,6 @@ components:
             - CloseWithNotification
             - CloseWithoutNotification
             type: string
-        type: object
-      - $ref: '#/components/schemas/incident'
-    previewIncident:
-      allOf:
-      - properties:
-          incidentAction:
-            description: "Incident Action:\n * `Launch`: This is the most common use case for launching a new incident.\n * `LaunchThenClose`: This closes the incident right after launching the incident."
-            enum:
-            - Launch
-            - LaunchThenClose
-            type: string
-        required:
-        - incidentAction
-        - incidentPhases
         type: object
       - $ref: '#/components/schemas/incident'
     IncidentResponse:
@@ -1606,6 +1578,34 @@ components:
       - page
       title: Generated schema for Root
       type: object
+    createIncident:
+      allOf:
+      - properties:
+          incidentAction:
+            description: "Incident Action:\n * `Launch`: This is the most common use case for launching a new incident.\n * `LaunchThenClose`: This closes the incident right after launching the incident."
+            enum:
+            - Launch
+            - LaunchThenClose
+            type: string
+        required:
+        - incidentAction
+        - incidentPhases
+        type: object
+      - $ref: '#/components/schemas/incident'
+    previewIncident:
+      allOf:
+      - properties:
+          incidentAction:
+            description: "Incident Action:\n * `Launch`: This is the most common use case for launching a new incident.\n * `LaunchThenClose`: This closes the incident right after launching the incident."
+            enum:
+            - Launch
+            - LaunchThenClose
+            type: string
+        required:
+        - incidentAction
+        - incidentPhases
+        type: object
+      - $ref: '#/components/schemas/incident'
   securitySchemes:
     API_Authorizer:
       type: apiKey

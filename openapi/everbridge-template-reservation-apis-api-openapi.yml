@@ -162,7 +162,7 @@ paths:
       tags:
       - Template Reservation APIs
       operationId: delete-template-reservations
-      summary: Delete template reservations for a system.
+      summary: Delete template reservations for a system
       description: 'Delete a reservation from a template. By default, the caller will delete all reservations matching the templateId and systemName.
 
         Should the caller wish to be specific about a reservation, the reservation must have been created with a systemEntityId. Passing the query parameter systemEntityId will then allow the caller to delete a specific reservation rather than all matching the systemName for the template.'
@@ -238,6 +238,32 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/TemplateReservation'
+    TemplateReservationRequest:
+      type: object
+      properties:
+        templateId:
+          type: string
+          description: The template being reserved.
+        templateType:
+          type: string
+          description: The type of the communication template to reserve.
+          enum:
+          - legacy
+          - communication
+        systemId:
+          type: string
+          description: The identifier of the system that is reserving the template.
+        systemEntityId:
+          type: string
+          description: A unique identifier, allowing the caller to indicate which item on it’s end is holding the reservation.
+        systemUrl:
+          type: string
+          description: A self-generated URL offering a helpful link back to the reservation holder.
+      required:
+      - templateId
+      - templateType
+      - systemId
+      - systemUrl
     TemplateReservation:
       type: object
       properties:
@@ -274,32 +300,6 @@ components:
         id:
           type: string
           description: The ID of the communication that was launched.
-    TemplateReservationRequest:
-      type: object
-      properties:
-        templateId:
-          type: string
-          description: The template being reserved.
-        templateType:
-          type: string
-          description: The type of the communication template to reserve.
-          enum:
-          - legacy
-          - communication
-        systemId:
-          type: string
-          description: The identifier of the system that is reserving the template.
-        systemEntityId:
-          type: string
-          description: A unique identifier, allowing the caller to indicate which item on it’s end is holding the reservation.
-        systemUrl:
-          type: string
-          description: A self-generated URL offering a helpful link back to the reservation holder.
-      required:
-      - templateId
-      - templateType
-      - systemId
-      - systemUrl
   securitySchemes:
     API_Authorizer:
       type: apiKey

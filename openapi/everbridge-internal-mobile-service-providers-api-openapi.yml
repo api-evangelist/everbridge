@@ -1,7 +1,7 @@
 openapi: 3.2.0
 info:
   title: Digital Apps Internal Mobile Service Providers API
-  description: 'Digital Apps APIs bring Everbridge notification functionality to your company''s mobile, desktop or web applications. '
+  description: Digital Apps APIs bring Everbridge notification functionality to your company's mobile, desktop or web applications.
   version: v1
 servers:
 - url: https://api.everbridge.net/digitalapps/v2
@@ -50,17 +50,6 @@ paths:
         passthroughBehavior: when_no_match
 components:
   schemas:
-    CategoryGroup:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        categories:
-          type: array
-          items:
-            $ref: '#/components/schemas/Category'
     Service:
       type: object
       properties:
@@ -80,47 +69,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/WeatherService'
-    Category:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-    ServiceGroup:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        categories:
-          type: array
-          items:
-            $ref: '#/components/schemas/ServiceCategory'
-    ServiceCategory:
-      type: object
-      properties:
-        id:
-          type: string
-        title:
-          type: string
-        group:
-          $ref: '#/components/schemas/ServiceGroup'
-        services:
-          type: array
-          items:
-            $ref: '#/components/schemas/Service'
-        mandatory:
-          type: boolean
-        expose:
-          type: boolean
-        type:
-          type: string
-          enum:
-          - Events
-          - Customized
-          - Weather
     WeatherService:
       type: object
       properties:
@@ -150,25 +98,29 @@ components:
         lastModifiedDate:
           type: string
           format: date-time
-    ServiceProvider:
+    ServiceCategory:
       type: object
       properties:
         id:
           type: string
-        name:
+        title:
           type: string
+        group:
+          $ref: '#/components/schemas/ServiceGroup'
         services:
           type: array
           items:
             $ref: '#/components/schemas/Service'
-        categories:
-          type: array
-          items:
-            $ref: '#/components/schemas/Category'
-        categoryGroups:
-          type: array
-          items:
-            $ref: '#/components/schemas/CategoryGroup'
+        mandatory:
+          type: boolean
+        expose:
+          type: boolean
+        type:
+          type: string
+          enum:
+          - Events
+          - Customized
+          - Weather
     WeatherType:
       type: object
       properties:
@@ -196,6 +148,54 @@ components:
         lastModifiedDate:
           type: string
           format: date-time
+    ServiceProvider:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        services:
+          type: array
+          items:
+            $ref: '#/components/schemas/Service'
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
+        categoryGroups:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryGroup'
+    Category:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    ServiceGroup:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceCategory'
+    CategoryGroup:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
   securitySchemes:
     API_Authorizer:
       type: apiKey

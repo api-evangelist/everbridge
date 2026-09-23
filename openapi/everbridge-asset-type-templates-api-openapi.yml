@@ -17,7 +17,6 @@ paths:
       - Asset Type Templates
       operationId: EBS AM List Asset Type Templates
       summary: List Asset Type Templates
-      description: List Asset Type Templates
       parameters:
       - name: X-EB-Organization-Id
         in: header
@@ -103,7 +102,6 @@ paths:
       - Asset Type Templates
       operationId: EBS AM Get Asset Type Template
       summary: Get Asset Type Template
-      description: Get Asset Type Template
       parameters:
       - name: X-EB-Organization-Id
         in: header
@@ -164,59 +162,6 @@ paths:
         passthroughBehavior: when_no_match
 components:
   schemas:
-    AssetTypeTemplate:
-      required:
-      - name
-      type: object
-      properties:
-        id:
-          type: string
-        organizationId:
-          type: integer
-          format: int64
-        createdId:
-          type: integer
-          format: int64
-        createdName:
-          type: string
-        createdProxyName:
-          type: string
-        lastModifiedId:
-          type: integer
-          format: int64
-        lastModifiedName:
-          type: string
-        lastModifiedProxyName:
-          type: string
-        createdTimestamp:
-          type: string
-          format: date-time
-        lastModifiedTimestamp:
-          type: string
-          format: date-time
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-        description:
-          maxLength: 2000
-          minLength: 0
-          type: string
-        seq:
-          type: integer
-          format: int32
-        legacy:
-          type: boolean
-        assetTypeCategory:
-          type: string
-          enum:
-          - REGULAR
-          - SUPPLY_CHAIN_STOP
-          - SUPPLY_CHAIN_ROUTE
-        propertyDefinitions:
-          type: array
-          items:
-            $ref: '#/components/schemas/AssetPropertyDefinition'
     AssetPropertyDefinition:
       required:
       - assetPropertyDataType
@@ -302,6 +247,59 @@ components:
           type: array
           items:
             type: object
+    AssetTypeTemplate:
+      required:
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+        organizationId:
+          type: integer
+          format: int64
+        createdId:
+          type: integer
+          format: int64
+        createdName:
+          type: string
+        createdProxyName:
+          type: string
+        lastModifiedId:
+          type: integer
+          format: int64
+        lastModifiedName:
+          type: string
+        lastModifiedProxyName:
+          type: string
+        createdTimestamp:
+          type: string
+          format: date-time
+        lastModifiedTimestamp:
+          type: string
+          format: date-time
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+        description:
+          maxLength: 2000
+          minLength: 0
+          type: string
+        seq:
+          type: integer
+          format: int32
+        legacy:
+          type: boolean
+        assetTypeCategory:
+          type: string
+          enum:
+          - REGULAR
+          - SUPPLY_CHAIN_STOP
+          - SUPPLY_CHAIN_ROUTE
+        propertyDefinitions:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetPropertyDefinition'
     organizationId:
       description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
       maxLength: 16

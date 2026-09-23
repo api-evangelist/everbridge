@@ -382,7 +382,7 @@ paths:
         '200':
           description: Paginated list of basic users.
       security: []
-      summary: List basic users with pagination.
+      summary: List basic users with pagination
       tags:
       - Users
       x-amazon-apigateway-integration:
@@ -1233,15 +1233,77 @@ paths:
         uri: https://ebs-restapi-prod-us.evbg.io/rest/users/{id}/sendEmail
 components:
   schemas:
-    postUpdateResponse:
+    UserVO:
       properties:
-        baseUri:
+        accountId:
+          format: int64
+          type: integer
+        apiAccess:
+          type: boolean
+        autoProvisionForEBU:
+          type: boolean
+        contactId:
+          format: int64
+          type: integer
+        contactOrgId:
+          format: int64
+          type: integer
+        defaultRoleId:
+          format: int64
+          type: integer
+        departmentRole:
+          type: string
+        email:
+          type: string
+        firstname:
           type: string
         id:
+          format: int64
           type: integer
-        instanceUri:
+        lastname:
           type: string
-        message:
+        middlename:
+          type: string
+        numericPassword:
+          type: string
+        numericUsername:
+          type: string
+        orgIds:
+          items:
+            format: int64
+            type: integer
+          type: array
+        organizationId:
+          format: int64
+          type: integer
+        password:
+          type: string
+        roleIds:
+          items:
+            format: int64
+            type: integer
+          type: array
+        roleItems:
+          items:
+            $ref: '#/components/schemas/RoleItem'
+          type: array
+        samlIdentity:
+          type: string
+        secondaryEmail:
+          type: string
+        suffix:
+          type: string
+        timeZoneId:
+          type: string
+        userStatus:
+          description: Whether the user is Active or Inactive. NotRegistered is an obsolete legacy status.
+          enum:
+          - Active
+          - Inactive
+          type: string
+        username:
+          type: string
+        usernameLowerCase:
           type: string
       type: object
     getUsers:
@@ -1432,103 +1494,6 @@ components:
           format: int32
           type: integer
       type: object
-    UserVO:
-      properties:
-        accountId:
-          format: int64
-          type: integer
-        apiAccess:
-          type: boolean
-        autoProvisionForEBU:
-          type: boolean
-        contactId:
-          format: int64
-          type: integer
-        contactOrgId:
-          format: int64
-          type: integer
-        defaultRoleId:
-          format: int64
-          type: integer
-        departmentRole:
-          type: string
-        email:
-          type: string
-        firstname:
-          type: string
-        id:
-          format: int64
-          type: integer
-        lastname:
-          type: string
-        middlename:
-          type: string
-        numericPassword:
-          type: string
-        numericUsername:
-          type: string
-        orgIds:
-          items:
-            format: int64
-            type: integer
-          type: array
-        organizationId:
-          format: int64
-          type: integer
-        password:
-          type: string
-        roleIds:
-          items:
-            format: int64
-            type: integer
-          type: array
-        roleItems:
-          items:
-            $ref: '#/components/schemas/RoleItem'
-          type: array
-        samlIdentity:
-          type: string
-        secondaryEmail:
-          type: string
-        suffix:
-          type: string
-        timeZoneId:
-          type: string
-        userStatus:
-          description: Whether the user is Active or Inactive. NotRegistered is an obsolete legacy status.
-          enum:
-          - Active
-          - Inactive
-          type: string
-        username:
-          type: string
-        usernameLowerCase:
-          type: string
-      type: object
-    RoleItem:
-      properties:
-        defaultOrganization:
-          type: boolean
-        defaultRole:
-          type: boolean
-        groupIds:
-          items:
-            format: int64
-            type: integer
-          type: array
-        organizationId:
-          format: int64
-          type: integer
-        roleId:
-          format: int64
-          type: integer
-      type: object
-    roleId:
-      default: '0'
-      description: Role ID
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
     patchEntity:
       additionalProperties: false
       properties:
@@ -1568,71 +1533,23 @@ components:
       - path
       title: Add, Replace or Remove
       type: object
-    userRequest:
+    RoleItem:
       properties:
-        apiAccess:
-          description: Whether the user has permission to access Rest API.
+        defaultOrganization:
           type: boolean
-        autoProvisionForEBU:
-          description: Whether auto provisioning an Everbridge University user.
+        defaultRole:
           type: boolean
-        contactId:
-          description: The existing contact ID within an organization to link to the user.
-          type: integer
-        contactOrgId:
-          description: The linked contact's organization ID.
-          type: integer
-        defaultRoleId:
-          description: The user's default role ID.
-          type: integer
-        email:
-          description: The user's email.
-          type: string
-        externalId:
-          description: An optional external identifier for the user. It may be set by an administrator in the web portal or by an integrating system through the API. The value must be unique within the account. It must start with a letter or digit and may contain letters, digits, '.', '_', '-', '@', '+', and ':'. External ID is case-insensitive and is normalized to lowercase when stored.
-          maxLength: 254
-          pattern: ^[a-zA-Z0-9][a-zA-Z0-9._\-@+:]*$
-          type: string
-        firstName:
-          description: The user's first name.
-          maxLength: 40
-          type: string
-        flowDesignerOrgs:
-          description: ID of the flow designer.
+        groupIds:
           items:
+            format: int64
             type: integer
           type: array
-        lastName:
-          description: The user's last name.
-          maxLength: 40
-          type: string
-        middlename:
-          description: The user's middle name.
-          maxLength: 1
-          type: string
-        roleIds:
-          description: The user's role IDs.
-          items:
-            type: integer
-          type: array
-        secondaryEmail:
-          description: The user's second email.
-          type: string
-        ssoUserId:
-          description: The user's SSO ID.
-          type: string
-        suffix:
-          description: 'The user''s suffix. Support: "II","III","Jr.","Sr."'
-          type: string
-        timeZoneId:
-          description: The user's IANA time zone identifier, for example America/New_York.
-          maxLength: 100
-          type: string
-      required:
-      - firstName
-      - lastName
-      - email
-      - timeZoneId
+        organizationId:
+          format: int64
+          type: integer
+        roleId:
+          format: int64
+          type: integer
       type: object
     getUser:
       properties:
@@ -1788,6 +1705,89 @@ components:
           description: Whether the user is Active or Inactive. NotRegistered is an obsolete legacy status.
           type: string
       type: object
+    userRequest:
+      properties:
+        apiAccess:
+          description: Whether the user has permission to access Rest API.
+          type: boolean
+        autoProvisionForEBU:
+          description: Whether auto provisioning an Everbridge University user.
+          type: boolean
+        contactId:
+          description: The existing contact ID within an organization to link to the user.
+          type: integer
+        contactOrgId:
+          description: The linked contact's organization ID.
+          type: integer
+        defaultRoleId:
+          description: The user's default role ID.
+          type: integer
+        email:
+          description: The user's email.
+          type: string
+        externalId:
+          description: An optional external identifier for the user. It may be set by an administrator in the web portal or by an integrating system through the API. The value must be unique within the account. It must start with a letter or digit and may contain letters, digits, '.', '_', '-', '@', '+', and ':'. External ID is case-insensitive and is normalized to lowercase when stored.
+          maxLength: 254
+          pattern: ^[a-zA-Z0-9][a-zA-Z0-9._\-@+:]*$
+          type: string
+        firstName:
+          description: The user's first name.
+          maxLength: 40
+          type: string
+        flowDesignerOrgs:
+          description: ID of the flow designer.
+          items:
+            type: integer
+          type: array
+        lastName:
+          description: The user's last name.
+          maxLength: 40
+          type: string
+        middlename:
+          description: The user's middle name.
+          maxLength: 1
+          type: string
+        roleIds:
+          description: The user's role IDs.
+          items:
+            type: integer
+          type: array
+        secondaryEmail:
+          description: The user's second email.
+          type: string
+        ssoUserId:
+          description: The user's SSO ID.
+          type: string
+        suffix:
+          description: 'The user''s suffix. Support: "II","III","Jr.","Sr."'
+          type: string
+        timeZoneId:
+          description: The user's IANA time zone identifier, for example America/New_York.
+          maxLength: 100
+          type: string
+      required:
+      - firstName
+      - lastName
+      - email
+      - timeZoneId
+      type: object
+    postUpdateResponse:
+      properties:
+        baseUri:
+          type: string
+        id:
+          type: integer
+        instanceUri:
+          type: string
+        message:
+          type: string
+      type: object
+    roleId:
+      default: '0'
+      description: Role ID
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
   securitySchemes:
     API_Authorizer:
       description: oAuth Token

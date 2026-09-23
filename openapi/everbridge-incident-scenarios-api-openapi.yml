@@ -258,6 +258,135 @@ paths:
         uri: https://ebs-restapi-prod-us.evbg.io/rest/incidentScenarios/{organizationId}/{queryValueOrscenarioIncidentId}
 components:
   schemas:
+    RestfulCollectionResult:
+      properties:
+        currentPageUri:
+          type: string
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        nextPageUri:
+          type: string
+        page:
+          $ref: '#/components/schemas/DataPageObject'
+        previousPageUri:
+          type: string
+      title: RestfulCollectionResult
+      type: object
+    RestfulInstanceResult:
+      properties:
+        message:
+          type: string
+        result:
+          type: object
+      title: RestfulInstanceResult
+      type: object
+    Option:
+      properties:
+        name:
+          type: string
+      type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
+    DataPageObject:
+      properties:
+        currentPageNo:
+          format: int32
+          type: integer
+        data:
+          items:
+            type: object
+          type: array
+        dataPageList:
+          items:
+            $ref: '#/components/schemas/DataPageObject'
+          type: array
+        pageSize:
+          format: int32
+          type: integer
+        scrollId:
+          type: string
+        start:
+          format: int32
+          type: integer
+        totalCount:
+          format: int64
+          type: integer
+        totalPageCount:
+          format: int32
+          type: integer
+      title: DataPage«object»
+      type: object
+    CascadingSetting:
+      properties:
+        cascadingLevels:
+          items:
+            type: string
+          type: array
+        cascadingOptions:
+          items:
+            $ref: '#/components/schemas/Option'
+          type: array
+      type: object
+    IncidentScenarioWrapper:
+      description: An incidentScenario object to launch.
+      properties:
+        customScenarioId:
+          type: string
+        enableMessageTruncate:
+          type: boolean
+        formVariables:
+          items:
+            $ref: '#/components/schemas/FormVariableItem'
+          type: array
+        incidentAction:
+          enum:
+          - Launch
+          - LaunchThenClose
+          - Update
+          - Close
+          - UpdateThenClose
+          - CloseWithNotification
+          - CloseWithoutNotification
+          type: string
+        incidentMode:
+          type: string
+        incidentName:
+          type: string
+        incidentNotificationPropertyBag:
+          additionalProperties:
+            type: string
+          type: object
+        name:
+          type: string
+        pinCode:
+          type: string
+        pushCustomFields:
+          additionalProperties:
+            type: string
+          type: object
+        scenarioId:
+          format: int64
+          type: integer
+        skipVariableRequiredCheck:
+          type: boolean
+        templateIds:
+          items:
+            format: int64
+            type: integer
+          type: array
+        templates:
+          items:
+            $ref: '#/components/schemas/IncidentTemplateBO'
+          type: array
+      type: object
     VariableOption:
       properties:
         accountId:
@@ -315,94 +444,6 @@ components:
         variableId:
           format: int64
           type: integer
-      type: object
-    RestfulInstanceResult:
-      properties:
-        message:
-          type: string
-        result:
-          type: object
-      title: RestfulInstanceResult
-      type: object
-    RestfulModificationResult:
-      properties:
-        baseUri:
-          type: string
-        id:
-          format: int64
-          type: integer
-        instanceUri:
-          type: string
-        message:
-          type: string
-      title: RestfulModificationResult
-      type: object
-    CascadingSetting:
-      properties:
-        cascadingLevels:
-          items:
-            type: string
-          type: array
-        cascadingOptions:
-          items:
-            $ref: '#/components/schemas/Option'
-          type: array
-      type: object
-    Option:
-      properties:
-        name:
-          type: string
-      type: object
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
-    RestfulCollectionResult:
-      properties:
-        currentPageUri:
-          type: string
-        firstPageUri:
-          type: string
-        lastPageUri:
-          type: string
-        message:
-          type: string
-        nextPageUri:
-          type: string
-        page:
-          $ref: '#/components/schemas/DataPageObject'
-        previousPageUri:
-          type: string
-      title: RestfulCollectionResult
-      type: object
-    FormCascadingItem:
-      properties:
-        cascadingVars:
-          items:
-            $ref: '#/components/schemas/Option'
-          type: array
-        requiredLevel:
-          format: int32
-          type: integer
-        selectedLevel:
-          format: int32
-          type: integer
-      type: object
-    IncidentTemplateBO:
-      properties:
-        id:
-          format: int64
-          type: integer
-        name:
-          type: string
-        status:
-          type: string
-        sysVarCurrentTimeFormat:
-          type: string
-        sysVarTodayDateFormat:
-          type: string
       type: object
     VariableItem:
       properties:
@@ -611,86 +652,45 @@ components:
           deprecated: true
           type: string
       type: object
-    DataPageObject:
+    RestfulModificationResult:
       properties:
-        currentPageNo:
-          format: int32
-          type: integer
-        data:
-          items:
-            type: object
-          type: array
-        dataPageList:
-          items:
-            $ref: '#/components/schemas/DataPageObject'
-          type: array
-        pageSize:
-          format: int32
-          type: integer
-        scrollId:
+        baseUri:
           type: string
-        start:
-          format: int32
-          type: integer
-        totalCount:
+        id:
           format: int64
           type: integer
-        totalPageCount:
+        instanceUri:
+          type: string
+        message:
+          type: string
+      title: RestfulModificationResult
+      type: object
+    FormCascadingItem:
+      properties:
+        cascadingVars:
+          items:
+            $ref: '#/components/schemas/Option'
+          type: array
+        requiredLevel:
           format: int32
           type: integer
-      title: DataPage«object»
+        selectedLevel:
+          format: int32
+          type: integer
       type: object
-    IncidentScenarioWrapper:
-      description: An incidentScenario object to launch.
+    IncidentTemplateBO:
       properties:
-        customScenarioId:
-          type: string
-        enableMessageTruncate:
-          type: boolean
-        formVariables:
-          items:
-            $ref: '#/components/schemas/FormVariableItem'
-          type: array
-        incidentAction:
-          enum:
-          - Launch
-          - LaunchThenClose
-          - Update
-          - Close
-          - UpdateThenClose
-          - CloseWithNotification
-          - CloseWithoutNotification
-          type: string
-        incidentMode:
-          type: string
-        incidentName:
-          type: string
-        incidentNotificationPropertyBag:
-          additionalProperties:
-            type: string
-          type: object
+        id:
+          format: int64
+          type: integer
         name:
           type: string
-        pinCode:
+        status:
           type: string
-        pushCustomFields:
-          additionalProperties:
-            type: string
-          type: object
-        scenarioId:
-          format: int64
-          type: integer
-        skipVariableRequiredCheck:
-          type: boolean
-        templateIds:
-          items:
-            format: int64
-            type: integer
-          type: array
-        templates:
-          items:
-            $ref: '#/components/schemas/IncidentTemplateBO'
-          type: array
+        sysVarCurrentTimeFormat:
+          type: string
+        sysVarTodayDateFormat:
+          type: string
       type: object
   securitySchemes:
     API_Authorizer:

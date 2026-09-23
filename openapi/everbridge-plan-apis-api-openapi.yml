@@ -153,7 +153,7 @@ paths:
       tags:
       - Plan APIs
       operationId: getPlan
-      summary: Retrieve the plan associated with the specified identifier.
+      summary: Retrieve the plan associated with the specified identifier
       description: Retrieves a Comms plan details.
       parameters:
       - name: planId
@@ -304,6 +304,10 @@ paths:
         connectionType: VPC_LINK
 components:
   schemas:
+    Tag:
+      type: string
+      description: A value used to contain a simple categorization.
+      example: eventType:hurricane
     UpsertPlanRequest:
       type: object
       required:
@@ -340,14 +344,6 @@ components:
           items:
             type: string
           description: A list of communication template IDs for intended for closing communications.
-    CommsResponse:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          type: string
-          description: The ID of the communication that was launched.
     PlanApiPaginatedResponse:
       type: object
       description: A page of data from an endpoint.
@@ -377,10 +373,65 @@ components:
             totalCount:
               type: number
               description: The total number of elements across all pages.
-    Tag:
-      type: string
-      description: A value used to contain a simple categorization.
-      example: eventType:hurricane
+    PlanDetail:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum:
+          - DRAFT
+          - LIVE
+        eventTypes:
+          type: array
+          items:
+            type: string
+          description: Event types for the plan. Each value must exist in the event type library.
+        createdAt:
+          type: string
+          description: ISO 8601 formatted date-time string representing when the plan was created.
+        createdBy:
+          type: string
+        createdByName:
+          type: string
+        updatedAt:
+          type: string
+          description: ISO 8601 formatted date-time string representing when the plan was last updated.
+        updatedBy:
+          type: string
+        updatedByName:
+          type: string
+        createdRoleId:
+          type: string
+        updatedRoleId:
+          type: string
+        lastUsedAt:
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+          description: A list of tags assigned to the communication plan.
+        initialTemplates:
+          type: array
+          items:
+            type: string
+          description: A list containing at most one communication template intended for initial communications.
+        updateTemplates:
+          type: array
+          items:
+            type: string
+          description: A list of communication template IDs for intended for updating communications.
+        closeTemplates:
+          type: array
+          items:
+            type: string
+          description: A list of communication template IDs for intended for closing communications.
     PlanBase:
       type: object
       required:
@@ -441,65 +492,14 @@ components:
         lastUsedAt:
           type: string
           description: ISO 8601 formatted date-time string representing when the plan was last updated by the logged in user.
-    PlanDetail:
+    CommsResponse:
+      required:
+      - id
       type: object
       properties:
         id:
           type: string
-        name:
-          type: string
-        description:
-          type: string
-        status:
-          type: string
-          enum:
-          - DRAFT
-          - LIVE
-        eventTypes:
-          type: array
-          items:
-            type: string
-          description: Event types for the plan. Each value must exist in the event type library.
-        createdAt:
-          type: string
-          description: ISO 8601 formatted date-time string representing when the plan was created.
-        createdBy:
-          type: string
-        createdByName:
-          type: string
-        updatedAt:
-          type: string
-          description: ISO 8601 formatted date-time string representing when the plan was last updated.
-        updatedBy:
-          type: string
-        updatedByName:
-          type: string
-        createdRoleId:
-          type: string
-        updatedRoleId:
-          type: string
-        lastUsedAt:
-          type: string
-        tags:
-          type: array
-          items:
-            $ref: '#/components/schemas/Tag'
-          description: A list of tags assigned to the communication plan.
-        initialTemplates:
-          type: array
-          items:
-            type: string
-          description: A list containing at most one communication template intended for initial communications.
-        updateTemplates:
-          type: array
-          items:
-            type: string
-          description: A list of communication template IDs for intended for updating communications.
-        closeTemplates:
-          type: array
-          items:
-            type: string
-          description: A list of communication template IDs for intended for closing communications.
+          description: The ID of the communication that was launched.
   securitySchemes:
     API_Authorizer:
       type: apiKey

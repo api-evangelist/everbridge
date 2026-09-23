@@ -629,6 +629,24 @@ paths:
       url: https://api.snapcomms.com/mock
 components:
   schemas:
+    RestfulCollectionResult:
+      properties:
+        currentPageUri:
+          type: string
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        nextPageUri:
+          type: string
+        page:
+          $ref: '#/components/schemas/DataPageObject'
+        previousPageUri:
+          type: string
+      title: RestfulCollectionResult
+      type: object
     DataPageObject:
       properties:
         currentPageNo:
@@ -664,24 +682,182 @@ components:
       example: '1536984111644674'
       maxLength: 16
       type: integer
-    RestfulCollectionResult:
-      properties:
-        currentPageUri:
-          type: string
-        firstPageUri:
-          type: string
-        lastPageUri:
-          type: string
-        message:
-          type: string
-        nextPageUri:
-          type: string
-        page:
-          $ref: '#/components/schemas/DataPageObject'
-        previousPageUri:
-          type: string
-      title: RestfulCollectionResult
+    ReportPublishingStatisticsResponse:
       type: object
+      properties:
+        content:
+          type: array
+          items:
+            required:
+            - publishDate
+            - name
+            - version
+            - channel
+            - folder
+            - templateName
+            - publisher
+            - creator
+            - successPercentage
+            - targetedCount
+            - reachCount
+            - totalReadCount
+            - readCount
+            - completedCount
+            - totalReadLaterCount
+            - totalDismissedCount
+            - totalPopupCount
+            - clientID
+            - campaignID
+            - assetTypeID
+            - assetID
+            - templateID
+            - itemId
+            - startDate
+            - startDateFormat
+            - endDate
+            - endDateFormat
+            type: object
+            properties:
+              publishDate:
+                type: string
+              name:
+                type: string
+              version:
+                type: string
+              channel:
+                type: string
+              folder:
+                type: string
+              templateName:
+                type: string
+              publisher:
+                type: string
+              creator:
+                type: string
+              successPercentage:
+                type: string
+              targetedCount:
+                type: string
+              reachCount:
+                type: string
+              totalReadCount:
+                type: string
+              readCount:
+                type: string
+              completedCount:
+                type: string
+              totalReadLaterCount:
+                type: string
+              totalDismissedCount:
+                type: string
+              totalPopupCount:
+                type: string
+              clientID:
+                type: string
+              campaignID:
+                type: string
+              assetTypeID:
+                type: string
+              assetID:
+                type: string
+              templateID:
+                type: string
+              itemId:
+                type: string
+              lastUpdated:
+                type: string
+              startDate:
+                type: string
+              startDateFormat:
+                type: string
+              endDate:
+                type: string
+              endDateFormat:
+                type: string
+        types:
+          type: array
+          items:
+            required:
+            - label
+            - value
+            type: object
+            properties:
+              label:
+                type: string
+              value:
+                type: string
+        folders:
+          type: array
+          items:
+            required:
+            - label
+            - value
+            type: object
+            properties:
+              label:
+                type: string
+              value:
+                type: string
+        admins:
+          type: array
+          items:
+            required:
+            - label
+            - value
+            type: object
+            properties:
+              label:
+                type: string
+              value:
+                type: string
+    ReportQuestionnaireResponsesResponse:
+      type: object
+      properties:
+        responses:
+          type: array
+          items:
+            required:
+            - version
+            - questionNo
+            - questionText
+            - submissionTime
+            - completionTime
+            - consumerId
+            - userName
+            - fullName
+            - response
+            - score
+            - type
+            type: object
+            properties:
+              version:
+                type: string
+              questionNo:
+                type: string
+              questionText:
+                type: string
+              submissionTime:
+                type: string
+              completionTime:
+                type: string
+              consumerId:
+                type: string
+              userName:
+                type: string
+              fullName:
+                type: string
+              response:
+                type: string
+              score:
+                type: string
+              type:
+                type: string
+        version:
+          type: string
+        startDate:
+          type: string
+        endDate:
+          type: string
     ReportQuestionnaireSummaryResponse:
       type: object
       properties:
@@ -833,182 +1009,6 @@ components:
               type: string
             campaignName:
               type: string
-    ReportQuestionnaireResponsesResponse:
-      type: object
-      properties:
-        responses:
-          type: array
-          items:
-            required:
-            - version
-            - questionNo
-            - questionText
-            - submissionTime
-            - completionTime
-            - consumerId
-            - userName
-            - fullName
-            - response
-            - score
-            - type
-            type: object
-            properties:
-              version:
-                type: string
-              questionNo:
-                type: string
-              questionText:
-                type: string
-              submissionTime:
-                type: string
-              completionTime:
-                type: string
-              consumerId:
-                type: string
-              userName:
-                type: string
-              fullName:
-                type: string
-              response:
-                type: string
-              score:
-                type: string
-              type:
-                type: string
-        version:
-          type: string
-        startDate:
-          type: string
-        endDate:
-          type: string
-    ReportPublishingStatisticsResponse:
-      type: object
-      properties:
-        content:
-          type: array
-          items:
-            required:
-            - publishDate
-            - name
-            - version
-            - channel
-            - folder
-            - templateName
-            - publisher
-            - creator
-            - successPercentage
-            - targetedCount
-            - reachCount
-            - totalReadCount
-            - readCount
-            - completedCount
-            - totalReadLaterCount
-            - totalDismissedCount
-            - totalPopupCount
-            - clientID
-            - campaignID
-            - assetTypeID
-            - assetID
-            - templateID
-            - itemId
-            - startDate
-            - startDateFormat
-            - endDate
-            - endDateFormat
-            type: object
-            properties:
-              publishDate:
-                type: string
-              name:
-                type: string
-              version:
-                type: string
-              channel:
-                type: string
-              folder:
-                type: string
-              templateName:
-                type: string
-              publisher:
-                type: string
-              creator:
-                type: string
-              successPercentage:
-                type: string
-              targetedCount:
-                type: string
-              reachCount:
-                type: string
-              totalReadCount:
-                type: string
-              readCount:
-                type: string
-              completedCount:
-                type: string
-              totalReadLaterCount:
-                type: string
-              totalDismissedCount:
-                type: string
-              totalPopupCount:
-                type: string
-              clientID:
-                type: string
-              campaignID:
-                type: string
-              assetTypeID:
-                type: string
-              assetID:
-                type: string
-              templateID:
-                type: string
-              itemId:
-                type: string
-              lastUpdated:
-                type: string
-              startDate:
-                type: string
-              startDateFormat:
-                type: string
-              endDate:
-                type: string
-              endDateFormat:
-                type: string
-        types:
-          type: array
-          items:
-            required:
-            - label
-            - value
-            type: object
-            properties:
-              label:
-                type: string
-              value:
-                type: string
-        folders:
-          type: array
-          items:
-            required:
-            - label
-            - value
-            type: object
-            properties:
-              label:
-                type: string
-              value:
-                type: string
-        admins:
-          type: array
-          items:
-            required:
-            - label
-            - value
-            type: object
-            properties:
-              label:
-                type: string
-              value:
-                type: string
   securitySchemes:
     API_Authorizer:
       description: oAuth Token

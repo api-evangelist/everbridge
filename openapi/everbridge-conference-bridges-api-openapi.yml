@@ -575,73 +575,6 @@ paths:
         uri: https://ebs-restapi-prod-us.evbg.io/rest/conferenceBridges/{organizationId}/{id}
 components:
   schemas:
-    ConferenceBridgeUpdateRequestSchema:
-      properties:
-        countryCode:
-          type: string
-        countryName:
-          type: string
-        name:
-          type: string
-        number:
-          type: string
-        steps:
-          items:
-            properties:
-              type:
-                type: string
-              value:
-                type: string
-            required:
-            - type
-            - value
-            type: object
-          type: array
-      type: object
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
-    ConferenceBridgeRequestSchema:
-      properties:
-        countryCode:
-          type: string
-        countryName:
-          type: string
-        name:
-          type: string
-        number:
-          type: string
-        steps:
-          items:
-            properties:
-              type:
-                type: string
-              value:
-                type: string
-            required:
-            - type
-            - value
-            type: object
-          type: array
-      required:
-      - countryCode
-      - number
-      - name
-      type: object
-    ConferenceBridgePostResponseSchema:
-      properties:
-        baseUri:
-          type: string
-        id:
-          type: integer
-        instanceUri:
-          type: string
-        message:
-          type: string
-      type: object
     ConferenceBridgeResponseSchema:
       properties:
         firstPageUri:
@@ -729,6 +662,73 @@ components:
       - firstPageUri
       - lastPageUri
       - page
+      type: object
+    ConferenceBridgePostResponseSchema:
+      properties:
+        baseUri:
+          type: string
+        id:
+          type: integer
+        instanceUri:
+          type: string
+        message:
+          type: string
+      type: object
+    ConferenceBridgeRequestSchema:
+      properties:
+        countryCode:
+          type: string
+        countryName:
+          type: string
+        name:
+          type: string
+        number:
+          type: string
+        steps:
+          items:
+            properties:
+              type:
+                type: string
+              value:
+                type: string
+            required:
+            - type
+            - value
+            type: object
+          type: array
+      required:
+      - countryCode
+      - number
+      - name
+      type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
+    ConferenceBridgeUpdateRequestSchema:
+      properties:
+        countryCode:
+          type: string
+        countryName:
+          type: string
+        name:
+          type: string
+        number:
+          type: string
+        steps:
+          items:
+            properties:
+              type:
+                type: string
+              value:
+                type: string
+            required:
+            - type
+            - value
+            type: object
+          type: array
       type: object
   securitySchemes:
     API_Authorizer:

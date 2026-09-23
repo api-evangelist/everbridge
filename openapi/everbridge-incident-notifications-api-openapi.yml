@@ -1804,6 +1804,24 @@ paths:
         uri: https://ebs-restapi-prod-us.evbg.io/rest/incidentNotifications/{organizationId}/{incidentId}/notification
 components:
   schemas:
+    RestfulCollectionResult:
+      properties:
+        currentPageUri:
+          type: string
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        nextPageUri:
+          type: string
+        page:
+          $ref: '#/components/schemas/DataPageObject'
+        previousPageUri:
+          type: string
+      title: RestfulCollectionResult
+      type: object
     RestfulInstanceResult:
       properties:
         message:
@@ -1847,24 +1865,6 @@ components:
       example: '1536984111644674'
       maxLength: 16
       type: integer
-    RestfulCollectionResult:
-      properties:
-        currentPageUri:
-          type: string
-        firstPageUri:
-          type: string
-        lastPageUri:
-          type: string
-        message:
-          type: string
-        nextPageUri:
-          type: string
-        page:
-          $ref: '#/components/schemas/DataPageObject'
-        previousPageUri:
-          type: string
-      title: RestfulCollectionResult
-      type: object
   securitySchemes:
     API_Authorizer:
       description: oAuth Token

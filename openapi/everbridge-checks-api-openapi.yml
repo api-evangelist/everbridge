@@ -41,6 +41,8 @@ paths:
             statusCode: '200'
         passthroughBehavior: when_no_match
         connectionType: VPC_LINK
+      operationId: postChecks
+      x-operation-id-source: derived
     get:
       tags:
       - Checks
@@ -70,6 +72,8 @@ paths:
             statusCode: '200'
         passthroughBehavior: when_no_match
         connectionType: VPC_LINK
+      operationId: getChecks
+      x-operation-id-source: derived
   /checks/{id}:
     get:
       tags:
@@ -105,6 +109,8 @@ paths:
             statusCode: '200'
         passthroughBehavior: when_no_match
         connectionType: VPC_LINK
+      operationId: getChecksById
+      x-operation-id-source: derived
     put:
       tags:
       - Checks
@@ -143,6 +149,8 @@ paths:
             statusCode: '200'
         passthroughBehavior: when_no_match
         connectionType: VPC_LINK
+      operationId: putChecksById
+      x-operation-id-source: derived
     delete:
       tags:
       - Checks
@@ -173,6 +181,8 @@ paths:
             statusCode: '200'
         passthroughBehavior: when_no_match
         connectionType: VPC_LINK
+      operationId: deleteChecksById
+      x-operation-id-source: derived
   /checks/query:
     get:
       tags:
@@ -220,8 +230,27 @@ paths:
             statusCode: '200'
         passthroughBehavior: when_no_match
         connectionType: VPC_LINK
+      operationId: getChecksQuery
+      x-operation-id-source: derived
 components:
   schemas:
+    CreateCheckRequest:
+      type: object
+      properties:
+        customerAccountId:
+          type: string
+        sourceId:
+          type: string
+        agencyOfficeId:
+          type: string
+        path:
+          type: string
+        expectedValues:
+          type: array
+          items:
+            type: string
+        contentType:
+          type: string
     Check:
       type: object
       properties:
@@ -247,23 +276,6 @@ components:
         updatedAt:
           type: string
           format: date-time
-    CreateCheckRequest:
-      type: object
-      properties:
-        customerAccountId:
-          type: string
-        sourceId:
-          type: string
-        agencyOfficeId:
-          type: string
-        path:
-          type: string
-        expectedValues:
-          type: array
-          items:
-            type: string
-        contentType:
-          type: string
   securitySchemes:
     API_Authorizer:
       type: apiKey

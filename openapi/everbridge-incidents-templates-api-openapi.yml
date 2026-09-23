@@ -12,7 +12,7 @@ tags:
 paths:
   /incidentTemplates/{organizationId}:
     get:
-      description: Returns all _active_ incident templates for a given org.  Basic properties like name, id and status are returned.  To get template details, use [Get Template](https://developers.everbridge.net/home/reference/ebs-get-template).
+      description: Returns all _active_ incident templates for a given org. Basic properties like name, id and status are returned. To get template details, use Get Template.
       operationId: EBS List Templates
       parameters:
       - in: path

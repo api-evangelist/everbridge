@@ -150,154 +150,6 @@ paths:
         connectionType: VPC_LINK
 components:
   schemas:
-    CtxHandlebarsTemplateVariableProperty:
-      type: object
-      description: Provides the recommended Handlebars template for rendering this variable.
-      properties:
-        type:
-          type: string
-          description: Must be set to exactly `HandlebarsTemplate`.
-          enum:
-          - HandlebarsTemplate
-        value:
-          type: string
-          description: A small Handlebars template that may be directly inserted into another template to render the variable.
-          example: '{{{ printList context.cema.lastEvent.categories }}}'
-    ContextPaginatedResponse:
-      type: object
-      description: A page of data from an endpoint.
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Context'
-        pages:
-          type: object
-          properties:
-            currentPage:
-              type: number
-              description: The requested page number.
-            pageSize:
-              type: number
-              description: The requested page size.
-            pageCount:
-              type: number
-              description: The number of elements in the current page.
-            totalPages:
-              type: number
-              description: The total number of pages available for request.
-            maxSize:
-              type: number
-              description: The maximum size of a single page that is allowed by the API.
-            totalCount:
-              type: number
-              description: The total number of elements across all pages.
-    Context:
-      type: object
-      description: A context object holding the schema and metadata regarding a particular context
-      required:
-      - name
-      properties:
-        id:
-          type: string
-          minLength: 36
-          maxLength: 36
-          format: uuid
-        name:
-          type: string
-          maxLength: 100
-          minLength: 3
-        shortName:
-          type: string
-          maxLength: 20
-          minLength: 3
-        lastModifiedId:
-          type: string
-        lastModifiedDt:
-          type: string
-          format: date-time
-        organizationId:
-          type: string
-          maxLength: 30
-          minLength: 3
-        schema:
-          type: object
-          additionalProperties: true
-        variables:
-          type: array
-          description: Notable values of the context source.
-          items:
-            $ref: '#/components/schemas/CtxVariable'
-    CtxPartialArgument:
-      type: object
-      properties:
-        key:
-          type: string
-          description: The key of the argument, which can be used to reference the argument within the Handlebars partial.
-        description:
-          type: string
-          description: A description of the argument and how it can be used within the Handlebars partial.
-        required:
-          type: boolean
-          description: Whether the argument is required when using the Handlebars partial.
-          default: true
-        readOnly:
-          type: boolean
-          description: Whether the argument's value may be changed by an end user.
-          default: true
-        defaultValue:
-          type:
-          - string
-          - 'null'
-          description: The default value of the argument. The type of this field should match the `valueType` field.
-          oneOf:
-          - type: string
-          - type: number
-          - type: boolean
-          - type: object
-            description: A JSON object representing a Handlebars path expression, which can be used to reference a value within the context.
-            properties:
-              type:
-                type: string
-                description: Must be set to exactly `Path`.
-                enum:
-                - Path
-              value:
-                type: string
-                description: The Handlebars path expression to the value within the context.
-        valueType:
-          type: string
-          description: The type of the argument's value, which can be used to enforce type checking when using the Handlebars partial.
-          enum:
-          - String
-          - Number
-          - Boolean
-          - 'Null'
-          - Path
-    CtxSinglePartialArgument:
-      allOf:
-      - $ref: '#/components/schemas/CtxPartialArgument'
-      - type: object
-        description: A hash argument for a Handlebars partial that accepts an arbitrary value of the given type.
-        properties:
-          type:
-            type: string
-            description: The type of the argument.
-            enum:
-            - Single
-    CtxDateTimeVariableProperty:
-      type: object
-      description: Provides date-time formatting information.
-      properties:
-        type:
-          type: string
-          description: Must be set to exactly `DatetimeFormatter`.
-          enum:
-          - DatetimeFormatter
-        value:
-          type: string
-          description: The date-time formatting string that describes the format of the context data.
-          example: yyyy-MM-dd'T'HH:mm:ss.SSSXXX
     PreviewResponse:
       type: object
       description: Contains information about the rendered values.
@@ -320,58 +172,19 @@ components:
               name:
                 type: string
                 description: The human-friendly name of the variable.
-    ProblemDetail:
+    CtxHandlebarsTemplateVariableProperty:
       type: object
-      description: An RFC-7807 compliant model for error details.
+      description: Provides the recommended Handlebars template for rendering this variable.
       properties:
         type:
           type: string
-          description: A URI that identifies the problem type.
-        title:
+          description: Must be set to exactly `HandlebarsTemplate`.
+          enum:
+          - HandlebarsTemplate
+        value:
           type: string
-          description: A short, human-readable summary of the problem type.
-        status:
-          type: integer
-          description: The HTTP response status code describing the error.
-        detail:
-          type: string
-          description: A human-readable explanation of the specific problem.
-        instance:
-          type: string
-          description: A URI that identifies the specific problem.
-    CtxEnumerationPartialArgument:
-      allOf:
-      - $ref: '#/components/schemas/CtxPartialArgument'
-      - type: object
-        description: A hash argument for a Handlebars partial that accepts a value, specified in its `options`, of the given type.
-        properties:
-          type:
-            type: string
-            description: The type of the argument.
-            enum:
-            - Enumeration
-          options:
-            type: array
-            description: An array of possible values for the argument. The type of each value should match the `valueType` field.
-            items:
-              type: object
-              properties:
-                value:
-                  oneOf:
-                  - type: string
-                  - type: number
-                  - type: boolean
-                  - type: object
-                    description: A JSON object representing a Handlebars path expression, which can be used to reference a value within the context.
-                    properties:
-                      type:
-                        type: string
-                        description: Must be set to exactly `Path`.
-                        enum:
-                        - Path
-                      value:
-                        type: string
-                        description: The Handlebars path expression to the value within the context.
+          description: A small Handlebars template that may be directly inserted into another template to render the variable.
+          example: '{{{ printList context.cema.lastEvent.categories }}}'
     CtxVariable:
       type: object
       description: A value within a context object.
@@ -435,6 +248,193 @@ components:
           items:
             type: string
             example: cema://cd01f9d6-1e60-42ac-b1a6-bca9644d90c4
+    ProblemDetail:
+      type: object
+      description: An RFC-7807 compliant model for error details.
+      properties:
+        type:
+          type: string
+          description: A URI that identifies the problem type.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem type.
+        status:
+          type: integer
+          description: The HTTP response status code describing the error.
+        detail:
+          type: string
+          description: A human-readable explanation of the specific problem.
+        instance:
+          type: string
+          description: A URI that identifies the specific problem.
+    CtxDateTimeVariableProperty:
+      type: object
+      description: Provides date-time formatting information.
+      properties:
+        type:
+          type: string
+          description: Must be set to exactly `DatetimeFormatter`.
+          enum:
+          - DatetimeFormatter
+        value:
+          type: string
+          description: The date-time formatting string that describes the format of the context data.
+          example: yyyy-MM-dd'T'HH:mm:ss.SSSXXX
+    CtxEnumerationPartialArgument:
+      allOf:
+      - $ref: '#/components/schemas/CtxPartialArgument'
+      - type: object
+        description: A hash argument for a Handlebars partial that accepts a value, specified in its `options`, of the given type.
+        properties:
+          type:
+            type: string
+            description: The type of the argument.
+            enum:
+            - Enumeration
+          options:
+            type: array
+            description: An array of possible values for the argument. The type of each value should match the `valueType` field.
+            items:
+              type: object
+              properties:
+                value:
+                  oneOf:
+                  - type: string
+                  - type: number
+                  - type: boolean
+                  - type: object
+                    description: A JSON object representing a Handlebars path expression, which can be used to reference a value within the context.
+                    properties:
+                      type:
+                        type: string
+                        description: Must be set to exactly `Path`.
+                        enum:
+                        - Path
+                      value:
+                        type: string
+                        description: The Handlebars path expression to the value within the context.
+    CtxSinglePartialArgument:
+      allOf:
+      - $ref: '#/components/schemas/CtxPartialArgument'
+      - type: object
+        description: A hash argument for a Handlebars partial that accepts an arbitrary value of the given type.
+        properties:
+          type:
+            type: string
+            description: The type of the argument.
+            enum:
+            - Single
+    CtxPartialArgument:
+      type: object
+      properties:
+        key:
+          type: string
+          description: The key of the argument, which can be used to reference the argument within the Handlebars partial.
+        description:
+          type: string
+          description: A description of the argument and how it can be used within the Handlebars partial.
+        required:
+          type: boolean
+          description: Whether the argument is required when using the Handlebars partial.
+          default: true
+        readOnly:
+          type: boolean
+          description: Whether the argument's value may be changed by an end user.
+          default: true
+        defaultValue:
+          type:
+          - string
+          - 'null'
+          description: The default value of the argument. The type of this field should match the `valueType` field.
+          oneOf:
+          - type: string
+          - type: number
+          - type: boolean
+          - type: object
+            description: A JSON object representing a Handlebars path expression, which can be used to reference a value within the context.
+            properties:
+              type:
+                type: string
+                description: Must be set to exactly `Path`.
+                enum:
+                - Path
+              value:
+                type: string
+                description: The Handlebars path expression to the value within the context.
+        valueType:
+          type: string
+          description: The type of the argument's value, which can be used to enforce type checking when using the Handlebars partial.
+          enum:
+          - String
+          - Number
+          - Boolean
+          - 'Null'
+          - Path
+    Context:
+      type: object
+      description: A context object holding the schema and metadata regarding a particular context
+      required:
+      - name
+      properties:
+        id:
+          type: string
+          minLength: 36
+          maxLength: 36
+          format: uuid
+        name:
+          type: string
+          maxLength: 100
+          minLength: 3
+        shortName:
+          type: string
+          maxLength: 20
+          minLength: 3
+        lastModifiedId:
+          type: string
+        lastModifiedDt:
+          type: string
+          format: date-time
+        organizationId:
+          type: string
+          maxLength: 30
+          minLength: 3
+        schema:
+          type: object
+          additionalProperties: true
+        variables:
+          type: array
+          description: Notable values of the context source.
+          items:
+            $ref: '#/components/schemas/CtxVariable'
+    ContextPaginatedResponse:
+      type: object
+      description: A page of data from an endpoint.
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Context'
+        pages:
+          type: object
+          properties:
+            currentPage:
+              type: number
+              description: The requested page number.
+            pageSize:
+              type: number
+              description: The requested page size.
+            pageCount:
+              type: number
+              description: The number of elements in the current page.
+            totalPages:
+              type: number
+              description: The total number of pages available for request.
+            maxSize:
+              type: number
+              description: The maximum size of a single page that is allowed by the API.
+            totalCount:
+              type: number
+              description: The total number of elements across all pages.
   securitySchemes:
     API_Authorizer:
       type: apiKey

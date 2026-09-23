@@ -96,19 +96,6 @@ paths:
         uri: https://ebs-restapi-prod-us.evbg.io/rest/lastknownlocations/{organizationId}/{contactId}
 components:
   schemas:
-    RestfulModificationResult:
-      properties:
-        baseUri:
-          type: string
-        id:
-          format: int64
-          type: integer
-        instanceUri:
-          type: string
-        message:
-          type: string
-      title: RestfulModificationResult
-      type: object
     LastKnownLocationWrapper:
       anyOf:
       - required:
@@ -143,6 +130,19 @@ components:
       required:
       - arriveDate
       - expireDate
+      type: object
+    RestfulModificationResult:
+      properties:
+        baseUri:
+          type: string
+        id:
+          format: int64
+          type: integer
+        instanceUri:
+          type: string
+        message:
+          type: string
+      title: RestfulModificationResult
       type: object
     organizationId:
       default: '1536984111644674'

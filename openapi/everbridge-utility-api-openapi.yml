@@ -43,16 +43,6 @@ paths:
           description: Failed - Rate limit is exceeded
 components:
   schemas:
-    OfflineService:
-      properties:
-        name:
-          type: string
-          description: Value indicating whether the backend server is operational
-          example: CommService
-        error:
-          type: string
-          description: Error message for the offline service
-          example: 'Error: The operation has timed out'
     StatusResponse:
       properties:
         isOperational:
@@ -74,6 +64,16 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/OfflineService'
+    OfflineService:
+      properties:
+        name:
+          type: string
+          description: Value indicating whether the backend server is operational
+          example: CommService
+        error:
+          type: string
+          description: Error message for the offline service
+          example: 'Error: The operation has timed out'
   securitySchemes:
     bearerAuth:
       type: http

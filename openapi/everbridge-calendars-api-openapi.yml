@@ -60,6 +60,34 @@ paths:
         uri: https://ebs-restapi-prod-us.evbg.io/rest/calendars/{organizationId}
 components:
   schemas:
+    DataPageCalendarWrapper:
+      properties:
+        currentPageNo:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/CalendarWrapper'
+          type: array
+        dataPageList:
+          items:
+            $ref: '#/components/schemas/DataPageCalendarWrapper'
+          type: array
+        pageSize:
+          format: int32
+          type: integer
+        scrollId:
+          type: string
+        start:
+          format: int32
+          type: integer
+        totalCount:
+          format: int64
+          type: integer
+        totalPageCount:
+          format: int32
+          type: integer
+      type: object
     CalendarWrapper:
       properties:
         accountId:
@@ -120,34 +148,6 @@ components:
           - A
           - D
           type: string
-      type: object
-    DataPageCalendarWrapper:
-      properties:
-        currentPageNo:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/CalendarWrapper'
-          type: array
-        dataPageList:
-          items:
-            $ref: '#/components/schemas/DataPageCalendarWrapper'
-          type: array
-        pageSize:
-          format: int32
-          type: integer
-        scrollId:
-          type: string
-        start:
-          format: int32
-          type: integer
-        totalCount:
-          format: int64
-          type: integer
-        totalPageCount:
-          format: int32
-          type: integer
       type: object
     CalendarWrapperCollectionResult:
       properties:

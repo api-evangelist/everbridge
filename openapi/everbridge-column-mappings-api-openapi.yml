@@ -17,7 +17,6 @@ paths:
       - Column Mappings
       operationId: EB AM List Column Mappings
       summary: List Column Mappings
-      description: List Column Mappings
       parameters:
       - name: X-EB-Organization-Id
         in: header
@@ -66,7 +65,6 @@ paths:
       - Column Mappings
       operationId: EB AM Create Column Mapping
       summary: Create Column Mapping
-      description: Create Column Mapping
       parameters:
       - name: X-EB-Organization-Id
         in: header
@@ -128,7 +126,6 @@ paths:
       - Column Mappings
       operationId: EB AM Get Column Mapping
       summary: Get Column Mapping
-      description: Get Column Mapping
       parameters:
       - name: X-EB-Organization-Id
         in: header
@@ -183,7 +180,6 @@ paths:
       - Column Mappings
       operationId: EB AM Update Column Mapping
       summary: Update Column Mapping
-      description: Update Column Mapping
       parameters:
       - name: X-EB-Organization-Id
         in: header
@@ -244,7 +240,6 @@ paths:
       - Column Mappings
       operationId: EB AM Delete Column Mapping
       summary: Delete Column Mapping
-      description: Delete Column Mapping
       parameters:
       - name: X-EB-Organization-Id
         in: header
@@ -310,12 +305,6 @@ components:
           maxLength: 200
           minLength: 1
           type: string
-    organizationId:
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      maxLength: 16
-      type: integer
-      example: '1536984111644674'
-      default: '1536984111644674'
     ColumnMapping:
       type: object
       properties:
@@ -351,6 +340,12 @@ components:
         seq:
           type: integer
           format: int32
+    organizationId:
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      maxLength: 16
+      type: integer
+      example: '1536984111644674'
+      default: '1536984111644674'
   securitySchemes:
     BasicAuth:
       type: http

@@ -17,7 +17,7 @@ paths:
       - Assets
       operationId: EBS AM Create Asset
       summary: Create Asset
-      description: Create a new asset to an organization. To get the assertTypeId use [List Asset Types](https://developers.everbridge.net/home/reference/ebs-list-asset-types) endpoint.
+      description: Create a new asset to an organization. To get the assertTypeId use List Asset Types endpoint.
       parameters:
       - description: The organization ID
         in: header
@@ -155,7 +155,7 @@ paths:
       - Assets
       operationId: EBS AM List Assets
       summary: List Assets
-      description: Retrieve all assets for a given asset type with in an organization. To get the assertTypeId use [List Asset Types](https://developers.everbridge.net/home/reference/ebs-list-asset-types) endpoint.
+      description: Retrieve all assets for a given asset type with in an organization. To get the assertTypeId use List Asset Types endpoint.
       parameters:
       - description: The organization ID
         in: header
@@ -254,7 +254,7 @@ paths:
       - Assets
       operationId: EBS AM Search Assets
       summary: Search Assets
-      description: Retrieve assets based on different search criteria with in a given asset type. To get the assertTypeId use [List Asset Types](https://developers.everbridge.net/home/reference/ebs-list-asset-types) endpoint.
+      description: Retrieve assets based on different search criteria with in a given asset type. To get the assertTypeId use List Asset Types endpoint.
       parameters:
       - description: The organization ID
         in: header
@@ -353,7 +353,7 @@ paths:
       - Assets
       operationId: EBS AM Get Asset
       summary: Get Asset
-      description: Retrieve the specified asset within an organization. To get the assertTypeId use [List Asset Types](https://developers.everbridge.net/home/reference/ebs-list-asset-types) endpoint.
+      description: Retrieve the specified asset within an organization. To get the assertTypeId use List Asset Types endpoint.
       parameters:
       - description: The organization ID
         in: header
@@ -431,7 +431,7 @@ paths:
       - Assets
       operationId: EBS AM Update Asset
       summary: Update Asset
-      description: Update the specified asset within an organization. To get the assertTypeId use [List Asset Types](https://developers.everbridge.net/home/reference/ebs-list-asset-types) endpoint.
+      description: Update the specified asset within an organization. To get the assertTypeId use List Asset Types endpoint.
       parameters:
       - description: The organization ID
         in: header
@@ -549,7 +549,7 @@ paths:
       - Assets
       operationId: EBS AM Delete Asset
       summary: Delete Asset
-      description: Delete the specified asset within an organization. To get the assertTypeId use [List Asset Types](https://developers.everbridge.net/home/reference/ebs-list-asset-types) endpoint.
+      description: Delete the specified asset within an organization. To get the assertTypeId use List Asset Types endpoint.
       parameters:
       - description: The organization ID
         in: header
@@ -628,7 +628,7 @@ paths:
       - Assets
       operationId: EBS AM Get Asset By ExternalId
       summary: Get Asset By ExternalId
-      description: Retrieve the specified assets for the provided assertTypeId. To get the assertTypeId use [List Asset Types](https://developers.everbridge.net/home/reference/ebs-list-asset-types) endpoint.
+      description: Retrieve the specified assets for the provided assertTypeId. To get the assertTypeId use List Asset Types endpoint.
       parameters:
       - description: The organization ID
         in: header
@@ -744,7 +744,9 @@ paths:
       - Assets
       operationId: EBS AM Get Asset By ExternalId Path
       summary: Get Asset By ExternalId (Path)
-      description: Retrieve the specified assets for the provided assetTypeId. ExternalId provided as path variable. </br> To get the assertTypeId use [List Asset Types](https://developers.everbridge.net/home/reference/ebs-list-asset-types) endpoint.
+      description: 'Retrieve the specified assets for the provided assetTypeId. ExternalId provided as path variable.
+
+        To get the assertTypeId use List Asset Types endpoint.'
       parameters:
       - description: The organization ID
         in: header
@@ -857,10 +859,180 @@ paths:
         passthroughBehavior: when_no_match
 components:
   schemas:
+    AssetIcon:
+      type: object
+      properties:
+        source:
+          type: string
+          enum:
+          - SYSTEM
+          - CUSTOM
+        id:
+          type: string
+        name:
+          type: string
+        contentUrl:
+          type: string
+        color:
+          type: string
     assetTypeId:
       description: Available on manager portal (Settings --> Organization --> Contacts/Assets --> Assert Types)
       type: string
       example: 665ff8e1a1b61d39e577b9c6
+    assetsManagementQuickSearchRequestWrapper:
+      type: array
+      description: Asset ids
+      items:
+        type: string
+    assetsManagementRequestWrapper:
+      type: object
+      properties:
+        assetTypeId:
+          type: string
+        name:
+          type: string
+        externalId:
+          type: string
+        category:
+          type: string
+        notes:
+          type: string
+        startTimestamp:
+          type: number
+        endTimestamp:
+          type: number
+        properties:
+          type: array
+          items:
+            type: object
+            properties:
+              propertyId:
+                type: string
+              value:
+                type: string
+            required:
+            - propertyId
+            - value
+        isEditMode:
+          type: boolean
+        address:
+          type: object
+          properties:
+            country:
+              type: string
+            state:
+              type: string
+            streetAddress1:
+              type: string
+            streetAddress2:
+              type: string
+            city:
+              type: string
+            postalCode:
+              type: string
+          required:
+          - country
+          - state
+          - streetAddress1
+          - streetAddress2
+          - city
+          - postalCode
+        geometry:
+          type: string
+        associations:
+          type: array
+          items:
+            type: object
+            properties:
+              associationDefinitionId:
+                type: string
+              entityIds:
+                type: array
+                items:
+                  type: number
+              entityType:
+                type: string
+            required:
+            - associationDefinitionId
+            - entityIds
+            - entityType
+      required:
+      - assetTypeId
+      - name
+      - externalId
+    assetsManagementListResponseWrapper:
+      type: object
+      properties:
+        pageSize:
+          type: number
+        start:
+          type: number
+        totalCount:
+          type: number
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              organizationId:
+                type: number
+              createdId:
+                type: number
+              createdName:
+                type: string
+              lastModifiedId:
+                type: number
+              lastModifiedName:
+                type: string
+              createdTimestamp:
+                type: number
+              lastModifiedTimestamp:
+                type: number
+              externalId:
+                type: string
+              assetTypeId:
+                type: string
+              name:
+                type: string
+              address:
+                type: object
+                properties:
+                  country:
+                    type: string
+                  state:
+                    type: string
+                  city:
+                    type: string
+                  postalCode:
+                    type: string
+                  streetAddress1:
+                    type: string
+                  streetAddress2:
+                    type: string
+              iconId:
+                type: string
+              assetTypeName:
+                type: string
+              geocodingAddressRequired:
+                type: boolean
+              smartEnabled:
+                type: boolean
+              icon:
+                $ref: '#/components/schemas/AssetIcon'
+              color:
+                type: string
+        currentPageNo:
+          type: number
+        totalPageCount:
+          type: number
+    organizationId:
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      maxLength: 16
+      type: integer
+      example: '1536984111644674'
+      default: '1536984111644674'
     assetsManagementResponseWrapper:
       type: object
       properties:
@@ -905,37 +1077,6 @@ components:
           type: boolean
         icon:
           $ref: '#/components/schemas/AssetIcon'
-        color:
-          type: string
-    externalId:
-      description: The External ID
-      type: string
-      example: externalId@everbridge.com
-    organizationId:
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      maxLength: 16
-      type: integer
-      example: '1536984111644674'
-      default: '1536984111644674'
-    assetsManagementQuickSearchRequestWrapper:
-      type: array
-      description: Asset ids
-      items:
-        type: string
-    AssetIcon:
-      type: object
-      properties:
-        source:
-          type: string
-          enum:
-          - SYSTEM
-          - CUSTOM
-        id:
-          type: string
-        name:
-          type: string
-        contentUrl:
-          type: string
         color:
           type: string
     assetsManagementSingleResponseWrapper:
@@ -1033,149 +1174,10 @@ components:
       - properties
       - geocodingAddressRequired
       - smartEnabled
-    assetsManagementListResponseWrapper:
-      type: object
-      properties:
-        pageSize:
-          type: number
-        start:
-          type: number
-        totalCount:
-          type: number
-        data:
-          type: array
-          items:
-            type: object
-            properties:
-              id:
-                type: string
-              organizationId:
-                type: number
-              createdId:
-                type: number
-              createdName:
-                type: string
-              lastModifiedId:
-                type: number
-              lastModifiedName:
-                type: string
-              createdTimestamp:
-                type: number
-              lastModifiedTimestamp:
-                type: number
-              externalId:
-                type: string
-              assetTypeId:
-                type: string
-              name:
-                type: string
-              address:
-                type: object
-                properties:
-                  country:
-                    type: string
-                  state:
-                    type: string
-                  city:
-                    type: string
-                  postalCode:
-                    type: string
-                  streetAddress1:
-                    type: string
-                  streetAddress2:
-                    type: string
-              iconId:
-                type: string
-              assetTypeName:
-                type: string
-              geocodingAddressRequired:
-                type: boolean
-              smartEnabled:
-                type: boolean
-              icon:
-                $ref: '#/components/schemas/AssetIcon'
-              color:
-                type: string
-        currentPageNo:
-          type: number
-        totalPageCount:
-          type: number
-    assetsManagementRequestWrapper:
-      type: object
-      properties:
-        assetTypeId:
-          type: string
-        name:
-          type: string
-        externalId:
-          type: string
-        category:
-          type: string
-        notes:
-          type: string
-        startTimestamp:
-          type: number
-        endTimestamp:
-          type: number
-        properties:
-          type: array
-          items:
-            type: object
-            properties:
-              propertyId:
-                type: string
-              value:
-                type: string
-            required:
-            - propertyId
-            - value
-        isEditMode:
-          type: boolean
-        address:
-          type: object
-          properties:
-            country:
-              type: string
-            state:
-              type: string
-            streetAddress1:
-              type: string
-            streetAddress2:
-              type: string
-            city:
-              type: string
-            postalCode:
-              type: string
-          required:
-          - country
-          - state
-          - streetAddress1
-          - streetAddress2
-          - city
-          - postalCode
-        geometry:
-          type: string
-        associations:
-          type: array
-          items:
-            type: object
-            properties:
-              associationDefinitionId:
-                type: string
-              entityIds:
-                type: array
-                items:
-                  type: number
-              entityType:
-                type: string
-            required:
-            - associationDefinitionId
-            - entityIds
-            - entityType
-      required:
-      - assetTypeId
-      - name
-      - externalId
+    externalId:
+      description: The External ID
+      type: string
+      example: externalId@everbridge.com
   securitySchemes:
     BasicAuth:
       type: http

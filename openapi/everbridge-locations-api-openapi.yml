@@ -123,7 +123,9 @@ paths:
         uri: https://ebs-restapi-prod-us.evbg.io/rest/locationSource/{organizationId}
   /locationSource/{organizationId}/BatchGet:
     post:
-      description: "Batch Get Location Source Data. \nNOTE: The maximum number of IDs is 4096."
+      description: 'Batch Get Location Source Data.
+
+        NOTE: The maximum number of IDs is 4096.'
       operationId: EBS List BatchLocation Source Data
       parameters:
       - description: Organization ID
@@ -290,6 +292,28 @@ paths:
         uri: https://ebs-restapi-prod-us.evbg.io/rest/locationSource/{organizationId}/{locationId}
 components:
   schemas:
+    LocationSourceDataInstanceResult:
+      properties:
+        message:
+          type: string
+        result:
+          $ref: '#/components/schemas/LocationSourceDataWrapper'
+      type: object
+    LocationSourceDataParameterModel:
+      description: Array object of the Location ID.
+      properties:
+        locationIds:
+          items:
+            format: int64
+            type: integer
+          type: array
+      type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
     LocationSourceDataWrapper:
       properties:
         address:
@@ -330,28 +354,6 @@ components:
         locationSources:
           items:
             $ref: '#/components/schemas/LocationSourceDataWrapper'
-          type: array
-      type: object
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
-    LocationSourceDataInstanceResult:
-      properties:
-        message:
-          type: string
-        result:
-          $ref: '#/components/schemas/LocationSourceDataWrapper'
-      type: object
-    LocationSourceDataParameterModel:
-      description: Array object of the Location ID.
-      properties:
-        locationIds:
-          items:
-            format: int64
-            type: integer
           type: array
       type: object
   securitySchemes:

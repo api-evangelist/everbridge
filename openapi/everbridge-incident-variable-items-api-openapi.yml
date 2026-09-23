@@ -241,7 +241,20 @@ paths:
         uri: https://ebs-restapi-prod-us.evbg.io/rest/incidentVariableItems/{organizationId}
   /incidentVariableItems/{organizationId}/{proxy+}:
     get:
-      description: "This endpoint consolidates multiple previously separate paths under a single route using the {proxy+} catch-all parameter. It supports the following routes:\n- /incidentVariableItems/{organizationId}/{searchOption}\n- /incidentVariableItems/{organizationId}/{templateId}/{phase}\n\nThe {proxy+} parameter captures all additional path segments after {organizationId}. \n\nThis change was required because AWS API Gateway disallows multiple sibling paths with different path variable names at the same level.\n\nYou do not need to change your existing request paths. The API will continue to behave as before, and this structure ensures compatibility across different use cases"
+      description: 'This endpoint consolidates multiple previously separate paths under a single route using the {proxy+} catch-all parameter. It supports the following routes:
+
+        - /incidentVariableItems/{organizationId}/{searchOption}
+
+        - /incidentVariableItems/{organizationId}/{templateId}/{phase}
+
+
+        The {proxy+} parameter captures all additional path segments after {organizationId}.
+
+
+        This change was required because AWS API Gateway disallows multiple sibling paths with different path variable names at the same level.
+
+
+        You do not need to change your existing request paths. The API will continue to behave as before, and this structure ensures compatibility across different use cases'
       operationId: EBS Get Incident Variables Proxy
       parameters:
       - description: The ID of the organization containing the variables
@@ -406,6 +419,24 @@ paths:
           name: Name search option filter
 components:
   schemas:
+    RestfulCollectionResult:
+      properties:
+        currentPageUri:
+          type: string
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        nextPageUri:
+          type: string
+        page:
+          $ref: '#/components/schemas/DataPageObject'
+        previousPageUri:
+          type: string
+      title: RestfulCollectionResult
+      type: object
     RestfulInstanceResult:
       properties:
         message:
@@ -449,24 +480,6 @@ components:
       example: '1536984111644674'
       maxLength: 16
       type: integer
-    RestfulCollectionResult:
-      properties:
-        currentPageUri:
-          type: string
-        firstPageUri:
-          type: string
-        lastPageUri:
-          type: string
-        message:
-          type: string
-        nextPageUri:
-          type: string
-        page:
-          $ref: '#/components/schemas/DataPageObject'
-        previousPageUri:
-          type: string
-      title: RestfulCollectionResult
-      type: object
   securitySchemes:
     API_Authorizer:
       description: oAuth Token

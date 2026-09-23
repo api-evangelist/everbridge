@@ -75,6 +75,70 @@ paths:
         uri: https://ebs-restapi-prod-us.evbg.io/rest/residents/{organizationId}/query
 components:
   schemas:
+    ResidentFiltersWrapper:
+      properties:
+        residents:
+          $ref: '#/components/schemas/UmsContactsWrapper'
+        searchShapes:
+          items:
+            $ref: '#/components/schemas/SearchShapeWrapper'
+          type: array
+      type: object
+    UmsUploadWrapper:
+      properties:
+        pattern:
+          type: string
+        values:
+          items:
+            additionalProperties:
+              type: string
+            type: object
+          type: array
+      type: object
+    JsonResult:
+      properties:
+        data:
+          type: object
+        message:
+          type: string
+        resultCode:
+          type: string
+        success:
+          type: boolean
+        type:
+          type: string
+      type: object
+    GeoPointWrapper:
+      properties:
+        x:
+          format: double
+          type: number
+        y:
+          format: double
+          type: number
+      type: object
+    UmsContactsWrapper:
+      properties:
+        properties:
+          items:
+            $ref: '#/components/schemas/ResidentPropertyFilterWrapper'
+          type: array
+        searchBySearchShapes:
+          type: boolean
+        umsPatterns:
+          items:
+            $ref: '#/components/schemas/UmsUploadWrapper'
+          type: array
+      type: object
+    ResidentPropertyFilterWrapper:
+      properties:
+        field:
+          type: string
+        values:
+          items:
+            type: string
+          type: array
+      type: object
     SearchShapeWrapper:
       properties:
         boundaryId:
@@ -106,70 +170,6 @@ components:
           type: array
         shape:
           $ref: '#/components/schemas/GeoShapeWrapper'
-      type: object
-    ResidentFiltersWrapper:
-      properties:
-        residents:
-          $ref: '#/components/schemas/UmsContactsWrapper'
-        searchShapes:
-          items:
-            $ref: '#/components/schemas/SearchShapeWrapper'
-          type: array
-      type: object
-    UmsContactsWrapper:
-      properties:
-        properties:
-          items:
-            $ref: '#/components/schemas/ResidentPropertyFilterWrapper'
-          type: array
-        searchBySearchShapes:
-          type: boolean
-        umsPatterns:
-          items:
-            $ref: '#/components/schemas/UmsUploadWrapper'
-          type: array
-      type: object
-    ResidentPropertyFilterWrapper:
-      properties:
-        field:
-          type: string
-        values:
-          items:
-            type: string
-          type: array
-      type: object
-    JsonResult:
-      properties:
-        data:
-          type: object
-        message:
-          type: string
-        resultCode:
-          type: string
-        success:
-          type: boolean
-        type:
-          type: string
-      type: object
-    GeoPointWrapper:
-      properties:
-        x:
-          format: double
-          type: number
-        y:
-          format: double
-          type: number
-      type: object
-    UmsUploadWrapper:
-      properties:
-        pattern:
-          type: string
-        values:
-          items:
-            additionalProperties:
-              type: string
-            type: object
-          type: array
       type: object
     GeoShapeWrapper:
       properties:

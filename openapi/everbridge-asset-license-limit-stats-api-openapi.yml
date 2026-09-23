@@ -17,7 +17,6 @@ paths:
       - Asset License Limit Stats
       operationId: EBS AM Get Asset License Limit Stats
       summary: Get Asset License Limit Stats
-      description: Get Asset License Limit Stats
       parameters:
       - name: X-EB-Organization-Id
         in: header

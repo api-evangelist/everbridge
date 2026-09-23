@@ -1,7 +1,7 @@
 openapi: 3.2.0
 info:
   title: Digital Apps Internal Mobile Travels API
-  description: 'Digital Apps APIs bring Everbridge notification functionality to your company''s mobile, desktop or web applications. '
+  description: Digital Apps APIs bring Everbridge notification functionality to your company's mobile, desktop or web applications.
   version: v1
 servers:
 - url: https://api.everbridge.net/digitalapps/v2

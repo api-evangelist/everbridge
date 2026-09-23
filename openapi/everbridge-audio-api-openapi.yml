@@ -12,7 +12,9 @@ tags:
 paths:
   /audio/{organizationId}:
     post:
-      description: "Upload an audio file to use in notifications. \nThe recommended format is 8KHz, 8bit, mono u-Law or uncompressed PCM WAV and less than 5 minutes in length."
+      description: 'Upload an audio file to use in notifications.
+
+        The recommended format is 8KHz, 8bit, mono u-Law or uncompressed PCM WAV and less than 5 minutes in length.'
       operationId: EBS Upload Audio
       parameters:
       - description: The ID of the organization containing the audio
@@ -166,19 +168,6 @@ paths:
         uri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:apigw-large-file-handler-us-east-1-prod/invocations
 components:
   schemas:
-    AudioWrapperInstanceResult:
-      properties:
-        message:
-          type: string
-        result:
-          $ref: '#/components/schemas/AudioWrapper'
-      type: object
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
     FileResourceWrapper:
       properties:
         fileName:
@@ -190,6 +179,13 @@ components:
         size:
           format: double
           type: number
+      type: object
+    AudioWrapperInstanceResult:
+      properties:
+        message:
+          type: string
+        result:
+          $ref: '#/components/schemas/AudioWrapper'
       type: object
     AudioRestfulModificationResult:
       properties:
@@ -205,6 +201,12 @@ components:
         message:
           type: string
       type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
     AudioWrapper:
       properties:
         accountId:

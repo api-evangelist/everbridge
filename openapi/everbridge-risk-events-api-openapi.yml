@@ -135,6 +135,15 @@ paths:
         connectionType: VPC_LINK
 components:
   schemas:
+    exportRiskeventsRequest:
+      description: Schema for export riskevents request body
+      type: object
+      properties:
+        query:
+          type: string
+          description: Graphql based query in JSON format with the supported parameters. <br/> See the parameters section on this page for more information.
+      required:
+      - query
     exportRiskeventsResponse:
       description: Schema for export riskevents response
       type: object
@@ -158,15 +167,6 @@ components:
                         type: string
                       sender:
                         type: string
-    exportRiskeventsRequest:
-      description: Schema for export riskevents request body
-      type: object
-      properties:
-        query:
-          type: string
-          description: Graphql based query in JSON format with the supported parameters. <br/> See the parameters section on this page for more information.
-      required:
-      - query
   securitySchemes:
     API_Authorizer:
       type: apiKey

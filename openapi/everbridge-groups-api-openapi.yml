@@ -712,6 +712,105 @@ paths:
         uri: https://ebs-restapi-prod-us.evbg.io/rest/groups/{organizationId}/{groupIdOrQueryValue}
 components:
   schemas:
+    contactGroupsRequest:
+      description: Contact id
+      items:
+        type: string
+      type: array
+    postUpdateResponse:
+      properties:
+        baseUri:
+          type: string
+        id:
+          type: integer
+        instanceUri:
+          type: string
+        message:
+          type: string
+      type: object
+    groups:
+      properties:
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        page:
+          properties:
+            currentPageNo:
+              type: integer
+            data:
+              items:
+                properties:
+                  accountId:
+                    type: integer
+                  createdId:
+                    type: integer
+                  dirty:
+                    type: boolean
+                  enableSequencedContact:
+                    type: boolean
+                  id:
+                    type: integer
+                  lastModifiedDate:
+                    type: integer
+                  lastModifiedId:
+                    type: integer
+                  lastModifiedName:
+                    type: string
+                  lastModifiedTime:
+                    type: integer
+                  lastSynchronizedTime:
+                    type: integer
+                  name:
+                    type: string
+                  organizationId:
+                    type: integer
+                  parentId:
+                    type: integer
+                  resourceBundleId:
+                    type: integer
+                type: object
+              type: array
+            pageSize:
+              type: integer
+            start:
+              type: integer
+            totalCount:
+              type: integer
+            totalPageCount:
+              type: integer
+          type: object
+      type: object
+    error:
+      properties:
+        message:
+          type: string
+        status:
+          type: integer
+      required:
+      - status
+      - message
+      type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
+    RestfulBatchOperationResult:
+      properties:
+        code:
+          format: int64
+          type: integer
+        data:
+          items:
+            type: string
+          type: array
+        message:
+          type: string
+      type: object
     GroupResponseWrapper:
       properties:
         message:
@@ -774,105 +873,6 @@ components:
       required:
       - message
       - result
-      type: object
-    postUpdateResponse:
-      properties:
-        baseUri:
-          type: string
-        id:
-          type: integer
-        instanceUri:
-          type: string
-        message:
-          type: string
-      type: object
-    error:
-      properties:
-        message:
-          type: string
-        status:
-          type: integer
-      required:
-      - status
-      - message
-      type: object
-    RestfulBatchOperationResult:
-      properties:
-        code:
-          format: int64
-          type: integer
-        data:
-          items:
-            type: string
-          type: array
-        message:
-          type: string
-      type: object
-    contactGroupsRequest:
-      description: Contact id
-      items:
-        type: string
-      type: array
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
-    groups:
-      properties:
-        firstPageUri:
-          type: string
-        lastPageUri:
-          type: string
-        message:
-          type: string
-        page:
-          properties:
-            currentPageNo:
-              type: integer
-            data:
-              items:
-                properties:
-                  accountId:
-                    type: integer
-                  createdId:
-                    type: integer
-                  dirty:
-                    type: boolean
-                  enableSequencedContact:
-                    type: boolean
-                  id:
-                    type: integer
-                  lastModifiedDate:
-                    type: integer
-                  lastModifiedId:
-                    type: integer
-                  lastModifiedName:
-                    type: string
-                  lastModifiedTime:
-                    type: integer
-                  lastSynchronizedTime:
-                    type: integer
-                  name:
-                    type: string
-                  organizationId:
-                    type: integer
-                  parentId:
-                    type: integer
-                  resourceBundleId:
-                    type: integer
-                type: object
-              type: array
-            pageSize:
-              type: integer
-            start:
-              type: integer
-            totalCount:
-              type: integer
-            totalPageCount:
-              type: integer
-          type: object
       type: object
     groupsRequest:
       properties:

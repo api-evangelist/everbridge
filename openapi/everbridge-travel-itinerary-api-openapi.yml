@@ -934,6 +934,64 @@ paths:
         uri: https://ebs-restapi-prod-us.evbg.io/rest/itineraries/{organizationId}/{id}
 components:
   schemas:
+    ExpectedLocationWrapper:
+      properties:
+        address:
+          $ref: '#/components/schemas/ContactAddressWrapper'
+        contactExternalId:
+          type: string
+        contactId:
+          format: int64
+          type: integer
+        createdDate:
+          format: date-time
+          type: string
+        createdId:
+          format: int64
+          type: integer
+        createdName:
+          type: string
+        id:
+          format: int64
+          type: integer
+        isInternationalTravel:
+          type: boolean
+        isLocalTravel:
+          type: boolean
+        lastModifiedDate:
+          format: date-time
+          type: string
+        lastModifiedId:
+          format: int64
+          type: integer
+        lastModifiedName:
+          type: string
+        organizationId:
+          format: int64
+          type: integer
+        travelCategory:
+          type: string
+        travelType:
+          type: string
+      required:
+      - contactId
+      type: object
+    ItineraryResponseWrapper:
+      properties:
+        baseUri:
+          type: string
+        id:
+          type: number
+        instanceUri:
+          type: string
+        message:
+          type: string
+      required:
+      - message
+      - id
+      - baseUri
+      - instanceUri
+      type: object
     DataPageExpectedLocationWrapper:
       properties:
         currentPageNo:
@@ -961,6 +1019,152 @@ components:
         totalPageCount:
           format: int32
           type: integer
+      type: object
+    GisLocationWrapper:
+      properties:
+        lat:
+          format: double
+          type: number
+        lon:
+          format: double
+          type: number
+      type: object
+    ItineraryBatchDeleteResult:
+      properties:
+        code:
+          format: int32
+          type: integer
+        message:
+          type: string
+      required:
+      - message
+      - code
+      title: ItineraryBatchDeleteResult
+      type: object
+    ContactAddressWrapper:
+      properties:
+        arriveDate:
+          format: date-time
+          type: string
+        assetExternalId:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+        expireDate:
+          format: date-time
+          type: string
+        gisLocation:
+          $ref: '#/components/schemas/GisLocationWrapper'
+        iata:
+          type: string
+        locationId:
+          format: int64
+          type: integer
+        locationName:
+          type: string
+        locationSource:
+          type: string
+        locationSourceId:
+          format: int64
+          type: integer
+        newAssetId:
+          type: string
+        postalCode:
+          type: string
+        source:
+          enum:
+          - MANUAL
+          - AUTO
+          type: string
+        state:
+          type: string
+        streetAddress:
+          type: string
+        suite:
+          type: string
+      required:
+      - arriveDate
+      - country
+      - expireDate
+      - locationName
+      - streetAddress
+      type: object
+    ItineraryQueryResponseWrapper:
+      description: Response wrapper for itinerary query results
+      properties:
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        page:
+          properties:
+            currentPageNo:
+              format: int32
+              type: integer
+            data:
+              items:
+                properties:
+                  id:
+                    type: string
+                type: object
+              type: array
+            pageSize:
+              format: int32
+              type: integer
+            start:
+              format: int32
+              type: integer
+            totalCount:
+              format: int64
+              type: integer
+            totalPageCount:
+              format: int32
+              type: integer
+          type: object
+      type: object
+    ExpectedLocationWrapperCollectionResult:
+      properties:
+        currentPageUri:
+          type: string
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        nextPageUri:
+          type: string
+        page:
+          $ref: '#/components/schemas/DataPageExpectedLocationWrapper'
+        previousPageUri:
+          type: string
+      type: object
+    ItinerarySearchCriteria:
+      description: JSON object of SearchCriteria
+      properties:
+        fieldName:
+          type: string
+        fieldValues:
+          items:
+            type: string
+          type: array
+      type: object
+    RestfulModificationResult:
+      properties:
+        baseUri:
+          type: string
+        id:
+          format: int64
+          type: integer
+        instanceUri:
+          type: string
+        message:
+          type: string
+      title: RestfulModificationResult
       type: object
     ItineraryRequestWrapper:
       properties:
@@ -1087,210 +1291,6 @@ components:
       - lastModifiedDate
       - segments
       - passengers
-      type: object
-    RestfulModificationResult:
-      properties:
-        baseUri:
-          type: string
-        id:
-          format: int64
-          type: integer
-        instanceUri:
-          type: string
-        message:
-          type: string
-      title: RestfulModificationResult
-      type: object
-    ContactAddressWrapper:
-      properties:
-        arriveDate:
-          format: date-time
-          type: string
-        assetExternalId:
-          type: string
-        city:
-          type: string
-        country:
-          type: string
-        expireDate:
-          format: date-time
-          type: string
-        gisLocation:
-          $ref: '#/components/schemas/GisLocationWrapper'
-        iata:
-          type: string
-        locationId:
-          format: int64
-          type: integer
-        locationName:
-          type: string
-        locationSource:
-          type: string
-        locationSourceId:
-          format: int64
-          type: integer
-        newAssetId:
-          type: string
-        postalCode:
-          type: string
-        source:
-          enum:
-          - MANUAL
-          - AUTO
-          type: string
-        state:
-          type: string
-        streetAddress:
-          type: string
-        suite:
-          type: string
-      required:
-      - arriveDate
-      - country
-      - expireDate
-      - locationName
-      - streetAddress
-      type: object
-    GisLocationWrapper:
-      properties:
-        lat:
-          format: double
-          type: number
-        lon:
-          format: double
-          type: number
-      type: object
-    ItineraryBatchDeleteResult:
-      properties:
-        code:
-          format: int32
-          type: integer
-        message:
-          type: string
-      required:
-      - message
-      - code
-      title: ItineraryBatchDeleteResult
-      type: object
-    ItinerarySearchCriteria:
-      description: JSON object of SearchCriteria
-      properties:
-        fieldName:
-          type: string
-        fieldValues:
-          items:
-            type: string
-          type: array
-      type: object
-    ItineraryResponseWrapper:
-      properties:
-        baseUri:
-          type: string
-        id:
-          type: number
-        instanceUri:
-          type: string
-        message:
-          type: string
-      required:
-      - message
-      - id
-      - baseUri
-      - instanceUri
-      type: object
-    ItineraryQueryResponseWrapper:
-      description: Response wrapper for itinerary query results
-      properties:
-        firstPageUri:
-          type: string
-        lastPageUri:
-          type: string
-        message:
-          type: string
-        page:
-          properties:
-            currentPageNo:
-              format: int32
-              type: integer
-            data:
-              items:
-                properties:
-                  id:
-                    type: string
-                type: object
-              type: array
-            pageSize:
-              format: int32
-              type: integer
-            start:
-              format: int32
-              type: integer
-            totalCount:
-              format: int64
-              type: integer
-            totalPageCount:
-              format: int32
-              type: integer
-          type: object
-      type: object
-    ExpectedLocationWrapper:
-      properties:
-        address:
-          $ref: '#/components/schemas/ContactAddressWrapper'
-        contactExternalId:
-          type: string
-        contactId:
-          format: int64
-          type: integer
-        createdDate:
-          format: date-time
-          type: string
-        createdId:
-          format: int64
-          type: integer
-        createdName:
-          type: string
-        id:
-          format: int64
-          type: integer
-        isInternationalTravel:
-          type: boolean
-        isLocalTravel:
-          type: boolean
-        lastModifiedDate:
-          format: date-time
-          type: string
-        lastModifiedId:
-          format: int64
-          type: integer
-        lastModifiedName:
-          type: string
-        organizationId:
-          format: int64
-          type: integer
-        travelCategory:
-          type: string
-        travelType:
-          type: string
-      required:
-      - contactId
-      type: object
-    ExpectedLocationWrapperCollectionResult:
-      properties:
-        currentPageUri:
-          type: string
-        firstPageUri:
-          type: string
-        lastPageUri:
-          type: string
-        message:
-          type: string
-        nextPageUri:
-          type: string
-        page:
-          $ref: '#/components/schemas/DataPageExpectedLocationWrapper'
-        previousPageUri:
-          type: string
       type: object
   securitySchemes:
     API_Authorizer:

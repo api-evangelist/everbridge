@@ -17,7 +17,6 @@ paths:
       - Uploaded Assets
       operationId: EB AM List Uploaded Asset Detail By Status
       summary: List Uploaded Asset Detail By Status
-      description: List Uploaded Asset Detail By Status
       parameters:
       - name: X-EB-Organization-Id
         in: header
@@ -84,7 +83,6 @@ paths:
       - Uploaded Assets
       operationId: EB AM Get Uploaded Asset Detail By Id
       summary: Get Uploaded Asset Detail By Id
-      description: Get Uploaded Asset Detail By Id
       parameters:
       - name: X-EB-Organization-Id
         in: header
@@ -121,22 +119,14 @@ paths:
         passthroughBehavior: when_no_match
 components:
   schemas:
-    Error:
+    UploadAssetPropertyValue:
       type: object
       properties:
-        field:
+        propertyId:
           type: string
-        code:
-          type: integer
-          format: int32
-        message:
+        propertyName:
           type: string
-    UploadPoint:
-      type: object
-      properties:
-        lon:
-          type: string
-        lat:
+        value:
           type: string
     DataPageUploadAsset:
       type: object
@@ -160,20 +150,64 @@ components:
         totalPageCount:
           type: integer
           format: int32
+    UploadAddress:
+      type: object
+      properties:
+        country:
+          type: string
+        state:
+          type: string
+        city:
+          type: string
+        postalCode:
+          type: string
+        streetAddress1:
+          type: string
+        streetAddress2:
+          type: string
+        point:
+          $ref: '#/components/schemas/UploadPoint'
+    UploadAssetAssociation:
+      type: object
+      properties:
+        associationDefinitionId:
+          type: string
+        entityType:
+          type: string
+          enum:
+          - Contact
+          - ContactGroup
+          - ContactFilter
+        entityIds:
+          type: array
+          items:
+            type: string
+        entityValues:
+          type: string
+        associationDefinitionColumnName:
+          type: string
     organizationId:
       description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
       maxLength: 16
       type: integer
       example: '1536984111644674'
       default: '1536984111644674'
-    UploadAssetPropertyValue:
+    Error:
       type: object
       properties:
-        propertyId:
+        field:
           type: string
-        propertyName:
+        code:
+          type: integer
+          format: int32
+        message:
           type: string
-        value:
+    UploadPoint:
+      type: object
+      properties:
+        lon:
+          type: string
+        lat:
           type: string
     UploadAsset:
       type: object
@@ -259,42 +293,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UploadAssetAssociation'
-    UploadAddress:
-      type: object
-      properties:
-        country:
-          type: string
-        state:
-          type: string
-        city:
-          type: string
-        postalCode:
-          type: string
-        streetAddress1:
-          type: string
-        streetAddress2:
-          type: string
-        point:
-          $ref: '#/components/schemas/UploadPoint'
-    UploadAssetAssociation:
-      type: object
-      properties:
-        associationDefinitionId:
-          type: string
-        entityType:
-          type: string
-          enum:
-          - Contact
-          - ContactGroup
-          - ContactFilter
-        entityIds:
-          type: array
-          items:
-            type: string
-        entityValues:
-          type: string
-        associationDefinitionColumnName:
-          type: string
   securitySchemes:
     BasicAuth:
       type: http

@@ -40,6 +40,8 @@ paths:
             statusCode: '200'
         passthroughBehavior: when_no_match
         connectionType: VPC_LINK
+      operationId: postChecktemplates
+      x-operation-id-source: derived
     get:
       tags:
       - CheckTemplates
@@ -68,6 +70,8 @@ paths:
             statusCode: '200'
         passthroughBehavior: when_no_match
         connectionType: VPC_LINK
+      operationId: getChecktemplates
+      x-operation-id-source: derived
   /checktemplates/{id}:
     get:
       tags:
@@ -103,6 +107,8 @@ paths:
             statusCode: '200'
         passthroughBehavior: when_no_match
         connectionType: VPC_LINK
+      operationId: getChecktemplatesById
+      x-operation-id-source: derived
     put:
       tags:
       - CheckTemplates
@@ -141,6 +147,8 @@ paths:
             statusCode: '200'
         passthroughBehavior: when_no_match
         connectionType: VPC_LINK
+      operationId: putChecktemplatesById
+      x-operation-id-source: derived
     delete:
       tags:
       - CheckTemplates
@@ -171,6 +179,8 @@ paths:
             statusCode: '200'
         passthroughBehavior: when_no_match
         connectionType: VPC_LINK
+      operationId: deleteChecktemplatesById
+      x-operation-id-source: derived
   /checktemplates/source/{sourceId}:
     get:
       tags:
@@ -206,21 +216,10 @@ paths:
             statusCode: '200'
         passthroughBehavior: when_no_match
         connectionType: VPC_LINK
+      operationId: getChecktemplatesSourceBySourceId
+      x-operation-id-source: derived
 components:
   schemas:
-    CreateCheckTemplateRequest:
-      type: object
-      properties:
-        sourceId:
-          type: string
-        sourceName:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-        path:
-          type: string
     CheckTemplate:
       type: object
       properties:
@@ -242,6 +241,19 @@ components:
         updatedAt:
           type: string
           format: date-time
+    CreateCheckTemplateRequest:
+      type: object
+      properties:
+        sourceId:
+          type: string
+        sourceName:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        path:
+          type: string
     UpdateCheckTemplateRequest:
       type: object
       properties:

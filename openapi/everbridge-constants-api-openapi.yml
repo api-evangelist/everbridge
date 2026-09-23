@@ -136,51 +136,6 @@ components:
           type: string
       title: RestfulCollectionResult
       type: object
-    DataPageConstantValueWrapper:
-      properties:
-        currentPageNo:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/ConstantValueWrapper'
-          type: array
-        dataPageList:
-          items:
-            $ref: '#/components/schemas/DataPageConstantValueWrapper'
-          type: array
-        pageSize:
-          format: int32
-          type: integer
-        scrollId:
-          type: string
-        start:
-          format: int32
-          type: integer
-        totalCount:
-          format: int64
-          type: integer
-        totalPageCount:
-          format: int32
-          type: integer
-      type: object
-    RestfulCollectionResultConstantValueWrapper:
-      properties:
-        currentPageUri:
-          type: string
-        firstPageUri:
-          type: string
-        lastPageUri:
-          type: string
-        message:
-          type: string
-        nextPageUri:
-          type: string
-        page:
-          $ref: '#/components/schemas/DataPageConstantValueWrapper'
-        previousPageUri:
-          type: string
-      type: object
     DataPageObject:
       properties:
         currentPageNo:
@@ -209,6 +164,51 @@ components:
           format: int32
           type: integer
       title: DataPage«object»
+      type: object
+    RestfulCollectionResultConstantValueWrapper:
+      properties:
+        currentPageUri:
+          type: string
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        nextPageUri:
+          type: string
+        page:
+          $ref: '#/components/schemas/DataPageConstantValueWrapper'
+        previousPageUri:
+          type: string
+      type: object
+    DataPageConstantValueWrapper:
+      properties:
+        currentPageNo:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/ConstantValueWrapper'
+          type: array
+        dataPageList:
+          items:
+            $ref: '#/components/schemas/DataPageConstantValueWrapper'
+          type: array
+        pageSize:
+          format: int32
+          type: integer
+        scrollId:
+          type: string
+        start:
+          format: int32
+          type: integer
+        totalCount:
+          format: int64
+          type: integer
+        totalPageCount:
+          format: int32
+          type: integer
       type: object
   securitySchemes:
     API_Authorizer:

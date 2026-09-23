@@ -296,7 +296,9 @@ paths:
         uri: https://ebs-restapi-prod-us.evbg.io/rest/dynamicGroups/{organizationId}/{dynamicGroupId}
   /dynamicLocations/{organizationId}:
     post:
-      description: Upload a CSV with last known location for multiple contacts. <br />Once the file has been uploaded, use [Get DynamicLocation Status](https://developers.everbridge.net/home/reference/ebs-get-dynamic-location-status) to find the status of the upload.
+      description: 'Upload a CSV with last known location for multiple contacts.
+
+        Once the file has been uploaded, use Get DynamicLocation Status to find the status of the upload.'
       operationId: EBS Upload Dynamic Locations
       parameters:
       - in: path
@@ -986,7 +988,7 @@ paths:
         uri: https://ebs-restapi-prod-us.evbg.io/rest/uploadContacts/{organizationId}/groups/{uploadBatchId}
   /uploadContacts/{organizationId}/{uploadBatchId}:
     get:
-      description: Returns the details of a given job filtered by upload status (created using [Upload Contacts](https://developers.everbridge.net/internal/reference/ebs-upload-contacts).
+      description: Returns the details of a given job filtered by upload status (created using Upload Contacts.
       operationId: EBS Get Contacts Upload Details
       parameters:
       - in: path
@@ -1771,7 +1773,9 @@ paths:
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/uploads/{organizationId}
     post:
-      description: This API allows adding, updating or deleting contacts in bulk by uploading a file. <br />Once the file has been uploaded, use [Get Contacts Upload Status](https://developers.everbridge.net/home/reference/ebs-get-contacts-upload-status) to find the status of the upload. Use [Create Contact](https://developers.everbridge.net/home/reference/ebs-create-contact) to add individual contact.
+      description: 'This API allows adding, updating or deleting contacts in bulk by uploading a file.
+
+        Once the file has been uploaded, use Get Contacts Upload Status to find the status of the upload. Use Create Contact to add individual contact.'
       operationId: EBS Upload Contacts
       parameters:
       - in: path
@@ -2213,7 +2217,7 @@ paths:
       - API_Authorizer: []
       - BasicAuth: []
       - api_key: []
-      summary: ' List Upload Contacts Groups'
+      summary: List Upload Contacts Groups
       tags:
       - Uploads
       x-amazon-apigateway-integration:
@@ -2229,7 +2233,7 @@ paths:
     post:
       description: 'This API allows adding, removing contacts to group(s) in bulk by uploading a file.
 
-        Once the file has been uploaded, use [Get Contacts Groups Upload Status](https://developers.everbridge.net/home/reference/ebs-get-contacts-groups-upload-status) to find the status of the upload.'
+        Once the file has been uploaded, use Get Contacts Groups Upload Status to find the status of the upload.'
       operationId: EBS Upload Contacts Groups
       parameters:
       - description: The ID of the organization containing the contacts
@@ -2393,7 +2397,7 @@ paths:
         uri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:apigw-large-file-handler-us-east-1-prod/invocations
   /uploads/{organizationId}/groups/{uploadBatchId}:
     get:
-      description: Returns details of a given group(s) upload batch ID.  This API is used to find the status of a given job (created using [Upload Contacts Groups](https://developers.everbridge.net/internal/reference/ebs-upload-contacts-groups).
+      description: Returns details of a given group(s) upload batch ID. This API is used to find the status of a given job (created using Upload Contacts Groups.
       operationId: EBS Get Contacts Groups Upload Status
       parameters:
       - description: The ID of the organization containing the uploadBatchs
@@ -2936,12 +2940,6 @@ paths:
         uri: https://ebs-restapi-prod-us.evbg.io/rest/uploads/{organizationId}/{uploadBatchId}
 components:
   schemas:
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
     DynamicGroupResponseListSchema:
       properties:
         firstPageUri:
@@ -3052,6 +3050,12 @@ components:
       - lastPageUri
       - page
       type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
   securitySchemes:
     API_Authorizer:
       description: oAuth Token

@@ -267,69 +267,6 @@ paths:
           description: Failed - Rate limit is exceeded
 components:
   schemas:
-    PublishingTarget:
-      properties:
-        type:
-          type: string
-          description: Target type
-        id:
-          type:
-          - string
-          - 'null'
-          description: 'Target Id relevant to the target type (eg: GroupId). Null if irrelevant for the type'
-    ContentTemplates:
-      properties:
-        id:
-          type: string
-          format: uuid
-          example: d300f1ee-6c54-4b01-90e6-d701748f0843
-        name:
-          type: string
-          example: Active Shooter!
-        status:
-          enum:
-          - active
-          type: string
-          example: active
-        type:
-          type: string
-        tags:
-          type: array
-          items:
-            type: string
-        description:
-          type: string
-          example: Use this for shooter alert
-        previewImageUrl:
-          type: string
-          example: Preview Image URL of a template
-    BadRequestTemplateId:
-      properties:
-        message:
-          type: string
-          example: The request is invalid.
-    PreviewFromTemplateResponse:
-      type: object
-      properties:
-        previewUrl:
-          type: string
-    ContentPublish400:
-      properties:
-        message:
-          enum:
-          - TemplateId is invalid
-          - TemplateId could not be found or is not available
-          - BodyFormat is invalid
-          - DurationInMinutes must be greater than 0
-          - The end date must be in the future
-          - ContentName must not exceed 150 charaters
-          - Account does not have permissions to all targeted groups
-          - Invalid targeting type
-          - Invalid attribute ID
-          - Account does not have permissions to target by attributes
-          - Account does not have permissions to target groups
-          type: string
-          example: TemplateId is invalid
     ContentStatus:
       type: string
       enum:
@@ -338,111 +275,6 @@ components:
       - disabled
       - deleted
       - expired
-    ContentStatistics:
-      type: object
-      properties:
-        contentId:
-          type: string
-          format: uuid
-          example: e1231960-da4d-4f30-aea8-742bf538d7f3
-        contentStatus:
-          type: string
-          $ref: '#/components/schemas/ContentStatus'
-          example: published
-        targetedCount:
-          type: integer
-        reachedCount:
-          type: integer
-        successCount:
-          type: integer
-    PreviewFromTemplateRequest:
-      required:
-      - templateId
-      type: object
-      properties:
-        templateId:
-          type: string
-          format: uuid
-          example: d290f1ee-6c54-4b01-90e6-d701748f0851
-        fields:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/FieldValue'
-    TemplateField:
-      type: object
-      properties:
-        name:
-          type: string
-        displayName:
-          type: string
-        description:
-          type:
-          - string
-          - 'null'
-        type:
-          type: string
-          description: Type of field as a guidance for building a UI. Enums values can be added in the future; therefore, the client should default to text if the value is unknown.
-          enum:
-          - text
-          - textarea
-        required:
-          type: boolean
-          description: True if the field is required for publishing
-    PublishFromTemplateRequest:
-      required:
-      - templateId
-      - durationInMinutes
-      type: object
-      properties:
-        templateId:
-          type: string
-          format: uuid
-          example: d290f1ee-6c54-4b01-90e6-d701748f0851
-        externalId:
-          type:
-          - string
-          - 'null'
-          example: externalId1
-        contentName:
-          type:
-          - string
-          - 'null'
-          example: Incoming Storm - 27/04/2022 08:00 am
-          description: Unique content name with a maximum number of 150 characters. This name must be unique and it is recommended to leave this field null to let the system automatically generate a unique name.
-        durationInMinutes:
-          type: integer
-          example: 60
-        startTime:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          example: '2020-07-21T17:32:28Z'
-          description: Optional date and time for the message to be publish to the targeted users. Null to publish the message immediately. Date format folowing https://en.wikipedia.org/wiki/ISO_8601 including date, time and timezone.
-        targets:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/PublishingTarget'
-          description: Recipients of the content
-        fields:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/FieldValue'
-    FieldValue:
-      type: object
-      properties:
-        name:
-          type: string
-        value:
-          type:
-          - string
-          - 'null'
     PublishFromTemplateResponse:
       type: object
       properties:
@@ -505,6 +337,174 @@ components:
           - 'null'
           description: Estimated total number of targeted users by the template default targeting
           example: 42
+    TemplateField:
+      type: object
+      properties:
+        name:
+          type: string
+        displayName:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        type:
+          type: string
+          description: Type of field as a guidance for building a UI. Enums values can be added in the future; therefore, the client should default to text if the value is unknown.
+          enum:
+          - text
+          - textarea
+        required:
+          type: boolean
+          description: True if the field is required for publishing
+    PublishingTarget:
+      properties:
+        type:
+          type: string
+          description: Target type
+        id:
+          type:
+          - string
+          - 'null'
+          description: 'Target Id relevant to the target type (eg: GroupId). Null if irrelevant for the type'
+    PreviewFromTemplateRequest:
+      required:
+      - templateId
+      type: object
+      properties:
+        templateId:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        fields:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/FieldValue'
+    BadRequestTemplateId:
+      properties:
+        message:
+          type: string
+          example: The request is invalid.
+    ContentTemplates:
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d300f1ee-6c54-4b01-90e6-d701748f0843
+        name:
+          type: string
+          example: Active Shooter!
+        status:
+          enum:
+          - active
+          type: string
+          example: active
+        type:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        description:
+          type: string
+          example: Use this for shooter alert
+        previewImageUrl:
+          type: string
+          example: Preview Image URL of a template
+    PreviewFromTemplateResponse:
+      type: object
+      properties:
+        previewUrl:
+          type: string
+    FieldValue:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type:
+          - string
+          - 'null'
+    ContentStatistics:
+      type: object
+      properties:
+        contentId:
+          type: string
+          format: uuid
+          example: e1231960-da4d-4f30-aea8-742bf538d7f3
+        contentStatus:
+          type: string
+          $ref: '#/components/schemas/ContentStatus'
+          example: published
+        targetedCount:
+          type: integer
+        reachedCount:
+          type: integer
+        successCount:
+          type: integer
+    PublishFromTemplateRequest:
+      required:
+      - templateId
+      - durationInMinutes
+      type: object
+      properties:
+        templateId:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        externalId:
+          type:
+          - string
+          - 'null'
+          example: externalId1
+        contentName:
+          type:
+          - string
+          - 'null'
+          example: Incoming Storm - 27/04/2022 08:00 am
+          description: Unique content name with a maximum number of 150 characters. This name must be unique and it is recommended to leave this field null to let the system automatically generate a unique name.
+        durationInMinutes:
+          type: integer
+          example: 60
+        startTime:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: '2020-07-21T17:32:28Z'
+          description: Optional date and time for the message to be publish to the targeted users. Null to publish the message immediately. Date format folowing https://en.wikipedia.org/wiki/ISO_8601 including date, time and timezone.
+        targets:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PublishingTarget'
+          description: Recipients of the content
+        fields:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/FieldValue'
+    ContentPublish400:
+      properties:
+        message:
+          enum:
+          - TemplateId is invalid
+          - TemplateId could not be found or is not available
+          - BodyFormat is invalid
+          - DurationInMinutes must be greater than 0
+          - The end date must be in the future
+          - ContentName must not exceed 150 charaters
+          - Account does not have permissions to all targeted groups
+          - Invalid targeting type
+          - Invalid attribute ID
+          - Account does not have permissions to target by attributes
+          - Account does not have permissions to target groups
+          type: string
+          example: TemplateId is invalid
   securitySchemes:
     bearerAuth:
       type: http

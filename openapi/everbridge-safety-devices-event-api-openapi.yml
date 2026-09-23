@@ -14,7 +14,7 @@ paths:
       - Safety Devices Event
       operationId: Push a safety device event
       summary: Push a safety device event
-      description: This method only supports the client_credential grant type authentication. Refer to the <a href="../docs/ebs-gs-guide-authentication-types#oauth-20-authentication">OAuth</a> section of the getting started guide as well as to the methods where you can <a href="generate-token">retrieve the token</a>.
+      description: This method only supports the client_credential grant type authentication. Refer to the OAuth section of the getting started guide as well as to the methods where you can retrieve the token.
       requestBody:
         content:
           application/json:

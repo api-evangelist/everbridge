@@ -1,7 +1,7 @@
 openapi: 3.2.0
 info:
   title: Digital Apps Internal Mobile Organizations API
-  description: 'Digital Apps APIs bring Everbridge notification functionality to your company''s mobile, desktop or web applications. '
+  description: Digital Apps APIs bring Everbridge notification functionality to your company's mobile, desktop or web applications.
   version: v1
 servers:
 - url: https://api.everbridge.net/digitalapps/v2
@@ -341,20 +341,6 @@ paths:
         passthroughBehavior: when_no_match
 components:
   schemas:
-    ButtonFrequency:
-      type: object
-      properties:
-        timeUnit:
-          type: string
-          enum:
-          - SECONDS
-          - MINUTES
-          - HOURS
-        duration:
-          type: integer
-          format: int32
-        customized:
-          type: boolean
     Geofence:
       type: object
       properties:
@@ -362,43 +348,85 @@ components:
           type: string
         circle:
           $ref: '#/components/schemas/GeoCircle'
-    MobileLocationTracingSetting:
-      type: object
-      properties:
-        enableLocationTracingInsideGeofence:
-          type: boolean
-        enteringGeofenceMessage:
-          $ref: '#/components/schemas/EnteringGeofenceMessage'
-        exitingGeofenceMessage:
-          $ref: '#/components/schemas/ExitingGeofenceMessage'
-        geofences:
-          type: array
-          items:
-            $ref: '#/components/schemas/Geofence'
-        accountLocationTracingSettings:
-          type: array
-          items:
-            $ref: '#/components/schemas/MobileAccountLocationTracingSetting'
-    SmartPing:
-      type: object
-      properties:
-        available:
-          type: boolean
-        enableSmartPing:
-          type: boolean
     MobileAccountLocationTracingSetting:
       type: object
       properties:
         individualAccountId:
           type: string
-    KeywordSearchResponse:
+    PasscodeSetting:
       type: object
       properties:
-        keywordId:
+        enabled:
+          type: boolean
+        interval:
           type: integer
-          format: int64
-        keywordName:
+          format: int32
+    KeywordV2Request:
+      required:
+      - individualAccountInfoVo
+      - operation
+      type: object
+      properties:
+        operation:
           type: string
+          description: The operation must be either SUBSCRIBE or UNSUBSCRIBE
+          enum:
+          - SUBSCRIBE
+          - UNSUBSCRIBE
+        individualAccountInfoVo:
+          $ref: '#/components/schemas/IndividualAccountInfoVo'
+    MobileOrganizationSafetySetting:
+      type: object
+      properties:
+        enableSafetyFeature:
+          type: boolean
+        duration:
+          type: integer
+          format: int32
+        unit:
+          type: string
+          enum:
+          - SECONDS
+          - MINUTES
+          - HOURS
+        allowCustomDuration:
+          type: boolean
+        accountSafetySettings:
+          type: array
+          items:
+            $ref: '#/components/schemas/MobileAccountSafetySetting'
+        emergencyPhoneNumbers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EmergencyPhoneNumber'
+        defaultEmergencyPhoneNumber:
+          $ref: '#/components/schemas/EmergencyPhoneNumber'
+        enableLandingPage:
+          type: boolean
+    MobileAccountSafetySetting:
+      type: object
+      properties:
+        individualAccountId:
+          type: string
+        useCheckIn:
+          type: boolean
+        usePanicAndSafeCorridor:
+          type: boolean
+        useEmergencyCall:
+          type: boolean
+        useSOS:
+          type: boolean
+        useSafeCorridor:
+          type: boolean
+        activeForSOS:
+          type: boolean
+        customButtons:
+          type: array
+          items:
+            $ref: '#/components/schemas/MobileCustomButton'
+    KeywordSubscriptionResponse:
+      type: object
+      properties:
         organizationId:
           type: integer
           format: int64
@@ -408,33 +436,13 @@ components:
           type: string
         appBrandedFileId:
           type: string
-        createdTime:
+        keywordId:
+          type: integer
+          format: int64
+        keywordName:
           type: string
-          format: date-time
-        enableAnonymousSubscribe:
-          type: boolean
-    ExitingGeofenceMessage:
-      type: object
-      properties:
-        enabled:
-          type: boolean
-        message:
-          type: string
-    MobileContactTracingSetting:
-      type: object
-      properties:
-        enableBlueToothProximity:
-          type: boolean
-        anonymousReport:
-          type: boolean
-        exposureEventNotification:
-          $ref: '#/components/schemas/ExposureEventNotification'
-        exposureEventIncident:
-          $ref: '#/components/schemas/ExposureEventIncident'
-        accountContactTracingSettings:
-          type: array
-          items:
-            $ref: '#/components/schemas/MobileAccountContactTracingSetting'
+        individualAccountInfo:
+          $ref: '#/components/schemas/IndividualAccountInfoVo'
     MobileOrganizationSetting:
       type: object
       properties:
@@ -491,6 +499,168 @@ components:
           type: boolean
         enableChatReceipt:
           type: boolean
+    MobileAccountContactTracingSetting:
+      type: object
+      properties:
+        individualAccountId:
+          type: string
+    MobileAction:
+      type: object
+      properties:
+        name:
+          type: string
+    MobileCustomButton:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        type:
+          type: string
+        subtype:
+          type: string
+        image:
+          type: string
+        frequency:
+          $ref: '#/components/schemas/ButtonFrequency'
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/MobileAction'
+        classic:
+          type: boolean
+    IncidentZoneAgency:
+      type: object
+      properties:
+        name:
+          type: string
+        designation:
+          type: string
+        logoFileId:
+          type: string
+        smartPing:
+          $ref: '#/components/schemas/SmartPing'
+    KeywordSearchResponse:
+      type: object
+      properties:
+        keywordId:
+          type: integer
+          format: int64
+        keywordName:
+          type: string
+        organizationId:
+          type: integer
+          format: int64
+        organizationName:
+          type: string
+        organizationLogoFileId:
+          type: string
+        appBrandedFileId:
+          type: string
+        createdTime:
+          type: string
+          format: date-time
+        enableAnonymousSubscribe:
+          type: boolean
+    EnteringGeofenceMessage:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        message:
+          type: string
+    MobileLocationTracingSetting:
+      type: object
+      properties:
+        enableLocationTracingInsideGeofence:
+          type: boolean
+        enteringGeofenceMessage:
+          $ref: '#/components/schemas/EnteringGeofenceMessage'
+        exitingGeofenceMessage:
+          $ref: '#/components/schemas/ExitingGeofenceMessage'
+        geofences:
+          type: array
+          items:
+            $ref: '#/components/schemas/Geofence'
+        accountLocationTracingSettings:
+          type: array
+          items:
+            $ref: '#/components/schemas/MobileAccountLocationTracingSetting'
+    IndividualAccountInfoVo:
+      type: object
+      properties:
+        uuid:
+          type: string
+        individualAccountId:
+          type: string
+        contactId:
+          type: integer
+          format: int64
+        contactFirstName:
+          type: string
+        contactLastName:
+          type: string
+    OrganizationCode:
+      type: object
+      properties:
+        region:
+          type: string
+        organizationId:
+          type: string
+        organizationCode:
+          type: string
+        isEnabled:
+          type: boolean
+    EmergencyPhoneNumber:
+      type: object
+      properties:
+        country:
+          type: string
+        countryCode:
+          type: string
+        phoneNumber:
+          type: string
+        authority:
+          type: boolean
+        ignoreValidation:
+          type: boolean
+    ExposureEventNotification:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        message:
+          type: string
+    ExitingGeofenceMessage:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        message:
+          type: string
+    SmartPing:
+      type: object
+      properties:
+        available:
+          type: boolean
+        enableSmartPing:
+          type: boolean
+    ButtonFrequency:
+      type: object
+      properties:
+        timeUnit:
+          type: string
+          enum:
+          - SECONDS
+          - MINUTES
+          - HOURS
+        duration:
+          type: integer
+          format: int32
+        customized:
+          type: boolean
     GeoPoint:
       type: object
       properties:
@@ -500,6 +670,39 @@ components:
         y:
           type: number
           format: double
+    OrganizationV2Response:
+      type: object
+      properties:
+        organizationId:
+          type: string
+          description: Organization Id
+        organizationName:
+          type: string
+          description: Organization name
+        organizationLogoId:
+          type: string
+          description: Organization logo
+        ssoSetting:
+          type: object
+          additionalProperties:
+            type: string
+            description: Organization's SSO settings
+          description: Organization's SSO settings
+    MobileContactTracingSetting:
+      type: object
+      properties:
+        enableBlueToothProximity:
+          type: boolean
+        anonymousReport:
+          type: boolean
+        exposureEventNotification:
+          $ref: '#/components/schemas/ExposureEventNotification'
+        exposureEventIncident:
+          $ref: '#/components/schemas/ExposureEventIncident'
+        accountContactTracingSettings:
+          type: array
+          items:
+            $ref: '#/components/schemas/MobileAccountContactTracingSetting'
     GeoCircle:
       type: object
       properties:
@@ -523,209 +726,6 @@ components:
         templateId:
           type: integer
           format: int64
-    KeywordV2Request:
-      required:
-      - individualAccountInfoVo
-      - operation
-      type: object
-      properties:
-        operation:
-          type: string
-          description: The operation must be either SUBSCRIBE or UNSUBSCRIBE
-          enum:
-          - SUBSCRIBE
-          - UNSUBSCRIBE
-        individualAccountInfoVo:
-          $ref: '#/components/schemas/IndividualAccountInfoVo'
-    OrganizationCode:
-      type: object
-      properties:
-        region:
-          type: string
-        organizationId:
-          type: string
-        organizationCode:
-          type: string
-        isEnabled:
-          type: boolean
-    IndividualAccountInfoVo:
-      type: object
-      properties:
-        uuid:
-          type: string
-        individualAccountId:
-          type: string
-        contactId:
-          type: integer
-          format: int64
-        contactFirstName:
-          type: string
-        contactLastName:
-          type: string
-    EmergencyPhoneNumber:
-      type: object
-      properties:
-        country:
-          type: string
-        countryCode:
-          type: string
-        phoneNumber:
-          type: string
-        authority:
-          type: boolean
-        ignoreValidation:
-          type: boolean
-    OrganizationV2Response:
-      type: object
-      properties:
-        organizationId:
-          type: string
-          description: Organization Id
-        organizationName:
-          type: string
-          description: Organization name
-        organizationLogoId:
-          type: string
-          description: Organization logo
-        ssoSetting:
-          type: object
-          additionalProperties:
-            type: string
-            description: Organization's SSO settings
-          description: Organization's SSO settings
-    PasscodeSetting:
-      type: object
-      properties:
-        enabled:
-          type: boolean
-        interval:
-          type: integer
-          format: int32
-    MobileAccountSafetySetting:
-      type: object
-      properties:
-        individualAccountId:
-          type: string
-        useCheckIn:
-          type: boolean
-        usePanicAndSafeCorridor:
-          type: boolean
-        useEmergencyCall:
-          type: boolean
-        useSOS:
-          type: boolean
-        useSafeCorridor:
-          type: boolean
-        activeForSOS:
-          type: boolean
-        customButtons:
-          type: array
-          items:
-            $ref: '#/components/schemas/MobileCustomButton'
-    ExposureEventNotification:
-      type: object
-      properties:
-        enabled:
-          type: boolean
-        message:
-          type: string
-    IncidentZoneAgency:
-      type: object
-      properties:
-        name:
-          type: string
-        designation:
-          type: string
-        logoFileId:
-          type: string
-        smartPing:
-          $ref: '#/components/schemas/SmartPing'
-    KeywordSubscriptionResponse:
-      type: object
-      properties:
-        organizationId:
-          type: integer
-          format: int64
-        organizationName:
-          type: string
-        organizationLogoFileId:
-          type: string
-        appBrandedFileId:
-          type: string
-        keywordId:
-          type: integer
-          format: int64
-        keywordName:
-          type: string
-        individualAccountInfo:
-          $ref: '#/components/schemas/IndividualAccountInfoVo'
-    MobileCustomButton:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        name:
-          type: string
-        type:
-          type: string
-        subtype:
-          type: string
-        image:
-          type: string
-        frequency:
-          $ref: '#/components/schemas/ButtonFrequency'
-        actions:
-          type: array
-          items:
-            $ref: '#/components/schemas/MobileAction'
-        classic:
-          type: boolean
-    MobileOrganizationSafetySetting:
-      type: object
-      properties:
-        enableSafetyFeature:
-          type: boolean
-        duration:
-          type: integer
-          format: int32
-        unit:
-          type: string
-          enum:
-          - SECONDS
-          - MINUTES
-          - HOURS
-        allowCustomDuration:
-          type: boolean
-        accountSafetySettings:
-          type: array
-          items:
-            $ref: '#/components/schemas/MobileAccountSafetySetting'
-        emergencyPhoneNumbers:
-          type: array
-          items:
-            $ref: '#/components/schemas/EmergencyPhoneNumber'
-        defaultEmergencyPhoneNumber:
-          $ref: '#/components/schemas/EmergencyPhoneNumber'
-        enableLandingPage:
-          type: boolean
-    MobileAction:
-      type: object
-      properties:
-        name:
-          type: string
-    EnteringGeofenceMessage:
-      type: object
-      properties:
-        enabled:
-          type: boolean
-        message:
-          type: string
-    MobileAccountContactTracingSetting:
-      type: object
-      properties:
-        individualAccountId:
-          type: string
   securitySchemes:
     API_Authorizer:
       type: apiKey

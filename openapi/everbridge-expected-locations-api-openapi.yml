@@ -573,6 +573,78 @@ paths:
         uri: https://ebs-restapi-prod-us.evbg.io/rest/expectedLocations/{organizationId}/{contactId}/{expectedLocationId}
 components:
   schemas:
+    ExpectedLocationInstance:
+      properties:
+        address:
+          $ref: '#/components/schemas/ContactAddressInstance'
+        contactExternalId:
+          type: string
+        contactId:
+          format: int64
+          type: integer
+        id:
+          format: int64
+          type: integer
+        isInternationalTravel:
+          type: boolean
+        isLocalTravel:
+          type: boolean
+        travelCategory:
+          type: string
+        travelType:
+          type: string
+      type: object
+    ContactAddressInstance:
+      properties:
+        arriveDate:
+          format: date-time
+          type: string
+        assetExternalId:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+        expireDate:
+          format: date-time
+          type: string
+        gisLocation:
+          $ref: '#/components/schemas/GisLocationWrapper'
+        iata:
+          type: string
+        locationId:
+          format: int64
+          type: integer
+        locationName:
+          type: string
+        locationSource:
+          type: string
+        locationSourceId:
+          format: int64
+          type: integer
+        newAssetId:
+          type: string
+        postalCode:
+          type: string
+        source:
+          enum:
+          - MANUAL
+          - AUTO
+          type: string
+        state:
+          type: string
+        streetAddress:
+          type: string
+        suite:
+          type: string
+      type: object
+    ExpectedLocationInstanceResult:
+      properties:
+        message:
+          type: string
+        result:
+          $ref: '#/components/schemas/ExpectedLocationInstance'
+      type: object
     RestfulInstanceResult:
       properties:
         message:
@@ -581,18 +653,29 @@ components:
           type: object
       title: RestfulInstanceResult
       type: object
-    RestfulModificationResult:
+    GisLocationWrapper:
       properties:
-        baseUri:
-          type: string
-        id:
-          format: int64
-          type: integer
-        instanceUri:
-          type: string
+        lat:
+          format: double
+          type: number
+        lon:
+          format: double
+          type: number
+      type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
+    ExpectedLocationCollectionResult:
+      properties:
         message:
           type: string
-      title: RestfulModificationResult
+        result:
+          items:
+            $ref: '#/components/schemas/ExpectedLocationInstance'
+          type: array
       type: object
     RestfulBatchOperationResult:
       properties:
@@ -605,15 +688,6 @@ components:
           type: array
         message:
           type: string
-      type: object
-    GisLocationWrapper:
-      properties:
-        lat:
-          format: double
-          type: number
-        lon:
-          format: double
-          type: number
       type: object
     ContactAddressWrapper:
       properties:
@@ -665,84 +739,6 @@ components:
       - locationName
       - streetAddress
       type: object
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
-    ExpectedLocationInstance:
-      properties:
-        address:
-          $ref: '#/components/schemas/ContactAddressInstance'
-        contactExternalId:
-          type: string
-        contactId:
-          format: int64
-          type: integer
-        id:
-          format: int64
-          type: integer
-        isInternationalTravel:
-          type: boolean
-        isLocalTravel:
-          type: boolean
-        travelCategory:
-          type: string
-        travelType:
-          type: string
-      type: object
-    ExpectedLocationInstanceResult:
-      properties:
-        message:
-          type: string
-        result:
-          $ref: '#/components/schemas/ExpectedLocationInstance'
-      type: object
-    ContactAddressInstance:
-      properties:
-        arriveDate:
-          format: date-time
-          type: string
-        assetExternalId:
-          type: string
-        city:
-          type: string
-        country:
-          type: string
-        expireDate:
-          format: date-time
-          type: string
-        gisLocation:
-          $ref: '#/components/schemas/GisLocationWrapper'
-        iata:
-          type: string
-        locationId:
-          format: int64
-          type: integer
-        locationName:
-          type: string
-        locationSource:
-          type: string
-        locationSourceId:
-          format: int64
-          type: integer
-        newAssetId:
-          type: string
-        postalCode:
-          type: string
-        source:
-          enum:
-          - MANUAL
-          - AUTO
-          type: string
-        state:
-          type: string
-        streetAddress:
-          type: string
-        suite:
-          type: string
-      type: object
     ExpectedLocationWrapper:
       properties:
         address:
@@ -785,14 +781,18 @@ components:
       required:
       - contactId
       type: object
-    ExpectedLocationCollectionResult:
+    RestfulModificationResult:
       properties:
+        baseUri:
+          type: string
+        id:
+          format: int64
+          type: integer
+        instanceUri:
+          type: string
         message:
           type: string
-        result:
-          items:
-            $ref: '#/components/schemas/ExpectedLocationInstance'
-          type: array
+      title: RestfulModificationResult
       type: object
   securitySchemes:
     API_Authorizer:

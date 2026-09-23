@@ -115,6 +115,8 @@ paths:
         passthroughBehavior: when_no_match
         connectionId: 11ofco
         connectionType: VPC_LINK
+      operationId: getVariables
+      x-operation-id-source: derived
     post:
       tags:
       - Variables APIs
@@ -220,6 +222,8 @@ paths:
         passthroughBehavior: when_no_match
         connectionId: 11ofco
         connectionType: VPC_LINK
+      operationId: postVariables
+      x-operation-id-source: derived
     delete:
       tags:
       - Variables APIs
@@ -253,6 +257,8 @@ paths:
         passthroughBehavior: when_no_match
         connectionId: 11ofco
         connectionType: VPC_LINK
+      operationId: deleteVariables
+      x-operation-id-source: derived
   /variables/{id}:
     get:
       tags:
@@ -397,6 +403,8 @@ paths:
         passthroughBehavior: when_no_match
         connectionId: 11ofco
         connectionType: VPC_LINK
+      operationId: getVariablesById
+      x-operation-id-source: derived
     patch:
       tags:
       - Variables APIs
@@ -510,6 +518,8 @@ paths:
         passthroughBehavior: when_no_match
         connectionId: 11ofco
         connectionType: VPC_LINK
+      operationId: patchVariablesById
+      x-operation-id-source: derived
   /variables/validation:
     post:
       tags:
@@ -605,129 +615,30 @@ paths:
         passthroughBehavior: when_no_match
         connectionId: 11ofco
         connectionType: VPC_LINK
+      operationId: postVariablesValidation
+      x-operation-id-source: derived
 components:
   schemas:
-    VariableItemPatchVO:
+    VariableValidateResponse:
       type: object
       properties:
-        displayName:
+        status:
           type: string
-          description: Variable display name.
-        variableType:
-          type: string
-          enum:
-          - Single
-          - Multiple
-          - Textbox
-          - Textarea
-          - Date
-          description: Variable types.
-        tooltip:
-          type: string
-          description: Variable description.
-        properties:
-          type: array
-          items:
-            $ref: '#/components/schemas/VariableProperty'
-          description: "Properties of variable. Different variable type has different properties. \n * Textbox and Textarea: Length \n * Date: DatetimeFormatter \n * Single: DefaultValue(required when it has), Option \n * Multiple: DefaultValue(required when it has), Option"
-    VariableItemPostVO:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Variable name.
-        displayName:
-          type: string
-          description: Variable display name.
-        variableType:
-          type: string
-          enum:
-          - Single
-          - Multiple
-          - Textbox
-          - Textarea
-          - Date
-          description: Variable types.
-        tooltip:
-          type: string
-          description: Variable description.
-        properties:
-          type: array
-          items:
-            $ref: '#/components/schemas/VariableProperty'
-          description: "Properties of variable. Different variable type has different properties. \n * Textbox and Textarea: Length \n * Date: DatetimeFormatter \n * Single: DefaultValue(required when it has), Option \n * Multiple: DefaultValue(required when it has), Option"
-    VariableProperty:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-          - DefaultValue
-          - Option
-          - Length
-          - DatetimeFormatter
-          description: "* DatetimeFormatter: follow simpleDateFormat. Support pattern: Date pattern: dd-MM-yyyy, MM-dd-yyyy, yyyy-MM-dd; Time pattern: HH:mm, HH:mm:ss, hh:mm aaa, hh:mm:ss aaa \n * Length: max length of text variable value \n * Option: array of option values \n * DefaultValue: default variable value"
-        value:
-          oneOf:
-          - type: integer
-          - type: array
-            items:
-              type: string
-          - type: string
-    VariableDataPage:
-      type: object
-      properties:
-        pageSize:
+        code:
           type: integer
-          format: int32
-        start:
-          type: integer
-          format: int32
-        data:
-          type: array
-          items:
-            oneOf:
-            - $ref: '#/components/schemas/VariableItemBaseVO'
-            - $ref: '#/components/schemas/VariableItemDetailVO'
-        totalCount:
-          type: integer
-          format: int64
-        scrollId:
+        message:
           type: string
-    VariableItemBaseVO:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Variable id.
-        name:
-          type: string
-          description: Variable name.
-        displayName:
-          type: string
-          description: Variable display name.
-        variableType:
-          type: string
-          enum:
-          - Single
-          - Multiple
-          - Textbox
-          - Textarea
-          - Date
-          description: Variable types.
-        createdDate:
-          type: string
-          format: date-time
-          description: Date and time of variable created.
-        createdBy:
-          type: string
-          description: User id of the creator. If variable is created by System or Service, this field is 0.
-        librarySource:
-          type: string
-          description: Determines the source from which the variable originates. `IC` refers to legacy Incident Communications platform while `COMMS` indicates the new Communications platform.
-          enum:
-          - IC
-          - COMMS
+        detail:
+          type: object
+          properties:
+            success:
+              type: array
+              items:
+                $ref: '#/components/schemas/VariableValidationResponseItem'
+            failure:
+              type: array
+              items:
+                $ref: '#/components/schemas/VariableValidationResponseItem'
     VariableItemDetailVO:
       type: object
       properties:
@@ -837,34 +748,29 @@ components:
                     description: The type of the argument's value, which can be used to enforce type checking when using the Handlebars partial.
                     enum:
                     - Path
-    VariableResponse:
-      required:
-      - id
+    VariableItemPatchVO:
       type: object
       properties:
-        id:
+        displayName:
           type: string
-          description: Variable id.
-    VariableValidateResponse:
-      type: object
-      properties:
-        status:
+          description: Variable display name.
+        variableType:
           type: string
-        code:
-          type: integer
-        message:
+          enum:
+          - Single
+          - Multiple
+          - Textbox
+          - Textarea
+          - Date
+          description: Variable types.
+        tooltip:
           type: string
-        detail:
-          type: object
-          properties:
-            success:
-              type: array
-              items:
-                $ref: '#/components/schemas/VariableValidationResponseItem'
-            failure:
-              type: array
-              items:
-                $ref: '#/components/schemas/VariableValidationResponseItem'
+          description: Variable description.
+        properties:
+          type: array
+          items:
+            $ref: '#/components/schemas/VariableProperty'
+          description: "Properties of variable. Different variable type has different properties. \n * Textbox and Textarea: Length \n * Date: DatetimeFormatter \n * Single: DefaultValue(required when it has), Option \n * Multiple: DefaultValue(required when it has), Option"
     VariableValidationRequestItem:
       type: object
       properties:
@@ -889,6 +795,112 @@ components:
           type: string
         message:
           type: string
+    VariableItemPostVO:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Variable name.
+        displayName:
+          type: string
+          description: Variable display name.
+        variableType:
+          type: string
+          enum:
+          - Single
+          - Multiple
+          - Textbox
+          - Textarea
+          - Date
+          description: Variable types.
+        tooltip:
+          type: string
+          description: Variable description.
+        properties:
+          type: array
+          items:
+            $ref: '#/components/schemas/VariableProperty'
+          description: "Properties of variable. Different variable type has different properties. \n * Textbox and Textarea: Length \n * Date: DatetimeFormatter \n * Single: DefaultValue(required when it has), Option \n * Multiple: DefaultValue(required when it has), Option"
+    VariableDataPage:
+      type: object
+      properties:
+        pageSize:
+          type: integer
+          format: int32
+        start:
+          type: integer
+          format: int32
+        data:
+          type: array
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/VariableItemBaseVO'
+            - $ref: '#/components/schemas/VariableItemDetailVO'
+        totalCount:
+          type: integer
+          format: int64
+        scrollId:
+          type: string
+    VariableResponse:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          description: Variable id.
+    VariableItemBaseVO:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Variable id.
+        name:
+          type: string
+          description: Variable name.
+        displayName:
+          type: string
+          description: Variable display name.
+        variableType:
+          type: string
+          enum:
+          - Single
+          - Multiple
+          - Textbox
+          - Textarea
+          - Date
+          description: Variable types.
+        createdDate:
+          type: string
+          format: date-time
+          description: Date and time of variable created.
+        createdBy:
+          type: string
+          description: User id of the creator. If variable is created by System or Service, this field is 0.
+        librarySource:
+          type: string
+          description: Determines the source from which the variable originates. `IC` refers to legacy Incident Communications platform while `COMMS` indicates the new Communications platform.
+          enum:
+          - IC
+          - COMMS
+    VariableProperty:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - DefaultValue
+          - Option
+          - Length
+          - DatetimeFormatter
+          description: "* DatetimeFormatter: follow simpleDateFormat. Support pattern: Date pattern: dd-MM-yyyy, MM-dd-yyyy, yyyy-MM-dd; Time pattern: HH:mm, HH:mm:ss, hh:mm aaa, hh:mm:ss aaa \n * Length: max length of text variable value \n * Option: array of option values \n * DefaultValue: default variable value"
+        value:
+          oneOf:
+          - type: integer
+          - type: array
+            items:
+              type: string
+          - type: string
   securitySchemes:
     API_Authorizer:
       type: apiKey

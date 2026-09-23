@@ -17,7 +17,6 @@ paths:
       - Asset Association Definition
       operationId: EB AM List Asset Association Definitions
       summary: List Asset Association Definitions
-      description: List Asset Association Definitions
       parameters:
       - name: X-EB-Organization-Id
         in: header
@@ -67,7 +66,6 @@ paths:
       - Asset Association Definition
       operationId: EB AM Create Asset Association Definition
       summary: Create Asset Association Definition
-      description: Create Asset Association Definition
       parameters:
       - name: X-EB-Organization-Id
         in: header
@@ -128,7 +126,6 @@ paths:
       - Asset Association Definition
       operationId: EB AM Get Asset Association Definitions
       summary: Get Asset Association Definitions
-      description: Get Asset Association Definitions
       parameters:
       - name: X-EB-Organization-Id
         in: header
@@ -182,7 +179,6 @@ paths:
       - Asset Association Definition
       operationId: EB AM Update Asset Association Definition By Id
       summary: Update Asset Association Definition By Id
-      description: Update Asset Association Definition By Id
       parameters:
       - name: X-EB-Organization-Id
         in: header
@@ -248,7 +244,6 @@ paths:
       - Asset Association Definition
       operationId: EB AM Delete Asset Association Definition By Id
       summary: Delete Asset Association Definition By Id
-      description: Delete Asset Association Definition By Id
       parameters:
       - name: X-EB-Organization-Id
         in: header
@@ -303,7 +298,6 @@ paths:
       - Asset Association Definition
       operationId: EB AM Get Linked Asset
       summary: Get Linked Asset
-      description: Get Linked Asset
       parameters:
       - name: X-EB-Organization-Id
         in: header
@@ -349,7 +343,6 @@ paths:
       - Asset Association Definition
       operationId: EB AM Get Asset Association Definition By Name
       summary: Get Asset Association Definition By Name
-      description: Get Asset Association Definition By Name
       parameters:
       - name: X-EB-Organization-Id
         in: header
@@ -399,6 +392,11 @@ paths:
         passthroughBehavior: when_no_match
 components:
   schemas:
+    LinkedToAssetResponse:
+      type: object
+      properties:
+        linkedToExistingAsset:
+          type: boolean
     AssetAssociationDefinition:
       type: object
       properties:
@@ -433,17 +431,6 @@ components:
           type: string
           enum:
           - AssetToContact
-    LinkedToAssetResponse:
-      type: object
-      properties:
-        linkedToExistingAsset:
-          type: boolean
-    organizationId:
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      maxLength: 16
-      type: integer
-      example: '1536984111644674'
-      default: '1536984111644674'
     AssetAssociationDefinitionRequest:
       required:
       - name
@@ -457,6 +444,12 @@ components:
           type: string
           enum:
           - AssetToContact
+    organizationId:
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      maxLength: 16
+      type: integer
+      example: '1536984111644674'
+      default: '1536984111644674'
   securitySchemes:
     BasicAuth:
       type: http

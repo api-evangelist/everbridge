@@ -779,17 +779,6 @@ paths:
         uri: https://ebs-restapi-prod-us.evbg.io/rest/privacy-policy/organizations/{organizationId}/policy-assignment/bypolicy
 components:
   schemas:
-    postUpdateResponse:
-      properties:
-        baseUri:
-          type: string
-        id:
-          type: integer
-        instanceUri:
-          type: string
-        message:
-          type: string
-      type: object
     getPrivacyPolicies:
       properties:
         summary:
@@ -847,25 +836,16 @@ components:
               type: object
           type: object
       type: object
-    privacyPolicy:
+    assignOrUnassignPrivacy:
       properties:
-        policyItems:
+        assignRoleIds:
           items:
-            properties:
-              category:
-                description: Whether the data privacy policy work for 'contactSection' or 'contactField'
-                type: string
-              nameIdentity:
-                description: The data privacy policy will work when it be GENERAL_INFORMATION,DELIVERY_METHODS,STATIC_LOCATIONS,EXPECTED_LOCATIONS,LAST_KNOWN_LOCATIONS,TRAVEL_ARRANGER
-                type: string
-              permission:
-                description: The permission details of the privacy policy:NO_ACCESS,VIEW_ONLY,VIEW_AND_EDIT
-                type: string
-            type: object
+            type: integer
           type: array
-        policyName:
-          description: The name of the privacy policy
-          type: string
+        unassignRoleIds:
+          items:
+            type: integer
+          type: array
       type: object
     privacyAssignment:
       properties:
@@ -891,23 +871,43 @@ components:
       example: '1536984111644674'
       maxLength: 16
       type: integer
+    privacyPolicy:
+      properties:
+        policyItems:
+          items:
+            properties:
+              category:
+                description: Whether the data privacy policy work for 'contactSection' or 'contactField'
+                type: string
+              nameIdentity:
+                description: The data privacy policy will work when it be GENERAL_INFORMATION,DELIVERY_METHODS,STATIC_LOCATIONS,EXPECTED_LOCATIONS,LAST_KNOWN_LOCATIONS,TRAVEL_ARRANGER
+                type: string
+              permission:
+                description: The permission details of the privacy policy:NO_ACCESS,VIEW_ONLY,VIEW_AND_EDIT
+                type: string
+            type: object
+          type: array
+        policyName:
+          description: The name of the privacy policy
+          type: string
+      type: object
+    postUpdateResponse:
+      properties:
+        baseUri:
+          type: string
+        id:
+          type: integer
+        instanceUri:
+          type: string
+        message:
+          type: string
+      type: object
     policyId:
       default: '0'
       description: privacy policy ID
       example: '1536984111644674'
       maxLength: 16
       type: integer
-    assignOrUnassignPrivacy:
-      properties:
-        assignRoleIds:
-          items:
-            type: integer
-          type: array
-        unassignRoleIds:
-          items:
-            type: integer
-          type: array
-      type: object
   securitySchemes:
     API_Authorizer:
       description: oAuth Token

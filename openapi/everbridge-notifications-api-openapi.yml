@@ -206,7 +206,7 @@ paths:
         uri: https://ebs-restapi-prod-us.evbg.io/rest/notificationEvents/{organizationId}/{notificationEventId}
   /notifications/push/{organizationId}:
     post:
-      description: Initiate an immediate push notification.  To launch incident notification, see [Launch Incident](https://developers.everbridge.net/home/reference/ebs-launch-incident)
+      description: Initiate an immediate push notification. To launch incident notification, see Launch Incident
       operationId: EBS Launch Push Notification
       parameters:
       - in: path
@@ -288,7 +288,7 @@ paths:
         uri: https://ebs-restapi-prod-us.evbg.io/rest/notifications/push/{organizationId}
   /notifications/{organizationId}:
     get:
-      description: Retrieve all notifications at the org level.  Please note that this API only returns Mass Notifications and not [Incident Notifications](https://developers.everbridge.net/home/reference/ebs-list-incident-notifications).
+      description: Retrieve all notifications at the org level. Please note that this API only returns Mass Notifications and not Incident Notifications.
       operationId: EBS List Mass Notifications
       parameters:
       - in: path
@@ -1720,7 +1720,7 @@ paths:
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/notifications/{organizationId}
     post:
-      description: Launch a Mass notification.  To launch incident notification, see [Launch Incident](https://developers.everbridge.net/home/reference/ebs-launch-incident)
+      description: Launch a Mass notification. To launch incident notification, see Launch Incident
       operationId: EBS Launch Mass Notification
       parameters:
       - in: path
@@ -1853,7 +1853,7 @@ paths:
         uri: https://ebs-restapi-prod-us.evbg.io/rest/notifications/{organizationId}
   /notifications/{organizationId}/{notificationId}:
     get:
-      description: Retrieve details of a notification within an  organization.  This can be used to return Mass Notification as well as Incident Notification.
+      description: Retrieve details of a notification within an organization. This can be used to return Mass Notification as well as Incident Notification.
       operationId: EBS Get Notification
       parameters:
       - example: '591470146880264'
@@ -2635,7 +2635,10 @@ paths:
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/notifications/{organizationId}/{notificationId}
     put:
-      description: This API can be used for Mass Notification as well as Incident Notification.  Except stopping a notification, other updates to Incident Notification should be done using [Update Incident](https://developers.everbridge.net/home/reference/update-incident).  <br /><br />Additional samples for updating Mass Notification will be added soon.
+      description: 'This API can be used for Mass Notification as well as Incident Notification. Except stopping a notification, other updates to Incident Notification should be done using Update Incident.
+
+
+        Additional samples for updating Mass Notification will be added soon.'
       operationId: EBS Update Notification
       parameters:
       - in: path
@@ -2731,6 +2734,37 @@ paths:
         uri: https://ebs-restapi-prod-us.evbg.io/rest/notifications/{organizationId}/{notificationId}
 components:
   schemas:
+    RestfulCollectionResult:
+      properties:
+        currentPageUri:
+          type: string
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        nextPageUri:
+          type: string
+        page:
+          $ref: '#/components/schemas/DataPageObject'
+        previousPageUri:
+          type: string
+      title: RestfulCollectionResult
+      type: object
+    RestfulModificationResult:
+      properties:
+        baseUri:
+          type: string
+        id:
+          format: int64
+          type: integer
+        instanceUri:
+          type: string
+        message:
+          type: string
+      title: RestfulModificationResult
+      type: object
     RestfulInstanceResult:
       properties:
         message:
@@ -2739,6 +2773,53 @@ components:
           type: object
       title: RestfulInstanceResult
       type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
+    createNotification:
+      allOf:
+      - $ref: '#/components/schemas/notification'
+    DataPageObject:
+      properties:
+        currentPageNo:
+          format: int32
+          type: integer
+        data:
+          items:
+            type: object
+          type: array
+        dataPageList:
+          items:
+            $ref: '#/components/schemas/DataPageObject'
+          type: array
+        pageSize:
+          format: int32
+          type: integer
+        scrollId:
+          type: string
+        start:
+          format: int32
+          type: integer
+        totalCount:
+          format: int64
+          type: integer
+        totalPageCount:
+          format: int32
+          type: integer
+      title: DataPage«object»
+      type: object
+    updateNotification:
+      allOf:
+      - properties:
+          notificationStatus:
+            example: Stopped
+            type: string
+        required:
+        - notificationStatus
+        type: object
     NotificationEventWrapper:
       properties:
         accountId:
@@ -2781,52 +2862,6 @@ components:
           - D
           type: string
       title: NotificationEventWrapper
-      type: object
-    RestfulModificationResult:
-      properties:
-        baseUri:
-          type: string
-        id:
-          format: int64
-          type: integer
-        instanceUri:
-          type: string
-        message:
-          type: string
-      title: RestfulModificationResult
-      type: object
-    updateNotification:
-      allOf:
-      - properties:
-          notificationStatus:
-            example: Stopped
-            type: string
-        required:
-        - notificationStatus
-        type: object
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
-    RestfulCollectionResult:
-      properties:
-        currentPageUri:
-          type: string
-        firstPageUri:
-          type: string
-        lastPageUri:
-          type: string
-        message:
-          type: string
-        nextPageUri:
-          type: string
-        page:
-          $ref: '#/components/schemas/DataPageObject'
-        previousPageUri:
-          type: string
-      title: RestfulCollectionResult
       type: object
     notification:
       properties:
@@ -2936,38 +2971,6 @@ components:
           - Conference
           type: string
       type: object
-    DataPageObject:
-      properties:
-        currentPageNo:
-          format: int32
-          type: integer
-        data:
-          items:
-            type: object
-          type: array
-        dataPageList:
-          items:
-            $ref: '#/components/schemas/DataPageObject'
-          type: array
-        pageSize:
-          format: int32
-          type: integer
-        scrollId:
-          type: string
-        start:
-          format: int32
-          type: integer
-        totalCount:
-          format: int64
-          type: integer
-        totalPageCount:
-          format: int32
-          type: integer
-      title: DataPage«object»
-      type: object
-    createNotification:
-      allOf:
-      - $ref: '#/components/schemas/notification'
   securitySchemes:
     API_Authorizer:
       description: oAuth Token

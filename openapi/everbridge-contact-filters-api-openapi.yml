@@ -731,6 +731,80 @@ paths:
         uri: https://ebs-restapi-prod-us.evbg.io/rest/contactFilters/{organizationId}/{contactFilterIdOrQueryFilter}
 components:
   schemas:
+    ContactFilterResponseRuleWrapper:
+      properties:
+        baseUri:
+          type: string
+        id:
+          format: int64
+          type: integer
+        instanceUri:
+          type: string
+        message:
+          type: string
+      type: object
+    ContactFilterRequestRuleWrapper:
+      properties:
+        contactFilterRules:
+          items:
+            properties:
+              attributeId: {}
+              attributeValues: {}
+              clazz: {}
+              columnName:
+                type: string
+              columnValue: {}
+              contactFieldId:
+                type: number
+              contactFilterId:
+                type: number
+              contactFilterOption: {}
+              dataType:
+                type: string
+              defaultValue: {}
+              displayFieldName:
+                type: string
+              displayName:
+                type: string
+              embeddedColumnName: {}
+              fieldName:
+                type: string
+              fieldType: {}
+              fieldValue:
+                type: string
+              moduleType: {}
+              operator:
+                type: string
+              operators: {}
+              searchFieldDisplayType: {}
+              searchName:
+                type: string
+              seq:
+                type: number
+              showType:
+                type: string
+              tableName: {}
+              type:
+                type: string
+              valueCategory: {}
+              variableId: {}
+            required:
+            - type
+            - contactFieldId
+            - operator
+            - dataType
+            - columnName
+            - columnValue
+            type: object
+          type: array
+        contactFilterType:
+          type: string
+        name:
+          type: string
+      required:
+      - name
+      - contactFilterRules
+      type: object
     ContactFilterListResponseRuleWrapper:
       properties:
         firstPageUri:
@@ -832,6 +906,12 @@ components:
       - lastPageUri
       - page
       type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
     ContactFilterGetResponseRuleWrapper:
       properties:
         message:
@@ -913,86 +993,6 @@ components:
       required:
       - message
       - result
-      type: object
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
-    ContactFilterResponseRuleWrapper:
-      properties:
-        baseUri:
-          type: string
-        id:
-          format: int64
-          type: integer
-        instanceUri:
-          type: string
-        message:
-          type: string
-      type: object
-    ContactFilterRequestRuleWrapper:
-      properties:
-        contactFilterRules:
-          items:
-            properties:
-              attributeId: {}
-              attributeValues: {}
-              clazz: {}
-              columnName:
-                type: string
-              columnValue: {}
-              contactFieldId:
-                type: number
-              contactFilterId:
-                type: number
-              contactFilterOption: {}
-              dataType:
-                type: string
-              defaultValue: {}
-              displayFieldName:
-                type: string
-              displayName:
-                type: string
-              embeddedColumnName: {}
-              fieldName:
-                type: string
-              fieldType: {}
-              fieldValue:
-                type: string
-              moduleType: {}
-              operator:
-                type: string
-              operators: {}
-              searchFieldDisplayType: {}
-              searchName:
-                type: string
-              seq:
-                type: number
-              showType:
-                type: string
-              tableName: {}
-              type:
-                type: string
-              valueCategory: {}
-              variableId: {}
-            required:
-            - type
-            - contactFieldId
-            - operator
-            - dataType
-            - columnName
-            - columnValue
-            type: object
-          type: array
-        contactFilterType:
-          type: string
-        name:
-          type: string
-      required:
-      - name
-      - contactFilterRules
       type: object
   securitySchemes:
     API_Authorizer:

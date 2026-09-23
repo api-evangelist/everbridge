@@ -769,7 +769,11 @@ paths:
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/
     post:
-      description: 'Create a new custom role based on a baseRoleTemplate or baseRole.<br/>Note: You must specify either baseRoleTemplate or baseRole, but not both or neither.<br/>You can refer to the provided [file-link](https://manager.everbridge.net/docs?docLocation=/fe-manager-portal-role/assets/APIFeatureName.pdf) whenever needed to identify the corresponding apiFeatureName for your API requests based on the UI feature name.'
+      description: 'Create a new custom role based on a baseRoleTemplate or baseRole.
+
+        Note: You must specify either baseRoleTemplate or baseRole, but not both or neither.
+
+        You can refer to the provided file-link whenever needed to identify the corresponding apiFeatureName for your API requests based on the UI feature name.'
       operationId: EBS Create Custom Role
       parameters:
       - description: To control if the response should include detailed role data.
@@ -2404,7 +2408,11 @@ paths:
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/
     patch:
-      description: Partially update a custom role of an organization.<br/>Supported attributes are name, permissionScope, roleDataScope.<br/>You can refer to the provided [file-link](https://manager.everbridge.net/docs?docLocation=/fe-manager-portal-role/assets/APIFeatureName.pdf) whenever needed to identify the corresponding apiFeatureName for your API requests based on the UI feature name.
+      description: 'Partially update a custom role of an organization.
+
+        Supported attributes are name, permissionScope, roleDataScope.
+
+        You can refer to the provided file-link whenever needed to identify the corresponding apiFeatureName for your API requests based on the UI feature name.'
       operationId: EBS Patch Custom Role
       parameters:
       - description: The ID of the custom role for querying.
@@ -3280,7 +3288,9 @@ paths:
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/
     put:
-      description: Update a custom role of an organization.<br/>You can refer to the provided [file-link](https://manager.everbridge.net/docs?docLocation=/fe-manager-portal-role/assets/APIFeatureName.pdf) whenever needed to identify the corresponding apiFeatureName for your API requests based on the UI feature name.
+      description: 'Update a custom role of an organization.
+
+        You can refer to the provided file-link whenever needed to identify the corresponding apiFeatureName for your API requests based on the UI feature name.'
       operationId: EBS Update Custom Role
       parameters:
       - description: The ID of the custom role for querying.

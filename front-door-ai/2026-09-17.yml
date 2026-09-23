@@ -1,0 +1,27 @@
+# Front Door AI Index — everbridge — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: everbridge
+  lexicon_version: '1.0'
+  probed_at: '2026-09-17'
+  host: www.everbridge.com
+  final_host: www.everbridge.com
+  ownership: own
+  owner: everbridge
+  shares_host_with: null
+  inherited_from: null
+  verdict: scored
+  score: 32
+  host_score: 32
+  density: 20.34
+  words: 1573
+  tiers:
+    agentic: 0
+    core: 32
+    model: 0
+  ambiguous: 15
+  top_terms:
+    AI: 32
+    intelligence: 12
+    automation: 3
