@@ -12,7 +12,7 @@ tags:
 paths:
   /notificationCategories/{organizationId}:
     get:
-      operationId: EBS List Notification Categories
+      operationId: EBSListNotificationCategories
       parameters:
       - description: The ID of the organization containing the notificationCategories
         in: path
@@ -96,8 +96,10 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/notificationCategories/{organizationId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS List Notification Categories
     post:
-      operationId: EBS Create Notification Categories
+      operationId: EBSCreateNotificationCategories
       parameters:
       - description: The organization from which to initiate the category
         in: path
@@ -154,9 +156,11 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/notificationCategories/{organizationId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Create Notification Categories
   /notificationCategories/{organizationId}/{categoryId}:
     get:
-      operationId: EBS Get Notification Category
+      operationId: EBSGetNotificationCategory
       parameters:
       - description: The ID of the organization containing the category
         in: path
@@ -220,34 +224,10 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/notificationCategories/{organizationId}/{categoryId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Get Notification Category
 components:
   schemas:
-    RestfulCollectionResult:
-      properties:
-        currentPageUri:
-          type: string
-        firstPageUri:
-          type: string
-        lastPageUri:
-          type: string
-        message:
-          type: string
-        nextPageUri:
-          type: string
-        page:
-          $ref: '#/components/schemas/DataPageObject'
-        previousPageUri:
-          type: string
-      title: RestfulCollectionResult
-      type: object
-    RestfulInstanceResult:
-      properties:
-        message:
-          type: string
-        result:
-          type: object
-      title: RestfulInstanceResult
-      type: object
     organizationId:
       default: '1536984111644674'
       description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
@@ -282,6 +262,37 @@ components:
           format: int32
           type: integer
       title: DataPage«object»
+      type: object
+    RestfulModificationResult:
+      properties:
+        baseUri:
+          type: string
+        id:
+          format: int64
+          type: integer
+        instanceUri:
+          type: string
+        message:
+          type: string
+      title: RestfulModificationResult
+      type: object
+    RestfulCollectionResult:
+      properties:
+        currentPageUri:
+          type: string
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        nextPageUri:
+          type: string
+        page:
+          $ref: '#/components/schemas/DataPageObject'
+        previousPageUri:
+          type: string
+      title: RestfulCollectionResult
       type: object
     CategoryWrapper:
       description: The notificationCategory object to create
@@ -326,18 +337,13 @@ components:
           - D
           type: string
       type: object
-    RestfulModificationResult:
+    RestfulInstanceResult:
       properties:
-        baseUri:
-          type: string
-        id:
-          format: int64
-          type: integer
-        instanceUri:
-          type: string
         message:
           type: string
-      title: RestfulModificationResult
+        result:
+          type: object
+      title: RestfulInstanceResult
       type: object
   securitySchemes:
     API_Authorizer:

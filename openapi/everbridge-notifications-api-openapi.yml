@@ -14,7 +14,7 @@ paths:
     get:
       deprecated: false
       description: Retrieve all notification events for an organization
-      operationId: List Notification Events
+      operationId: ListNotificationEvents
       parameters:
       - description: The ID of the organization containing the notificationEvents
         in: path
@@ -78,10 +78,12 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/notificationEvents/{organizationId}
+      x-operation-id-source: normalized
+      x-operation-id-original: List Notification Events
     post:
       deprecated: false
       description: Create a new notification event within an organization
-      operationId: Create Notification Event
+      operationId: CreateNotificationEvent
       parameters:
       - description: The ID of the organization containing the notificationEvents
         in: path
@@ -138,11 +140,13 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/notificationEvents/{organizationId}
+      x-operation-id-source: normalized
+      x-operation-id-original: Create Notification Event
   /notificationEvents/{organizationId}/{notificationEventId}:
     get:
       deprecated: false
       description: Retrieve a specific notification event
-      operationId: Get Notification Event
+      operationId: GetNotificationEvent
       parameters:
       - description: The ID of the organization in which to find the notificationEvent
         in: path
@@ -204,10 +208,12 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/notificationEvents/{organizationId}/{notificationEventId}
+      x-operation-id-source: normalized
+      x-operation-id-original: Get Notification Event
   /notifications/push/{organizationId}:
     post:
       description: Initiate an immediate push notification. To launch incident notification, see Launch Incident
-      operationId: EBS Launch Push Notification
+      operationId: EBSLaunchPushNotification
       parameters:
       - in: path
         name: organizationId
@@ -286,10 +292,12 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/notifications/push/{organizationId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Launch Push Notification
   /notifications/{organizationId}:
     get:
       description: Retrieve all notifications at the org level. Please note that this API only returns Mass Notifications and not Incident Notifications.
-      operationId: EBS List Mass Notifications
+      operationId: EBSListMassNotifications
       parameters:
       - in: path
         name: organizationId
@@ -1719,9 +1727,11 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/notifications/{organizationId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS List Mass Notifications
     post:
       description: Launch a Mass notification. To launch incident notification, see Launch Incident
-      operationId: EBS Launch Mass Notification
+      operationId: EBSLaunchMassNotification
       parameters:
       - in: path
         name: organizationId
@@ -1851,10 +1861,12 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/notifications/{organizationId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Launch Mass Notification
   /notifications/{organizationId}/{notificationId}:
     get:
       description: Retrieve details of a notification within an organization. This can be used to return Mass Notification as well as Incident Notification.
-      operationId: EBS Get Notification
+      operationId: EBSGetNotification
       parameters:
       - example: '591470146880264'
         in: path
@@ -2634,12 +2646,14 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/notifications/{organizationId}/{notificationId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Get Notification
     put:
       description: 'This API can be used for Mass Notification as well as Incident Notification. Except stopping a notification, other updates to Incident Notification should be done using Update Incident.
 
 
         Additional samples for updating Mass Notification will be added soon.'
-      operationId: EBS Update Notification
+      operationId: EBSUpdateNotification
       parameters:
       - in: path
         name: organizationId
@@ -2732,56 +2746,16 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/notifications/{organizationId}/{notificationId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Update Notification
 components:
   schemas:
-    RestfulCollectionResult:
-      properties:
-        currentPageUri:
-          type: string
-        firstPageUri:
-          type: string
-        lastPageUri:
-          type: string
-        message:
-          type: string
-        nextPageUri:
-          type: string
-        page:
-          $ref: '#/components/schemas/DataPageObject'
-        previousPageUri:
-          type: string
-      title: RestfulCollectionResult
-      type: object
-    RestfulModificationResult:
-      properties:
-        baseUri:
-          type: string
-        id:
-          format: int64
-          type: integer
-        instanceUri:
-          type: string
-        message:
-          type: string
-      title: RestfulModificationResult
-      type: object
-    RestfulInstanceResult:
-      properties:
-        message:
-          type: string
-        result:
-          type: object
-      title: RestfulInstanceResult
-      type: object
     organizationId:
       default: '1536984111644674'
       description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
       example: '1536984111644674'
       maxLength: 16
       type: integer
-    createNotification:
-      allOf:
-      - $ref: '#/components/schemas/notification'
     DataPageObject:
       properties:
         currentPageNo:
@@ -2811,6 +2785,40 @@ components:
           type: integer
       title: DataPage«object»
       type: object
+    createNotification:
+      allOf:
+      - $ref: '#/components/schemas/notification'
+    RestfulModificationResult:
+      properties:
+        baseUri:
+          type: string
+        id:
+          format: int64
+          type: integer
+        instanceUri:
+          type: string
+        message:
+          type: string
+      title: RestfulModificationResult
+      type: object
+    RestfulCollectionResult:
+      properties:
+        currentPageUri:
+          type: string
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        nextPageUri:
+          type: string
+        page:
+          $ref: '#/components/schemas/DataPageObject'
+        previousPageUri:
+          type: string
+      title: RestfulCollectionResult
+      type: object
     updateNotification:
       allOf:
       - properties:
@@ -2820,48 +2828,13 @@ components:
         required:
         - notificationStatus
         type: object
-    NotificationEventWrapper:
+    RestfulInstanceResult:
       properties:
-        accountId:
-          format: int64
-          type: integer
-        createdDate:
-          format: date-time
+        message:
           type: string
-        createdId:
-          format: int64
-          type: integer
-        createdName:
-          type: string
-        createdProxyName:
-          type: string
-        id:
-          format: int64
-          type: integer
-        lastModifiedDate:
-          format: date-time
-          type: string
-        lastModifiedId:
-          format: int64
-          type: integer
-        lastModifiedName:
-          type: string
-        lastModifiedProxyName:
-          type: string
-        name:
-          type: string
-        organizationId:
-          format: int64
-          type: integer
-        resourceBundleId:
-          format: int64
-          type: integer
-        status:
-          enum:
-          - A
-          - D
-          type: string
-      title: NotificationEventWrapper
+        result:
+          type: object
+      title: RestfulInstanceResult
       type: object
     notification:
       properties:
@@ -2970,6 +2943,49 @@ components:
           - Polling
           - Conference
           type: string
+      type: object
+    NotificationEventWrapper:
+      properties:
+        accountId:
+          format: int64
+          type: integer
+        createdDate:
+          format: date-time
+          type: string
+        createdId:
+          format: int64
+          type: integer
+        createdName:
+          type: string
+        createdProxyName:
+          type: string
+        id:
+          format: int64
+          type: integer
+        lastModifiedDate:
+          format: date-time
+          type: string
+        lastModifiedId:
+          format: int64
+          type: integer
+        lastModifiedName:
+          type: string
+        lastModifiedProxyName:
+          type: string
+        name:
+          type: string
+        organizationId:
+          format: int64
+          type: integer
+        resourceBundleId:
+          format: int64
+          type: integer
+        status:
+          enum:
+          - A
+          - D
+          type: string
+      title: NotificationEventWrapper
       type: object
   securitySchemes:
     API_Authorizer:

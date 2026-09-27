@@ -49,6 +49,10 @@ paths:
           description: Failed - Rate limit is exceeded
 components:
   schemas:
+    TagResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/Tag'
     Tag:
       properties:
         id:
@@ -64,10 +68,6 @@ components:
           - string
           - 'null'
           description: Tag Id of the parent. Returns null value if there is not a parent tag
-    TagResponse:
-      type: array
-      items:
-        $ref: '#/components/schemas/Tag'
   securitySchemes:
     bearerAuth:
       type: http

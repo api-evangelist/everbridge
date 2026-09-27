@@ -13,7 +13,7 @@ paths:
     post:
       tags:
       - Tokens
-      operationId: Generate Token
+      operationId: GenerateToken
       summary: Generate Token
       description: 'Generate a new oAuth token which must be supplied to all subsequent API calls. Grab _id_token_ from the response and pass it as header
 
@@ -136,6 +136,8 @@ paths:
           2\d{2}:
             statusCode: '200'
         passthroughBehavior: when_no_match
+      x-operation-id-source: normalized
+      x-operation-id-original: Generate Token
 x-readme:
   explorer-enabled: true
   proxy-enabled: true

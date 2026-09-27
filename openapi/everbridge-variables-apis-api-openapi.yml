@@ -639,6 +639,77 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/VariableValidationResponseItem'
+    VariableItemBaseVO:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Variable id.
+        name:
+          type: string
+          description: Variable name.
+        displayName:
+          type: string
+          description: Variable display name.
+        variableType:
+          type: string
+          enum:
+          - Single
+          - Multiple
+          - Textbox
+          - Textarea
+          - Date
+          description: Variable types.
+        createdDate:
+          type: string
+          format: date-time
+          description: Date and time of variable created.
+        createdBy:
+          type: string
+          description: User id of the creator. If variable is created by System or Service, this field is 0.
+        librarySource:
+          type: string
+          description: Determines the source from which the variable originates. `IC` refers to legacy Incident Communications platform while `COMMS` indicates the new Communications platform.
+          enum:
+          - IC
+          - COMMS
+    VariableProperty:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - DefaultValue
+          - Option
+          - Length
+          - DatetimeFormatter
+          description: "* DatetimeFormatter: follow simpleDateFormat. Support pattern: Date pattern: dd-MM-yyyy, MM-dd-yyyy, yyyy-MM-dd; Time pattern: HH:mm, HH:mm:ss, hh:mm aaa, hh:mm:ss aaa \n * Length: max length of text variable value \n * Option: array of option values \n * DefaultValue: default variable value"
+        value:
+          oneOf:
+          - type: integer
+          - type: array
+            items:
+              type: string
+          - type: string
+    VariableResponse:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          description: Variable id.
+    VariableValidationResponseItem:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: integer
+        source:
+          type: string
+        message:
+          type: string
     VariableItemDetailVO:
       type: object
       properties:
@@ -748,9 +819,12 @@ components:
                     description: The type of the argument's value, which can be used to enforce type checking when using the Handlebars partial.
                     enum:
                     - Path
-    VariableItemPatchVO:
+    VariableItemPostVO:
       type: object
       properties:
+        name:
+          type: string
+          description: Variable name.
         displayName:
           type: string
           description: Variable display name.
@@ -771,36 +845,9 @@ components:
           items:
             $ref: '#/components/schemas/VariableProperty'
           description: "Properties of variable. Different variable type has different properties. \n * Textbox and Textarea: Length \n * Date: DatetimeFormatter \n * Single: DefaultValue(required when it has), Option \n * Multiple: DefaultValue(required when it has), Option"
-    VariableValidationRequestItem:
+    VariableItemPatchVO:
       type: object
       properties:
-        id:
-          type: string
-          description: Variable id.
-        value:
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          description: Value of variable assigned.
-    VariableValidationResponseItem:
-      type: object
-      properties:
-        id:
-          type: string
-        code:
-          type: integer
-        source:
-          type: string
-        message:
-          type: string
-    VariableItemPostVO:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Variable name.
         displayName:
           type: string
           description: Variable display name.
@@ -841,66 +888,19 @@ components:
           format: int64
         scrollId:
           type: string
-    VariableResponse:
-      required:
-      - id
+    VariableValidationRequestItem:
       type: object
       properties:
         id:
           type: string
           description: Variable id.
-    VariableItemBaseVO:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Variable id.
-        name:
-          type: string
-          description: Variable name.
-        displayName:
-          type: string
-          description: Variable display name.
-        variableType:
-          type: string
-          enum:
-          - Single
-          - Multiple
-          - Textbox
-          - Textarea
-          - Date
-          description: Variable types.
-        createdDate:
-          type: string
-          format: date-time
-          description: Date and time of variable created.
-        createdBy:
-          type: string
-          description: User id of the creator. If variable is created by System or Service, this field is 0.
-        librarySource:
-          type: string
-          description: Determines the source from which the variable originates. `IC` refers to legacy Incident Communications platform while `COMMS` indicates the new Communications platform.
-          enum:
-          - IC
-          - COMMS
-    VariableProperty:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-          - DefaultValue
-          - Option
-          - Length
-          - DatetimeFormatter
-          description: "* DatetimeFormatter: follow simpleDateFormat. Support pattern: Date pattern: dd-MM-yyyy, MM-dd-yyyy, yyyy-MM-dd; Time pattern: HH:mm, HH:mm:ss, hh:mm aaa, hh:mm:ss aaa \n * Length: max length of text variable value \n * Option: array of option values \n * DefaultValue: default variable value"
         value:
           oneOf:
-          - type: integer
+          - type: string
           - type: array
             items:
               type: string
-          - type: string
+          description: Value of variable assigned.
   securitySchemes:
     API_Authorizer:
       type: apiKey

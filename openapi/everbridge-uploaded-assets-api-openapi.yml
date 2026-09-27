@@ -15,7 +15,7 @@ paths:
     get:
       tags:
       - Uploaded Assets
-      operationId: EB AM List Uploaded Asset Detail By Status
+      operationId: EBAMListUploadedAssetDetailByStatus
       summary: List Uploaded Asset Detail By Status
       parameters:
       - name: X-EB-Organization-Id
@@ -77,11 +77,13 @@ paths:
         requestParameters:
           integration.request.header.Authorization: context.authorizer.override_token
         passthroughBehavior: when_no_match
+      x-operation-id-source: normalized
+      x-operation-id-original: EB AM List Uploaded Asset Detail By Status
   /upload-assets/{id}:
     get:
       tags:
       - Uploaded Assets
-      operationId: EB AM Get Uploaded Asset Detail By Id
+      operationId: EBAMGetUploadedAssetDetailById
       summary: Get Uploaded Asset Detail By Id
       parameters:
       - name: X-EB-Organization-Id
@@ -117,6 +119,8 @@ paths:
           integration.request.path.id: method.request.path.id
           integration.request.header.Authorization: context.authorizer.override_token
         passthroughBehavior: when_no_match
+      x-operation-id-source: normalized
+      x-operation-id-original: EB AM Get Uploaded Asset Detail By Id
 components:
   schemas:
     UploadAssetPropertyValue:
@@ -127,6 +131,41 @@ components:
         propertyName:
           type: string
         value:
+          type: string
+    Error:
+      type: object
+      properties:
+        field:
+          type: string
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+    organizationId:
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      maxLength: 16
+      type: integer
+      example: '1536984111644674'
+      default: '1536984111644674'
+    UploadAssetAssociation:
+      type: object
+      properties:
+        associationDefinitionId:
+          type: string
+        entityType:
+          type: string
+          enum:
+          - Contact
+          - ContactGroup
+          - ContactFilter
+        entityIds:
+          type: array
+          items:
+            type: string
+        entityValues:
+          type: string
+        associationDefinitionColumnName:
           type: string
     DataPageUploadAsset:
       type: object
@@ -150,58 +189,6 @@ components:
         totalPageCount:
           type: integer
           format: int32
-    UploadAddress:
-      type: object
-      properties:
-        country:
-          type: string
-        state:
-          type: string
-        city:
-          type: string
-        postalCode:
-          type: string
-        streetAddress1:
-          type: string
-        streetAddress2:
-          type: string
-        point:
-          $ref: '#/components/schemas/UploadPoint'
-    UploadAssetAssociation:
-      type: object
-      properties:
-        associationDefinitionId:
-          type: string
-        entityType:
-          type: string
-          enum:
-          - Contact
-          - ContactGroup
-          - ContactFilter
-        entityIds:
-          type: array
-          items:
-            type: string
-        entityValues:
-          type: string
-        associationDefinitionColumnName:
-          type: string
-    organizationId:
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      maxLength: 16
-      type: integer
-      example: '1536984111644674'
-      default: '1536984111644674'
-    Error:
-      type: object
-      properties:
-        field:
-          type: string
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
     UploadPoint:
       type: object
       properties:
@@ -293,6 +280,23 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UploadAssetAssociation'
+    UploadAddress:
+      type: object
+      properties:
+        country:
+          type: string
+        state:
+          type: string
+        city:
+          type: string
+        postalCode:
+          type: string
+        streetAddress1:
+          type: string
+        streetAddress2:
+          type: string
+        point:
+          $ref: '#/components/schemas/UploadPoint'
   securitySchemes:
     BasicAuth:
       type: http

@@ -13,7 +13,7 @@ paths:
   /nixleRegionIds/{organizationId}:
     get:
       description: Get City/Town, County or ZIP Code within jurisdiction
-      operationId: EBS List Nixle Region Ids
+      operationId: EBSListNixleRegionIds
       parameters:
       - description: The ID of the organization
         in: path
@@ -52,6 +52,8 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/nixleRegionIds/{organizationId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS List Nixle Region Ids
 components:
   schemas:
     NixleRegionIdCollectionResult:

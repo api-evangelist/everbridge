@@ -15,7 +15,7 @@ paths:
     get:
       tags:
       - Asset Upload Batches
-      operationId: EBS AM List Upload Assets Batches
+      operationId: EBSAMListUploadAssetsBatches
       summary: List Upload Assets Batches
       description: Retrieve all upload assets batches for a given asset type with in an organization.
       parameters:
@@ -151,10 +151,12 @@ paths:
         requestParameters:
           integration.request.header.Authorization: context.authorizer.override_token
         passthroughBehavior: when_no_match
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS AM List Upload Assets Batches
     post:
       tags:
       - Asset Upload Batches
-      operationId: EBS AM Upload Asset Batches
+      operationId: EBSAMUploadAssetBatches
       summary: Upload Asset Batches
       description: Upload assets batches to an organization.
       parameters:
@@ -285,11 +287,13 @@ paths:
         passthroughBehavior: when_no_match
         contentHandling: CONVERT_TO_TEXT
         type: aws_proxy
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS AM Upload Asset Batches
   /asset-upload-batches/{id}:
     get:
       tags:
       - Asset Upload Batches
-      operationId: EBS AM Get Upload Asset Batch
+      operationId: EBSAMGetUploadAssetBatch
       summary: Get Upload Asset Batch
       description: Retrieve the specified upload asset batch within an organization.
       parameters:
@@ -415,11 +419,13 @@ paths:
           integration.request.path.id: method.request.path.id
           integration.request.header.Authorization: context.authorizer.override_token
         passthroughBehavior: when_no_match
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS AM Get Upload Asset Batch
   /asset-upload-batches/cancel/{id}:
     put:
       tags:
       - Asset Upload Batches
-      operationId: EBS AM Update Upload Asset Batch
+      operationId: EBSAMUpdateUploadAssetBatch
       summary: Update Upload Asset Batch
       description: Cancel an uploaded Batch process within an organization.
       parameters:
@@ -525,6 +531,8 @@ paths:
           integration.request.path.id: method.request.path.id
           integration.request.header.Authorization: context.authorizer.override_token
         passthroughBehavior: when_no_match
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS AM Update Upload Asset Batch
 components:
   schemas:
     UploadBatchAssetResponse:
@@ -584,6 +592,12 @@ components:
           type: number
         csvDelimiter:
           type: string
+    organizationId:
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      maxLength: 16
+      type: integer
+      example: '1536984111644674'
+      default: '1536984111644674'
     ListUploadBatchResponse:
       type: object
       properties:
@@ -656,12 +670,6 @@ components:
           type: number
         totalPageCount:
           type: number
-    organizationId:
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      maxLength: 16
-      type: integer
-      example: '1536984111644674'
-      default: '1536984111644674'
   securitySchemes:
     BasicAuth:
       type: http

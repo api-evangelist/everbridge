@@ -13,7 +13,7 @@ paths:
   /nixleEventGroups/{organizationId}:
     get:
       description: Get all event groups
-      operationId: EBS List Nixle Event Groups
+      operationId: EBSListNixleEventGroups
       parameters:
       - description: The ID of the organization
         in: path
@@ -52,6 +52,8 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/nixleEventGroups/{organizationId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS List Nixle Event Groups
 components:
   schemas:
     NixleEventSubscriptionWrapper:

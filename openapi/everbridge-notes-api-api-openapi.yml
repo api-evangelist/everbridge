@@ -212,10 +212,65 @@ paths:
         connectionType: VPC_LINK
 components:
   schemas:
-    Tag:
-      type: string
-      description: A value used to contain a simple categorization.
-      example: eventType:hurricane
+    ProblemDetail:
+      type: object
+      description: An RFC-7807 compliant model for error details.
+      properties:
+        type:
+          type: string
+          description: A URI that identifies the problem type.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem type.
+        status:
+          type: integer
+          description: The HTTP response status code describing the error.
+        detail:
+          type: string
+          description: A human-readable explanation of the specific problem.
+        instance:
+          type: string
+          description: A URI that identifies the specific problem.
+    AbstractApiPaginatedResponse:
+      type: object
+      description: A page of data from an endpoint.
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommData'
+        pages:
+          type: object
+          properties:
+            currentPage:
+              type: number
+              description: The requested page number.
+            pageSize:
+              type: number
+              description: The requested page size.
+            pageCount:
+              type: number
+              description: The number of elements in the current page.
+            totalPages:
+              type: number
+              description: The total number of pages available for request.
+            maxSize:
+              type: number
+              description: The maximum size of a single page that is allowed by the API.
+            totalCount:
+              type: number
+              description: The total number of elements across all pages.
+    NotePaginatedResponse:
+      allOf:
+      - $ref: '#/components/schemas/AbstractApiPaginatedResponse'
+      - type: object
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/CommNote'
+        required:
+        - data
     CommNoteRequest:
       type: object
       properties:
@@ -253,78 +308,6 @@ components:
           description: Confirmations received after the expiration time
           type: integer
           example: '0'
-    AbstractApiPaginatedResponse:
-      type: object
-      description: A page of data from an endpoint.
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/CommData'
-        pages:
-          type: object
-          properties:
-            currentPage:
-              type: number
-              description: The requested page number.
-            pageSize:
-              type: number
-              description: The requested page size.
-            pageCount:
-              type: number
-              description: The number of elements in the current page.
-            totalPages:
-              type: number
-              description: The total number of pages available for request.
-            maxSize:
-              type: number
-              description: The maximum size of a single page that is allowed by the API.
-            totalCount:
-              type: number
-              description: The total number of elements across all pages.
-    ProblemDetail:
-      type: object
-      description: An RFC-7807 compliant model for error details.
-      properties:
-        type:
-          type: string
-          description: A URI that identifies the problem type.
-        title:
-          type: string
-          description: A short, human-readable summary of the problem type.
-        status:
-          type: integer
-          description: The HTTP response status code describing the error.
-        detail:
-          type: string
-          description: A human-readable explanation of the specific problem.
-        instance:
-          type: string
-          description: A URI that identifies the specific problem.
-    UserReference:
-      description: The person who launched the communication and thus created the activity.
-      type: object
-      properties:
-        id:
-          description: The ID of the person.
-          type: string
-          example: '2389927572537387'
-        username:
-          description: The username of the person.
-          type: string
-          example: yunlong.an-vcc
-        firstName:
-          description: The first name of the person.
-          type: string
-          example: ethan-role
-        lastName:
-          description: The last name of the person.
-          type: string
-          example: an
-        fullName:
-          description: The full name of the person.
-          type: string
-          example: ethan-role an
     CommNote:
       type: object
       properties:
@@ -450,17 +433,34 @@ components:
         planId:
           type: string
           description: The ID of the plan that launched the with communication, if any.
-    NotePaginatedResponse:
-      allOf:
-      - $ref: '#/components/schemas/AbstractApiPaginatedResponse'
-      - type: object
-        properties:
-          data:
-            type: array
-            items:
-              $ref: '#/components/schemas/CommNote'
-        required:
-        - data
+    Tag:
+      type: string
+      description: A value used to contain a simple categorization.
+      example: eventType:hurricane
+    UserReference:
+      description: The person who launched the communication and thus created the activity.
+      type: object
+      properties:
+        id:
+          description: The ID of the person.
+          type: string
+          example: '2389927572537387'
+        username:
+          description: The username of the person.
+          type: string
+          example: yunlong.an-vcc
+        firstName:
+          description: The first name of the person.
+          type: string
+          example: ethan-role
+        lastName:
+          description: The last name of the person.
+          type: string
+          example: an
+        fullName:
+          description: The full name of the person.
+          type: string
+          example: ethan-role an
   securitySchemes:
     API_Authorizer:
       type: apiKey

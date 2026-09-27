@@ -13,7 +13,7 @@ paths:
   /shapeLibrary/{organizationId}:
     delete:
       description: Delete shape file
-      operationId: EBS Delete Shape File
+      operationId: EBSDeleteShapeFile
       parameters:
       - description: The ID of the organization containing the contacts
         in: path
@@ -57,9 +57,11 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/shapeLibrary/{organizationId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Delete Shape File
     post:
       description: Upload shape file
-      operationId: EBS Upload Shape File
+      operationId: EBSUploadShapeFile
       parameters:
       - description: The ID of the organization containing the contacts
         in: path
@@ -132,8 +134,16 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/shapeLibrary/{organizationId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Upload Shape File
 components:
   schemas:
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
     RestfulModificationResult:
       properties:
         baseUri:
@@ -147,12 +157,6 @@ components:
           type: string
       title: RestfulModificationResult
       type: object
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
   securitySchemes:
     API_Authorizer:
       description: oAuth Token

@@ -15,7 +15,7 @@ paths:
     get:
       tags:
       - Asset License Limit Stats
-      operationId: EBS AM Get Asset License Limit Stats
+      operationId: EBSAMGetAssetLicenseLimitStats
       summary: Get Asset License Limit Stats
       parameters:
       - name: X-EB-Organization-Id
@@ -50,8 +50,16 @@ paths:
         requestParameters:
           integration.request.header.Authorization: context.authorizer.override_token
         passthroughBehavior: when_no_match
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS AM Get Asset License Limit Stats
 components:
   schemas:
+    organizationId:
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      maxLength: 16
+      type: integer
+      example: '1536984111644674'
+      default: '1536984111644674'
     AssetLicenseLimitStats:
       type: object
       properties:
@@ -61,12 +69,6 @@ components:
         alertableAssetsCount:
           type: integer
           format: int64
-    organizationId:
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      maxLength: 16
-      type: integer
-      example: '1536984111644674'
-      default: '1536984111644674'
   securitySchemes:
     BasicAuth:
       type: http

@@ -15,7 +15,7 @@ paths:
     get:
       tags:
       - Asset Association Definition
-      operationId: EB AM List Asset Association Definitions
+      operationId: EBAMListAssetAssociationDefinitions
       summary: List Asset Association Definitions
       parameters:
       - name: X-EB-Organization-Id
@@ -61,10 +61,12 @@ paths:
         requestParameters:
           integration.request.header.Authorization: context.authorizer.override_token
         passthroughBehavior: when_no_match
+      x-operation-id-source: normalized
+      x-operation-id-original: EB AM List Asset Association Definitions
     post:
       tags:
       - Asset Association Definition
-      operationId: EB AM Create Asset Association Definition
+      operationId: EBAMCreateAssetAssociationDefinition
       summary: Create Asset Association Definition
       parameters:
       - name: X-EB-Organization-Id
@@ -120,11 +122,13 @@ paths:
         requestParameters:
           integration.request.header.Authorization: context.authorizer.override_token
         passthroughBehavior: when_no_match
+      x-operation-id-source: normalized
+      x-operation-id-original: EB AM Create Asset Association Definition
   /asset-association-definitions/{id}:
     get:
       tags:
       - Asset Association Definition
-      operationId: EB AM Get Asset Association Definitions
+      operationId: EBAMGetAssetAssociationDefinitions
       summary: Get Asset Association Definitions
       parameters:
       - name: X-EB-Organization-Id
@@ -174,10 +178,12 @@ paths:
           integration.request.path.id: method.request.path.id
           integration.request.header.Authorization: context.authorizer.override_token
         passthroughBehavior: when_no_match
+      x-operation-id-source: normalized
+      x-operation-id-original: EB AM Get Asset Association Definitions
     put:
       tags:
       - Asset Association Definition
-      operationId: EB AM Update Asset Association Definition By Id
+      operationId: EBAMUpdateAssetAssociationDefinitionById
       summary: Update Asset Association Definition By Id
       parameters:
       - name: X-EB-Organization-Id
@@ -239,10 +245,12 @@ paths:
           integration.request.path.id: method.request.path.id
           integration.request.header.Authorization: context.authorizer.override_token
         passthroughBehavior: when_no_match
+      x-operation-id-source: normalized
+      x-operation-id-original: EB AM Update Asset Association Definition By Id
     delete:
       tags:
       - Asset Association Definition
-      operationId: EB AM Delete Asset Association Definition By Id
+      operationId: EBAMDeleteAssetAssociationDefinitionById
       summary: Delete Asset Association Definition By Id
       parameters:
       - name: X-EB-Organization-Id
@@ -292,11 +300,13 @@ paths:
           integration.request.path.id: method.request.path.id
           integration.request.header.Authorization: context.authorizer.override_token
         passthroughBehavior: when_no_match
+      x-operation-id-source: normalized
+      x-operation-id-original: EB AM Delete Asset Association Definition By Id
   /asset-association-definitions/{id}/linked-to-asset:
     get:
       tags:
       - Asset Association Definition
-      operationId: EB AM Get Linked Asset
+      operationId: EBAMGetLinkedAsset
       summary: Get Linked Asset
       parameters:
       - name: X-EB-Organization-Id
@@ -337,11 +347,13 @@ paths:
           integration.request.path.id: method.request.path.id
           integration.request.header.Authorization: context.authorizer.override_token
         passthroughBehavior: when_no_match
+      x-operation-id-source: normalized
+      x-operation-id-original: EB AM Get Linked Asset
   /asset-association-definitions/name:
     get:
       tags:
       - Asset Association Definition
-      operationId: EB AM Get Asset Association Definition By Name
+      operationId: EBAMGetAssetAssociationDefinitionByName
       summary: Get Asset Association Definition By Name
       parameters:
       - name: X-EB-Organization-Id
@@ -390,8 +402,29 @@ paths:
         requestParameters:
           integration.request.header.Authorization: context.authorizer.override_token
         passthroughBehavior: when_no_match
+      x-operation-id-source: normalized
+      x-operation-id-original: EB AM Get Asset Association Definition By Name
 components:
   schemas:
+    AssetAssociationDefinitionRequest:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+        associationType:
+          type: string
+          enum:
+          - AssetToContact
+    organizationId:
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      maxLength: 16
+      type: integer
+      example: '1536984111644674'
+      default: '1536984111644674'
     LinkedToAssetResponse:
       type: object
       properties:
@@ -431,25 +464,6 @@ components:
           type: string
           enum:
           - AssetToContact
-    AssetAssociationDefinitionRequest:
-      required:
-      - name
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-        associationType:
-          type: string
-          enum:
-          - AssetToContact
-    organizationId:
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      maxLength: 16
-      type: integer
-      example: '1536984111644674'
-      default: '1536984111644674'
   securitySchemes:
     BasicAuth:
       type: http

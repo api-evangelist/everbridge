@@ -13,7 +13,7 @@ paths:
   /incidentTemplates/{organizationId}:
     get:
       description: Returns all _active_ incident templates for a given org. Basic properties like name, id and status are returned. To get template details, use Get Template.
-      operationId: EBS List Templates
+      operationId: EBSListTemplates
       parameters:
       - in: path
         name: organizationId
@@ -109,10 +109,12 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/incidentTemplates/{organizationId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS List Templates
   /incidentTemplates/{organizationId}/{incidentTemplateId}:
     get:
       description: Returns details of a given incident template.
-      operationId: EBS Get Template
+      operationId: EBSGetTemplate
       parameters:
       - in: path
         name: organizationId
@@ -885,6 +887,8 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/incidentTemplates/{organizationId}/{incidentTemplateId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Get Template
 components:
   schemas:
     organizationId:

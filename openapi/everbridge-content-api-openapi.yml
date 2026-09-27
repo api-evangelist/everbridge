@@ -267,28 +267,89 @@ paths:
           description: Failed - Rate limit is exceeded
 components:
   schemas:
-    ContentStatus:
-      type: string
-      enum:
-      - draft
-      - published
-      - disabled
-      - deleted
-      - expired
-    PublishFromTemplateResponse:
+    ContentStatistics:
       type: object
       properties:
         contentId:
           type: string
           format: uuid
-          example: 86854452-a1d9-4c44-9bbe-07c93a46021c
-        status:
+          example: e1231960-da4d-4f30-aea8-742bf538d7f3
+        contentStatus:
           type: string
           $ref: '#/components/schemas/ContentStatus'
           example: published
-        targetedUsers:
+        targetedCount:
           type: integer
-          example: 1
+        reachedCount:
+          type: integer
+        successCount:
+          type: integer
+    FieldValue:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type:
+          - string
+          - 'null'
+    BadRequestTemplateId:
+      properties:
+        message:
+          type: string
+          example: The request is invalid.
+    TemplateField:
+      type: object
+      properties:
+        name:
+          type: string
+        displayName:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        type:
+          type: string
+          description: Type of field as a guidance for building a UI. Enums values can be added in the future; therefore, the client should default to text if the value is unknown.
+          enum:
+          - text
+          - textarea
+        required:
+          type: boolean
+          description: True if the field is required for publishing
+    ContentPublish400:
+      properties:
+        message:
+          enum:
+          - TemplateId is invalid
+          - TemplateId could not be found or is not available
+          - BodyFormat is invalid
+          - DurationInMinutes must be greater than 0
+          - The end date must be in the future
+          - ContentName must not exceed 150 charaters
+          - Account does not have permissions to all targeted groups
+          - Invalid targeting type
+          - Invalid attribute ID
+          - Account does not have permissions to target by attributes
+          - Account does not have permissions to target groups
+          type: string
+          example: TemplateId is invalid
+    PreviewFromTemplateRequest:
+      required:
+      - templateId
+      type: object
+      properties:
+        templateId:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        fields:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/FieldValue'
     ContentTemplate:
       properties:
         id:
@@ -337,26 +398,6 @@ components:
           - 'null'
           description: Estimated total number of targeted users by the template default targeting
           example: 42
-    TemplateField:
-      type: object
-      properties:
-        name:
-          type: string
-        displayName:
-          type: string
-        description:
-          type:
-          - string
-          - 'null'
-        type:
-          type: string
-          description: Type of field as a guidance for building a UI. Enums values can be added in the future; therefore, the client should default to text if the value is unknown.
-          enum:
-          - text
-          - textarea
-        required:
-          type: boolean
-          description: True if the field is required for publishing
     PublishingTarget:
       properties:
         type:
@@ -367,83 +408,14 @@ components:
           - string
           - 'null'
           description: 'Target Id relevant to the target type (eg: GroupId). Null if irrelevant for the type'
-    PreviewFromTemplateRequest:
-      required:
-      - templateId
-      type: object
-      properties:
-        templateId:
-          type: string
-          format: uuid
-          example: d290f1ee-6c54-4b01-90e6-d701748f0851
-        fields:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/FieldValue'
-    BadRequestTemplateId:
-      properties:
-        message:
-          type: string
-          example: The request is invalid.
-    ContentTemplates:
-      properties:
-        id:
-          type: string
-          format: uuid
-          example: d300f1ee-6c54-4b01-90e6-d701748f0843
-        name:
-          type: string
-          example: Active Shooter!
-        status:
-          enum:
-          - active
-          type: string
-          example: active
-        type:
-          type: string
-        tags:
-          type: array
-          items:
-            type: string
-        description:
-          type: string
-          example: Use this for shooter alert
-        previewImageUrl:
-          type: string
-          example: Preview Image URL of a template
-    PreviewFromTemplateResponse:
-      type: object
-      properties:
-        previewUrl:
-          type: string
-    FieldValue:
-      type: object
-      properties:
-        name:
-          type: string
-        value:
-          type:
-          - string
-          - 'null'
-    ContentStatistics:
-      type: object
-      properties:
-        contentId:
-          type: string
-          format: uuid
-          example: e1231960-da4d-4f30-aea8-742bf538d7f3
-        contentStatus:
-          type: string
-          $ref: '#/components/schemas/ContentStatus'
-          example: published
-        targetedCount:
-          type: integer
-        reachedCount:
-          type: integer
-        successCount:
-          type: integer
+    ContentStatus:
+      type: string
+      enum:
+      - draft
+      - published
+      - disabled
+      - deleted
+      - expired
     PublishFromTemplateRequest:
       required:
       - templateId
@@ -488,23 +460,51 @@ components:
           - 'null'
           items:
             $ref: '#/components/schemas/FieldValue'
-    ContentPublish400:
+    ContentTemplates:
       properties:
-        message:
-          enum:
-          - TemplateId is invalid
-          - TemplateId could not be found or is not available
-          - BodyFormat is invalid
-          - DurationInMinutes must be greater than 0
-          - The end date must be in the future
-          - ContentName must not exceed 150 charaters
-          - Account does not have permissions to all targeted groups
-          - Invalid targeting type
-          - Invalid attribute ID
-          - Account does not have permissions to target by attributes
-          - Account does not have permissions to target groups
+        id:
           type: string
-          example: TemplateId is invalid
+          format: uuid
+          example: d300f1ee-6c54-4b01-90e6-d701748f0843
+        name:
+          type: string
+          example: Active Shooter!
+        status:
+          enum:
+          - active
+          type: string
+          example: active
+        type:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        description:
+          type: string
+          example: Use this for shooter alert
+        previewImageUrl:
+          type: string
+          example: Preview Image URL of a template
+    PublishFromTemplateResponse:
+      type: object
+      properties:
+        contentId:
+          type: string
+          format: uuid
+          example: 86854452-a1d9-4c44-9bbe-07c93a46021c
+        status:
+          type: string
+          $ref: '#/components/schemas/ContentStatus'
+          example: published
+        targetedUsers:
+          type: integer
+          example: 1
+    PreviewFromTemplateResponse:
+      type: object
+      properties:
+        previewUrl:
+          type: string
   securitySchemes:
     bearerAuth:
       type: http

@@ -13,7 +13,7 @@ paths:
   /lastknownlocations/{organizationId}/{contactId}:
     post:
       description: Create new Dynamic Location for a contact
-      operationId: EBS Create Dynamic Location For Contact
+      operationId: EBSCreateDynamicLocationForContact
       parameters:
       - description: The ID of the organization containing the contacts
         in: path
@@ -94,8 +94,29 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/lastknownlocations/{organizationId}/{contactId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Create Dynamic Location For Contact
 components:
   schemas:
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
+    RestfulModificationResult:
+      properties:
+        baseUri:
+          type: string
+        id:
+          format: int64
+          type: integer
+        instanceUri:
+          type: string
+        message:
+          type: string
+      title: RestfulModificationResult
+      type: object
     LastKnownLocationWrapper:
       anyOf:
       - required:
@@ -131,25 +152,6 @@ components:
       - arriveDate
       - expireDate
       type: object
-    RestfulModificationResult:
-      properties:
-        baseUri:
-          type: string
-        id:
-          format: int64
-          type: integer
-        instanceUri:
-          type: string
-        message:
-          type: string
-      title: RestfulModificationResult
-      type: object
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
   securitySchemes:
     API_Authorizer:
       description: oAuth Token

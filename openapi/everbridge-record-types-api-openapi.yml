@@ -12,7 +12,7 @@ tags:
 paths:
   /recordTypes/{organizationId}:
     get:
-      operationId: EBS List Record Types
+      operationId: EBSListRecordTypes
       parameters:
       - description: The ID of the organization containing the contact record types
         in: path
@@ -51,8 +51,10 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/recordTypes/{organizationId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS List Record Types
     post:
-      operationId: EBS Create Record Type
+      operationId: EBSCreateRecordType
       parameters:
       - description: The ID of the organization containing the contactRecordTypes
         in: path
@@ -97,9 +99,11 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/recordTypes/{organizationId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Create Record Type
   /recordTypes/{organizationId}/{recordTypeId}:
     delete:
-      operationId: EBS Delete Record Type
+      operationId: EBSDeleteRecordType
       parameters:
       - description: The ID of the organization containing the contactRecordTypes
         in: path
@@ -146,8 +150,10 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/recordTypes/{organizationId}/{recordTypeId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Delete Record Type
     get:
-      operationId: EBS Get Record Type
+      operationId: EBSGetRecordType
       parameters:
       - description: The ID of the organization containing the contactRecordTypes
         in: path
@@ -194,8 +200,10 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/recordTypes/{organizationId}/{recordTypeId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Get Record Type
     put:
-      operationId: EBS Update Record Type
+      operationId: EBSUpdateRecordType
       parameters:
       - description: The ID of the organization containing the contactRecordTypes
         in: path
@@ -248,8 +256,70 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/recordTypes/{organizationId}/{recordTypeId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Update Record Type
 components:
   schemas:
+    DataPageObject:
+      properties:
+        currentPageNo:
+          format: int32
+          type: integer
+        data:
+          items:
+            type: object
+          type: array
+        dataPageList:
+          items:
+            $ref: '#/components/schemas/DataPageObject'
+          type: array
+        pageSize:
+          format: int32
+          type: integer
+        scrollId:
+          type: string
+        start:
+          format: int32
+          type: integer
+        totalCount:
+          format: int64
+          type: integer
+        totalPageCount:
+          format: int32
+          type: integer
+      title: DataPage«object»
+      type: object
+    RestfulModificationResult:
+      properties:
+        baseUri:
+          type: string
+        id:
+          format: int64
+          type: integer
+        instanceUri:
+          type: string
+        message:
+          type: string
+      title: RestfulModificationResult
+      type: object
+    RestfulCollectionResult:
+      properties:
+        currentPageUri:
+          type: string
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        nextPageUri:
+          type: string
+        page:
+          $ref: '#/components/schemas/DataPageObject'
+        previousPageUri:
+          type: string
+      title: RestfulCollectionResult
+      type: object
     ContactRecordTypeWrapper:
       description: JSON object describing the new contactRecordType
       properties:
@@ -304,24 +374,6 @@ components:
           - D
           type: string
       type: object
-    RestfulCollectionResult:
-      properties:
-        currentPageUri:
-          type: string
-        firstPageUri:
-          type: string
-        lastPageUri:
-          type: string
-        message:
-          type: string
-        nextPageUri:
-          type: string
-        page:
-          $ref: '#/components/schemas/DataPageObject'
-        previousPageUri:
-          type: string
-      title: RestfulCollectionResult
-      type: object
     RestfulInstanceResult:
       properties:
         message:
@@ -329,48 +381,6 @@ components:
         result:
           type: object
       title: RestfulInstanceResult
-      type: object
-    DataPageObject:
-      properties:
-        currentPageNo:
-          format: int32
-          type: integer
-        data:
-          items:
-            type: object
-          type: array
-        dataPageList:
-          items:
-            $ref: '#/components/schemas/DataPageObject'
-          type: array
-        pageSize:
-          format: int32
-          type: integer
-        scrollId:
-          type: string
-        start:
-          format: int32
-          type: integer
-        totalCount:
-          format: int64
-          type: integer
-        totalPageCount:
-          format: int32
-          type: integer
-      title: DataPage«object»
-      type: object
-    RestfulModificationResult:
-      properties:
-        baseUri:
-          type: string
-        id:
-          format: int64
-          type: integer
-        instanceUri:
-          type: string
-        message:
-          type: string
-      title: RestfulModificationResult
       type: object
   securitySchemes:
     API_Authorizer:

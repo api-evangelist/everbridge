@@ -13,7 +13,7 @@ paths:
   /organizations:
     get:
       description: Retrieve all organizations accessible by this user
-      operationId: EBS List Organizations
+      operationId: EBSListOrganizations
       parameters: []
       responses:
         '200':
@@ -140,10 +140,12 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/organizations
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS List Organizations
   /organizations/{organizationId}:
     get:
       description: Retrieve a specific organization
-      operationId: EBS Get Organization
+      operationId: EBSGetOrganization
       parameters:
       - description: The ID of the organization
         in: path
@@ -282,64 +284,35 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/organizations/{organizationId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Get Organization
 components:
   schemas:
-    ThresholdSettingWrapper:
+    OrganizationWrapperInstanceResult:
       properties:
-        accountId:
-          format: int64
-          type: integer
-        createdDate:
-          format: date-time
+        message:
           type: string
-        createdId:
-          format: int64
-          type: integer
-        createdName:
-          type: string
-        createdProxyName:
-          type: string
-        id:
-          format: int64
-          type: integer
-        lastModifiedDate:
-          format: date-time
-          type: string
-        lastModifiedId:
-          format: int64
-          type: integer
-        lastModifiedName:
-          type: string
-        lastModifiedProxyName:
-          type: string
-        maxRadiusOfRecipientAppThresholdCircle:
+        result:
+          $ref: '#/components/schemas/OrganizationWrapper'
+      type: object
+    UnsoicitedMessageConstraintWrapper:
+      properties:
+        maxMessagesPerHour:
           format: int32
           type: integer
-        maxRadiusOfTwitterThresholdCircle:
+        maxMessagesPerMinute:
           format: int32
           type: integer
-        messageConstraint:
-          $ref: '#/components/schemas/UnsoicitedMessageConstraintWrapper'
-        organizationId:
+      type: object
+    TweetConstraintWrapper:
+      properties:
+        maxTotalTweets:
           format: int64
           type: integer
-        recipientAppThresholdVolumn:
+        maxTweetsPerHour:
           format: int32
           type: integer
-        resourceBundleId:
-          format: int64
-          type: integer
-        status:
-          enum:
-          - A
-          - D
-          type: string
-        tweetConstraint:
-          $ref: '#/components/schemas/TweetConstraintWrapper'
-        twitterthresholdVolumn:
-          format: int32
-          type: integer
-        weatherThresholdVolumn:
+        maxTweetsPerMinute:
           format: int32
           type: integer
       type: object
@@ -496,21 +469,19 @@ components:
           - SLACK
           type: string
       type: object
-    OrganizationPathWrapperInstanceResult:
+    ProcessingStateWrapper:
       properties:
-        message:
+        serverId:
+          format: int64
+          type: integer
+        startTime:
+          format: int64
+          type: integer
+        synchronizeTime:
+          format: int64
+          type: integer
+        threadName:
           type: string
-        result:
-          $ref: '#/components/schemas/OrganizationPathWrapper'
-      type: object
-    UnsoicitedMessageConstraintWrapper:
-      properties:
-        maxMessagesPerHour:
-          format: int32
-          type: integer
-        maxMessagesPerMinute:
-          format: int32
-          type: integer
       type: object
     ThrottleSettingWrapper:
       properties:
@@ -693,87 +664,6 @@ components:
           - WDT
           type: string
       type: object
-    ProcessingStateWrapper:
-      properties:
-        serverId:
-          format: int64
-          type: integer
-        startTime:
-          format: int64
-          type: integer
-        synchronizeTime:
-          format: int64
-          type: integer
-        threadName:
-          type: string
-      type: object
-    GisLocationWrapper:
-      properties:
-        lat:
-          format: double
-          type: number
-        lon:
-          format: double
-          type: number
-      type: object
-    OrganizationWrapperInstanceResult:
-      properties:
-        message:
-          type: string
-        result:
-          $ref: '#/components/schemas/OrganizationWrapper'
-      type: object
-    TweetConstraintWrapper:
-      properties:
-        maxTotalTweets:
-          format: int64
-          type: integer
-        maxTweetsPerHour:
-          format: int32
-          type: integer
-        maxTweetsPerMinute:
-          format: int32
-          type: integer
-      type: object
-    GisSettingWrapper:
-      properties:
-        baseMap:
-          format: int64
-          type: integer
-        latitude:
-          format: double
-          type: number
-        longitude:
-          format: double
-          type: number
-        mapCenter:
-          type: string
-        mapZoomLevel:
-          format: int64
-          type: integer
-        projection:
-          format: int64
-          type: integer
-      type: object
-    AddressWrapper:
-      properties:
-        city:
-          type: string
-        country:
-          type: string
-        gisLocation:
-          $ref: '#/components/schemas/GisLocationWrapper'
-        locationName:
-          type: string
-        postalCode:
-          type: string
-        state:
-          type: string
-        streetAddress:
-          type: string
-        suite:
-          type: string
-      type: object
     OrganizationBroadcastSettingWrapper:
       properties:
         attachmentLinkDurationDays:
@@ -828,6 +718,120 @@ components:
           - MESSAGE_ONLY
           - MESSAGE_WITH_CONFIRMATION
           type: string
+      type: object
+    OrganizationPathWrapperInstanceResult:
+      properties:
+        message:
+          type: string
+        result:
+          $ref: '#/components/schemas/OrganizationPathWrapper'
+      type: object
+    GisSettingWrapper:
+      properties:
+        baseMap:
+          format: int64
+          type: integer
+        latitude:
+          format: double
+          type: number
+        longitude:
+          format: double
+          type: number
+        mapCenter:
+          type: string
+        mapZoomLevel:
+          format: int64
+          type: integer
+        projection:
+          format: int64
+          type: integer
+      type: object
+    AddressWrapper:
+      properties:
+        city:
+          type: string
+        country:
+          type: string
+        gisLocation:
+          $ref: '#/components/schemas/GisLocationWrapper'
+        locationName:
+          type: string
+        postalCode:
+          type: string
+        state:
+          type: string
+        streetAddress:
+          type: string
+        suite:
+          type: string
+      type: object
+    ThresholdSettingWrapper:
+      properties:
+        accountId:
+          format: int64
+          type: integer
+        createdDate:
+          format: date-time
+          type: string
+        createdId:
+          format: int64
+          type: integer
+        createdName:
+          type: string
+        createdProxyName:
+          type: string
+        id:
+          format: int64
+          type: integer
+        lastModifiedDate:
+          format: date-time
+          type: string
+        lastModifiedId:
+          format: int64
+          type: integer
+        lastModifiedName:
+          type: string
+        lastModifiedProxyName:
+          type: string
+        maxRadiusOfRecipientAppThresholdCircle:
+          format: int32
+          type: integer
+        maxRadiusOfTwitterThresholdCircle:
+          format: int32
+          type: integer
+        messageConstraint:
+          $ref: '#/components/schemas/UnsoicitedMessageConstraintWrapper'
+        organizationId:
+          format: int64
+          type: integer
+        recipientAppThresholdVolumn:
+          format: int32
+          type: integer
+        resourceBundleId:
+          format: int64
+          type: integer
+        status:
+          enum:
+          - A
+          - D
+          type: string
+        tweetConstraint:
+          $ref: '#/components/schemas/TweetConstraintWrapper'
+        twitterthresholdVolumn:
+          format: int32
+          type: integer
+        weatherThresholdVolumn:
+          format: int32
+          type: integer
+      type: object
+    GisLocationWrapper:
+      properties:
+        lat:
+          format: double
+          type: number
+        lon:
+          format: double
+          type: number
       type: object
   securitySchemes:
     API_Authorizer:

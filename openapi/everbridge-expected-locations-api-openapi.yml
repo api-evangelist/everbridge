@@ -13,7 +13,7 @@ paths:
   /expectedLocations/{organizationId}:
     post:
       description: Batch create Expected Locations.
-      operationId: EBS Add Expected Locations
+      operationId: EBSAddExpectedLocations
       parameters:
       - description: Organization ID.
         in: path
@@ -96,10 +96,12 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/expectedLocations/{organizationId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Add Expected Locations
   /expectedLocations/{organizationId}/batch:
     delete:
       description: Batch Delete Expected Locations.
-      operationId: EBS Delete Batch Expected Locations
+      operationId: EBSDeleteBatchExpectedLocations
       parameters:
       - description: Organization ID.
         in: path
@@ -160,10 +162,12 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/expectedLocations/{organizationId}/batch
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Delete Batch Expected Locations
   /expectedLocations/{organizationId}/{contactId}:
     get:
       description: Retrieve all Expected Locations of a contact.
-      operationId: EBS List Expected Location For Contact
+      operationId: EBSListExpectedLocationForContact
       parameters:
       - description: Organization ID.
         in: path
@@ -230,9 +234,11 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/expectedLocations/{organizationId}/{contactId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS List Expected Location For Contact
     post:
       description: Create new Expected Location.
-      operationId: EBS Create Expected Location For Contact
+      operationId: EBSCreateExpectedLocationForContact
       parameters:
       - description: Organization ID
         in: path
@@ -312,10 +318,12 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/expectedLocations/{organizationId}/{contactId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Create Expected Location For Contact
   /expectedLocations/{organizationId}/{contactId}/{expectedLocationId}:
     delete:
       description: Delete Expected Location by ID.
-      operationId: EBS Delete Expected Location For Contact
+      operationId: EBSDeleteExpectedLocationForContact
       parameters:
       - description: Organization ID.
         in: path
@@ -385,9 +393,11 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/expectedLocations/{organizationId}/{contactId}/{expectedLocationId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Delete Expected Location For Contact
     get:
       description: Retrieve Expected Location by ID.
-      operationId: EBS Get Expected Location For Contact
+      operationId: EBSGetExpectedLocationForContact
       parameters:
       - description: Organization ID.
         in: path
@@ -473,9 +483,11 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/expectedLocations/{organizationId}/{contactId}/{expectedLocationId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Get Expected Location For Contact
     put:
       description: Update Expected Location by ID.
-      operationId: EBS Update Expected Location For Contact
+      operationId: EBSUpdateExpectedLocationForContact
       parameters:
       - description: Organization ID.
         in: path
@@ -571,29 +583,10 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/expectedLocations/{organizationId}/{contactId}/{expectedLocationId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Update Expected Location For Contact
 components:
   schemas:
-    ExpectedLocationInstance:
-      properties:
-        address:
-          $ref: '#/components/schemas/ContactAddressInstance'
-        contactExternalId:
-          type: string
-        contactId:
-          format: int64
-          type: integer
-        id:
-          format: int64
-          type: integer
-        isInternationalTravel:
-          type: boolean
-        isLocalTravel:
-          type: boolean
-        travelCategory:
-          type: string
-        travelType:
-          type: string
-      type: object
     ContactAddressInstance:
       properties:
         arriveDate:
@@ -636,57 +629,6 @@ components:
         streetAddress:
           type: string
         suite:
-          type: string
-      type: object
-    ExpectedLocationInstanceResult:
-      properties:
-        message:
-          type: string
-        result:
-          $ref: '#/components/schemas/ExpectedLocationInstance'
-      type: object
-    RestfulInstanceResult:
-      properties:
-        message:
-          type: string
-        result:
-          type: object
-      title: RestfulInstanceResult
-      type: object
-    GisLocationWrapper:
-      properties:
-        lat:
-          format: double
-          type: number
-        lon:
-          format: double
-          type: number
-      type: object
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
-    ExpectedLocationCollectionResult:
-      properties:
-        message:
-          type: string
-        result:
-          items:
-            $ref: '#/components/schemas/ExpectedLocationInstance'
-          type: array
-      type: object
-    RestfulBatchOperationResult:
-      properties:
-        code:
-          format: int64
-          type: integer
-        data:
-          items:
-            type: string
-          type: array
-        message:
           type: string
       type: object
     ContactAddressWrapper:
@@ -781,6 +723,45 @@ components:
       required:
       - contactId
       type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
+    ExpectedLocationInstance:
+      properties:
+        address:
+          $ref: '#/components/schemas/ContactAddressInstance'
+        contactExternalId:
+          type: string
+        contactId:
+          format: int64
+          type: integer
+        id:
+          format: int64
+          type: integer
+        isInternationalTravel:
+          type: boolean
+        isLocalTravel:
+          type: boolean
+        travelCategory:
+          type: string
+        travelType:
+          type: string
+      type: object
+    RestfulBatchOperationResult:
+      properties:
+        code:
+          format: int64
+          type: integer
+        data:
+          items:
+            type: string
+          type: array
+        message:
+          type: string
+      type: object
     RestfulModificationResult:
       properties:
         baseUri:
@@ -793,6 +774,39 @@ components:
         message:
           type: string
       title: RestfulModificationResult
+      type: object
+    ExpectedLocationCollectionResult:
+      properties:
+        message:
+          type: string
+        result:
+          items:
+            $ref: '#/components/schemas/ExpectedLocationInstance'
+          type: array
+      type: object
+    RestfulInstanceResult:
+      properties:
+        message:
+          type: string
+        result:
+          type: object
+      title: RestfulInstanceResult
+      type: object
+    ExpectedLocationInstanceResult:
+      properties:
+        message:
+          type: string
+        result:
+          $ref: '#/components/schemas/ExpectedLocationInstance'
+      type: object
+    GisLocationWrapper:
+      properties:
+        lat:
+          format: double
+          type: number
+        lon:
+          format: double
+          type: number
       type: object
   securitySchemes:
     API_Authorizer:

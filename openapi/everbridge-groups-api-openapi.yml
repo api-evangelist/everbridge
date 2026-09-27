@@ -14,7 +14,7 @@ paths:
     get:
       deprecated: false
       description: Retrieve all groups for an organization
-      operationId: EBS List Groups
+      operationId: EBSListGroups
       parameters:
       - description: The ID of the organization containing the groups
         in: path
@@ -102,9 +102,11 @@ paths:
             statusCode: '200'
         type: aws_proxy
         uri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:apigw-large-file-handler-us-east-1-prod/invocations
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS List Groups
     post:
       description: Create a new group within an organization
-      operationId: EBS Create Group
+      operationId: EBSCreateGroup
       parameters:
       - description: The ID of the organization where the group is created
         in: path
@@ -172,9 +174,11 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/groups/{organizationId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Create Group
   /groups/{organizationId}/contacts:
     delete:
-      operationId: EBS Delete Contacts Group
+      operationId: EBSDeleteContactsGroup
       parameters:
       - description: The ID of the organization containing the groups
         in: path
@@ -257,8 +261,10 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/groups/{organizationId}/contacts
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Delete Contacts Group
     post:
-      operationId: EBS Add Contacts Group
+      operationId: EBSAddContactsGroup
       parameters:
       - description: The ID of the organization containing the groups
         in: path
@@ -341,9 +347,11 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/groups/{organizationId}/contacts
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Add Contacts Group
   /groups/{organizationId}/contacts/sequence:
     post:
-      operationId: EBS Replace Contacts SeqGroup
+      operationId: EBSReplaceContactsSeqGroup
       parameters:
       - description: The ID of the organization containing the groups
         in: path
@@ -426,10 +434,12 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/groups/{organizationId}/contacts/sequence
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Replace Contacts SeqGroup
   /groups/{organizationId}/pagination:
     get:
       description: Retrieve all groups by page for an organization
-      operationId: EBS List Groups By Page
+      operationId: EBSListGroupsByPage
       parameters:
       - description: The ID of the organization in which to find the group
         in: path
@@ -531,11 +541,13 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/groups/{organizationId}/pagination
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS List Groups By Page
   /groups/{organizationId}/{groupIdOrQueryValue}:
     delete:
       deprecated: false
       description: Delete the specified group from an organization
-      operationId: EBS Delete Group
+      operationId: EBSDeleteGroup
       parameters:
       - description: The ID of the organization where the group exists
         in: path
@@ -582,9 +594,11 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/groups/{organizationId}/{groupIdOrQueryValue}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Delete Group
     get:
       description: Retrieve a specific group within an organization
-      operationId: EBS Get Group
+      operationId: EBSGetGroup
       parameters:
       - description: The ID of the organization in which to find the group
         in: path
@@ -639,10 +653,12 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/groups/{organizationId}/{groupIdOrQueryValue}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Get Group
     put:
       deprecated: false
       description: Update a group within an organization
-      operationId: EBS Update Group
+      operationId: EBSUpdateGroup
       parameters:
       - description: The ID of the organization where the group exists
         in: path
@@ -710,6 +726,8 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/groups/{organizationId}/{groupIdOrQueryValue}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Update Group
 components:
   schemas:
     contactGroupsRequest:
@@ -717,100 +735,6 @@ components:
       items:
         type: string
       type: array
-    postUpdateResponse:
-      properties:
-        baseUri:
-          type: string
-        id:
-          type: integer
-        instanceUri:
-          type: string
-        message:
-          type: string
-      type: object
-    groups:
-      properties:
-        firstPageUri:
-          type: string
-        lastPageUri:
-          type: string
-        message:
-          type: string
-        page:
-          properties:
-            currentPageNo:
-              type: integer
-            data:
-              items:
-                properties:
-                  accountId:
-                    type: integer
-                  createdId:
-                    type: integer
-                  dirty:
-                    type: boolean
-                  enableSequencedContact:
-                    type: boolean
-                  id:
-                    type: integer
-                  lastModifiedDate:
-                    type: integer
-                  lastModifiedId:
-                    type: integer
-                  lastModifiedName:
-                    type: string
-                  lastModifiedTime:
-                    type: integer
-                  lastSynchronizedTime:
-                    type: integer
-                  name:
-                    type: string
-                  organizationId:
-                    type: integer
-                  parentId:
-                    type: integer
-                  resourceBundleId:
-                    type: integer
-                type: object
-              type: array
-            pageSize:
-              type: integer
-            start:
-              type: integer
-            totalCount:
-              type: integer
-            totalPageCount:
-              type: integer
-          type: object
-      type: object
-    error:
-      properties:
-        message:
-          type: string
-        status:
-          type: integer
-      required:
-      - status
-      - message
-      type: object
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
-    RestfulBatchOperationResult:
-      properties:
-        code:
-          format: int64
-          type: integer
-        data:
-          items:
-            type: string
-          type: array
-        message:
-          type: string
-      type: object
     GroupResponseWrapper:
       properties:
         message:
@@ -873,6 +797,100 @@ components:
       required:
       - message
       - result
+      type: object
+    RestfulBatchOperationResult:
+      properties:
+        code:
+          format: int64
+          type: integer
+        data:
+          items:
+            type: string
+          type: array
+        message:
+          type: string
+      type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
+    groups:
+      properties:
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        page:
+          properties:
+            currentPageNo:
+              type: integer
+            data:
+              items:
+                properties:
+                  accountId:
+                    type: integer
+                  createdId:
+                    type: integer
+                  dirty:
+                    type: boolean
+                  enableSequencedContact:
+                    type: boolean
+                  id:
+                    type: integer
+                  lastModifiedDate:
+                    type: integer
+                  lastModifiedId:
+                    type: integer
+                  lastModifiedName:
+                    type: string
+                  lastModifiedTime:
+                    type: integer
+                  lastSynchronizedTime:
+                    type: integer
+                  name:
+                    type: string
+                  organizationId:
+                    type: integer
+                  parentId:
+                    type: integer
+                  resourceBundleId:
+                    type: integer
+                type: object
+              type: array
+            pageSize:
+              type: integer
+            start:
+              type: integer
+            totalCount:
+              type: integer
+            totalPageCount:
+              type: integer
+          type: object
+      type: object
+    postUpdateResponse:
+      properties:
+        baseUri:
+          type: string
+        id:
+          type: integer
+        instanceUri:
+          type: string
+        message:
+          type: string
+      type: object
+    error:
+      properties:
+        message:
+          type: string
+        status:
+          type: integer
+      required:
+      - status
+      - message
       type: object
     groupsRequest:
       properties:

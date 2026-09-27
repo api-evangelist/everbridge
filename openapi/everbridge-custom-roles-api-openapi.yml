@@ -13,7 +13,7 @@ paths:
   /v1/roles:
     get:
       description: Retrieve all roles within an organization, with optional filtering by roleTemplate.
-      operationId: EBS Get Custom Roles In Organization
+      operationId: EBSGetCustomRolesInOrganization
       parameters:
       - description: Organization ID
         in: query
@@ -768,13 +768,15 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Get Custom Roles In Organization
     post:
       description: 'Create a new custom role based on a baseRoleTemplate or baseRole.
 
         Note: You must specify either baseRoleTemplate or baseRole, but not both or neither.
 
         You can refer to the provided file-link whenever needed to identify the corresponding apiFeatureName for your API requests based on the UI feature name.'
-      operationId: EBS Create Custom Role
+      operationId: EBSCreateCustomRole
       parameters:
       - description: To control if the response should include detailed role data.
         in: query
@@ -1638,10 +1640,12 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Create Custom Role
   /v1/roles/{roleId}:
     delete:
       description: Delete a role of an organization.
-      operationId: EBS Delete Custom Role
+      operationId: EBSDeleteCustomRole
       parameters:
       - description: The ID of the custom role to delete.
         in: path
@@ -1705,9 +1709,11 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Delete Custom Role
     get:
       description: Retrieve a custom role of an organization.
-      operationId: EBS Get Custom Role
+      operationId: EBSGetCustomRole
       parameters:
       - description: The ID of the custom role for querying.
         in: path
@@ -2407,13 +2413,15 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Get Custom Role
     patch:
       description: 'Partially update a custom role of an organization.
 
         Supported attributes are name, permissionScope, roleDataScope.
 
         You can refer to the provided file-link whenever needed to identify the corresponding apiFeatureName for your API requests based on the UI feature name.'
-      operationId: EBS Patch Custom Role
+      operationId: EBSPatchCustomRole
       parameters:
       - description: The ID of the custom role for querying.
         in: path
@@ -3287,11 +3295,13 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Patch Custom Role
     put:
       description: 'Update a custom role of an organization.
 
         You can refer to the provided file-link whenever needed to identify the corresponding apiFeatureName for your API requests based on the UI feature name.'
-      operationId: EBS Update Custom Role
+      operationId: EBSUpdateCustomRole
       parameters:
       - description: The ID of the custom role for querying.
         in: path
@@ -4179,6 +4189,8 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Update Custom Role
 components:
   securitySchemes:
     API_Authorizer:

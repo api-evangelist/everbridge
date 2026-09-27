@@ -66,10 +66,10 @@ paths:
           description: Failed - Rate limit is exceeded
 components:
   schemas:
-    GroupResponse:
+    TargetingAttributeResponse:
       type: array
       items:
-        $ref: '#/components/schemas/Group'
+        $ref: '#/components/schemas/TargetingAttribute'
     Group:
       properties:
         id:
@@ -106,10 +106,10 @@ components:
           enum:
           - User
           - Machine
-    TargetingAttributeResponse:
+    GroupResponse:
       type: array
       items:
-        $ref: '#/components/schemas/TargetingAttribute'
+        $ref: '#/components/schemas/Group'
   securitySchemes:
     bearerAuth:
       type: http

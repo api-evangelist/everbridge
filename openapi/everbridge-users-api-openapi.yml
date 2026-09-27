@@ -13,7 +13,7 @@ paths:
   /users:
     get:
       description: Retrieve all users for an account.
-      operationId: EBS List Users
+      operationId: EBSListUsers
       parameters:
       - description: Filter users by roleId.
         in: query
@@ -216,9 +216,11 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/users
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS List Users
     post:
       description: Create a user for an account.
-      operationId: EBS Create User
+      operationId: EBSCreateUser
       requestBody:
         content:
           application/json:
@@ -336,10 +338,12 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/users
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Create User
   /users/list/basic:
     get:
       description: Internal endpoint (not published).
-      operationId: EBS List Users Basic
+      operationId: EBSListUsersBasic
       parameters:
       - description: Page number.
         in: query
@@ -393,11 +397,13 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/users/list/basic
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS List Users Basic
   /users/{id}:
     delete:
       deprecated: false
       description: Delete the specified user
-      operationId: EBS Delete user
+      operationId: EBSDeleteUser
       parameters:
       - description: The ID/External ID of the user to delete
         in: path
@@ -472,10 +478,12 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/users/{id}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Delete user
     get:
       deprecated: false
       description: Retrieve details of an user by specific ID(user ID/SSO ID/External ID).
-      operationId: EBS Get User
+      operationId: EBSGetUser
       parameters:
       - description: The user identifier to return. Use idType to specify internal user ID, SSO ID, or external ID.
         in: path
@@ -654,9 +662,11 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/users/{id}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Get User
     patch:
       description: Partially update a user. This can be used to add, update or remove a user property without passing the entire user object in the request.
-      operationId: EBS Update User Partial
+      operationId: EBSUpdateUserPartial
       parameters:
       - description: The user identifier to update. Use idType to specify internal user ID, SSO ID, or external ID.
         in: path
@@ -910,9 +920,11 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/users/{id}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Update User Partial
     put:
       description: Update a user for an account.
-      operationId: EBS Update User
+      operationId: EBSUpdateUser
       parameters:
       - description: The user identifier to update. Use idType to specify internal user ID, SSO ID, or external ID.
         in: path
@@ -1111,10 +1123,12 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/users/{id}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Update User
   /users/{id}/sendEmail:
     post:
       description: Send registration email for an unregistered user.
-      operationId: EBS Send registration email
+      operationId: EBSSendRegistrationEmail
       parameters:
       - description: The user identifier to send the registration email. Use idType to specify internal user ID or external ID.
         in: path
@@ -1231,80 +1245,24 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/users/{id}/sendEmail
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Send registration email
 components:
   schemas:
-    UserVO:
+    CommonErrorResponse:
       properties:
-        accountId:
-          format: int64
+        code:
+          format: int32
           type: integer
-        apiAccess:
-          type: boolean
-        autoProvisionForEBU:
-          type: boolean
-        contactId:
-          format: int64
-          type: integer
-        contactOrgId:
-          format: int64
-          type: integer
-        defaultRoleId:
-          format: int64
-          type: integer
-        departmentRole:
-          type: string
-        email:
-          type: string
-        firstname:
-          type: string
+        details:
+          type: object
         id:
-          format: int64
+          type: string
+        message:
+          type: string
+        status:
+          format: int32
           type: integer
-        lastname:
-          type: string
-        middlename:
-          type: string
-        numericPassword:
-          type: string
-        numericUsername:
-          type: string
-        orgIds:
-          items:
-            format: int64
-            type: integer
-          type: array
-        organizationId:
-          format: int64
-          type: integer
-        password:
-          type: string
-        roleIds:
-          items:
-            format: int64
-            type: integer
-          type: array
-        roleItems:
-          items:
-            $ref: '#/components/schemas/RoleItem'
-          type: array
-        samlIdentity:
-          type: string
-        secondaryEmail:
-          type: string
-        suffix:
-          type: string
-        timeZoneId:
-          type: string
-        userStatus:
-          description: Whether the user is Active or Inactive. NotRegistered is an obsolete legacy status.
-          enum:
-          - Active
-          - Inactive
-          type: string
-        username:
-          type: string
-        usernameLowerCase:
-          type: string
       type: object
     getUsers:
       properties:
@@ -1479,78 +1437,6 @@ components:
               type: object
           type: object
       type: object
-    CommonErrorResponse:
-      properties:
-        code:
-          format: int32
-          type: integer
-        details:
-          type: object
-        id:
-          type: string
-        message:
-          type: string
-        status:
-          format: int32
-          type: integer
-      type: object
-    patchEntity:
-      additionalProperties: false
-      properties:
-        op:
-          description: The operation to perform.
-          enum:
-          - add
-          - replace
-          - remove
-          type: string
-        path:
-          description: 'A JSON Pointer path. For example: ''/firstName'''
-          type: string
-        value:
-          description: The value to add or replace. This field is not required for remove operation
-          oneOf:
-          - title: string
-            type: string
-          - title: double
-            type: number
-          - title: integer or long
-            type: integer
-          - title: boolean
-            type: boolean
-          - title: object
-            type: object
-          - items:
-              type: integer
-            title: integer array
-            type: array
-          - items:
-              type: string
-            title: string array
-            type: array
-      required:
-      - op
-      - path
-      title: Add, Replace or Remove
-      type: object
-    RoleItem:
-      properties:
-        defaultOrganization:
-          type: boolean
-        defaultRole:
-          type: boolean
-        groupIds:
-          items:
-            format: int64
-            type: integer
-          type: array
-        organizationId:
-          format: int64
-          type: integer
-        roleId:
-          format: int64
-          type: integer
-      type: object
     getUser:
       properties:
         apiAccess:
@@ -1705,6 +1591,45 @@ components:
           description: Whether the user is Active or Inactive. NotRegistered is an obsolete legacy status.
           type: string
       type: object
+    patchEntity:
+      additionalProperties: false
+      properties:
+        op:
+          description: The operation to perform.
+          enum:
+          - add
+          - replace
+          - remove
+          type: string
+        path:
+          description: 'A JSON Pointer path. For example: ''/firstName'''
+          type: string
+        value:
+          description: The value to add or replace. This field is not required for remove operation
+          oneOf:
+          - title: string
+            type: string
+          - title: double
+            type: number
+          - title: integer or long
+            type: integer
+          - title: boolean
+            type: boolean
+          - title: object
+            type: object
+          - items:
+              type: integer
+            title: integer array
+            type: array
+          - items:
+              type: string
+            title: string array
+            type: array
+      required:
+      - op
+      - path
+      title: Add, Replace or Remove
+      type: object
     userRequest:
       properties:
         apiAccess:
@@ -1781,6 +1706,97 @@ components:
           type: string
         message:
           type: string
+      type: object
+    UserVO:
+      properties:
+        accountId:
+          format: int64
+          type: integer
+        apiAccess:
+          type: boolean
+        autoProvisionForEBU:
+          type: boolean
+        contactId:
+          format: int64
+          type: integer
+        contactOrgId:
+          format: int64
+          type: integer
+        defaultRoleId:
+          format: int64
+          type: integer
+        departmentRole:
+          type: string
+        email:
+          type: string
+        firstname:
+          type: string
+        id:
+          format: int64
+          type: integer
+        lastname:
+          type: string
+        middlename:
+          type: string
+        numericPassword:
+          type: string
+        numericUsername:
+          type: string
+        orgIds:
+          items:
+            format: int64
+            type: integer
+          type: array
+        organizationId:
+          format: int64
+          type: integer
+        password:
+          type: string
+        roleIds:
+          items:
+            format: int64
+            type: integer
+          type: array
+        roleItems:
+          items:
+            $ref: '#/components/schemas/RoleItem'
+          type: array
+        samlIdentity:
+          type: string
+        secondaryEmail:
+          type: string
+        suffix:
+          type: string
+        timeZoneId:
+          type: string
+        userStatus:
+          description: Whether the user is Active or Inactive. NotRegistered is an obsolete legacy status.
+          enum:
+          - Active
+          - Inactive
+          type: string
+        username:
+          type: string
+        usernameLowerCase:
+          type: string
+      type: object
+    RoleItem:
+      properties:
+        defaultOrganization:
+          type: boolean
+        defaultRole:
+          type: boolean
+        groupIds:
+          items:
+            format: int64
+            type: integer
+          type: array
+        organizationId:
+          format: int64
+          type: integer
+        roleId:
+          format: int64
+          type: integer
       type: object
     roleId:
       default: '0'

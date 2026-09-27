@@ -12,7 +12,7 @@ tags:
 paths:
   /staff/{organizationId}/assignment/{externalId}:
     get:
-      operationId: EBS Get Staff Assigned By Calendar ExternalId
+      operationId: EBSGetStaffAssignedByCalendarExternalId
       parameters:
       - description: The ID of the organization containing the contacts
         in: path
@@ -78,21 +78,124 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/staff/{organizationId}/assignment/{externalId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Get Staff Assigned By Calendar ExternalId
 components:
   schemas:
-    TimingInterval:
+    StaffShiftAssignmentsWrapper:
       properties:
-        from:
+        externalId:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        middleInitial:
+          type: string
+        shiftAssignments:
+          items:
+            $ref: '#/components/schemas/ShiftAssignmentWrapper'
+          type: array
+        staffId:
+          format: int64
+          type: integer
+        suffix:
+          type: string
+      type: object
+    CalendarStaffShiftAssignmentsWrapper:
+      properties:
+        calendar:
+          $ref: '#/components/schemas/CalendarWrapper'
+        staffAssignments:
+          items:
+            $ref: '#/components/schemas/StaffShiftAssignmentsWrapper'
+          type: array
+          uniqueItems: true
+      type: object
+    Staff:
+      properties:
+        externalId:
+          type: string
+        firstName:
+          type: string
+        id:
+          format: int64
+          type: integer
+        lastName:
+          type: string
+        middleInitial:
+          type: string
+        suffix:
+          type: string
+        unavailable:
+          type: boolean
+      type: object
+    CalendarStaffShiftAssignmentsWrapperInstanceResult:
+      properties:
+        message:
+          type: string
+        result:
+          $ref: '#/components/schemas/CalendarStaffShiftAssignmentsWrapper'
+      type: object
+    CalendarWrapper:
+      properties:
+        accountId:
+          format: int64
+          type: integer
+        active:
+          type: boolean
+        createdDate:
           format: date-time
           type: string
-        fromDate:
+        createdDateString:
+          type: string
+        createdId:
+          format: int64
+          type: integer
+        createdName:
+          type: string
+        createdProxyName:
+          type: string
+        emailNotificationEnabled:
+          type: boolean
+        emailNotificationList:
+          items:
+            type: string
+          type: array
+        externalId:
+          type: string
+        id:
+          format: int64
+          type: integer
+        lastModifiedDate:
           format: date-time
           type: string
-        to:
-          format: date-time
+        lastModifiedDateString:
           type: string
-        toDate:
-          format: date-time
+        lastModifiedId:
+          format: int64
+          type: integer
+        lastModifiedName:
+          type: string
+        lastModifiedProxyName:
+          type: string
+        name:
+          type: string
+        organizationId:
+          format: int64
+          type: integer
+        resourceBundleId:
+          format: int64
+          type: integer
+        shiftIds:
+          items:
+            format: int64
+            type: integer
+          type: array
+        status:
+          enum:
+          - A
+          - D
           type: string
       type: object
     ShiftExceptions:
@@ -174,33 +277,6 @@ components:
           - D
           type: string
       type: object
-    StaffShiftAssignmentsWrapper:
-      properties:
-        externalId:
-          type: string
-        firstName:
-          type: string
-        lastName:
-          type: string
-        middleInitial:
-          type: string
-        shiftAssignments:
-          items:
-            $ref: '#/components/schemas/ShiftAssignmentWrapper'
-          type: array
-        staffId:
-          format: int64
-          type: integer
-        suffix:
-          type: string
-      type: object
-    CalendarStaffShiftAssignmentsWrapperInstanceResult:
-      properties:
-        message:
-          type: string
-        result:
-          $ref: '#/components/schemas/CalendarStaffShiftAssignmentsWrapper'
-      type: object
     ShiftAssignmentWrapper:
       properties:
         dayOfShift:
@@ -238,94 +314,20 @@ components:
           format: int64
           type: integer
       type: object
-    CalendarWrapper:
+    TimingInterval:
       properties:
-        accountId:
-          format: int64
-          type: integer
-        active:
-          type: boolean
-        createdDate:
+        from:
           format: date-time
           type: string
-        createdDateString:
-          type: string
-        createdId:
-          format: int64
-          type: integer
-        createdName:
-          type: string
-        createdProxyName:
-          type: string
-        emailNotificationEnabled:
-          type: boolean
-        emailNotificationList:
-          items:
-            type: string
-          type: array
-        externalId:
-          type: string
-        id:
-          format: int64
-          type: integer
-        lastModifiedDate:
+        fromDate:
           format: date-time
           type: string
-        lastModifiedDateString:
+        to:
+          format: date-time
           type: string
-        lastModifiedId:
-          format: int64
-          type: integer
-        lastModifiedName:
+        toDate:
+          format: date-time
           type: string
-        lastModifiedProxyName:
-          type: string
-        name:
-          type: string
-        organizationId:
-          format: int64
-          type: integer
-        resourceBundleId:
-          format: int64
-          type: integer
-        shiftIds:
-          items:
-            format: int64
-            type: integer
-          type: array
-        status:
-          enum:
-          - A
-          - D
-          type: string
-      type: object
-    Staff:
-      properties:
-        externalId:
-          type: string
-        firstName:
-          type: string
-        id:
-          format: int64
-          type: integer
-        lastName:
-          type: string
-        middleInitial:
-          type: string
-        suffix:
-          type: string
-        unavailable:
-          type: boolean
-      type: object
-    CalendarStaffShiftAssignmentsWrapper:
-      properties:
-        calendar:
-          $ref: '#/components/schemas/CalendarWrapper'
-        staffAssignments:
-          items:
-            $ref: '#/components/schemas/StaffShiftAssignmentsWrapper'
-          type: array
-          uniqueItems: true
       type: object
   securitySchemes:
     API_Authorizer:

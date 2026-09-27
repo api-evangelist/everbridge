@@ -220,27 +220,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    CheckTemplate:
-      type: object
-      properties:
-        id:
-          type: string
-        sourceId:
-          type: string
-        sourceName:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-        path:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
     CreateCheckTemplateRequest:
       type: object
       properties:
@@ -267,6 +246,27 @@ components:
           type: string
         path:
           type: string
+    CheckTemplate:
+      type: object
+      properties:
+        id:
+          type: string
+        sourceId:
+          type: string
+        sourceName:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        path:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
   securitySchemes:
     API_Authorizer:
       type: apiKey

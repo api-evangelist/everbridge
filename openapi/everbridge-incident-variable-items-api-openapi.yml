@@ -12,7 +12,7 @@ tags:
 paths:
   /incidentVariableItems/{organizationId}:
     get:
-      operationId: EBS List Incident Variable Items
+      operationId: EBSListIncidentVariableItems
       parameters:
       - description: The ID of the organization containing the variables
         in: path
@@ -239,6 +239,8 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/incidentVariableItems/{organizationId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS List Incident Variable Items
   /incidentVariableItems/{organizationId}/{proxy+}:
     get:
       description: 'This endpoint consolidates multiple previously separate paths under a single route using the {proxy+} catch-all parameter. It supports the following routes:
@@ -255,7 +257,7 @@ paths:
 
 
         You do not need to change your existing request paths. The API will continue to behave as before, and this structure ensures compatibility across different use cases'
-      operationId: EBS Get Incident Variables Proxy
+      operationId: EBSGetIncidentVariablesProxy
       parameters:
       - description: The ID of the organization containing the variables
         in: path
@@ -417,34 +419,16 @@ paths:
         - code: "curl -X GET \\\n  'https://api.everbridge.net/rest/incidentVariableItems/organizationId/Name' \\\n  -H 'accept: application/json'"
           language: curl
           name: Name search option filter
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Get Incident Variables Proxy
 components:
   schemas:
-    RestfulCollectionResult:
-      properties:
-        currentPageUri:
-          type: string
-        firstPageUri:
-          type: string
-        lastPageUri:
-          type: string
-        message:
-          type: string
-        nextPageUri:
-          type: string
-        page:
-          $ref: '#/components/schemas/DataPageObject'
-        previousPageUri:
-          type: string
-      title: RestfulCollectionResult
-      type: object
-    RestfulInstanceResult:
-      properties:
-        message:
-          type: string
-        result:
-          type: object
-      title: RestfulInstanceResult
-      type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
     DataPageObject:
       properties:
         currentPageNo:
@@ -474,12 +458,32 @@ components:
           type: integer
       title: DataPage«object»
       type: object
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
+    RestfulCollectionResult:
+      properties:
+        currentPageUri:
+          type: string
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        nextPageUri:
+          type: string
+        page:
+          $ref: '#/components/schemas/DataPageObject'
+        previousPageUri:
+          type: string
+      title: RestfulCollectionResult
+      type: object
+    RestfulInstanceResult:
+      properties:
+        message:
+          type: string
+        result:
+          type: object
+      title: RestfulInstanceResult
+      type: object
   securitySchemes:
     API_Authorizer:
       description: oAuth Token

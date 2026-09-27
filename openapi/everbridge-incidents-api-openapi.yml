@@ -65,7 +65,7 @@ paths:
   /incidentJournals/{organizationId}/{incidentId}:
     get:
       description: Get all incident journals for a given incidentId
-      operationId: EBS Get Journals
+      operationId: EBSGetJournals
       parameters:
       - example: '591470146880572'
         in: path
@@ -144,9 +144,11 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/incidentJournals/{organizationId}/{incidentId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Get Journals
     post:
       description: Add a new incident journal to a given incident
-      operationId: EBS Add Incident Journal
+      operationId: EBSAddIncidentJournal
       parameters:
       - example: '591470146880572'
         in: path
@@ -210,13 +212,15 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/incidentJournals/{organizationId}/{incidentId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Add Incident Journal
     servers:
     - url: https://api.everbridge.net/rest
     - url: https://api.everbridge.eu/rest
   /incidents/{organizationId}:
     get:
       description: Retrieve all the incidents for an organization.
-      operationId: EBS List Incidents
+      operationId: EBSListIncidents
       parameters:
       - in: path
         name: organizationId
@@ -453,9 +457,11 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/incidents/{organizationId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS List Incidents
     post:
       description: Creating a new incident results in launching one or more new notifications. Incident can be launched with default values set up at the template level or various parameters defined at the template level can be overridden by sending it through this API.
-      operationId: EBS Launch Incident
+      operationId: EBSLaunchIncident
       parameters:
       - in: path
         name: organizationId
@@ -613,13 +619,15 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/incidents/{organizationId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Launch Incident
     servers:
     - url: https://api.everbridge.net/rest
     - url: https://api.everbridge.eu/rest
   /incidents/{organizationId}/incidentDynamicInfo/query:
     post:
       description: Get dynamic information after parsing
-      operationId: EBS Get Incident Dynamic Info Query
+      operationId: EBSGetIncidentDynamicInfoQuery
       parameters:
       - in: path
         name: organizationId
@@ -671,13 +679,15 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/incidents/{organizationId}/incidentDynamicInfo/query
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Get Incident Dynamic Info Query
     servers:
     - url: https://api.everbridge.net/rest
     - url: https://api.everbridge.eu/rest
   /incidents/{organizationId}/preview:
     post:
       description: Returns a dummy incident.
-      operationId: EBS Preview Incident
+      operationId: EBSPreviewIncident
       parameters:
       - in: path
         name: organizationId
@@ -765,13 +775,15 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/incidents/{organizationId}/preview
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Preview Incident
     servers:
     - url: https://api.everbridge.net/rest
     - url: https://api.everbridge.eu/rest
   /incidents/{organizationId}/verifyPIN:
     post:
       description: The organization from which to verify the PIN
-      operationId: EBS Incident Verify Pin
+      operationId: EBSIncidentVerifyPin
       parameters:
       - in: path
         name: organizationId
@@ -823,13 +835,15 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/incidents/{organizationId}/verifyPIN
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Incident Verify Pin
     servers:
     - url: https://api.everbridge.net/rest
     - url: https://api.everbridge.eu/rest
   /incidents/{organizationId}/{incidentId}:
     get:
       description: Retrieve details of an incident within an organization. This also returns the list of notifications launched within a given incident.
-      operationId: EBS Get Incident
+      operationId: EBSGetIncident
       parameters:
       - example: '591470146880507'
         in: path
@@ -1001,9 +1015,11 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/incidents/{organizationId}/{incidentId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Get Incident
     put:
       description: Update an existing incident to launch another notification within a given notification. This can also be used to close an incident (with or without sending notification).
-      operationId: EBS Update Incident
+      operationId: EBSUpdateIncident
       parameters:
       - in: path
         name: organizationId
@@ -1122,65 +1138,13 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/incidents/{organizationId}/{incidentId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Update Incident
     servers:
     - url: https://api.everbridge.net/rest
     - url: https://api.everbridge.eu/rest
 components:
   schemas:
-    MessageSetting:
-      required:
-      - allowShare
-      - requestComment
-      - requestImage
-      - requestLocation
-      - requireConfirm
-      type: object
-      properties:
-        requestImage:
-          type: boolean
-          description: Indicates if an image upload has been requested by the message sender.
-        requestLocation:
-          type: boolean
-          description: Indicates if a location has been requested by the message sender.
-        requestComment:
-          type: boolean
-          description: Indicates if comments are requested by the message sender.
-        allowShare:
-          type: boolean
-          description: Indicates if the message is allowed to be shared.
-        requireConfirm:
-          type: boolean
-          description: Indicates if the the message sender has requested confirmation.
-      description: Additional message settings.
-    MessageState:
-      required:
-      - active
-      - confirmed
-      - read
-      - shared
-      type: object
-      properties:
-        read:
-          type: boolean
-          description: Indicates whether the message has been marked as read for the Contact.
-        shared:
-          type: boolean
-          description: Indicates whether the message has been marked as shared for the Contact.
-        confirmed:
-          type: boolean
-          description: Indicates whether the message has been marked as confirmed for the Contact.
-        confirmedAt:
-          type: integer
-          description: The time the message was marked as confirmed for the Contact.
-          format: int64
-        readAt:
-          type: integer
-          description: The time the message was marked as read for the Contact.
-          format: int64
-        active:
-          type: boolean
-          description: Indicates whether the message is still active.
-      description: Message state.
     Sender:
       required:
       - firstName
@@ -1198,46 +1162,6 @@ components:
           type: string
           description: The Sender's last name.
       description: Message sender.
-    MessageResponseForQuery:
-      required:
-      - body
-      - id
-      - priority
-      - sender
-      - setting
-      - source
-      - state
-      - title
-      type: object
-      properties:
-        id:
-          type: string
-          description: Message ID.
-        title:
-          type: string
-          description: Message title.
-        body:
-          type: string
-          description: Message content.
-        priority:
-          type: boolean
-          description: Message priority.
-        sender:
-          $ref: '#/components/schemas/Sender'
-        source:
-          type: string
-          description: Message source.
-        setting:
-          $ref: '#/components/schemas/MessageSetting'
-        state:
-          $ref: '#/components/schemas/MessageState'
-        incidentName:
-          type: string
-          description: Incident name. Only available if the message was triggered from an incident.
-        createdAt:
-          type: integer
-          description: Message created time.
-          format: int64
     IncidentV2response:
       required:
       - id
@@ -1278,6 +1202,114 @@ components:
           description: Notification messages belong to this incident.
           items:
             $ref: '#/components/schemas/MessageResponseForQuery'
+    MessageResponseForQuery:
+      required:
+      - body
+      - id
+      - priority
+      - sender
+      - setting
+      - source
+      - state
+      - title
+      type: object
+      properties:
+        id:
+          type: string
+          description: Message ID.
+        title:
+          type: string
+          description: Message title.
+        body:
+          type: string
+          description: Message content.
+        priority:
+          type: boolean
+          description: Message priority.
+        sender:
+          $ref: '#/components/schemas/Sender'
+        source:
+          type: string
+          description: Message source.
+        setting:
+          $ref: '#/components/schemas/MessageSetting'
+        state:
+          $ref: '#/components/schemas/MessageState'
+        incidentName:
+          type: string
+          description: Incident name. Only available if the message was triggered from an incident.
+        createdAt:
+          type: integer
+          description: Message created time.
+          format: int64
+    MessageState:
+      required:
+      - active
+      - confirmed
+      - read
+      - shared
+      type: object
+      properties:
+        read:
+          type: boolean
+          description: Indicates whether the message has been marked as read for the Contact.
+        shared:
+          type: boolean
+          description: Indicates whether the message has been marked as shared for the Contact.
+        confirmed:
+          type: boolean
+          description: Indicates whether the message has been marked as confirmed for the Contact.
+        confirmedAt:
+          type: integer
+          description: The time the message was marked as confirmed for the Contact.
+          format: int64
+        readAt:
+          type: integer
+          description: The time the message was marked as read for the Contact.
+          format: int64
+        active:
+          type: boolean
+          description: Indicates whether the message is still active.
+      description: Message state.
+    MessageSetting:
+      required:
+      - allowShare
+      - requestComment
+      - requestImage
+      - requestLocation
+      - requireConfirm
+      type: object
+      properties:
+        requestImage:
+          type: boolean
+          description: Indicates if an image upload has been requested by the message sender.
+        requestLocation:
+          type: boolean
+          description: Indicates if a location has been requested by the message sender.
+        requestComment:
+          type: boolean
+          description: Indicates if comments are requested by the message sender.
+        allowShare:
+          type: boolean
+          description: Indicates if the message is allowed to be shared.
+        requireConfirm:
+          type: boolean
+          description: Indicates if the the message sender has requested confirmation.
+      description: Additional message settings.
+    createIncident:
+      allOf:
+      - properties:
+          incidentAction:
+            description: "Incident Action:\n * `Launch`: This is the most common use case for launching a new incident.\n * `LaunchThenClose`: This closes the incident right after launching the incident."
+            enum:
+            - Launch
+            - LaunchThenClose
+            type: string
+        required:
+        - incidentAction
+        - incidentPhases
+        type: object
+      - $ref: '#/components/schemas/incident'
     incident:
       properties:
         incidentPhases:
@@ -1394,6 +1426,20 @@ components:
             - CloseWithNotification
             - CloseWithoutNotification
             type: string
+        type: object
+      - $ref: '#/components/schemas/incident'
+    previewIncident:
+      allOf:
+      - properties:
+          incidentAction:
+            description: "Incident Action:\n * `Launch`: This is the most common use case for launching a new incident.\n * `LaunchThenClose`: This closes the incident right after launching the incident."
+            enum:
+            - Launch
+            - LaunchThenClose
+            type: string
+        required:
+        - incidentAction
+        - incidentPhases
         type: object
       - $ref: '#/components/schemas/incident'
     IncidentResponse:
@@ -1578,34 +1624,6 @@ components:
       - page
       title: Generated schema for Root
       type: object
-    createIncident:
-      allOf:
-      - properties:
-          incidentAction:
-            description: "Incident Action:\n * `Launch`: This is the most common use case for launching a new incident.\n * `LaunchThenClose`: This closes the incident right after launching the incident."
-            enum:
-            - Launch
-            - LaunchThenClose
-            type: string
-        required:
-        - incidentAction
-        - incidentPhases
-        type: object
-      - $ref: '#/components/schemas/incident'
-    previewIncident:
-      allOf:
-      - properties:
-          incidentAction:
-            description: "Incident Action:\n * `Launch`: This is the most common use case for launching a new incident.\n * `LaunchThenClose`: This closes the incident right after launching the incident."
-            enum:
-            - Launch
-            - LaunchThenClose
-            type: string
-        required:
-        - incidentAction
-        - incidentPhases
-        type: object
-      - $ref: '#/components/schemas/incident'
   securitySchemes:
     API_Authorizer:
       type: apiKey

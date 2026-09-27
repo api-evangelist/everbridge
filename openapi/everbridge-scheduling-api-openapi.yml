@@ -255,7 +255,7 @@ paths:
   /scheduling/{organizationId}/audits:
     get:
       description: Scheduling Audit is a read-only resource, meaning audits cannot be modified or deleted. Hence, there is only one API to get the audits. However, the result can be filtered in various ways as per the need.
-      operationId: EBS List Scheduling Audits
+      operationId: EBSListSchedulingAudits
       parameters:
       - description: The id of the Organization that owns this resource
         in: path
@@ -538,13 +538,15 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/scheduling/{organizationId}/audits
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS List Scheduling Audits
     servers:
     - url: https://api.everbridge.net/rest
     - url: https://api.everbridge.eu/rest
   /scheduling/{organizationId}/calendarEvents:
     get:
       description: List of events and their corresponding assignments
-      operationId: EBS List Calendar Events
+      operationId: EBSListCalendarEvents
       parameters:
       - description: The id of the Organization that owns this resource
         in: path
@@ -693,6 +695,8 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/scheduling/{organizationId}/calendarEvents
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS List Calendar Events
     servers:
     - url: https://api.everbridge.net/rest
     - url: https://api.everbridge.eu/rest
@@ -700,7 +704,7 @@ paths:
     get:
       deprecated: false
       description: Return a list of all calendars for an organization
-      operationId: EBS List Calendars
+      operationId: EBSListCalendars
       parameters:
       - description: The ID of the organization that owns this resource
         example: 1536984111644674
@@ -785,10 +789,12 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/scheduling/{organizationId}/calendars
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS List Calendars
     post:
       deprecated: false
       description: Create Calendar in an Organization
-      operationId: EBS Create Calendar
+      operationId: EBSCreateCalendar
       parameters:
       - description: The id of the Organization that owns this resource
         example: 1536984111644674
@@ -883,6 +889,8 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/scheduling/{organizationId}/calendars
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Create Calendar
     servers:
     - url: https://api.everbridge.net/rest
     - url: https://api.everbridge.eu/rest
@@ -890,7 +898,7 @@ paths:
     delete:
       deprecated: false
       description: Delete Calendars within an Organization
-      operationId: EBS Delete Calendars
+      operationId: EBSDeleteCalendars
       parameters:
       - description: The id of the Organization that owns this resource
         example: 1536984111644674
@@ -955,10 +963,12 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/scheduling/{organizationId}/calendars/{ids}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Delete Calendars
     get:
       deprecated: false
       description: Get Calendar or Calendars within an Organization
-      operationId: EBS Get Calendars
+      operationId: EBSGetCalendars
       parameters:
       - description: The id of the Organization that owns this resource
         in: path
@@ -1022,10 +1032,12 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/scheduling/{organizationId}/calendars/{ids}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Get Calendars
     put:
       deprecated: false
       description: Update Calendar or Calendars within an Organization
-      operationId: EBS Update calendars
+      operationId: EBSUpdateCalendars
       parameters:
       - description: The id of the Organization that owns this resource
         in: path
@@ -1128,13 +1140,15 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/scheduling/{organizationId}/calendars/{ids}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Update calendars
     servers:
     - url: https://api.everbridge.net/rest
     - url: https://api.everbridge.eu/rest
   /scheduling/{organizationId}/oncallreminder/staff:
     get:
       description: Get the on-call staff for Scheduling reminder
-      operationId: EBS Scheduling Oncall Reminder Staff
+      operationId: EBSSchedulingOncallReminderStaff
       parameters:
       - description: The id of the Organization that owns this resource
         in: path
@@ -1214,13 +1228,15 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/scheduling/{organizationId}/oncallreminder/staff
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Scheduling Oncall Reminder Staff
     servers:
     - url: https://api.everbridge.net/rest
     - url: https://api.everbridge.eu/rest
   /scheduling/{organizationId}/oncallstaff:
     post:
       description: Get the on-call staff for non-flexible or flexible Scheduling
-      operationId: EBS Scheduling Oncall Staff
+      operationId: EBSSchedulingOncallStaff
       parameters:
       - description: The id of the Organization that owns this resource
         in: path
@@ -1258,6 +1274,8 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/scheduling/{organizationId}/oncallstaff
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Scheduling Oncall Staff
     servers:
     - url: https://api.everbridge.net/rest
     - url: https://api.everbridge.eu/rest
@@ -1265,7 +1283,7 @@ paths:
     get:
       deprecated: false
       description: Return a list of shiftSchedules within an organization
-      operationId: EBS List Shift Schedules
+      operationId: EBSListShiftSchedules
       parameters:
       - description: The ID of the organization containing the shift schedules
         in: path
@@ -1569,8 +1587,10 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/scheduling/{organizationId}/shiftSchedules
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS List Shift Schedules
     post:
-      operationId: EBS Create Shift Schedules
+      operationId: EBSCreateShiftSchedules
       parameters:
       - description: The id of the Organization that owns this resource
         in: path
@@ -1801,6 +1821,8 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/scheduling/{organizationId}/shiftSchedules
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Create Shift Schedules
     servers:
     - url: https://api.everbridge.net/rest
     - url: https://api.everbridge.eu/rest
@@ -1808,7 +1830,7 @@ paths:
     delete:
       deprecated: false
       description: Delete shiftSchedule or shiftSchedules within an organization
-      operationId: EBS Delete Shift Schedules
+      operationId: EBSDeleteShiftSchedules
       parameters:
       - description: The ID of the organization containing the shift schedules
         in: path
@@ -1960,10 +1982,12 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/scheduling/{organizationId}/shiftSchedules/{ids}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Delete Shift Schedules
     get:
       deprecated: false
       description: Get shiftSchedule or shiftSchedules within an organization
-      operationId: EBS Get Shift Schedules
+      operationId: EBSGetShiftSchedules
       parameters:
       - description: The ID of the organization containing the shift schedules
         in: path
@@ -2151,8 +2175,10 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/scheduling/{organizationId}/shiftSchedules/{ids}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Get Shift Schedules
     put:
-      operationId: EBS Update Shift Schedules
+      operationId: EBSUpdateShiftSchedules
       parameters:
       - description: The id of the Organization that owns this resource
         in: path
@@ -2272,13 +2298,15 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/scheduling/{organizationId}/shiftSchedules/{ids}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Update Shift Schedules
     servers:
     - url: https://api.everbridge.net/rest
     - url: https://api.everbridge.eu/rest
   /scheduling/{organizationId}/shiftSubstitutions:
     get:
       description: Retrieve Shift Substitution(s) for an organization (Override)
-      operationId: EBS List Shift Substitutions
+      operationId: EBSListShiftSubstitutions
       parameters:
       - description: The id of the Organization that owns this resource
         in: path
@@ -2428,9 +2456,11 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/scheduling/{organizationId}/shiftSubstitutions
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS List Shift Substitutions
     post:
       description: Create Shift Substitution(s) for an organization (Override).
-      operationId: EBS Create Shift Substitutions
+      operationId: EBSCreateShiftSubstitutions
       parameters:
       - description: The id of the Organization that owns this resource
         in: path
@@ -2582,12 +2612,14 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/scheduling/{organizationId}/shiftSubstitutions
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Create Shift Substitutions
     servers:
     - url: https://api.everbridge.net/rest
     - url: https://api.everbridge.eu/rest
   /scheduling/{organizationId}/shiftSubstitutions/{ids}:
     delete:
-      operationId: EBS Delete Shift Substitutions
+      operationId: EBSDeleteShiftSubstitutions
       parameters:
       - description: 'The id of the Organization that owns this resource '
         in: path
@@ -2674,8 +2706,10 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/scheduling/{organizationId}/shiftSubstitutions/{ids}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Delete Shift Substitutions
     get:
-      operationId: EBS Get Shift Substitutions
+      operationId: EBSGetShiftSubstitutions
       parameters:
       - description: The id of the Organization that owns this resource
         in: path
@@ -2815,8 +2849,10 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/scheduling/{organizationId}/shiftSubstitutions/{ids}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Get Shift Substitutions
     put:
-      operationId: EBS Update Shift Substitutions
+      operationId: EBSUpdateShiftSubstitutions
       parameters:
       - description: The id of the Organization that owns this resource
         in: path
@@ -2973,12 +3009,14 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/scheduling/{organizationId}/shiftSubstitutions/{ids}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Update Shift Substitutions
     servers:
     - url: https://api.everbridge.net/rest
     - url: https://api.everbridge.eu/rest
   /scheduling/{organizationId}/staffSchedules:
     get:
-      operationId: EBS List Staff Schedules
+      operationId: EBSListStaffSchedules
       parameters:
       - description: The id of the Organization that owns this resource
         in: path
@@ -3219,8 +3257,10 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/scheduling/{organizationId}/staffSchedules
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS List Staff Schedules
     post:
-      operationId: EBS Create Staff Schedule
+      operationId: EBSCreateStaffSchedule
       parameters:
       - description: The id of the Organization that owns this resource
         in: path
@@ -3529,12 +3569,14 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/scheduling/{organizationId}/staffSchedules
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Create Staff Schedule
     servers:
     - url: https://api.everbridge.net/rest
     - url: https://api.everbridge.eu/rest
   /scheduling/{organizationId}/staffSchedules/{ids}:
     delete:
-      operationId: EBS Delete Staff Schedules
+      operationId: EBSDeleteStaffSchedules
       parameters:
       - description: The id of the Organization that owns this resource
         in: path
@@ -3701,9 +3743,11 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/scheduling/{organizationId}/staffSchedules/{ids}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Delete Staff Schedules
     get:
       description: Get one or more Staff Schedules
-      operationId: EBS Get Staff Schedules
+      operationId: EBSGetStaffSchedules
       parameters:
       - description: The id of the Organization that owns this resource
         in: path
@@ -3887,9 +3931,11 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/scheduling/{organizationId}/staffSchedules/{ids}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Get Staff Schedules
     put:
       description: Update one or more Staff Schedules
-      operationId: EBS Update Staff Schedules
+      operationId: EBSUpdateStaffSchedules
       parameters:
       - description: The id of the Organization that owns this resource
         in: path
@@ -4118,13 +4164,15 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/scheduling/{organizationId}/staffSchedules/{ids}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Update Staff Schedules
     servers:
     - url: https://api.everbridge.net/rest
     - url: https://api.everbridge.eu/rest
   /scheduling/{organizationId}/substitutions:
     get:
       description: List scheduling substitutions (Unavailable/Replacement)
-      operationId: EBS List Scheduling Substitutions
+      operationId: EBSListSchedulingSubstitutions
       parameters:
       - description: The id of the Organization that owns this resource
         in: path
@@ -4195,9 +4243,11 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/scheduling/{organizationId}/substitutions
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS List Scheduling Substitutions
     post:
       description: Create scheduling substitutions (Unavailable/Replacement)
-      operationId: EBS Create Scheduling Substitutions
+      operationId: EBSCreateSchedulingSubstitutions
       parameters:
       - description: The id of the Organization that owns this resource
         in: path
@@ -4299,13 +4349,15 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/scheduling/{organizationId}/substitutions
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Create Scheduling Substitutions
     servers:
     - url: https://api.everbridge.net/rest
     - url: https://api.everbridge.eu/rest
   /scheduling/{organizationId}/substitutions/{ids}:
     delete:
       description: Delete scheduling substitutions (Unavailable/Replacement)
-      operationId: EBS Delete Scheduling Substitutions
+      operationId: EBSDeleteSchedulingSubstitutions
       parameters:
       - description: The id of the Organization that owns this resource
         in: path
@@ -4344,9 +4396,11 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/scheduling/{organizationId}/substitutions/{ids}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Delete Scheduling Substitutions
     get:
       description: Get a single substitution(s) (Unavailable/Replacement)
-      operationId: EBS Get Scheduling Substitutions
+      operationId: EBSGetSchedulingSubstitutions
       parameters:
       - description: The id of the Organization that owns this resource
         in: path
@@ -4400,9 +4454,11 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/scheduling/{organizationId}/substitutions/{ids}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Get Scheduling Substitutions
     put:
       description: Update scheduling substitutions (Unavailable/Replacement)
-      operationId: EBS Update Scheduling Substitutions
+      operationId: EBSUpdateSchedulingSubstitutions
       parameters:
       - description: The id of the Organization that owns this resource
         in: path
@@ -4473,11 +4529,23 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/scheduling/{organizationId}/substitutions/{ids}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Update Scheduling Substitutions
     servers:
     - url: https://api.everbridge.net/rest
     - url: https://api.everbridge.eu/rest
 components:
   schemas:
+    Event:
+      type: object
+      properties:
+        end:
+          type: string
+          description: Event end
+        start:
+          type: string
+          description: Event start
+      description: Event Time Range
     DatesApplicable:
       type: object
       properties:
@@ -4488,14 +4556,14 @@ components:
           type: string
           description: Applicable dates end
       description: Applicable Date Range
-    StaffSubstitutionV2BulkUpdateRequest:
+    StaffSubstitutionV2BulkRequest:
       type: object
       properties:
         data:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/StaffSubstitution'
+          type: array
           description: Data
+          items:
+            $ref: '#/components/schemas/StaffSubstitution'
     StaffingAssignment:
       type: object
       properties:
@@ -4510,6 +4578,14 @@ components:
             description: Substitution Contact IDs
             format: int64
       description: Staffing Assignment
+    StaffSubstitutionV2BulkUpdateRequest:
+      type: object
+      properties:
+        data:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/StaffSubstitution'
+          description: Data
     Recurrence:
       type: object
       properties:
@@ -4524,16 +4600,6 @@ components:
           type: string
           description: Recurrence Rule
       description: Recurrence definition for substitution
-    Event:
-      type: object
-      properties:
-        end:
-          type: string
-          description: Event end
-        start:
-          type: string
-          description: Event start
-      description: Event Time Range
     StaffSubstitution:
       required:
       - type
@@ -4558,271 +4624,29 @@ components:
           type: string
           description: Timezone
       description: Data
-    StaffSubstitutionV2BulkRequest:
-      type: object
-      properties:
-        data:
-          type: array
-          description: Data
-          items:
-            $ref: '#/components/schemas/StaffSubstitution'
-    shiftSubstitutionsRequest:
+    calendarObj:
       properties:
         data:
           properties:
-            recurrence:
-              properties:
-                datesApplicable:
-                  items:
-                    type: string
-                  type: array
-                type:
-                  type: string
-              required:
-              - type
-              - datesApplicable
-              type: object
-            shiftScheduleId:
-              type: number
-            staffAssignment:
-              properties:
-                contactIds:
-                  items:
-                    type: number
-                  type: array
-                type:
-                  type: string
-              required:
-              - type
-              - contactIds
-              type: object
-          required:
-          - recurrence
-          - shiftScheduleId
-          - staffAssignment
-          type: object
-      required:
-      - data
-      type: object
-    shiftSchedulesGetResponse:
-      properties:
-        currentPageNo:
-          type: number
-        data:
-          items:
-            properties:
-              accountId:
-                type: number
-              calendarId:
-                type: number
-              colorIndicator:
+            active:
+              type: boolean
+            emailNotificationEnabled:
+              type: boolean
+            emailNotificationList:
+              items:
                 type: string
-              createdDate:
-                type: string
-              createdId:
-                type: number
-              createdName:
-                type: string
-              datesApplicable:
-                properties:
-                  from:
-                    type: string
-                required:
-                - from
-                type: object
-              id:
-                type: number
-              lastModifiedDate:
-                type: string
-              lastModifiedId:
-                type: number
-              lastModifiedName:
-                type: string
-              name:
-                type: string
-              organizationId:
-                type: number
-              resourceBundleId:
-                type: number
-              shiftTimeZoneString:
-                type: string
-              staffTypeRequired:
-                items: {}
-                type: array
-              status:
-                type: string
-              timeZoneString:
-                type: string
-              type:
-                type: string
-            required:
-            - id
-            - type
-            - accountId
-            - calendarId
-            - colorIndicator
-            - createdDate
-            - createdId
-            - createdName
-            - datesApplicable
-            - lastModifiedDate
-            - lastModifiedId
-            - lastModifiedName
-            - name
-            - organizationId
-            - resourceBundleId
-            - shiftTimeZoneString
-            - staffTypeRequired
-            - status
-            - timeZoneString
-            type: object
-          type: array
-        pageSize:
-          type: number
-        totalCount:
-          type: number
-        totalPageCount:
-          type: number
-      required:
-      - currentPageNo
-      - totalPageCount
-      - totalCount
-      - pageSize
-      - data
-      type: object
-    CreateSubstitution:
-      properties:
-        data:
-          properties:
-            contactId:
-              type: number
-            recurrence:
-              properties:
-                datesApplicable:
-                  properties:
-                    from:
-                      type: string
-                    to:
-                      type: string
-                  required:
-                  - from
-                  - to
-                  type: object
-                event:
-                  properties:
-                    end:
-                      type: string
-                    start:
-                      type: string
-                  required:
-                  - end
-                  - start
-                  type: object
-                type:
-                  type: string
-              required:
-              - type
-              - datesApplicable
-              - event
-              type: object
-            staffAssignment:
-              properties:
-                contactIds:
-                  items:
-                    type: number
-                  type: array
-                type:
-                  type: string
-              required:
-              - type
-              - contactIds
-              type: object
-            timeZoneString:
+              type: array
+            externalId:
               type: string
-          required:
-          - contactId
-          - recurrence
-          - timeZoneString
-          type: object
-      required:
-      - data
-      type: object
-    shiftSchedulesRequest:
-      properties:
-        data:
-          properties:
-            calendarId:
-              type: number
-            colorIndicator:
-              type: string
-            datesApplicable:
-              properties:
-                from:
-                  type: string
-                to: {}
-              required:
-              - from
-              - to
-              type: object
-            groupId:
-              type: number
             name:
               type: string
-            numDays:
-              type: number
-            override:
+            notifyScheduled:
               type: boolean
-            schedule:
-              items:
-                properties:
-                  days:
-                    items:
-                      type: number
-                    type: array
-                  shift:
-                    properties:
-                      end:
-                        type: string
-                      start:
-                        type: string
-                    required:
-                    - start
-                    - end
-                    type: object
-                  type:
-                    type: string
-                required:
-                - days
-                - type
-                - shift
-                type: object
-              type: array
-            sequenced:
-              type: boolean
-            staffTypeRequired:
-              items: {}
-              type: array
-            timeZoneString:
+            visibility:
               type: string
-            weekStartsWith:
-              type: string
-          required:
-          - name
-          - calendarId
-          - timeZoneString
-          - datesApplicable
           type: object
       required:
       - data
-      type: object
-    ZonedDateTimeRange:
-      properties:
-        from:
-          format: date-time
-          type: string
-        to:
-          format: date-time
-          type: string
       type: object
     listCalendars:
       properties:
@@ -4881,235 +4705,6 @@ components:
         totalPageCount:
           type: integer
       type: object
-    FlatAssignmentUnavailability:
-      properties:
-        period:
-          $ref: '#/components/schemas/ZonedDateTimeRange'
-        replacedById:
-          format: int64
-          type: integer
-        staffSubstitutionId:
-          format: int64
-          type: integer
-      type: object
-    createStaffSchedule:
-      properties:
-        data:
-          properties:
-            calendarId:
-              type: number
-            minStaff:
-              type: number
-            name:
-              type: string
-            recurrence:
-              properties:
-                datesApplicable:
-                  properties:
-                    from:
-                      type: string
-                    to:
-                      type: string
-                  required:
-                  - from
-                  type: object
-                everyNRecurrence:
-                  type: number
-                type:
-                  type: string
-              required:
-              - type
-              - datesApplicable
-              type: object
-            seq:
-              type: number
-            shiftScheduleId:
-              type: number
-            staffAssignments:
-              items:
-                properties:
-                  days:
-                    items:
-                      type: number
-                    type: array
-                  ids:
-                    items:
-                      properties:
-                        id:
-                          type: number
-                        type:
-                          type: string
-                      required:
-                      - id
-                      - type
-                      type: object
-                    type: array
-                  type:
-                    type: string
-                required:
-                - type
-                - days
-                - ids
-                type: object
-              type: array
-            staffEachDay:
-              type: boolean
-            status:
-              type: string
-            type:
-              type: string
-          required:
-          - name
-          - recurrence
-          - shiftScheduleId
-          - staffAssignments
-          type: object
-      required:
-      - data
-      type: object
-    substitution:
-      properties:
-        data:
-          properties:
-            accountId:
-              type: number
-            contactId:
-              type: number
-            createdDate:
-              type: string
-            createdId:
-              type: number
-            createdName:
-              type: string
-            id:
-              type: number
-            lastModifiedDate:
-              type: string
-            lastModifiedId:
-              type: number
-            lastModifiedName:
-              type: string
-            organizationId:
-              type: number
-            recurrence:
-              properties:
-                datesApplicable:
-                  properties:
-                    from:
-                      type: string
-                    to:
-                      type: string
-                  type: object
-                event:
-                  properties:
-                    end:
-                      type: string
-                    start:
-                      type: string
-                  type: object
-                type:
-                  type: string
-              type: object
-            resourceBundleId:
-              type: number
-            staffAssignment:
-              properties:
-                contactIds:
-                  items:
-                    type: number
-                  type: array
-                type:
-                  type: string
-              type: object
-            status:
-              type: string
-            timeZoneString:
-              type: string
-            type:
-              type: string
-          type: object
-      type: object
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
-    UpdateSubstitution:
-      properties:
-        data:
-          properties:
-            contactId:
-              type: number
-            recurrence:
-              properties:
-                datesApplicable:
-                  properties:
-                    from:
-                      type: string
-                    to:
-                      type: string
-                  type: object
-                event:
-                  properties:
-                    end:
-                      type: string
-                    start:
-                      type: string
-                  type: object
-                type:
-                  type: string
-              type: object
-            staffAssignment:
-              properties:
-                contactIds:
-                  items:
-                    type: number
-                  type: array
-                type:
-                  type: string
-              type: object
-            timeZoneString:
-              type: string
-          type: object
-      required:
-      - data
-      type: object
-    calendarObj:
-      properties:
-        data:
-          properties:
-            active:
-              type: boolean
-            emailNotificationEnabled:
-              type: boolean
-            emailNotificationList:
-              items:
-                type: string
-              type: array
-            externalId:
-              type: string
-            name:
-              type: string
-            notifyScheduled:
-              type: boolean
-            visibility:
-              type: string
-          type: object
-      required:
-      - data
-      type: object
-    FlatAssignmentReplacement:
-      properties:
-        replacedContactId:
-          format: int64
-          type: integer
-        replacementPeriod:
-          $ref: '#/components/schemas/ZonedDateTimeRange'
-        staffSubstitutionId:
-          format: int64
-          type: integer
-      type: object
     FlatAssignment:
       properties:
         contactId:
@@ -5137,6 +4732,108 @@ components:
             $ref: '#/components/schemas/FlatAssignmentUnavailability'
           type: array
           uniqueItems: true
+      type: object
+    CreateSubstitution:
+      properties:
+        data:
+          properties:
+            contactId:
+              type: number
+            recurrence:
+              properties:
+                datesApplicable:
+                  properties:
+                    from:
+                      type: string
+                    to:
+                      type: string
+                  required:
+                  - from
+                  - to
+                  type: object
+                event:
+                  properties:
+                    end:
+                      type: string
+                    start:
+                      type: string
+                  required:
+                  - end
+                  - start
+                  type: object
+                type:
+                  type: string
+              required:
+              - type
+              - datesApplicable
+              - event
+              type: object
+            staffAssignment:
+              properties:
+                contactIds:
+                  items:
+                    type: number
+                  type: array
+                type:
+                  type: string
+              required:
+              - type
+              - contactIds
+              type: object
+            timeZoneString:
+              type: string
+          required:
+          - contactId
+          - recurrence
+          - timeZoneString
+          type: object
+      required:
+      - data
+      type: object
+    ZonedDateTimeRange:
+      properties:
+        from:
+          format: date-time
+          type: string
+        to:
+          format: date-time
+          type: string
+      type: object
+    FlatCalendarEvent:
+      properties:
+        assignments:
+          items:
+            $ref: '#/components/schemas/FlatAssignment'
+          type: array
+          uniqueItems: true
+        calendarId:
+          format: int64
+          type: integer
+        end:
+          format: date-time
+          type: string
+        id:
+          type: string
+        organizationId:
+          format: int64
+          type: integer
+        shiftScheduleId:
+          format: int64
+          type: integer
+        start:
+          format: date-time
+          type: string
+      type: object
+    FlatAssignmentReplacement:
+      properties:
+        replacedContactId:
+          format: int64
+          type: integer
+        replacementPeriod:
+          $ref: '#/components/schemas/ZonedDateTimeRange'
+        staffSubstitutionId:
+          format: int64
+          type: integer
       type: object
     schedulingAudits:
       properties:
@@ -5329,46 +5026,81 @@ components:
         totalPageCount:
           type: number
       type: object
-    staffSchedule:
+    updateStaffSchedule:
       properties:
         data:
           properties:
-            accountId:
-              type: number
             calendarId:
               type: number
-            createdDate:
-              type: string
-            createdId:
-              type: number
-            createdName:
-              type: string
-            id:
-              type: number
-            lastModifiedDate:
-              type: string
-            lastModifiedId:
-              type: number
-            lastModifiedName:
-              type: string
             minStaff:
               type: number
             name:
               type: string
-            onCallReminder:
-              properties:
-                enabled:
-                  type: boolean
-              required:
-              - enabled
-              type: object
-            organizationId:
-              type: number
             recurrence:
               properties:
                 datesApplicable:
                   properties:
                     from:
+                      type: string
+                    to:
+                      type: string
+                  type: object
+                everyNRecurrence:
+                  type: number
+                type:
+                  type: string
+              type: object
+            seq:
+              type: number
+            shiftScheduleId:
+              type: number
+            staffAssignments:
+              items:
+                properties:
+                  days:
+                    items:
+                      type: number
+                    type: array
+                  ids:
+                    items:
+                      properties:
+                        id:
+                          type: number
+                        type:
+                          type: string
+                      type: object
+                    type: array
+                  type:
+                    type: string
+                type: object
+              type: array
+            staffEachDay:
+              type: boolean
+            status:
+              type: string
+            type:
+              type: string
+          type: object
+      required:
+      - data
+      type: object
+    createStaffSchedule:
+      properties:
+        data:
+          properties:
+            calendarId:
+              type: number
+            minStaff:
+              type: number
+            name:
+              type: string
+            recurrence:
+              properties:
+                datesApplicable:
+                  properties:
+                    from:
+                      type: string
+                    to:
                       type: string
                   required:
                   - from
@@ -5380,14 +5112,9 @@ components:
               required:
               - type
               - datesApplicable
-              - everyNRecurrence
               type: object
-            resourceBundleId:
-              type: number
             seq:
               type: number
-            sequencingOverrideAllowed:
-              type: boolean
             shiftScheduleId:
               type: number
             staffAssignments:
@@ -5424,31 +5151,75 @@ components:
             type:
               type: string
           required:
-          - id
-          - type
-          - accountId
-          - calendarId
-          - createdDate
-          - createdId
-          - createdName
-          - lastModifiedDate
-          - lastModifiedId
-          - lastModifiedName
-          - minStaff
           - name
-          - onCallReminder
-          - organizationId
           - recurrence
-          - resourceBundleId
-          - seq
-          - sequencingOverrideAllowed
           - shiftScheduleId
           - staffAssignments
-          - staffEachDay
-          - status
           type: object
       required:
       - data
+      type: object
+    substitution:
+      properties:
+        data:
+          properties:
+            accountId:
+              type: number
+            contactId:
+              type: number
+            createdDate:
+              type: string
+            createdId:
+              type: number
+            createdName:
+              type: string
+            id:
+              type: number
+            lastModifiedDate:
+              type: string
+            lastModifiedId:
+              type: number
+            lastModifiedName:
+              type: string
+            organizationId:
+              type: number
+            recurrence:
+              properties:
+                datesApplicable:
+                  properties:
+                    from:
+                      type: string
+                    to:
+                      type: string
+                  type: object
+                event:
+                  properties:
+                    end:
+                      type: string
+                    start:
+                      type: string
+                  type: object
+                type:
+                  type: string
+              type: object
+            resourceBundleId:
+              type: number
+            staffAssignment:
+              properties:
+                contactIds:
+                  items:
+                    type: number
+                  type: array
+                type:
+                  type: string
+              type: object
+            status:
+              type: string
+            timeZoneString:
+              type: string
+            type:
+              type: string
+          type: object
       type: object
     listStaffSchedules:
       properties:
@@ -5544,6 +5315,44 @@ components:
           type: number
         totalPageCount:
           type: number
+      type: object
+    shiftSubstitutionsRequest:
+      properties:
+        data:
+          properties:
+            recurrence:
+              properties:
+                datesApplicable:
+                  items:
+                    type: string
+                  type: array
+                type:
+                  type: string
+              required:
+              - type
+              - datesApplicable
+              type: object
+            shiftScheduleId:
+              type: number
+            staffAssignment:
+              properties:
+                contactIds:
+                  items:
+                    type: number
+                  type: array
+                type:
+                  type: string
+              required:
+              - type
+              - contactIds
+              type: object
+          required:
+          - recurrence
+          - shiftScheduleId
+          - staffAssignment
+          type: object
+      required:
+      - data
       type: object
     shiftSchedulesCreateResponse:
       properties:
@@ -5641,6 +5450,114 @@ components:
           - status
           - timeZoneString
           - weekStartsWith
+          type: object
+      required:
+      - data
+      type: object
+    UpdateSubstitution:
+      properties:
+        data:
+          properties:
+            contactId:
+              type: number
+            recurrence:
+              properties:
+                datesApplicable:
+                  properties:
+                    from:
+                      type: string
+                    to:
+                      type: string
+                  type: object
+                event:
+                  properties:
+                    end:
+                      type: string
+                    start:
+                      type: string
+                  type: object
+                type:
+                  type: string
+              type: object
+            staffAssignment:
+              properties:
+                contactIds:
+                  items:
+                    type: number
+                  type: array
+                type:
+                  type: string
+              type: object
+            timeZoneString:
+              type: string
+          type: object
+      required:
+      - data
+      type: object
+    shiftSchedulesRequest:
+      properties:
+        data:
+          properties:
+            calendarId:
+              type: number
+            colorIndicator:
+              type: string
+            datesApplicable:
+              properties:
+                from:
+                  type: string
+                to: {}
+              required:
+              - from
+              - to
+              type: object
+            groupId:
+              type: number
+            name:
+              type: string
+            numDays:
+              type: number
+            override:
+              type: boolean
+            schedule:
+              items:
+                properties:
+                  days:
+                    items:
+                      type: number
+                    type: array
+                  shift:
+                    properties:
+                      end:
+                        type: string
+                      start:
+                        type: string
+                    required:
+                    - start
+                    - end
+                    type: object
+                  type:
+                    type: string
+                required:
+                - days
+                - type
+                - shift
+                type: object
+              type: array
+            sequenced:
+              type: boolean
+            staffTypeRequired:
+              items: {}
+              type: array
+            timeZoneString:
+              type: string
+            weekStartsWith:
+              type: string
+          required:
+          - name
+          - calendarId
+          - timeZoneString
+          - datesApplicable
           type: object
       required:
       - data
@@ -5779,57 +5696,71 @@ components:
         totalPageCount:
           type: integer
       type: object
-    FlatCalendarEvent:
-      properties:
-        assignments:
-          items:
-            $ref: '#/components/schemas/FlatAssignment'
-          type: array
-          uniqueItems: true
-        calendarId:
-          format: int64
-          type: integer
-        end:
-          format: date-time
-          type: string
-        id:
-          type: string
-        organizationId:
-          format: int64
-          type: integer
-        shiftScheduleId:
-          format: int64
-          type: integer
-        start:
-          format: date-time
-          type: string
-      type: object
-    updateStaffSchedule:
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
+    staffSchedule:
       properties:
         data:
           properties:
+            accountId:
+              type: number
             calendarId:
               type: number
+            createdDate:
+              type: string
+            createdId:
+              type: number
+            createdName:
+              type: string
+            id:
+              type: number
+            lastModifiedDate:
+              type: string
+            lastModifiedId:
+              type: number
+            lastModifiedName:
+              type: string
             minStaff:
               type: number
             name:
               type: string
+            onCallReminder:
+              properties:
+                enabled:
+                  type: boolean
+              required:
+              - enabled
+              type: object
+            organizationId:
+              type: number
             recurrence:
               properties:
                 datesApplicable:
                   properties:
                     from:
                       type: string
-                    to:
-                      type: string
+                  required:
+                  - from
                   type: object
                 everyNRecurrence:
                   type: number
                 type:
                   type: string
+              required:
+              - type
+              - datesApplicable
+              - everyNRecurrence
               type: object
+            resourceBundleId:
+              type: number
             seq:
               type: number
+            sequencingOverrideAllowed:
+              type: boolean
             shiftScheduleId:
               type: number
             staffAssignments:
@@ -5846,10 +5777,17 @@ components:
                           type: number
                         type:
                           type: string
+                      required:
+                      - id
+                      - type
                       type: object
                     type: array
                   type:
                     type: string
+                required:
+                - type
+                - days
+                - ids
                 type: object
               type: array
             staffEachDay:
@@ -5858,8 +5796,128 @@ components:
               type: string
             type:
               type: string
+          required:
+          - id
+          - type
+          - accountId
+          - calendarId
+          - createdDate
+          - createdId
+          - createdName
+          - lastModifiedDate
+          - lastModifiedId
+          - lastModifiedName
+          - minStaff
+          - name
+          - onCallReminder
+          - organizationId
+          - recurrence
+          - resourceBundleId
+          - seq
+          - sequencingOverrideAllowed
+          - shiftScheduleId
+          - staffAssignments
+          - staffEachDay
+          - status
           type: object
       required:
+      - data
+      type: object
+    FlatAssignmentUnavailability:
+      properties:
+        period:
+          $ref: '#/components/schemas/ZonedDateTimeRange'
+        replacedById:
+          format: int64
+          type: integer
+        staffSubstitutionId:
+          format: int64
+          type: integer
+      type: object
+    shiftSchedulesGetResponse:
+      properties:
+        currentPageNo:
+          type: number
+        data:
+          items:
+            properties:
+              accountId:
+                type: number
+              calendarId:
+                type: number
+              colorIndicator:
+                type: string
+              createdDate:
+                type: string
+              createdId:
+                type: number
+              createdName:
+                type: string
+              datesApplicable:
+                properties:
+                  from:
+                    type: string
+                required:
+                - from
+                type: object
+              id:
+                type: number
+              lastModifiedDate:
+                type: string
+              lastModifiedId:
+                type: number
+              lastModifiedName:
+                type: string
+              name:
+                type: string
+              organizationId:
+                type: number
+              resourceBundleId:
+                type: number
+              shiftTimeZoneString:
+                type: string
+              staffTypeRequired:
+                items: {}
+                type: array
+              status:
+                type: string
+              timeZoneString:
+                type: string
+              type:
+                type: string
+            required:
+            - id
+            - type
+            - accountId
+            - calendarId
+            - colorIndicator
+            - createdDate
+            - createdId
+            - createdName
+            - datesApplicable
+            - lastModifiedDate
+            - lastModifiedId
+            - lastModifiedName
+            - name
+            - organizationId
+            - resourceBundleId
+            - shiftTimeZoneString
+            - staffTypeRequired
+            - status
+            - timeZoneString
+            type: object
+          type: array
+        pageSize:
+          type: number
+        totalCount:
+          type: number
+        totalPageCount:
+          type: number
+      required:
+      - currentPageNo
+      - totalPageCount
+      - totalCount
+      - pageSize
       - data
       type: object
   securitySchemes:

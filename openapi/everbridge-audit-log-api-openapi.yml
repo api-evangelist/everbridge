@@ -13,7 +13,7 @@ paths:
   /reports/auditLog:
     get:
       description: Retrieve event log report data
-      operationId: EBS Get Audit Log
+      operationId: EBSGetAuditLog
       parameters:
       - description: Start date in format yyyy-MM-ddTHH:MM:SS
         example: '2026-05-01T08:00:00'
@@ -97,6 +97,8 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/reports/auditLog
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Get Audit Log
 components:
   schemas:
     DataPage:

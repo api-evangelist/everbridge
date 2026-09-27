@@ -197,7 +197,7 @@ paths:
     patch:
       tags:
       - Plan APIs
-      operationId: partial update plan
+      operationId: partialUpdatePlan
       summary: Partial Update plan
       description: partial Updates an existing Comms plan.
       requestBody:
@@ -257,6 +257,8 @@ paths:
           integration.request.path.planId: method.request.path.planId
         passthroughBehavior: when_no_match
         connectionType: VPC_LINK
+      x-operation-id-source: normalized
+      x-operation-id-original: partial update plan
     delete:
       tags:
       - Plan APIs
@@ -304,10 +306,6 @@ paths:
         connectionType: VPC_LINK
 components:
   schemas:
-    Tag:
-      type: string
-      description: A value used to contain a simple categorization.
-      example: eventType:hurricane
     UpsertPlanRequest:
       type: object
       required:
@@ -344,35 +342,6 @@ components:
           items:
             type: string
           description: A list of communication template IDs for intended for closing communications.
-    PlanApiPaginatedResponse:
-      type: object
-      description: A page of data from an endpoint.
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/PlanBase'
-        pages:
-          type: object
-          properties:
-            currentPage:
-              type: number
-              description: The requested page number.
-            pageSize:
-              type: number
-              description: The requested page size.
-            pageCount:
-              type: number
-              description: The number of elements in the current page.
-            totalPages:
-              type: number
-              description: The total number of pages available for request.
-            maxSize:
-              type: number
-              description: The maximum size of a single page that is allowed by the API.
-            totalCount:
-              type: number
-              description: The total number of elements across all pages.
     PlanDetail:
       type: object
       properties:
@@ -432,6 +401,43 @@ components:
           items:
             type: string
           description: A list of communication template IDs for intended for closing communications.
+    PlanApiPaginatedResponse:
+      type: object
+      description: A page of data from an endpoint.
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlanBase'
+        pages:
+          type: object
+          properties:
+            currentPage:
+              type: number
+              description: The requested page number.
+            pageSize:
+              type: number
+              description: The requested page size.
+            pageCount:
+              type: number
+              description: The number of elements in the current page.
+            totalPages:
+              type: number
+              description: The total number of pages available for request.
+            maxSize:
+              type: number
+              description: The maximum size of a single page that is allowed by the API.
+            totalCount:
+              type: number
+              description: The total number of elements across all pages.
+    CommsResponse:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the communication that was launched.
     PlanBase:
       type: object
       required:
@@ -492,14 +498,10 @@ components:
         lastUsedAt:
           type: string
           description: ISO 8601 formatted date-time string representing when the plan was last updated by the logged in user.
-    CommsResponse:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          type: string
-          description: The ID of the communication that was launched.
+    Tag:
+      type: string
+      description: A value used to contain a simple categorization.
+      example: eventType:hurricane
   securitySchemes:
     API_Authorizer:
       type: apiKey

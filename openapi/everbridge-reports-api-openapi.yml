@@ -18,7 +18,7 @@ paths:
     get:
       deprecated: false
       description: Retrieve the report of a notification within an organization
-      operationId: EBS Get Notification Report
+      operationId: EBSGetNotificationReport
       parameters:
       - description: Everbridge Organization id. Available on manager portal (Settings --> Organization --> Base Information)
         in: path
@@ -223,13 +223,15 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/notificationReports/{organizationId}/{notificationId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Get Notification Report
     servers:
     - url: https://api.everbridge.net/rest
     - url: https://api.everbridge.eu/rest
   /notifications/{organizationId}/reports:
     get:
       description: Retrieve all mass notifications ids for an organization.
-      operationId: EBS Mass Notification Report
+      operationId: EBSMassNotificationReport
       parameters:
       - description: The ID of the organization containing the notification reports
         in: path
@@ -315,6 +317,8 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/notifications/{organizationId}/reports
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Mass Notification Report
     servers:
     - url: https://api.everbridge.net/rest
     - url: https://api.everbridge.eu/rest
@@ -629,24 +633,12 @@ paths:
       url: https://api.snapcomms.com/mock
 components:
   schemas:
-    RestfulCollectionResult:
-      properties:
-        currentPageUri:
-          type: string
-        firstPageUri:
-          type: string
-        lastPageUri:
-          type: string
-        message:
-          type: string
-        nextPageUri:
-          type: string
-        page:
-          $ref: '#/components/schemas/DataPageObject'
-        previousPageUri:
-          type: string
-      title: RestfulCollectionResult
-      type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
     DataPageObject:
       properties:
         currentPageNo:
@@ -676,12 +668,24 @@ components:
           type: integer
       title: DataPage«object»
       type: object
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
+    RestfulCollectionResult:
+      properties:
+        currentPageUri:
+          type: string
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        nextPageUri:
+          type: string
+        page:
+          $ref: '#/components/schemas/DataPageObject'
+        previousPageUri:
+          type: string
+      title: RestfulCollectionResult
+      type: object
     ReportPublishingStatisticsResponse:
       type: object
       properties:
@@ -810,6 +814,96 @@ components:
                 type: string
               value:
                 type: string
+    ReportSuccesReportResponse:
+      type: object
+      properties:
+        details:
+          type: array
+          items:
+            required:
+            - userName
+            - contentVersion
+            - reached
+            - success
+            - totalSuccess
+            - consumerId
+            - domainName
+            - itemID
+            - lastConnectDate
+            - completedCount
+            - dismissedCount
+            - alertPopupCount
+            - readLaterCount
+            - timeOutCount
+            - urgentDisplayCount
+            - organizationalUnit
+            - popupOnScreenTime
+            - alertOnScreenTime
+            - urgentOnScreenTime
+            type: object
+            properties:
+              userName:
+                type: string
+              contentVersion:
+                type: string
+              reached:
+                type: string
+              success:
+                type: string
+              totalSuccess:
+                type: string
+              consumerId:
+                type: string
+              domainName:
+                type: string
+              itemID:
+                type: string
+              lastConnectDate:
+                type: string
+              completedCount:
+                type: string
+              dismissedCount:
+                type: string
+              alertPopupCount:
+                type: string
+              readLaterCount:
+                type: string
+              timeOutCount:
+                type: string
+              urgentDisplayCount:
+                type: string
+              organizationalUnit: {}
+              popupOnScreenTime:
+                type: string
+              alertOnScreenTime:
+                type: string
+              urgentOnScreenTime:
+                type: string
+        summary:
+          type: object
+          properties:
+            _AssetType:
+              type: string
+            assetName:
+              type: string
+            _AssetTypeId:
+              type: string
+            assetType:
+              type: string
+            assetTypeName:
+              type: string
+            _AssetStatus:
+              type: string
+            lastPublishDate:
+              type: string
+            publishCount:
+              type: string
+            targetCount:
+              type: string
+            publishDate:
+              type: string
+            campaignName:
+              type: string
     ReportQuestionnaireResponsesResponse:
       type: object
       properties:
@@ -919,96 +1013,6 @@ components:
           type: string
         endDate:
           type: string
-    ReportSuccesReportResponse:
-      type: object
-      properties:
-        details:
-          type: array
-          items:
-            required:
-            - userName
-            - contentVersion
-            - reached
-            - success
-            - totalSuccess
-            - consumerId
-            - domainName
-            - itemID
-            - lastConnectDate
-            - completedCount
-            - dismissedCount
-            - alertPopupCount
-            - readLaterCount
-            - timeOutCount
-            - urgentDisplayCount
-            - organizationalUnit
-            - popupOnScreenTime
-            - alertOnScreenTime
-            - urgentOnScreenTime
-            type: object
-            properties:
-              userName:
-                type: string
-              contentVersion:
-                type: string
-              reached:
-                type: string
-              success:
-                type: string
-              totalSuccess:
-                type: string
-              consumerId:
-                type: string
-              domainName:
-                type: string
-              itemID:
-                type: string
-              lastConnectDate:
-                type: string
-              completedCount:
-                type: string
-              dismissedCount:
-                type: string
-              alertPopupCount:
-                type: string
-              readLaterCount:
-                type: string
-              timeOutCount:
-                type: string
-              urgentDisplayCount:
-                type: string
-              organizationalUnit: {}
-              popupOnScreenTime:
-                type: string
-              alertOnScreenTime:
-                type: string
-              urgentOnScreenTime:
-                type: string
-        summary:
-          type: object
-          properties:
-            _AssetType:
-              type: string
-            assetName:
-              type: string
-            _AssetTypeId:
-              type: string
-            assetType:
-              type: string
-            assetTypeName:
-              type: string
-            _AssetStatus:
-              type: string
-            lastPublishDate:
-              type: string
-            publishCount:
-              type: string
-            targetCount:
-              type: string
-            publishDate:
-              type: string
-            campaignName:
-              type: string
   securitySchemes:
     API_Authorizer:
       description: oAuth Token

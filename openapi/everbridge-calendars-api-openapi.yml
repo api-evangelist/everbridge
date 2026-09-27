@@ -12,7 +12,7 @@ tags:
 paths:
   /calendars/{organizationId}:
     get:
-      operationId: EBS Query Calendars
+      operationId: EBSQueryCalendars
       parameters:
       - description: The ID of the organization containing the calendars.
         in: path
@@ -58,6 +58,8 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/calendars/{organizationId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Query Calendars
 components:
   schemas:
     DataPageCalendarWrapper:
@@ -87,6 +89,23 @@ components:
         totalPageCount:
           format: int32
           type: integer
+      type: object
+    CalendarWrapperCollectionResult:
+      properties:
+        currentPageUri:
+          type: string
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        nextPageUri:
+          type: string
+        page:
+          $ref: '#/components/schemas/DataPageCalendarWrapper'
+        previousPageUri:
+          type: string
       type: object
     CalendarWrapper:
       properties:
@@ -147,23 +166,6 @@ components:
           enum:
           - A
           - D
-          type: string
-      type: object
-    CalendarWrapperCollectionResult:
-      properties:
-        currentPageUri:
-          type: string
-        firstPageUri:
-          type: string
-        lastPageUri:
-          type: string
-        message:
-          type: string
-        nextPageUri:
-          type: string
-        page:
-          $ref: '#/components/schemas/DataPageCalendarWrapper'
-        previousPageUri:
           type: string
       type: object
   securitySchemes:

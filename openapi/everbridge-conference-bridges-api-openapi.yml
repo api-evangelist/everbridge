@@ -13,7 +13,7 @@ paths:
   /conferenceBridges/{organizationId}:
     get:
       description: List all the conference bridges for an org.
-      operationId: EBS List Conference Bridges
+      operationId: EBSListConferenceBridges
       parameters:
       - description: The ID of the organization
         in: path
@@ -137,9 +137,11 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/conferenceBridges/{organizationId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS List Conference Bridges
     post:
       description: Create a conference bridge.
-      operationId: EBS Create Conference Bridge
+      operationId: EBSCreateConferenceBridge
       parameters:
       - description: The ID of the organization
         in: path
@@ -249,10 +251,12 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/conferenceBridges/{organizationId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Create Conference Bridge
   /conferenceBridges/{organizationId}/{id}:
     delete:
       description: Delete a specific conference bridge.
-      operationId: EBS Delete Conference Bridge
+      operationId: EBSDeleteConferenceBridge
       parameters:
       - description: The ID of the organization
         in: path
@@ -346,9 +350,11 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/conferenceBridges/{organizationId}/{id}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Delete Conference Bridge
     get:
       description: Get a specific conference bridge.
-      operationId: EBS Get Conference Bridge
+      operationId: EBSGetConferenceBridge
       parameters:
       - description: The ID of the organization
         in: path
@@ -457,9 +463,11 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/conferenceBridges/{organizationId}/{id}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Get Conference Bridge
     put:
       description: Update a specific conference bridge.
-      operationId: EBS Update Conference Bridge
+      operationId: EBSUpdateConferenceBridge
       parameters:
       - description: The ID of the organization
         in: path
@@ -573,8 +581,39 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/conferenceBridges/{organizationId}/{id}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Update Conference Bridge
 components:
   schemas:
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
+    ConferenceBridgeUpdateRequestSchema:
+      properties:
+        countryCode:
+          type: string
+        countryName:
+          type: string
+        name:
+          type: string
+        number:
+          type: string
+        steps:
+          items:
+            properties:
+              type:
+                type: string
+              value:
+                type: string
+            required:
+            - type
+            - value
+            type: object
+          type: array
+      type: object
     ConferenceBridgeResponseSchema:
       properties:
         firstPageUri:
@@ -663,17 +702,6 @@ components:
       - lastPageUri
       - page
       type: object
-    ConferenceBridgePostResponseSchema:
-      properties:
-        baseUri:
-          type: string
-        id:
-          type: integer
-        instanceUri:
-          type: string
-        message:
-          type: string
-      type: object
     ConferenceBridgeRequestSchema:
       properties:
         countryCode:
@@ -701,34 +729,16 @@ components:
       - number
       - name
       type: object
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
-    ConferenceBridgeUpdateRequestSchema:
+    ConferenceBridgePostResponseSchema:
       properties:
-        countryCode:
+        baseUri:
           type: string
-        countryName:
+        id:
+          type: integer
+        instanceUri:
           type: string
-        name:
+        message:
           type: string
-        number:
-          type: string
-        steps:
-          items:
-            properties:
-              type:
-                type: string
-              value:
-                type: string
-            required:
-            - type
-            - value
-            type: object
-          type: array
       type: object
   securitySchemes:
     API_Authorizer:

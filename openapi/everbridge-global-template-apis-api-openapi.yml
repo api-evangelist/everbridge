@@ -323,6 +323,57 @@ paths:
         connectionType: VPC_LINK
 components:
   schemas:
+    GlobalTemplateImportToOrgResponse:
+      type: object
+      description: Response after importing a global template to an org.
+      properties:
+        templateId:
+          type: string
+          format: uuid
+          description: The ID of the newly created org template.
+        templateName:
+          type: string
+          description: The name of the newly created org template.
+        message:
+          type: string
+          description: Success message.
+      required:
+      - templateId
+      - templateName
+      - message
+    GlobalTemplateImportToOrgRequest:
+      type: object
+      description: Request to import a global template into an organization.
+      properties:
+        globalTemplateId:
+          type: string
+          format: uuid
+          description: The ID of the global template to import.
+        category:
+          type: object
+          properties:
+            id:
+              type: string
+              description: The org category ID to assign to the imported template.
+            name:
+              type: string
+              description: The org category name.
+          required:
+          - id
+          - name
+      required:
+      - globalTemplateId
+      - category
+    GlobalTemplateImportRequest:
+      type: object
+      description: Request to publish/create a global template from an org template.
+      properties:
+        templateId:
+          type: string
+          format: uuid
+          description: The ID of the org template to publish to the global library.
+      required:
+      - templateId
     GlobalTemplateResponse:
       type: object
       description: A global template from the Global Template Library.
@@ -425,57 +476,6 @@ components:
       - alreadyImported
       - importCount
       - existingTemplates
-    GlobalTemplateImportToOrgRequest:
-      type: object
-      description: Request to import a global template into an organization.
-      properties:
-        globalTemplateId:
-          type: string
-          format: uuid
-          description: The ID of the global template to import.
-        category:
-          type: object
-          properties:
-            id:
-              type: string
-              description: The org category ID to assign to the imported template.
-            name:
-              type: string
-              description: The org category name.
-          required:
-          - id
-          - name
-      required:
-      - globalTemplateId
-      - category
-    GlobalTemplateImportToOrgResponse:
-      type: object
-      description: Response after importing a global template to an org.
-      properties:
-        templateId:
-          type: string
-          format: uuid
-          description: The ID of the newly created org template.
-        templateName:
-          type: string
-          description: The name of the newly created org template.
-        message:
-          type: string
-          description: Success message.
-      required:
-      - templateId
-      - templateName
-      - message
-    GlobalTemplateImportRequest:
-      type: object
-      description: Request to publish/create a global template from an org template.
-      properties:
-        templateId:
-          type: string
-          format: uuid
-          description: The ID of the org template to publish to the global library.
-      required:
-      - templateId
   securitySchemes:
     API_Authorizer:
       type: apiKey

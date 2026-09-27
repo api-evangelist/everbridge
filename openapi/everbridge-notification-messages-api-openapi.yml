@@ -289,14 +289,65 @@ paths:
         passthroughBehavior: when_no_match
 components:
   schemas:
-    ReplyMessageResponse:
+    Audio:
       required:
       - id
+      - metadata
+      - name
       type: object
       properties:
         id:
           type: string
-          description: Message ID.
+          description: Audio ID.
+        name:
+          type: string
+          description: Audio name
+        metadata:
+          $ref: '#/components/schemas/AudioMetadata'
+      description: Message audio resources.
+    LocationResponse:
+      required:
+      - latitude
+      - longitude
+      type: object
+      properties:
+        latitude:
+          type: number
+          description: Location latitude
+          format: double
+          example: 44.999326
+        longitude:
+          type: number
+          description: Location longitude
+          format: double
+          example: -123.126128
+      description: Location info.
+    MessageReply:
+      required:
+      - body
+      type: object
+      properties:
+        body:
+          type: string
+          description: Message content.
+        location:
+          $ref: '#/components/schemas/LocationResponse'
+        images:
+          type: array
+          description: Message images.
+          items:
+            $ref: '#/components/schemas/ImageResponse'
+        attachments:
+          type: array
+          description: Message attachments.
+          items:
+            $ref: '#/components/schemas/Attachment'
+        audios:
+          type: array
+          description: Message audio resources.
+          items:
+            $ref: '#/components/schemas/Audio'
+      description: Message replies.
     ImageResponse:
       required:
       - id
@@ -313,6 +364,71 @@ components:
         metadata:
           $ref: '#/components/schemas/ImageMetadata'
       description: Message images.
+    MessageResponseForQuery:
+      required:
+      - body
+      - id
+      - priority
+      - sender
+      - setting
+      - source
+      - state
+      - title
+      type: object
+      properties:
+        id:
+          type: string
+          description: Message ID.
+        title:
+          type: string
+          description: Message title.
+        body:
+          type: string
+          description: Message content.
+        priority:
+          type: boolean
+          description: Message priority.
+        sender:
+          $ref: '#/components/schemas/Sender'
+        source:
+          type: string
+          description: Message source.
+        setting:
+          $ref: '#/components/schemas/MessageSetting'
+        state:
+          $ref: '#/components/schemas/MessageState'
+        incidentName:
+          type: string
+          description: Incident name. Only available if the message was triggered from an incident.
+        createdAt:
+          type: integer
+          description: Message created time.
+          format: int64
+    SurveyRequest:
+      required:
+      - surveyId
+      - surveyOptionId
+      type: object
+      properties:
+        surveyId:
+          type: string
+          description: Survey ID.
+        surveyOptionId:
+          type: string
+          description: Selected Survey Option ID.
+    SurveyResult:
+      required:
+      - respondedTime
+      - selectedOption
+      type: object
+      properties:
+        selectedOption:
+          $ref: '#/components/schemas/SurveyOption'
+        respondedTime:
+          type: integer
+          description: The time that the Contact's survey response was sent.
+          format: int64
+      description: Message survey results.
     MessageResponse:
       required:
       - body
@@ -387,18 +503,56 @@ components:
           description: Message replies.
           items:
             $ref: '#/components/schemas/MessageReply'
-    SurveyResponse:
+    SurveyOption:
       required:
-      - surveyId
-      - surveyOptionId
+      - id
+      - text
       type: object
       properties:
-        surveyId:
+        id:
           type: string
-          description: Survey ID.
-        surveyOptionId:
+          description: Question option ID
+        text:
           type: string
-          description: Selected Survey Option ID.
+          description: Question option value
+      description: Selected option.
+    ReplyMessageRequest:
+      required:
+      - body
+      type: object
+      properties:
+        body:
+          maxLength: 1000
+          minLength: 1
+          type: string
+          description: Text to include as the message reply.
+        location:
+          $ref: '#/components/schemas/LocationRequest'
+        images:
+          type: array
+          description: Message images. If a reply is made with images, the images must be uploaded first (using Image Upload API) to generate the required IDs.
+          items:
+            $ref: '#/components/schemas/ImageRequest'
+    ImageMetadata:
+      required:
+      - contentType
+      type: object
+      properties:
+        contentType:
+          type: string
+          description: File type.
+          example: image/png
+      description: Image metadata.
+    AudioMetadata:
+      required:
+      - contentType
+      type: object
+      properties:
+        contentType:
+          type: string
+          description: File type.
+          example: image/png
+      description: Audio metadata.
     LocationRequest:
       required:
       - latitude
@@ -436,23 +590,84 @@ components:
         metadata:
           $ref: '#/components/schemas/AttachmentMetadata'
       description: Message attachments.
-    LocationResponse:
+    Survey:
       required:
-      - latitude
-      - longitude
+      - id
+      - inputOptionAllowable
+      - options
+      - question
       type: object
       properties:
-        latitude:
-          type: number
-          description: Location latitude
-          format: double
-          example: 44.999326
-        longitude:
-          type: number
-          description: Location longitude
-          format: double
-          example: -123.126128
-      description: Location info.
+        id:
+          type: string
+          description: Survey ID
+        question:
+          type: string
+          description: Survey question
+        options:
+          type: array
+          description: Survey question options
+          items:
+            $ref: '#/components/schemas/SurveyOption'
+        inputOptionAllowable:
+          type: boolean
+          description: Indicates whether new options are allowed to be entered by the Contact.
+        inputOptionType:
+          type: string
+          description: The new input option type.
+      description: Message surveys.
+    AttachmentMetadata:
+      required:
+      - contentType
+      type: object
+      properties:
+        contentType:
+          type: string
+          description: File type.
+          example: image/png
+      description: Attachment metadata.
+    MessageSetting:
+      required:
+      - allowShare
+      - requestComment
+      - requestImage
+      - requestLocation
+      - requireConfirm
+      type: object
+      properties:
+        requestImage:
+          type: boolean
+          description: Indicates if an image upload has been requested by the message sender.
+        requestLocation:
+          type: boolean
+          description: Indicates if a location has been requested by the message sender.
+        requestComment:
+          type: boolean
+          description: Indicates if comments are requested by the message sender.
+        allowShare:
+          type: boolean
+          description: Indicates if the message is allowed to be shared.
+        requireConfirm:
+          type: boolean
+          description: Indicates if the the message sender has requested confirmation.
+      description: Additional message settings.
+    Sender:
+      required:
+      - firstName
+      - id
+      - lastName
+      type: object
+      properties:
+        id:
+          type: string
+          description: Sender ID.
+        firstName:
+          type: string
+          description: The Sender's first name.
+        lastName:
+          type: string
+          description: The Sender's last name.
+      description: Message sender.
     ImageRequest:
       required:
       - id
@@ -463,37 +678,7 @@ components:
           description: Image ID.
           example: 629a233923b4b6410329fc84
       description: Message images. If a reply is made with images, the images must be uploaded first (using Image Upload API) to generate the required IDs.
-    ReplyMessageRequest:
-      required:
-      - body
-      type: object
-      properties:
-        body:
-          maxLength: 1000
-          minLength: 1
-          type: string
-          description: Text to include as the message reply.
-        location:
-          $ref: '#/components/schemas/LocationRequest'
-        images:
-          type: array
-          description: Message images. If a reply is made with images, the images must be uploaded first (using Image Upload API) to generate the required IDs.
-          items:
-            $ref: '#/components/schemas/ImageRequest'
-    ConferenceInfo:
-      required:
-      - accessCode
-      - phoneNumber
-      type: object
-      properties:
-        phoneNumber:
-          type: string
-          description: Conference phone number.
-        accessCode:
-          type: string
-          description: Conference access code.
-      description: Conference information.
-    SurveyRequest:
+    SurveyResponse:
       required:
       - surveyId
       - surveyOptionId
@@ -505,22 +690,6 @@ components:
         surveyOptionId:
           type: string
           description: Selected Survey Option ID.
-    Audio:
-      required:
-      - id
-      - metadata
-      - name
-      type: object
-      properties:
-        id:
-          type: string
-          description: Audio ID.
-        name:
-          type: string
-          description: Audio name
-        metadata:
-          $ref: '#/components/schemas/AudioMetadata'
-      description: Message audio resources.
     MessageState:
       required:
       - active
@@ -550,170 +719,6 @@ components:
           type: boolean
           description: Indicates whether the message is still active.
       description: Message state.
-    Sender:
-      required:
-      - firstName
-      - id
-      - lastName
-      type: object
-      properties:
-        id:
-          type: string
-          description: Sender ID.
-        firstName:
-          type: string
-          description: The Sender's first name.
-        lastName:
-          type: string
-          description: The Sender's last name.
-      description: Message sender.
-    MessageReply:
-      required:
-      - body
-      type: object
-      properties:
-        body:
-          type: string
-          description: Message content.
-        location:
-          $ref: '#/components/schemas/LocationResponse'
-        images:
-          type: array
-          description: Message images.
-          items:
-            $ref: '#/components/schemas/ImageResponse'
-        attachments:
-          type: array
-          description: Message attachments.
-          items:
-            $ref: '#/components/schemas/Attachment'
-        audios:
-          type: array
-          description: Message audio resources.
-          items:
-            $ref: '#/components/schemas/Audio'
-      description: Message replies.
-    MessageResponseForQuery:
-      required:
-      - body
-      - id
-      - priority
-      - sender
-      - setting
-      - source
-      - state
-      - title
-      type: object
-      properties:
-        id:
-          type: string
-          description: Message ID.
-        title:
-          type: string
-          description: Message title.
-        body:
-          type: string
-          description: Message content.
-        priority:
-          type: boolean
-          description: Message priority.
-        sender:
-          $ref: '#/components/schemas/Sender'
-        source:
-          type: string
-          description: Message source.
-        setting:
-          $ref: '#/components/schemas/MessageSetting'
-        state:
-          $ref: '#/components/schemas/MessageState'
-        incidentName:
-          type: string
-          description: Incident name. Only available if the message was triggered from an incident.
-        createdAt:
-          type: integer
-          description: Message created time.
-          format: int64
-    SurveyResult:
-      required:
-      - respondedTime
-      - selectedOption
-      type: object
-      properties:
-        selectedOption:
-          $ref: '#/components/schemas/SurveyOption'
-        respondedTime:
-          type: integer
-          description: The time that the Contact's survey response was sent.
-          format: int64
-      description: Message survey results.
-    SurveyOption:
-      required:
-      - id
-      - text
-      type: object
-      properties:
-        id:
-          type: string
-          description: Question option ID
-        text:
-          type: string
-          description: Question option value
-      description: Selected option.
-    AttachmentMetadata:
-      required:
-      - contentType
-      type: object
-      properties:
-        contentType:
-          type: string
-          description: File type.
-          example: image/png
-      description: Attachment metadata.
-    ImageMetadata:
-      required:
-      - contentType
-      type: object
-      properties:
-        contentType:
-          type: string
-          description: File type.
-          example: image/png
-      description: Image metadata.
-    MessageSetting:
-      required:
-      - allowShare
-      - requestComment
-      - requestImage
-      - requestLocation
-      - requireConfirm
-      type: object
-      properties:
-        requestImage:
-          type: boolean
-          description: Indicates if an image upload has been requested by the message sender.
-        requestLocation:
-          type: boolean
-          description: Indicates if a location has been requested by the message sender.
-        requestComment:
-          type: boolean
-          description: Indicates if comments are requested by the message sender.
-        allowShare:
-          type: boolean
-          description: Indicates if the message is allowed to be shared.
-        requireConfirm:
-          type: boolean
-          description: Indicates if the the message sender has requested confirmation.
-      description: Additional message settings.
-    AudioMetadata:
-      required:
-      - contentType
-      type: object
-      properties:
-        contentType:
-          type: string
-          description: File type.
-          example: image/png
-      description: Audio metadata.
     MarkMessageResponse:
       required:
       - id
@@ -725,32 +730,27 @@ components:
           description: Message ID.
         state:
           $ref: '#/components/schemas/MessageState'
-    Survey:
+    ConferenceInfo:
+      required:
+      - accessCode
+      - phoneNumber
+      type: object
+      properties:
+        phoneNumber:
+          type: string
+          description: Conference phone number.
+        accessCode:
+          type: string
+          description: Conference access code.
+      description: Conference information.
+    ReplyMessageResponse:
       required:
       - id
-      - inputOptionAllowable
-      - options
-      - question
       type: object
       properties:
         id:
           type: string
-          description: Survey ID
-        question:
-          type: string
-          description: Survey question
-        options:
-          type: array
-          description: Survey question options
-          items:
-            $ref: '#/components/schemas/SurveyOption'
-        inputOptionAllowable:
-          type: boolean
-          description: Indicates whether new options are allowed to be entered by the Contact.
-        inputOptionType:
-          type: string
-          description: The new input option type.
-      description: Message surveys.
+          description: Message ID.
   securitySchemes:
     API_Authorizer:
       type: apiKey

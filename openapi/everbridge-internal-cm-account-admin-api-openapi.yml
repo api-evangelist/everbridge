@@ -12,7 +12,7 @@ tags:
 paths:
   /cminternal/accountadmin/{organizationId}:
     get:
-      operationId: EBS Get Active Account Admin
+      operationId: EBSGetActiveAccountAdmin
       parameters:
       - in: header
         name: Authorization
@@ -66,6 +66,8 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/cminternal/accountadmin/{organizationId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Get Active Account Admin
 components:
   securitySchemes:
     API_Authorizer:

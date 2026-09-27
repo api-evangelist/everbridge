@@ -13,7 +13,7 @@ paths:
   /locationSource/{organizationId}:
     get:
       description: Retrieve Location Source Data.
-      operationId: EBS List Location Source Data
+      operationId: EBSListLocationSourceData
       parameters:
       - description: Organization ID.
         in: path
@@ -121,12 +121,14 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/locationSource/{organizationId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS List Location Source Data
   /locationSource/{organizationId}/BatchGet:
     post:
       description: 'Batch Get Location Source Data.
 
         NOTE: The maximum number of IDs is 4096.'
-      operationId: EBS List BatchLocation Source Data
+      operationId: EBSListBatchLocationSourceData
       parameters:
       - description: Organization ID
         in: path
@@ -217,10 +219,12 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/locationSource/{organizationId}/BatchGet
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS List BatchLocation Source Data
   /locationSource/{organizationId}/{locationId}:
     get:
       description: Retrieve Location Source Data by ID.
-      operationId: EBS Get Location Source Data
+      operationId: EBSGetLocationSourceData
       parameters:
       - description: Organization ID
         in: path
@@ -290,30 +294,10 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/locationSource/{organizationId}/{locationId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Get Location Source Data
 components:
   schemas:
-    LocationSourceDataInstanceResult:
-      properties:
-        message:
-          type: string
-        result:
-          $ref: '#/components/schemas/LocationSourceDataWrapper'
-      type: object
-    LocationSourceDataParameterModel:
-      description: Array object of the Location ID.
-      properties:
-        locationIds:
-          items:
-            format: int64
-            type: integer
-          type: array
-      type: object
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
     LocationSourceDataWrapper:
       properties:
         address:
@@ -354,6 +338,28 @@ components:
         locationSources:
           items:
             $ref: '#/components/schemas/LocationSourceDataWrapper'
+          type: array
+      type: object
+    LocationSourceDataInstanceResult:
+      properties:
+        message:
+          type: string
+        result:
+          $ref: '#/components/schemas/LocationSourceDataWrapper'
+      type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
+    LocationSourceDataParameterModel:
+      description: Array object of the Location ID.
+      properties:
+        locationIds:
+          items:
+            format: int64
+            type: integer
           type: array
       type: object
   securitySchemes:

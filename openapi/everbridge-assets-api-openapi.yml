@@ -15,7 +15,7 @@ paths:
     post:
       tags:
       - Assets
-      operationId: EBS AM Create Asset
+      operationId: EBSAMCreateAsset
       summary: Create Asset
       description: Create a new asset to an organization. To get the assertTypeId use List Asset Types endpoint.
       parameters:
@@ -150,10 +150,12 @@ paths:
         requestParameters:
           integration.request.header.Authorization: context.authorizer.override_token
         passthroughBehavior: when_no_match
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS AM Create Asset
     get:
       tags:
       - Assets
-      operationId: EBS AM List Assets
+      operationId: EBSAMListAssets
       summary: List Assets
       description: Retrieve all assets for a given asset type with in an organization. To get the assertTypeId use List Asset Types endpoint.
       parameters:
@@ -248,11 +250,13 @@ paths:
         requestParameters:
           integration.request.header.Authorization: context.authorizer.override_token
         passthroughBehavior: when_no_match
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS AM List Assets
   /assets/quick-search:
     post:
       tags:
       - Assets
-      operationId: EBS AM Search Assets
+      operationId: EBSAMSearchAssets
       summary: Search Assets
       description: Retrieve assets based on different search criteria with in a given asset type. To get the assertTypeId use List Asset Types endpoint.
       parameters:
@@ -347,11 +351,13 @@ paths:
         requestParameters:
           integration.request.header.Authorization: context.authorizer.override_token
         passthroughBehavior: when_no_match
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS AM Search Assets
   /assets/{id}:
     get:
       tags:
       - Assets
-      operationId: EBS AM Get Asset
+      operationId: EBSAMGetAsset
       summary: Get Asset
       description: Retrieve the specified asset within an organization. To get the assertTypeId use List Asset Types endpoint.
       parameters:
@@ -426,10 +432,12 @@ paths:
           integration.request.path.id: method.request.path.id
           integration.request.header.Authorization: context.authorizer.override_token
         passthroughBehavior: when_no_match
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS AM Get Asset
     put:
       tags:
       - Assets
-      operationId: EBS AM Update Asset
+      operationId: EBSAMUpdateAsset
       summary: Update Asset
       description: Update the specified asset within an organization. To get the assertTypeId use List Asset Types endpoint.
       parameters:
@@ -544,10 +552,12 @@ paths:
           integration.request.path.id: method.request.path.id
           integration.request.header.Authorization: context.authorizer.override_token
         passthroughBehavior: when_no_match
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS AM Update Asset
     delete:
       tags:
       - Assets
-      operationId: EBS AM Delete Asset
+      operationId: EBSAMDeleteAsset
       summary: Delete Asset
       description: Delete the specified asset within an organization. To get the assertTypeId use List Asset Types endpoint.
       parameters:
@@ -622,11 +632,13 @@ paths:
           integration.request.path.id: method.request.path.id
           integration.request.header.Authorization: context.authorizer.override_token
         passthroughBehavior: when_no_match
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS AM Delete Asset
   /assets/asset-type-id/{assetTypeId}/external-id:
     get:
       tags:
       - Assets
-      operationId: EBS AM Get Asset By ExternalId
+      operationId: EBSAMGetAssetByExternalId
       summary: Get Asset By ExternalId
       description: Retrieve the specified assets for the provided assertTypeId. To get the assertTypeId use List Asset Types endpoint.
       parameters:
@@ -738,11 +750,13 @@ paths:
           integration.request.path.assetTypeId: method.request.path.assetTypeId
           integration.request.header.Authorization: context.authorizer.override_token
         passthroughBehavior: when_no_match
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS AM Get Asset By ExternalId
   /assets/asset-type-id/{assetTypeId}/external-id/{externalId}:
     get:
       tags:
       - Assets
-      operationId: EBS AM Get Asset By ExternalId Path
+      operationId: EBSAMGetAssetByExternalIdPath
       summary: Get Asset By ExternalId (Path)
       description: 'Retrieve the specified assets for the provided assetTypeId. ExternalId provided as path variable.
 
@@ -857,6 +871,8 @@ paths:
           integration.request.path.externalId: method.request.path.externalId
           integration.request.header.Authorization: context.authorizer.override_token
         passthroughBehavior: when_no_match
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS AM Get Asset By ExternalId Path
 components:
   schemas:
     AssetIcon:
@@ -873,210 +889,6 @@ components:
           type: string
         contentUrl:
           type: string
-        color:
-          type: string
-    assetTypeId:
-      description: Available on manager portal (Settings --> Organization --> Contacts/Assets --> Assert Types)
-      type: string
-      example: 665ff8e1a1b61d39e577b9c6
-    assetsManagementQuickSearchRequestWrapper:
-      type: array
-      description: Asset ids
-      items:
-        type: string
-    assetsManagementRequestWrapper:
-      type: object
-      properties:
-        assetTypeId:
-          type: string
-        name:
-          type: string
-        externalId:
-          type: string
-        category:
-          type: string
-        notes:
-          type: string
-        startTimestamp:
-          type: number
-        endTimestamp:
-          type: number
-        properties:
-          type: array
-          items:
-            type: object
-            properties:
-              propertyId:
-                type: string
-              value:
-                type: string
-            required:
-            - propertyId
-            - value
-        isEditMode:
-          type: boolean
-        address:
-          type: object
-          properties:
-            country:
-              type: string
-            state:
-              type: string
-            streetAddress1:
-              type: string
-            streetAddress2:
-              type: string
-            city:
-              type: string
-            postalCode:
-              type: string
-          required:
-          - country
-          - state
-          - streetAddress1
-          - streetAddress2
-          - city
-          - postalCode
-        geometry:
-          type: string
-        associations:
-          type: array
-          items:
-            type: object
-            properties:
-              associationDefinitionId:
-                type: string
-              entityIds:
-                type: array
-                items:
-                  type: number
-              entityType:
-                type: string
-            required:
-            - associationDefinitionId
-            - entityIds
-            - entityType
-      required:
-      - assetTypeId
-      - name
-      - externalId
-    assetsManagementListResponseWrapper:
-      type: object
-      properties:
-        pageSize:
-          type: number
-        start:
-          type: number
-        totalCount:
-          type: number
-        data:
-          type: array
-          items:
-            type: object
-            properties:
-              id:
-                type: string
-              organizationId:
-                type: number
-              createdId:
-                type: number
-              createdName:
-                type: string
-              lastModifiedId:
-                type: number
-              lastModifiedName:
-                type: string
-              createdTimestamp:
-                type: number
-              lastModifiedTimestamp:
-                type: number
-              externalId:
-                type: string
-              assetTypeId:
-                type: string
-              name:
-                type: string
-              address:
-                type: object
-                properties:
-                  country:
-                    type: string
-                  state:
-                    type: string
-                  city:
-                    type: string
-                  postalCode:
-                    type: string
-                  streetAddress1:
-                    type: string
-                  streetAddress2:
-                    type: string
-              iconId:
-                type: string
-              assetTypeName:
-                type: string
-              geocodingAddressRequired:
-                type: boolean
-              smartEnabled:
-                type: boolean
-              icon:
-                $ref: '#/components/schemas/AssetIcon'
-              color:
-                type: string
-        currentPageNo:
-          type: number
-        totalPageCount:
-          type: number
-    organizationId:
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      maxLength: 16
-      type: integer
-      example: '1536984111644674'
-      default: '1536984111644674'
-    assetsManagementResponseWrapper:
-      type: object
-      properties:
-        id:
-          type: string
-        organizationId:
-          type: number
-        createdId:
-          type: number
-        createdName:
-          type: string
-        lastModifiedId:
-          type: number
-        lastModifiedName:
-          type: string
-        createdTimestamp:
-          type: number
-        lastModifiedTimestamp:
-          type: number
-        externalId:
-          type: string
-        assetTypeId:
-          type: string
-        name:
-          type: string
-        address:
-          type: object
-          properties:
-            country:
-              type: string
-            state:
-              type: string
-            city:
-              type: string
-            postalCode:
-              type: string
-        iconId:
-          type: string
-        geocodingAddressRequired:
-          type: boolean
-        smartEnabled:
-          type: boolean
-        icon:
-          $ref: '#/components/schemas/AssetIcon'
         color:
           type: string
     assetsManagementSingleResponseWrapper:
@@ -1174,6 +986,210 @@ components:
       - properties
       - geocodingAddressRequired
       - smartEnabled
+    assetTypeId:
+      description: Available on manager portal (Settings --> Organization --> Contacts/Assets --> Assert Types)
+      type: string
+      example: 665ff8e1a1b61d39e577b9c6
+    assetsManagementListResponseWrapper:
+      type: object
+      properties:
+        pageSize:
+          type: number
+        start:
+          type: number
+        totalCount:
+          type: number
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              organizationId:
+                type: number
+              createdId:
+                type: number
+              createdName:
+                type: string
+              lastModifiedId:
+                type: number
+              lastModifiedName:
+                type: string
+              createdTimestamp:
+                type: number
+              lastModifiedTimestamp:
+                type: number
+              externalId:
+                type: string
+              assetTypeId:
+                type: string
+              name:
+                type: string
+              address:
+                type: object
+                properties:
+                  country:
+                    type: string
+                  state:
+                    type: string
+                  city:
+                    type: string
+                  postalCode:
+                    type: string
+                  streetAddress1:
+                    type: string
+                  streetAddress2:
+                    type: string
+              iconId:
+                type: string
+              assetTypeName:
+                type: string
+              geocodingAddressRequired:
+                type: boolean
+              smartEnabled:
+                type: boolean
+              icon:
+                $ref: '#/components/schemas/AssetIcon'
+              color:
+                type: string
+        currentPageNo:
+          type: number
+        totalPageCount:
+          type: number
+    assetsManagementRequestWrapper:
+      type: object
+      properties:
+        assetTypeId:
+          type: string
+        name:
+          type: string
+        externalId:
+          type: string
+        category:
+          type: string
+        notes:
+          type: string
+        startTimestamp:
+          type: number
+        endTimestamp:
+          type: number
+        properties:
+          type: array
+          items:
+            type: object
+            properties:
+              propertyId:
+                type: string
+              value:
+                type: string
+            required:
+            - propertyId
+            - value
+        isEditMode:
+          type: boolean
+        address:
+          type: object
+          properties:
+            country:
+              type: string
+            state:
+              type: string
+            streetAddress1:
+              type: string
+            streetAddress2:
+              type: string
+            city:
+              type: string
+            postalCode:
+              type: string
+          required:
+          - country
+          - state
+          - streetAddress1
+          - streetAddress2
+          - city
+          - postalCode
+        geometry:
+          type: string
+        associations:
+          type: array
+          items:
+            type: object
+            properties:
+              associationDefinitionId:
+                type: string
+              entityIds:
+                type: array
+                items:
+                  type: number
+              entityType:
+                type: string
+            required:
+            - associationDefinitionId
+            - entityIds
+            - entityType
+      required:
+      - assetTypeId
+      - name
+      - externalId
+    organizationId:
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      maxLength: 16
+      type: integer
+      example: '1536984111644674'
+      default: '1536984111644674'
+    assetsManagementQuickSearchRequestWrapper:
+      type: array
+      description: Asset ids
+      items:
+        type: string
+    assetsManagementResponseWrapper:
+      type: object
+      properties:
+        id:
+          type: string
+        organizationId:
+          type: number
+        createdId:
+          type: number
+        createdName:
+          type: string
+        lastModifiedId:
+          type: number
+        lastModifiedName:
+          type: string
+        createdTimestamp:
+          type: number
+        lastModifiedTimestamp:
+          type: number
+        externalId:
+          type: string
+        assetTypeId:
+          type: string
+        name:
+          type: string
+        address:
+          type: object
+          properties:
+            country:
+              type: string
+            state:
+              type: string
+            city:
+              type: string
+            postalCode:
+              type: string
+        iconId:
+          type: string
+        geocodingAddressRequired:
+          type: boolean
+        smartEnabled:
+          type: boolean
+        icon:
+          $ref: '#/components/schemas/AssetIcon'
+        color:
+          type: string
     externalId:
       description: The External ID
       type: string

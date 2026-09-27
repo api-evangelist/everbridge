@@ -12,7 +12,7 @@ tags:
 paths:
   /notificationTemplates/{organizationId}:
     get:
-      operationId: EBS List Notification Templates
+      operationId: EBSListNotificationTemplates
       parameters:
       - description: The ID of the organization containing the notificationTemplates
         in: path
@@ -219,8 +219,10 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/notificationTemplates/{organizationId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS List Notification Templates
     post:
-      operationId: EBS Create Notification Template
+      operationId: EBSCreateNotificationTemplate
       parameters:
       - description: The organization from which to initiate the notificationTemplate
         in: path
@@ -278,9 +280,11 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/notificationTemplates/{organizationId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Create Notification Template
   /notificationTemplates/{organizationId}/{notificationTemplateId}:
     delete:
-      operationId: EBS Delete Notification Template
+      operationId: EBSDeleteNotificationTemplate
       parameters:
       - description: The ID of the organization containing the notificationTemplates
         in: path
@@ -334,8 +338,10 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/notificationTemplates/{organizationId}/{notificationTemplateId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Delete Notification Template
     get:
-      operationId: EBS Get Notification Template
+      operationId: EBSGetNotificationTemplate
       parameters:
       - description: The ID of the organization containing the notificationTemplate
         in: path
@@ -476,8 +482,10 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/notificationTemplates/{organizationId}/{notificationTemplateId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Get Notification Template
     put:
-      operationId: EBS Update Notification Template
+      operationId: EBSUpdateNotificationTemplate
       parameters:
       - description: The organization from which to initiate the notificationTemplate
         in: path
@@ -543,86 +551,31 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/notificationTemplates/{organizationId}/{notificationTemplateId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Update Notification Template
 components:
   schemas:
-    NixleCommunityWrapper:
+    WebWidgetWrapper:
       properties:
-        contactDivision:
-          type: string
-        contactEmail:
-          type: string
-        contactName:
-          type: string
-        contactPhone:
-          type: string
-        jurisdictionType:
-          type: string
-        regionIds:
-          items:
-            format: int64
-            type: integer
-          type: array
-      type: object
-    NaResidentContactsWrapper:
-      properties:
-        businessIds:
-          items:
-            type: string
-          type: array
-        filterIds:
-          items:
-            type: string
-          type: array
-        residentIds:
-          items:
-            type: string
-          type: array
-      type: object
-    OrganizationPathRCWrapper:
-      properties:
-        default:
-          type: boolean
-        editable:
-          type: boolean
-        id:
-          format: int64
-          type: integer
-        mandatory:
-          type: boolean
-        pathId:
-          format: int64
-          type: integer
-        prompt:
-          type: string
-        seq:
-          format: int32
-          type: integer
-      type: object
-    DesktopAlertWrapper:
-      properties:
-        category:
-          type: string
         customDuration:
           format: int32
           type: integer
         customTimeUnit:
           type: string
-        fields:
-          items:
-            $ref: '#/components/schemas/DesktopAlertPlaceholder'
-          type: array
-        targets:
-          items:
-            $ref: '#/components/schemas/DesktopAlertTarget'
-          type: array
-        templateId:
+        ewwEndDate:
+          format: date-time
           type: string
-        useDefaultTargeting:
-          type: boolean
+        name:
+          type: string
+        stream:
+          format: int32
+          type: integer
         useSameDurationAsNotification:
           type: boolean
+        useSetEndTimeByCalendar:
+          type: boolean
       type: object
-    GenericOneWayMessageWrapper:
+    IPAWSMessageWrapper:
       properties:
         accountId:
           format: int64
@@ -633,6 +586,21 @@ components:
           type: array
         body:
           type: string
+        capFileLength:
+          format: int32
+          type: integer
+        capFileResourceId:
+          type: string
+        capSendResult:
+          type: string
+        capSent:
+          type: boolean
+        category:
+          type: string
+        certainty:
+          type: string
+        code:
+          type: string
         createdDate:
           format: date-time
           type: string
@@ -643,15 +611,49 @@ components:
           type: string
         createdProxyName:
           type: string
+        event:
+          type: string
+        eventCode:
+          type: string
+        expiredHours:
+          format: int32
+          type: integer
+        fields:
+          items:
+            $ref: '#/components/schemas/IpawsMessageField'
+          type: array
         fileAttachments:
           items:
             $ref: '#/components/schemas/FileAttachmentWrapper'
           type: array
-        genericOneWaySetting:
-          $ref: '#/components/schemas/GenericOneWaySettingWrapper'
+        geoCodes:
+          items:
+            type: string
+          type: array
+        handling:
+          type: string
         id:
           format: int64
           type: integer
+        identifier:
+          format: int64
+          type: integer
+        instruction:
+          type: string
+        ipawsMessage:
+          type: string
+        ipawsMessageEn360:
+          type: string
+        ipawsMessageEs360:
+          type: string
+        ipawsMessageEs90:
+          type: string
+        keystorePassword:
+          type: string
+        language:
+          enum:
+          - en_US
+          type: string
         lastModifiedDate:
           format: date-time
           type: string
@@ -662,13 +664,24 @@ components:
           type: string
         lastModifiedProxyName:
           type: string
+        messageStatus:
+          type: string
         organizationId:
           format: int64
           type: integer
+        privateKey:
+          type: string
+        pubDate:
+          format: date-time
+          type: string
         resourceBundleId:
           format: int64
           type: integer
+        scope:
+          type: string
         sendResult:
+          type: string
+        sender:
           type: string
         senderName:
           type: string
@@ -676,6 +689,8 @@ components:
           type: string
         sent:
           type: boolean
+        severity:
+          type: string
         status:
           enum:
           - A
@@ -685,49 +700,50 @@ components:
           type: string
         trainingMode:
           type: boolean
+        type:
+          type: string
+        urgency:
+          type: string
+        useCapRss:
+          type: boolean
         voice:
           $ref: '#/components/schemas/FileAttachmentWrapper'
+        web:
+          type: string
       type: object
-    RestfulCollectionResult:
+    PublicMessagesWrapper:
       properties:
-        currentPageUri:
-          type: string
-        firstPageUri:
-          type: string
-        lastPageUri:
-          type: string
-        message:
-          type: string
-        nextPageUri:
-          type: string
-        page:
-          $ref: '#/components/schemas/DataPageObject'
-        previousPageUri:
-          type: string
-      title: RestfulCollectionResult
+        alertUsMessage:
+          $ref: '#/components/schemas/AlertUsMessageWrapper'
+        desktopAlertMessage:
+          $ref: '#/components/schemas/DesktopAlertWrapper'
+        genericOneyWayMessage:
+          $ref: '#/components/schemas/GenericOneWayMessageWrapper'
+        ipawsMessage:
+          $ref: '#/components/schemas/IPAWSMessageWrapper'
+        networkEffectMessage:
+          $ref: '#/components/schemas/EBNetworkEffectMessageWrapper'
+        nixleAlertMessage:
+          $ref: '#/components/schemas/NixleAlertMessageWrapper'
+        webWidgetMessage:
+          $ref: '#/components/schemas/WebWidgetWrapper'
       type: object
-    GeoPointWrapper:
+    ConferenceBridgeWrapper:
       properties:
-        x:
-          format: double
-          type: number
-        y:
-          format: double
-          type: number
-      type: object
-    EBNetworkEffectSettingWrapper:
-      properties:
+        accessCode:
+          type: string
+        accessPath:
+          type: string
         accountId:
           format: int64
           type: integer
-        allPublishCategories:
-          type: boolean
-        allSubscribeAddresses:
-          type: boolean
-        allSubscribeCategories:
-          type: boolean
-        category:
-          $ref: '#/components/schemas/EBNetworkEffectCategoryWrapper'
+        awareBridgeId:
+          format: int32
+          type: integer
+        countryCode:
+          type: string
+        countryName:
+          type: string
         createdDate:
           format: date-time
           type: string
@@ -738,11 +754,14 @@ components:
           type: string
         createdProxyName:
           type: string
-        displayLogo:
+        default:
           type: boolean
+          writeOnly: true
         id:
           format: int64
           type: integer
+        isDefault:
+          type: boolean
         lastModifiedDate:
           format: date-time
           type: string
@@ -753,75 +772,78 @@ components:
           type: string
         lastModifiedProxyName:
           type: string
-        logoKey:
+        name:
           type: string
-        nickName:
+        number:
           type: string
         organizationId:
           format: int64
           type: integer
-        publishCategories:
-          items:
-            $ref: '#/components/schemas/EBNetworkEffectCategoryWrapper'
-          type: array
         resourceBundleId:
           format: int64
           type: integer
-        responsibilityArea:
-          items:
-            $ref: '#/components/schemas/GeoShapeWrapper'
-          type: array
         status:
           enum:
           - A
           - D
           type: string
-        subscribeAddresses:
+        steps:
           items:
-            $ref: '#/components/schemas/AddressWrapper'
-          type: array
-        subscribeCategories:
-          items:
-            $ref: '#/components/schemas/EBNetworkEffectCategoryWrapper'
+            $ref: '#/components/schemas/AccessStepWrapper'
           type: array
       type: object
-    AlertUsGroup:
+    ContactSearchConditionWrapper:
       properties:
-        groupId:
-          format: int64
-          type: integer
-        groupName:
-          type: string
-      type: object
-    AddressWrapper:
-      properties:
-        city:
-          type: string
-        country:
-          type: string
-        gisLocation:
-          $ref: '#/components/schemas/GisLocationWrapper'
-        locationName:
-          type: string
-        postalCode:
-          type: string
-        state:
-          type: string
-        streetAddress:
-          type: string
-        suite:
-          type: string
-      type: object
-    AccessStepWrapper:
-      properties:
-        type:
+        contactFilterRules:
+          items:
+            $ref: '#/components/schemas/ContactFilterRuleWrapper'
+          type: array
+        contactSearchExpression:
           enum:
-          - Wait
-          - Dial
-          - Code
+          - AllOr
+          - AllAnd
           type: string
-        value:
+        expectedDate:
+          items:
+            type: object
+          type: array
+        expectedDateContactIds:
+          items:
+            format: int64
+            type: integer
+          type: array
+        filterIds:
+          items:
+            format: int64
+            type: integer
+          type: array
+        filters:
+          items:
+            items:
+              $ref: '#/components/schemas/ContactFilterRuleWrapper'
+            type: array
+          type: array
+        groupIds:
+          items:
+            format: int64
+            type: integer
+          type: array
+      type: object
+    EscalationConditionWrapper:
+      properties:
+        timeUnit:
+          enum:
+          - NANOSECONDS
+          - MICROSECONDS
+          - MILLISECONDS
+          - SECONDS
+          - MINUTES
+          - HOURS
+          - DAYS
           type: string
+        waitTime:
+          format: int32
+          type: integer
       type: object
     EBNetworkEffectMessageWrapper:
       properties:
@@ -904,49 +926,6 @@ components:
         voice:
           $ref: '#/components/schemas/FileAttachmentWrapper'
       type: object
-    RestfulModificationResult:
-      properties:
-        baseUri:
-          type: string
-        id:
-          format: int64
-          type: integer
-        instanceUri:
-          type: string
-        message:
-          type: string
-      title: RestfulModificationResult
-      type: object
-    SenderSMSInfoWrapper:
-      properties:
-        countryCode:
-          type: string
-        smsId:
-          type: string
-      type: object
-    UmsUploadWrapper:
-      properties:
-        pattern:
-          type: string
-        values:
-          items:
-            additionalProperties:
-              type: string
-            type: object
-          type: array
-      type: object
-    RCNAFilterRulesWrapper:
-      properties:
-        childFilters:
-          items:
-            $ref: '#/components/schemas/ChildContactFilterDTOWrapper'
-          type: array
-        residentContactType:
-          enum:
-          - RESIDENTIAL
-          - BUSINESS
-          type: string
-      type: object
     ContactFilterWrapper:
       properties:
         accountId:
@@ -1012,221 +991,66 @@ components:
           - D
           type: string
       type: object
-    ProcessingStateWrapper:
+    RestfulModificationResult:
       properties:
-        serverId:
-          format: int64
-          type: integer
-        startTime:
-          format: int64
-          type: integer
-        synchronizeTime:
-          format: int64
-          type: integer
-        threadName:
-          type: string
-      type: object
-    BroadcastMessageWrapper:
-      properties:
-        accountId:
-          format: int64
-          type: integer
-        attachmentFiles:
-          items:
-            $ref: '#/components/schemas/FileAttachmentWrapper'
-          type: array
-        audioKey:
-          type: string
-        category:
-          $ref: '#/components/schemas/CategoryWrapper'
-        categoryId:
-          format: int64
-          type: integer
-        conferenceBridge:
-          $ref: '#/components/schemas/ConferenceBridgeWrapper'
-        conferenceBridgeId:
-          format: int64
-          type: integer
-        contentType:
-          enum:
-          - Voice
-          - Text
-          - VoiceText
-          type: string
-        createdDate:
-          format: date-time
-          type: string
-        createdId:
-          format: int64
-          type: integer
-        createdName:
-          type: string
-        createdProxyName:
+        baseUri:
           type: string
         id:
           format: int64
           type: integer
-        imageKey:
+        instanceUri:
           type: string
-        lastModifiedDate:
-          format: date-time
+        message:
           type: string
-        lastModifiedId:
-          format: int64
-          type: integer
-        lastModifiedName:
-          type: string
-        lastModifiedProxyName:
-          type: string
-        organizationId:
-          format: int64
-          type: integer
-        questionaire:
-          $ref: '#/components/schemas/QuestionaireWrapper'
-        resourceBundleId:
-          format: int64
-          type: integer
-        rtfContent:
-          type: string
-        status:
-          enum:
-          - A
-          - D
-          type: string
-        textMessage:
-          type: string
-        textSmsMessage:
-          type: string
-        textSmsWebPageMessage:
-          type: string
-        title:
-          type: string
-        useCustomEmail:
-          type: boolean
-        useCustomSms:
-          type: boolean
-        useNewRTF:
-          type: boolean
-        useSmsPrefix:
-          type: boolean
-        useSmsWebLink:
-          type: boolean
-        voiceSource:
-          enum:
-          - WebUploader
-          - WebRecorder
-          - PreRecorded
-          - MobileRecorder
-          - LandlineRecorder
-          type: string
+      title: RestfulModificationResult
       type: object
-    BroadcastContactsWrapper:
+    AndOrFilterWrapper:
       properties:
-        answerNeeded:
-          type: string
-        businessFilterRulesInMap:
-          $ref: '#/components/schemas/RCNAFilterRulesWrapper'
-        contactIds:
+        childFilters:
           items:
-            format: int64
-            type: integer
+            $ref: '#/components/schemas/AndOrFilterWrapper'
           type: array
-        contactSearchType:
-          enum:
-          - AllOr
-          - AllAnd
-          type: string
-        defaultSeqGroupQuota:
-          format: int32
-          type: integer
-        enableGroupCalendar:
-          type: boolean
-        enableSendToSubscribers:
-          type: boolean
-        excludedContactIds:
-          items:
-            format: int64
-            type: integer
-          type: array
-        externalIds:
-          items:
-            type: string
-          type: array
-        filterIds:
-          items:
-            format: int64
-            type: integer
-          type: array
-        filterNames:
-          items:
-            type: string
-          type: array
-        filterRules:
+        contactFilterRules:
           items:
             $ref: '#/components/schemas/ContactFilterRuleWrapper'
           type: array
-        groupIds:
-          items:
-            format: int64
-            type: integer
-          type: array
-        groupNames:
-          items:
-            type: string
-          type: array
-        mapConditions:
-          items:
-            $ref: '#/components/schemas/MapConditionWrapper'
-          type: array
-        naResidentContacts:
-          $ref: '#/components/schemas/NaResidentContactsWrapper'
-        residentFilterRulesInMap:
-          $ref: '#/components/schemas/RCNAFilterRulesWrapper'
-        residents:
-          $ref: '#/components/schemas/UmsContactsWrapper'
-        resultSetIds:
-          items:
-            type: string
-          type: array
-        searchShapes:
-          items:
-            $ref: '#/components/schemas/SearchShapeWrapper'
-          type: array
-        sequenceGroupEnabled:
-          type: boolean
-        sequenceGroupInterval:
-          format: int32
-          type: integer
-        sequenceGroups:
-          items:
-            $ref: '#/components/schemas/SequenceGroupWrapper'
-          type: array
-        sequenceShifts:
-          items:
-            $ref: '#/components/schemas/SequenceShiftWrapper'
-          type: array
+        filterExpression:
+          enum:
+          - AndAll
+          - OrAll
+          type: string
       type: object
-    UmsContactsWrapper:
+    SearchShapeWrapper:
       properties:
-        properties:
-          items:
-            $ref: '#/components/schemas/ResidentPropertyFilterWrapper'
-          type: array
-        searchBySearchShapes:
+        boundaryId:
+          type: string
+        fromLibrary:
           type: boolean
-        umsPatterns:
-          items:
-            $ref: '#/components/schemas/UmsUploadWrapper'
-          type: array
-      type: object
-    SequenceShiftWrapper:
-      properties:
-        confirmationQuota:
-          format: int32
-          type: integer
-        shiftId:
+        include:
+          type: boolean
+        name:
+          type: string
+        regionId:
           format: int64
           type: integer
+        residentContactTypes:
+          items:
+            enum:
+            - RESIDENTIAL
+            - BUSINESS
+            type: string
+          type: array
+        searchShapeTypes:
+          items:
+            enum:
+            - STATIC
+            - DYNAMIC
+            - EXPECTED
+            - TRAVEL
+            type: string
+          type: array
+        shape:
+          $ref: '#/components/schemas/GeoShapeWrapper'
       type: object
     ContactFilterRuleDTOWrapper:
       properties:
@@ -1255,526 +1079,34 @@ components:
           - DOES_NOT_CONTAIN
           type: string
       type: object
-    SenderInformationWrapper:
+    IpawsMessageField:
       properties:
-        accountId:
-          format: int64
-          type: integer
-        callerId:
+        field:
           type: string
-        countryCode:
-          type: string
-        countryName:
-          type: string
-        createdDate:
-          format: date-time
-          type: string
-        createdId:
-          format: int64
-          type: integer
-        createdName:
-          type: string
-        createdProxyName:
-          type: string
-        id:
-          format: int64
-          type: integer
-        isDefault:
-          type: boolean
-        lastModifiedDate:
-          format: date-time
-          type: string
-        lastModifiedId:
-          format: int64
-          type: integer
-        lastModifiedName:
-          type: string
-        lastModifiedProxyName:
-          type: string
-        organizationId:
-          format: int64
-          type: integer
-        resourceBundleId:
-          format: int64
-          type: integer
-        status:
-          enum:
-          - A
-          - D
-          type: string
-      type: object
-    GisLocationWrapper:
-      properties:
-        lat:
-          format: double
-          type: number
-        lon:
-          format: double
-          type: number
-      type: object
-    GenericOneWaySettingWrapper:
-      properties:
-        accountId:
-          format: int64
-          type: integer
-        createdDate:
-          format: date-time
-          type: string
-        createdId:
-          format: int64
-          type: integer
-        createdName:
-          type: string
-        createdProxyName:
-          type: string
-        id:
-          format: int64
-          type: integer
-        lastModifiedDate:
-          format: date-time
-          type: string
-        lastModifiedId:
-          format: int64
-          type: integer
-        lastModifiedName:
-          type: string
-        lastModifiedProxyName:
-          type: string
-        organizationId:
-          format: int64
-          type: integer
-        postParams:
-          additionalProperties:
+        values:
+          items:
             type: string
-          type: object
-        receiveEndPoints:
-          items:
-            $ref: '#/components/schemas/ReceiveEndPointWrapper'
-          type: array
-        resourceBundleId:
-          format: int64
-          type: integer
-        status:
-          enum:
-          - A
-          - D
-          type: string
-      type: object
-    BroadcastSettingsWrapper:
-      properties:
-        accountCode:
-          type: string
-        bookConference:
-          type: boolean
-        confirm:
-          type: boolean
-        contactCycles:
-          format: int32
-          type: integer
-        cycleInterval:
-          format: int32
-          type: integer
-        deliverPaths:
-          items:
-            $ref: '#/components/schemas/OrganizationPathWrapper'
-          type: array
-        deliveryMethodInterval:
-          format: int32
-          type: integer
-        deliveryPathOrder:
-          enum:
-          - Account
-          - Organization
-          - Contact
-          - Custom
-          type: string
-        deliveryPaths:
-          items:
-            $ref: '#/components/schemas/OrganizationPathWrapper'
-          type: array
-        duration:
-          format: int32
-          type: integer
-        durationTimeUnit:
-          enum:
-          - NANOSECONDS
-          - MICROSECONDS
-          - MILLISECONDS
-          - SECONDS
-          - MINUTES
-          - HOURS
-          - DAYS
-          type: string
-        enableBeep:
-          type: boolean
-        enableRecord:
-          type: boolean
-        enableSecureNotification:
-          type: boolean
-        enableSmartConferenceConfirmationText:
-          type: boolean
-        language:
-          type: string
-        mobileSettings:
-          $ref: '#/components/schemas/MobileNotificationSettingsWrapper'
-        pushCustomFields:
-          additionalProperties:
-            type: string
-          type: object
-        quietTimeOverride:
-          type: boolean
-        recipientApp:
-          type: boolean
-        requirePinForMessage:
-          type: boolean
-        residentConnectionDeliveryPaths:
-          items:
-            $ref: '#/components/schemas/OrganizationPathRCWrapper'
-          type: array
-        resourceURL:
-          type: string
-        responseSetting:
-          $ref: '#/components/schemas/ResponseSettingWrapper'
-        securePushInstructions:
-          type: string
-        senderCallerInfos:
-          items:
-            $ref: '#/components/schemas/SenderInformationWrapper'
-          type: array
-        senderEmail:
-          type: string
-        senderSMSInfos:
-          items:
-            $ref: '#/components/schemas/SenderSMSInfoWrapper'
-          type: array
-        smsCallBack:
-          type: boolean
-        throttlDefaultAmount:
-          format: int32
-          type: integer
-        throttle:
-          type: boolean
-        validateContacts:
-          type: boolean
-        validateContactsByOrganization:
-          type: boolean
-        voiceMailOption:
-          enum:
-          - NO_MESSAGE
-          - MESSAGE_ONLY
-          - MESSAGE_WITH_CONFIRMATION
-          type: string
-      type: object
-    DesktopAlertPlaceholder:
-      properties:
-        name:
-          type: string
-        value:
-          type: string
-      type: object
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
-    ReceiveEndPointWrapper:
-      properties:
-        credential:
-          $ref: '#/components/schemas/CredentialWrapper'
-        messageTemplate:
-          type: string
-        receiveUrl:
-          type: string
-        transportProtocol:
-          enum:
-          - HTTP
-          - HTTPS
-          type: string
-      type: object
-    CategoryWrapper:
-      description: The notificationCategory object to create
-      properties:
-        accountId:
-          format: int64
-          type: integer
-        createdDate:
-          format: date-time
-          type: string
-        createdId:
-          format: int64
-          type: integer
-        createdName:
-          type: string
-        createdProxyName:
-          type: string
-        id:
-          format: int64
-          type: integer
-        lastModifiedDate:
-          format: date-time
-          type: string
-        lastModifiedId:
-          format: int64
-          type: integer
-        lastModifiedName:
-          type: string
-        lastModifiedProxyName:
-          type: string
-        name:
-          type: string
-        organizationId:
-          format: int64
-          type: integer
-        resourceBundleId:
-          format: int64
-          type: integer
-        status:
-          enum:
-          - A
-          - D
-          type: string
-      type: object
-    ChildContactFilterDTOWrapper:
-      properties:
-        contactFilterRules:
-          items:
-            $ref: '#/components/schemas/ContactFilterRuleDTOWrapper'
-          type: array
-        pathFilterRules:
-          items:
-            items:
-              $ref: '#/components/schemas/ContactFilterRuleDTOWrapper'
-            type: array
           type: array
       type: object
-    ContactFilterRuleWrapper:
+    UmsUploadWrapper:
       properties:
-        attributeId:
-          format: int64
-          type: integer
-        attributeValues:
+        pattern:
+          type: string
+        values:
           items:
+            additionalProperties:
+              type: string
             type: object
           type: array
-        columnName:
-          type: string
-        columnValue:
-          type: object
-        contactFieldId:
-          format: int64
-          type: integer
-        contactFilterOption:
-          enum:
-          - ISNULL
-          - ISNULLARRAY
-          - NOTNULL
-          - ISEMPTY
-          - NOTEMPTY
-          - IN
-          - NIN
-          - GT
-          - LT
-          - GTE
-          - LTE
-          - NE
-          - NENLC
-          - E
-          - ENLC
-          - LIKE
-          - LIKENLC
-          - NLIKE
-          - NLIKENLC
-          - STARTWITH
-          - STARTWITHNLC
-          - ENDWITH
-          - ENDWITHNLC
-          - INPOLYGON
-          - NINPOLYGON
-          - OVERLAP
-          - NONEOVERLAP
-          - ELEMENTEQUAL
-          - ELEMENTNOTEQUAL
-          - BETWEEN
-          type: string
-        dataType:
-          enum:
-          - STRING
-          - NUMBER
-          - DATE
-          - BOOLEAN
-          - POLYGON
-          type: string
-        defaultValue:
-          type: object
-        displayFieldName:
-          type: string
-        embeddedColumnName:
-          type: string
-        fieldName:
-          type: string
-        fieldType:
-          enum:
-          - DATE
-          - STRING
-          - INT
-          - LONG
-          - BOOLEAN
-          - LIST
-          - NUMBER
-          - ARRAY
-          type: string
-        fieldValue:
-          type: object
-        operator:
-          type: string
-        showType:
-          enum:
-          - SINGLE
-          - MULTIPLE
-          - TEXT
-          type: string
-        type:
-          enum:
-          - SYSTEM
-          - CUSTOM
-          - SYSTEM_OBJECT
-          - SYSTEM_ARRAY
-          - CUSTOM_ARRAY
-          - SYSTEM_SCHEDULING
-          - SYSTEM_EXPECTED_OBJECT
-          - SYSTEM_POLYGON_ARRAY
-          type: string
       type: object
-    ConferenceBridgeWrapper:
+    GeoPointWrapper:
       properties:
-        accessCode:
-          type: string
-        accessPath:
-          type: string
-        accountId:
-          format: int64
-          type: integer
-        awareBridgeId:
-          format: int32
-          type: integer
-        countryCode:
-          type: string
-        countryName:
-          type: string
-        createdDate:
-          format: date-time
-          type: string
-        createdId:
-          format: int64
-          type: integer
-        createdName:
-          type: string
-        createdProxyName:
-          type: string
-        default:
-          type: boolean
-          writeOnly: true
-        id:
-          format: int64
-          type: integer
-        isDefault:
-          type: boolean
-        lastModifiedDate:
-          format: date-time
-          type: string
-        lastModifiedId:
-          format: int64
-          type: integer
-        lastModifiedName:
-          type: string
-        lastModifiedProxyName:
-          type: string
-        name:
-          type: string
-        number:
-          type: string
-        organizationId:
-          format: int64
-          type: integer
-        resourceBundleId:
-          format: int64
-          type: integer
-        status:
-          enum:
-          - A
-          - D
-          type: string
-        steps:
-          items:
-            $ref: '#/components/schemas/AccessStepWrapper'
-          type: array
-      type: object
-    QuestionaireWrapper:
-      properties:
-        answers:
-          items:
-            $ref: '#/components/schemas/AnswerWrapper'
-          type: array
-        inputOptionAllowable:
-          type: boolean
-        inputOptionType:
-          type: string
-        multipleSelected:
-          type: boolean
-        question:
-          type: string
-        required:
-          type: boolean
-        voiceMessage:
-          items:
-            format: byte
-            type: string
-          type: array
-      type: object
-    ContactSearchConditionWrapper:
-      properties:
-        contactFilterRules:
-          items:
-            $ref: '#/components/schemas/ContactFilterRuleWrapper'
-          type: array
-        contactSearchExpression:
-          enum:
-          - AllOr
-          - AllAnd
-          type: string
-        expectedDate:
-          items:
-            type: object
-          type: array
-        expectedDateContactIds:
-          items:
-            format: int64
-            type: integer
-          type: array
-        filterIds:
-          items:
-            format: int64
-            type: integer
-          type: array
-        filters:
-          items:
-            items:
-              $ref: '#/components/schemas/ContactFilterRuleWrapper'
-            type: array
-          type: array
-        groupIds:
-          items:
-            format: int64
-            type: integer
-          type: array
-      type: object
-    DesktopAlertTarget:
-      properties:
-        id:
-          type: string
-        type:
-          type: string
+        x:
+          format: double
+          type: number
+        y:
+          format: double
+          type: number
       type: object
     OrganizationPathWrapper:
       properties:
@@ -1929,289 +1261,20 @@ components:
           - SLACK
           type: string
       type: object
-    PublicMessagesWrapper:
+    EscalationLevelWrapper:
       properties:
-        alertUsMessage:
-          $ref: '#/components/schemas/AlertUsMessageWrapper'
-        desktopAlertMessage:
-          $ref: '#/components/schemas/DesktopAlertWrapper'
-        genericOneyWayMessage:
-          $ref: '#/components/schemas/GenericOneWayMessageWrapper'
-        ipawsMessage:
-          $ref: '#/components/schemas/IPAWSMessageWrapper'
-        networkEffectMessage:
-          $ref: '#/components/schemas/EBNetworkEffectMessageWrapper'
-        nixleAlertMessage:
-          $ref: '#/components/schemas/NixleAlertMessageWrapper'
-        webWidgetMessage:
-          $ref: '#/components/schemas/WebWidgetWrapper'
-      type: object
-    NixleAlertMessageWrapper:
-      properties:
-        action:
-          type: string
-        applyZipCodeToEventGroups:
-          type: boolean
-        category:
-          type: string
-        certainty:
-          type: string
-        community:
-          $ref: '#/components/schemas/NixleCommunityWrapper'
-        event:
-          type: string
-        eventGroups:
-          items:
-            format: int64
-            type: integer
-          type: array
-        expire:
-          type: string
-        instructions:
-          type: string
-        severity:
-          type: string
-        smsMessage:
-          type: string
-        type:
-          format: int32
-          type: integer
-        urgency:
-          type: string
-      type: object
-    ResponseSettingWrapper:
-      properties:
-        pollingResponse:
-          type: string
-        profileId:
-          type: string
-        type:
-          enum:
-          - FIRST
-          - EVERY
-          type: string
-      type: object
-    SequenceGroupWrapper:
-      properties:
-        confirmationQuota:
-          format: int32
-          type: integer
-        groupId:
-          format: int64
-          type: integer
-      type: object
-    GeoShapeWrapper:
-      properties:
-        points:
-          items:
-            $ref: '#/components/schemas/GeoPointWrapper'
-          type: array
-      type: object
-    CredentialWrapper:
-      properties:
-        password:
-          type: string
-        userName:
-          type: string
-      type: object
-    DataPageObject:
-      properties:
-        currentPageNo:
-          format: int32
-          type: integer
-        data:
-          items:
-            type: object
-          type: array
-        dataPageList:
-          items:
-            $ref: '#/components/schemas/DataPageObject'
-          type: array
-        pageSize:
-          format: int32
-          type: integer
-        scrollId:
-          type: string
-        start:
-          format: int32
-          type: integer
-        totalCount:
-          format: int64
-          type: integer
-        totalPageCount:
-          format: int32
-          type: integer
-      title: DataPage«object»
-      type: object
-    FileAttachmentWrapper:
-      properties:
-        base64DataValue:
-          type: string
-        fileData:
-          items:
-            format: byte
-            type: string
-          type: array
-        fileId:
-          type: string
-        fileName:
-          type: string
-        image:
-          type: boolean
-        mimeType:
-          type: string
-        size:
-          format: int64
-          type: integer
-      type: object
-    NotificationEventWrapper:
-      properties:
-        accountId:
-          format: int64
-          type: integer
-        createdDate:
-          format: date-time
-          type: string
-        createdId:
-          format: int64
-          type: integer
-        createdName:
-          type: string
-        createdProxyName:
-          type: string
-        id:
-          format: int64
-          type: integer
-        lastModifiedDate:
-          format: date-time
-          type: string
-        lastModifiedId:
-          format: int64
-          type: integer
-        lastModifiedName:
-          type: string
-        lastModifiedProxyName:
-          type: string
-        name:
-          type: string
-        organizationId:
-          format: int64
-          type: integer
-        resourceBundleId:
-          format: int64
-          type: integer
-        status:
-          enum:
-          - A
-          - D
-          type: string
-      title: NotificationEventWrapper
-      type: object
-    AndOrFilterWrapper:
-      properties:
-        childFilters:
-          items:
-            $ref: '#/components/schemas/AndOrFilterWrapper'
-          type: array
-        contactFilterRules:
-          items:
-            $ref: '#/components/schemas/ContactFilterRuleWrapper'
-          type: array
-        filterExpression:
-          enum:
-          - AndAll
-          - OrAll
-          type: string
-      type: object
-    BroadcastTemplateWrapper:
-      description: The NotificationTemplate object to create
-      properties:
-        accountId:
-          format: int64
-          type: integer
         broadcastContacts:
           $ref: '#/components/schemas/BroadcastContactsWrapper'
-        broadcastSettings:
-          $ref: '#/components/schemas/BroadcastSettingsWrapper'
-        category:
-          $ref: '#/components/schemas/CategoryWrapper'
-        categoryId:
+        escalationCondition:
+          $ref: '#/components/schemas/EscalationConditionWrapper'
+        escalationName:
+          type: string
+        index:
+          format: int32
+          type: integer
+        notificationId:
           format: int64
           type: integer
-        confirmCountNeeded:
-          format: int64
-          type: integer
-        createdDate:
-          format: date-time
-          type: string
-        createdId:
-          format: int64
-          type: integer
-        createdName:
-          type: string
-        createdProxyName:
-          type: string
-        customTemplateId:
-          type: string
-        enableLifeSafety:
-          type: boolean
-        escalationLevels:
-          items:
-            $ref: '#/components/schemas/EscalationLevelWrapper'
-          type: array
-        event:
-          $ref: '#/components/schemas/NotificationEventWrapper'
-        id:
-          format: int64
-          type: integer
-        lastModifiedDate:
-          format: date-time
-          type: string
-        lastModifiedId:
-          format: int64
-          type: integer
-        lastModifiedName:
-          type: string
-        lastModifiedProxyName:
-          type: string
-        message:
-          $ref: '#/components/schemas/BroadcastMessageWrapper'
-        notificationEventId:
-          format: int64
-          type: integer
-        notificationName:
-          type: string
-        organizationId:
-          format: int64
-          type: integer
-        pollingOptionNeeded:
-          type: string
-        priority:
-          enum:
-          - NonPriority
-          - Priority
-          type: string
-        publicMessages:
-          $ref: '#/components/schemas/PublicMessagesWrapper'
-        resourceBundleId:
-          format: int64
-          type: integer
-        showWaringFlag:
-          type: boolean
-        status:
-          enum:
-          - A
-          - D
-          type: string
-        type:
-          enum:
-          - Standard
-          - Polling
-          - Conference
-          - Quota
-          type: string
-        useEscalation:
-          type: boolean
       type: object
     MobileNotificationSettingsWrapper:
       properties:
@@ -2227,6 +1290,164 @@ components:
           type: boolean
         requireConfirm:
           type: boolean
+      type: object
+    BroadcastContactsWrapper:
+      properties:
+        answerNeeded:
+          type: string
+        businessFilterRulesInMap:
+          $ref: '#/components/schemas/RCNAFilterRulesWrapper'
+        contactIds:
+          items:
+            format: int64
+            type: integer
+          type: array
+        contactSearchType:
+          enum:
+          - AllOr
+          - AllAnd
+          type: string
+        defaultSeqGroupQuota:
+          format: int32
+          type: integer
+        enableGroupCalendar:
+          type: boolean
+        enableSendToSubscribers:
+          type: boolean
+        excludedContactIds:
+          items:
+            format: int64
+            type: integer
+          type: array
+        externalIds:
+          items:
+            type: string
+          type: array
+        filterIds:
+          items:
+            format: int64
+            type: integer
+          type: array
+        filterNames:
+          items:
+            type: string
+          type: array
+        filterRules:
+          items:
+            $ref: '#/components/schemas/ContactFilterRuleWrapper'
+          type: array
+        groupIds:
+          items:
+            format: int64
+            type: integer
+          type: array
+        groupNames:
+          items:
+            type: string
+          type: array
+        mapConditions:
+          items:
+            $ref: '#/components/schemas/MapConditionWrapper'
+          type: array
+        naResidentContacts:
+          $ref: '#/components/schemas/NaResidentContactsWrapper'
+        residentFilterRulesInMap:
+          $ref: '#/components/schemas/RCNAFilterRulesWrapper'
+        residents:
+          $ref: '#/components/schemas/UmsContactsWrapper'
+        resultSetIds:
+          items:
+            type: string
+          type: array
+        searchShapes:
+          items:
+            $ref: '#/components/schemas/SearchShapeWrapper'
+          type: array
+        sequenceGroupEnabled:
+          type: boolean
+        sequenceGroupInterval:
+          format: int32
+          type: integer
+        sequenceGroups:
+          items:
+            $ref: '#/components/schemas/SequenceGroupWrapper'
+          type: array
+        sequenceShifts:
+          items:
+            $ref: '#/components/schemas/SequenceShiftWrapper'
+          type: array
+      type: object
+    NaResidentContactsWrapper:
+      properties:
+        businessIds:
+          items:
+            type: string
+          type: array
+        filterIds:
+          items:
+            type: string
+          type: array
+        residentIds:
+          items:
+            type: string
+          type: array
+      type: object
+    SenderInformationWrapper:
+      properties:
+        accountId:
+          format: int64
+          type: integer
+        callerId:
+          type: string
+        countryCode:
+          type: string
+        countryName:
+          type: string
+        createdDate:
+          format: date-time
+          type: string
+        createdId:
+          format: int64
+          type: integer
+        createdName:
+          type: string
+        createdProxyName:
+          type: string
+        id:
+          format: int64
+          type: integer
+        isDefault:
+          type: boolean
+        lastModifiedDate:
+          format: date-time
+          type: string
+        lastModifiedId:
+          format: int64
+          type: integer
+        lastModifiedName:
+          type: string
+        lastModifiedProxyName:
+          type: string
+        organizationId:
+          format: int64
+          type: integer
+        resourceBundleId:
+          format: int64
+          type: integer
+        status:
+          enum:
+          - A
+          - D
+          type: string
+      type: object
+    SequenceShiftWrapper:
+      properties:
+        confirmationQuota:
+          format: int32
+          type: integer
+        shiftId:
+          format: int64
+          type: integer
       type: object
     AlertUsMessageWrapper:
       properties:
@@ -2320,6 +1541,676 @@ components:
         voice:
           $ref: '#/components/schemas/FileAttachmentWrapper'
       type: object
+    CategoryWrapper:
+      description: The notificationCategory object to create
+      properties:
+        accountId:
+          format: int64
+          type: integer
+        createdDate:
+          format: date-time
+          type: string
+        createdId:
+          format: int64
+          type: integer
+        createdName:
+          type: string
+        createdProxyName:
+          type: string
+        id:
+          format: int64
+          type: integer
+        lastModifiedDate:
+          format: date-time
+          type: string
+        lastModifiedId:
+          format: int64
+          type: integer
+        lastModifiedName:
+          type: string
+        lastModifiedProxyName:
+          type: string
+        name:
+          type: string
+        organizationId:
+          format: int64
+          type: integer
+        resourceBundleId:
+          format: int64
+          type: integer
+        status:
+          enum:
+          - A
+          - D
+          type: string
+      type: object
+    RestfulInstanceResult:
+      properties:
+        message:
+          type: string
+        result:
+          type: object
+      title: RestfulInstanceResult
+      type: object
+    SenderSMSInfoWrapper:
+      properties:
+        countryCode:
+          type: string
+        smsId:
+          type: string
+      type: object
+    ChildContactFilterDTOWrapper:
+      properties:
+        contactFilterRules:
+          items:
+            $ref: '#/components/schemas/ContactFilterRuleDTOWrapper'
+          type: array
+        pathFilterRules:
+          items:
+            items:
+              $ref: '#/components/schemas/ContactFilterRuleDTOWrapper'
+            type: array
+          type: array
+      type: object
+    NotificationEventWrapper:
+      properties:
+        accountId:
+          format: int64
+          type: integer
+        createdDate:
+          format: date-time
+          type: string
+        createdId:
+          format: int64
+          type: integer
+        createdName:
+          type: string
+        createdProxyName:
+          type: string
+        id:
+          format: int64
+          type: integer
+        lastModifiedDate:
+          format: date-time
+          type: string
+        lastModifiedId:
+          format: int64
+          type: integer
+        lastModifiedName:
+          type: string
+        lastModifiedProxyName:
+          type: string
+        name:
+          type: string
+        organizationId:
+          format: int64
+          type: integer
+        resourceBundleId:
+          format: int64
+          type: integer
+        status:
+          enum:
+          - A
+          - D
+          type: string
+      title: NotificationEventWrapper
+      type: object
+    ReceiveEndPointWrapper:
+      properties:
+        credential:
+          $ref: '#/components/schemas/CredentialWrapper'
+        messageTemplate:
+          type: string
+        receiveUrl:
+          type: string
+        transportProtocol:
+          enum:
+          - HTTP
+          - HTTPS
+          type: string
+      type: object
+    GisLocationWrapper:
+      properties:
+        lat:
+          format: double
+          type: number
+        lon:
+          format: double
+          type: number
+      type: object
+    BroadcastTemplateWrapper:
+      description: The NotificationTemplate object to create
+      properties:
+        accountId:
+          format: int64
+          type: integer
+        broadcastContacts:
+          $ref: '#/components/schemas/BroadcastContactsWrapper'
+        broadcastSettings:
+          $ref: '#/components/schemas/BroadcastSettingsWrapper'
+        category:
+          $ref: '#/components/schemas/CategoryWrapper'
+        categoryId:
+          format: int64
+          type: integer
+        confirmCountNeeded:
+          format: int64
+          type: integer
+        createdDate:
+          format: date-time
+          type: string
+        createdId:
+          format: int64
+          type: integer
+        createdName:
+          type: string
+        createdProxyName:
+          type: string
+        customTemplateId:
+          type: string
+        enableLifeSafety:
+          type: boolean
+        escalationLevels:
+          items:
+            $ref: '#/components/schemas/EscalationLevelWrapper'
+          type: array
+        event:
+          $ref: '#/components/schemas/NotificationEventWrapper'
+        id:
+          format: int64
+          type: integer
+        lastModifiedDate:
+          format: date-time
+          type: string
+        lastModifiedId:
+          format: int64
+          type: integer
+        lastModifiedName:
+          type: string
+        lastModifiedProxyName:
+          type: string
+        message:
+          $ref: '#/components/schemas/BroadcastMessageWrapper'
+        notificationEventId:
+          format: int64
+          type: integer
+        notificationName:
+          type: string
+        organizationId:
+          format: int64
+          type: integer
+        pollingOptionNeeded:
+          type: string
+        priority:
+          enum:
+          - NonPriority
+          - Priority
+          type: string
+        publicMessages:
+          $ref: '#/components/schemas/PublicMessagesWrapper'
+        resourceBundleId:
+          format: int64
+          type: integer
+        showWaringFlag:
+          type: boolean
+        status:
+          enum:
+          - A
+          - D
+          type: string
+        type:
+          enum:
+          - Standard
+          - Polling
+          - Conference
+          - Quota
+          type: string
+        useEscalation:
+          type: boolean
+      type: object
+    CredentialWrapper:
+      properties:
+        password:
+          type: string
+        userName:
+          type: string
+      type: object
+    BroadcastSettingsWrapper:
+      properties:
+        accountCode:
+          type: string
+        bookConference:
+          type: boolean
+        confirm:
+          type: boolean
+        contactCycles:
+          format: int32
+          type: integer
+        cycleInterval:
+          format: int32
+          type: integer
+        deliverPaths:
+          items:
+            $ref: '#/components/schemas/OrganizationPathWrapper'
+          type: array
+        deliveryMethodInterval:
+          format: int32
+          type: integer
+        deliveryPathOrder:
+          enum:
+          - Account
+          - Organization
+          - Contact
+          - Custom
+          type: string
+        deliveryPaths:
+          items:
+            $ref: '#/components/schemas/OrganizationPathWrapper'
+          type: array
+        duration:
+          format: int32
+          type: integer
+        durationTimeUnit:
+          enum:
+          - NANOSECONDS
+          - MICROSECONDS
+          - MILLISECONDS
+          - SECONDS
+          - MINUTES
+          - HOURS
+          - DAYS
+          type: string
+        enableBeep:
+          type: boolean
+        enableRecord:
+          type: boolean
+        enableSecureNotification:
+          type: boolean
+        enableSmartConferenceConfirmationText:
+          type: boolean
+        language:
+          type: string
+        mobileSettings:
+          $ref: '#/components/schemas/MobileNotificationSettingsWrapper'
+        pushCustomFields:
+          additionalProperties:
+            type: string
+          type: object
+        quietTimeOverride:
+          type: boolean
+        recipientApp:
+          type: boolean
+        requirePinForMessage:
+          type: boolean
+        residentConnectionDeliveryPaths:
+          items:
+            $ref: '#/components/schemas/OrganizationPathRCWrapper'
+          type: array
+        resourceURL:
+          type: string
+        responseSetting:
+          $ref: '#/components/schemas/ResponseSettingWrapper'
+        securePushInstructions:
+          type: string
+        senderCallerInfos:
+          items:
+            $ref: '#/components/schemas/SenderInformationWrapper'
+          type: array
+        senderEmail:
+          type: string
+        senderSMSInfos:
+          items:
+            $ref: '#/components/schemas/SenderSMSInfoWrapper'
+          type: array
+        smsCallBack:
+          type: boolean
+        throttlDefaultAmount:
+          format: int32
+          type: integer
+        throttle:
+          type: boolean
+        validateContacts:
+          type: boolean
+        validateContactsByOrganization:
+          type: boolean
+        voiceMailOption:
+          enum:
+          - NO_MESSAGE
+          - MESSAGE_ONLY
+          - MESSAGE_WITH_CONFIRMATION
+          type: string
+      type: object
+    OrganizationPathRCWrapper:
+      properties:
+        default:
+          type: boolean
+        editable:
+          type: boolean
+        id:
+          format: int64
+          type: integer
+        mandatory:
+          type: boolean
+        pathId:
+          format: int64
+          type: integer
+        prompt:
+          type: string
+        seq:
+          format: int32
+          type: integer
+      type: object
+    RCNAFilterRulesWrapper:
+      properties:
+        childFilters:
+          items:
+            $ref: '#/components/schemas/ChildContactFilterDTOWrapper'
+          type: array
+        residentContactType:
+          enum:
+          - RESIDENTIAL
+          - BUSINESS
+          type: string
+      type: object
+    ProcessingStateWrapper:
+      properties:
+        serverId:
+          format: int64
+          type: integer
+        startTime:
+          format: int64
+          type: integer
+        synchronizeTime:
+          format: int64
+          type: integer
+        threadName:
+          type: string
+      type: object
+    ContactFilterRuleWrapper:
+      properties:
+        attributeId:
+          format: int64
+          type: integer
+        attributeValues:
+          items:
+            type: object
+          type: array
+        columnName:
+          type: string
+        columnValue:
+          type: object
+        contactFieldId:
+          format: int64
+          type: integer
+        contactFilterOption:
+          enum:
+          - ISNULL
+          - ISNULLARRAY
+          - NOTNULL
+          - ISEMPTY
+          - NOTEMPTY
+          - IN
+          - NIN
+          - GT
+          - LT
+          - GTE
+          - LTE
+          - NE
+          - NENLC
+          - E
+          - ENLC
+          - LIKE
+          - LIKENLC
+          - NLIKE
+          - NLIKENLC
+          - STARTWITH
+          - STARTWITHNLC
+          - ENDWITH
+          - ENDWITHNLC
+          - INPOLYGON
+          - NINPOLYGON
+          - OVERLAP
+          - NONEOVERLAP
+          - ELEMENTEQUAL
+          - ELEMENTNOTEQUAL
+          - BETWEEN
+          type: string
+        dataType:
+          enum:
+          - STRING
+          - NUMBER
+          - DATE
+          - BOOLEAN
+          - POLYGON
+          type: string
+        defaultValue:
+          type: object
+        displayFieldName:
+          type: string
+        embeddedColumnName:
+          type: string
+        fieldName:
+          type: string
+        fieldType:
+          enum:
+          - DATE
+          - STRING
+          - INT
+          - LONG
+          - BOOLEAN
+          - LIST
+          - NUMBER
+          - ARRAY
+          type: string
+        fieldValue:
+          type: object
+        operator:
+          type: string
+        showType:
+          enum:
+          - SINGLE
+          - MULTIPLE
+          - TEXT
+          type: string
+        type:
+          enum:
+          - SYSTEM
+          - CUSTOM
+          - SYSTEM_OBJECT
+          - SYSTEM_ARRAY
+          - CUSTOM_ARRAY
+          - SYSTEM_SCHEDULING
+          - SYSTEM_EXPECTED_OBJECT
+          - SYSTEM_POLYGON_ARRAY
+          type: string
+      type: object
+    MapConditionWrapper:
+      properties:
+        contactSearchCondition:
+          $ref: '#/components/schemas/ContactSearchConditionWrapper'
+        mapFilter:
+          $ref: '#/components/schemas/ContactFilterWrapper'
+        searchShapes:
+          items:
+            $ref: '#/components/schemas/SearchShapeWrapper'
+          type: array
+      type: object
+    BroadcastMessageWrapper:
+      properties:
+        accountId:
+          format: int64
+          type: integer
+        attachmentFiles:
+          items:
+            $ref: '#/components/schemas/FileAttachmentWrapper'
+          type: array
+        audioKey:
+          type: string
+        category:
+          $ref: '#/components/schemas/CategoryWrapper'
+        categoryId:
+          format: int64
+          type: integer
+        conferenceBridge:
+          $ref: '#/components/schemas/ConferenceBridgeWrapper'
+        conferenceBridgeId:
+          format: int64
+          type: integer
+        contentType:
+          enum:
+          - Voice
+          - Text
+          - VoiceText
+          type: string
+        createdDate:
+          format: date-time
+          type: string
+        createdId:
+          format: int64
+          type: integer
+        createdName:
+          type: string
+        createdProxyName:
+          type: string
+        id:
+          format: int64
+          type: integer
+        imageKey:
+          type: string
+        lastModifiedDate:
+          format: date-time
+          type: string
+        lastModifiedId:
+          format: int64
+          type: integer
+        lastModifiedName:
+          type: string
+        lastModifiedProxyName:
+          type: string
+        organizationId:
+          format: int64
+          type: integer
+        questionaire:
+          $ref: '#/components/schemas/QuestionaireWrapper'
+        resourceBundleId:
+          format: int64
+          type: integer
+        rtfContent:
+          type: string
+        status:
+          enum:
+          - A
+          - D
+          type: string
+        textMessage:
+          type: string
+        textSmsMessage:
+          type: string
+        textSmsWebPageMessage:
+          type: string
+        title:
+          type: string
+        useCustomEmail:
+          type: boolean
+        useCustomSms:
+          type: boolean
+        useNewRTF:
+          type: boolean
+        useSmsPrefix:
+          type: boolean
+        useSmsWebLink:
+          type: boolean
+        voiceSource:
+          enum:
+          - WebUploader
+          - WebRecorder
+          - PreRecorded
+          - MobileRecorder
+          - LandlineRecorder
+          type: string
+      type: object
+    DesktopAlertWrapper:
+      properties:
+        category:
+          type: string
+        customDuration:
+          format: int32
+          type: integer
+        customTimeUnit:
+          type: string
+        fields:
+          items:
+            $ref: '#/components/schemas/DesktopAlertPlaceholder'
+          type: array
+        targets:
+          items:
+            $ref: '#/components/schemas/DesktopAlertTarget'
+          type: array
+        templateId:
+          type: string
+        useDefaultTargeting:
+          type: boolean
+        useSameDurationAsNotification:
+          type: boolean
+      type: object
+    QuestionaireWrapper:
+      properties:
+        answers:
+          items:
+            $ref: '#/components/schemas/AnswerWrapper'
+          type: array
+        inputOptionAllowable:
+          type: boolean
+        inputOptionType:
+          type: string
+        multipleSelected:
+          type: boolean
+        question:
+          type: string
+        required:
+          type: boolean
+        voiceMessage:
+          items:
+            format: byte
+            type: string
+          type: array
+      type: object
+    DesktopAlertPlaceholder:
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+      type: object
+    RestfulCollectionResult:
+      properties:
+        currentPageUri:
+          type: string
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        nextPageUri:
+          type: string
+        page:
+          $ref: '#/components/schemas/DataPageObject'
+        previousPageUri:
+          type: string
+      title: RestfulCollectionResult
+      type: object
+    AccessStepWrapper:
+      properties:
+        type:
+          enum:
+          - Wait
+          - Dial
+          - Code
+          type: string
+        value:
+          type: string
+      type: object
     EBNetworkEffectCategoryWrapper:
       properties:
         accountId:
@@ -2365,245 +2256,59 @@ components:
           - D
           type: string
       type: object
-    MapConditionWrapper:
+    ResponseSettingWrapper:
       properties:
-        contactSearchCondition:
-          $ref: '#/components/schemas/ContactSearchConditionWrapper'
-        mapFilter:
-          $ref: '#/components/schemas/ContactFilterWrapper'
-        searchShapes:
-          items:
-            $ref: '#/components/schemas/SearchShapeWrapper'
-          type: array
+        pollingResponse:
+          type: string
+        profileId:
+          type: string
+        type:
+          enum:
+          - FIRST
+          - EVERY
+          type: string
       type: object
-    RestfulInstanceResult:
+    SequenceGroupWrapper:
       properties:
-        message:
-          type: string
-        result:
-          type: object
-      title: RestfulInstanceResult
-      type: object
-    ResidentPropertyFilterWrapper:
-      properties:
-        field:
-          type: string
-        values:
-          items:
-            type: string
-          type: array
-      type: object
-    SearchShapeWrapper:
-      properties:
-        boundaryId:
-          type: string
-        fromLibrary:
-          type: boolean
-        include:
-          type: boolean
-        name:
-          type: string
-        regionId:
+        confirmationQuota:
+          format: int32
+          type: integer
+        groupId:
           format: int64
           type: integer
-        residentContactTypes:
-          items:
-            enum:
-            - RESIDENTIAL
-            - BUSINESS
-            type: string
-          type: array
-        searchShapeTypes:
-          items:
-            enum:
-            - STATIC
-            - DYNAMIC
-            - EXPECTED
-            - TRAVEL
-            type: string
-          type: array
-        shape:
-          $ref: '#/components/schemas/GeoShapeWrapper'
       type: object
-    WebWidgetWrapper:
+    NixleAlertMessageWrapper:
       properties:
-        customDuration:
-          format: int32
-          type: integer
-        customTimeUnit:
+        action:
           type: string
-        ewwEndDate:
-          format: date-time
-          type: string
-        name:
-          type: string
-        stream:
-          format: int32
-          type: integer
-        useSameDurationAsNotification:
-          type: boolean
-        useSetEndTimeByCalendar:
-          type: boolean
-      type: object
-    IpawsMessageField:
-      properties:
-        field:
-          type: string
-        values:
-          items:
-            type: string
-          type: array
-      type: object
-    IPAWSMessageWrapper:
-      properties:
-        accountId:
-          format: int64
-          type: integer
-        affectedAreas:
-          items:
-            $ref: '#/components/schemas/GeoShapeWrapper'
-          type: array
-        body:
-          type: string
-        capFileLength:
-          format: int32
-          type: integer
-        capFileResourceId:
-          type: string
-        capSendResult:
-          type: string
-        capSent:
+        applyZipCodeToEventGroups:
           type: boolean
         category:
           type: string
         certainty:
           type: string
-        code:
-          type: string
-        createdDate:
-          format: date-time
-          type: string
-        createdId:
-          format: int64
-          type: integer
-        createdName:
-          type: string
-        createdProxyName:
-          type: string
+        community:
+          $ref: '#/components/schemas/NixleCommunityWrapper'
         event:
           type: string
-        eventCode:
-          type: string
-        expiredHours:
-          format: int32
-          type: integer
-        fields:
+        eventGroups:
           items:
-            $ref: '#/components/schemas/IpawsMessageField'
+            format: int64
+            type: integer
           type: array
-        fileAttachments:
-          items:
-            $ref: '#/components/schemas/FileAttachmentWrapper'
-          type: array
-        geoCodes:
-          items:
-            type: string
-          type: array
-        handling:
+        expire:
           type: string
-        id:
-          format: int64
-          type: integer
-        identifier:
-          format: int64
-          type: integer
-        instruction:
+        instructions:
           type: string
-        ipawsMessage:
-          type: string
-        ipawsMessageEn360:
-          type: string
-        ipawsMessageEs360:
-          type: string
-        ipawsMessageEs90:
-          type: string
-        keystorePassword:
-          type: string
-        language:
-          enum:
-          - en_US
-          type: string
-        lastModifiedDate:
-          format: date-time
-          type: string
-        lastModifiedId:
-          format: int64
-          type: integer
-        lastModifiedName:
-          type: string
-        lastModifiedProxyName:
-          type: string
-        messageStatus:
-          type: string
-        organizationId:
-          format: int64
-          type: integer
-        privateKey:
-          type: string
-        pubDate:
-          format: date-time
-          type: string
-        resourceBundleId:
-          format: int64
-          type: integer
-        scope:
-          type: string
-        sendResult:
-          type: string
-        sender:
-          type: string
-        senderName:
-          type: string
-        senderTimeZoneId:
-          type: string
-        sent:
-          type: boolean
         severity:
           type: string
-        status:
-          enum:
-          - A
-          - D
+        smsMessage:
           type: string
-        title:
-          type: string
-        trainingMode:
-          type: boolean
         type:
-          type: string
-        urgency:
-          type: string
-        useCapRss:
-          type: boolean
-        voice:
-          $ref: '#/components/schemas/FileAttachmentWrapper'
-        web:
-          type: string
-      type: object
-    EscalationLevelWrapper:
-      properties:
-        broadcastContacts:
-          $ref: '#/components/schemas/BroadcastContactsWrapper'
-        escalationCondition:
-          $ref: '#/components/schemas/EscalationConditionWrapper'
-        escalationName:
-          type: string
-        index:
           format: int32
           type: integer
-        notificationId:
-          format: int64
-          type: integer
+        urgency:
+          type: string
       type: object
     AlertUsSettingWrapper:
       properties:
@@ -2656,22 +2361,62 @@ components:
         url:
           type: string
       type: object
-    EscalationConditionWrapper:
+    DesktopAlertTarget:
       properties:
-        timeUnit:
-          enum:
-          - NANOSECONDS
-          - MICROSECONDS
-          - MILLISECONDS
-          - SECONDS
-          - MINUTES
-          - HOURS
-          - DAYS
+        id:
           type: string
-        waitTime:
-          format: int32
+        type:
+          type: string
+      type: object
+    ResidentPropertyFilterWrapper:
+      properties:
+        field:
+          type: string
+        values:
+          items:
+            type: string
+          type: array
+      type: object
+    UmsContactsWrapper:
+      properties:
+        properties:
+          items:
+            $ref: '#/components/schemas/ResidentPropertyFilterWrapper'
+          type: array
+        searchBySearchShapes:
+          type: boolean
+        umsPatterns:
+          items:
+            $ref: '#/components/schemas/UmsUploadWrapper'
+          type: array
+      type: object
+    FileAttachmentWrapper:
+      properties:
+        base64DataValue:
+          type: string
+        fileData:
+          items:
+            format: byte
+            type: string
+          type: array
+        fileId:
+          type: string
+        fileName:
+          type: string
+        image:
+          type: boolean
+        mimeType:
+          type: string
+        size:
+          format: int64
           type: integer
       type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
     AnswerWrapper:
       properties:
         name:
@@ -2685,6 +2430,271 @@ components:
           - PHONE_NUMBER
           - TIME
           - OTHER
+          type: string
+      type: object
+    NixleCommunityWrapper:
+      properties:
+        contactDivision:
+          type: string
+        contactEmail:
+          type: string
+        contactName:
+          type: string
+        contactPhone:
+          type: string
+        jurisdictionType:
+          type: string
+        regionIds:
+          items:
+            format: int64
+            type: integer
+          type: array
+      type: object
+    DataPageObject:
+      properties:
+        currentPageNo:
+          format: int32
+          type: integer
+        data:
+          items:
+            type: object
+          type: array
+        dataPageList:
+          items:
+            $ref: '#/components/schemas/DataPageObject'
+          type: array
+        pageSize:
+          format: int32
+          type: integer
+        scrollId:
+          type: string
+        start:
+          format: int32
+          type: integer
+        totalCount:
+          format: int64
+          type: integer
+        totalPageCount:
+          format: int32
+          type: integer
+      title: DataPage«object»
+      type: object
+    GenericOneWaySettingWrapper:
+      properties:
+        accountId:
+          format: int64
+          type: integer
+        createdDate:
+          format: date-time
+          type: string
+        createdId:
+          format: int64
+          type: integer
+        createdName:
+          type: string
+        createdProxyName:
+          type: string
+        id:
+          format: int64
+          type: integer
+        lastModifiedDate:
+          format: date-time
+          type: string
+        lastModifiedId:
+          format: int64
+          type: integer
+        lastModifiedName:
+          type: string
+        lastModifiedProxyName:
+          type: string
+        organizationId:
+          format: int64
+          type: integer
+        postParams:
+          additionalProperties:
+            type: string
+          type: object
+        receiveEndPoints:
+          items:
+            $ref: '#/components/schemas/ReceiveEndPointWrapper'
+          type: array
+        resourceBundleId:
+          format: int64
+          type: integer
+        status:
+          enum:
+          - A
+          - D
+          type: string
+      type: object
+    EBNetworkEffectSettingWrapper:
+      properties:
+        accountId:
+          format: int64
+          type: integer
+        allPublishCategories:
+          type: boolean
+        allSubscribeAddresses:
+          type: boolean
+        allSubscribeCategories:
+          type: boolean
+        category:
+          $ref: '#/components/schemas/EBNetworkEffectCategoryWrapper'
+        createdDate:
+          format: date-time
+          type: string
+        createdId:
+          format: int64
+          type: integer
+        createdName:
+          type: string
+        createdProxyName:
+          type: string
+        displayLogo:
+          type: boolean
+        id:
+          format: int64
+          type: integer
+        lastModifiedDate:
+          format: date-time
+          type: string
+        lastModifiedId:
+          format: int64
+          type: integer
+        lastModifiedName:
+          type: string
+        lastModifiedProxyName:
+          type: string
+        logoKey:
+          type: string
+        nickName:
+          type: string
+        organizationId:
+          format: int64
+          type: integer
+        publishCategories:
+          items:
+            $ref: '#/components/schemas/EBNetworkEffectCategoryWrapper'
+          type: array
+        resourceBundleId:
+          format: int64
+          type: integer
+        responsibilityArea:
+          items:
+            $ref: '#/components/schemas/GeoShapeWrapper'
+          type: array
+        status:
+          enum:
+          - A
+          - D
+          type: string
+        subscribeAddresses:
+          items:
+            $ref: '#/components/schemas/AddressWrapper'
+          type: array
+        subscribeCategories:
+          items:
+            $ref: '#/components/schemas/EBNetworkEffectCategoryWrapper'
+          type: array
+      type: object
+    GeoShapeWrapper:
+      properties:
+        points:
+          items:
+            $ref: '#/components/schemas/GeoPointWrapper'
+          type: array
+      type: object
+    AddressWrapper:
+      properties:
+        city:
+          type: string
+        country:
+          type: string
+        gisLocation:
+          $ref: '#/components/schemas/GisLocationWrapper'
+        locationName:
+          type: string
+        postalCode:
+          type: string
+        state:
+          type: string
+        streetAddress:
+          type: string
+        suite:
+          type: string
+      type: object
+    GenericOneWayMessageWrapper:
+      properties:
+        accountId:
+          format: int64
+          type: integer
+        affectedAreas:
+          items:
+            $ref: '#/components/schemas/GeoShapeWrapper'
+          type: array
+        body:
+          type: string
+        createdDate:
+          format: date-time
+          type: string
+        createdId:
+          format: int64
+          type: integer
+        createdName:
+          type: string
+        createdProxyName:
+          type: string
+        fileAttachments:
+          items:
+            $ref: '#/components/schemas/FileAttachmentWrapper'
+          type: array
+        genericOneWaySetting:
+          $ref: '#/components/schemas/GenericOneWaySettingWrapper'
+        id:
+          format: int64
+          type: integer
+        lastModifiedDate:
+          format: date-time
+          type: string
+        lastModifiedId:
+          format: int64
+          type: integer
+        lastModifiedName:
+          type: string
+        lastModifiedProxyName:
+          type: string
+        organizationId:
+          format: int64
+          type: integer
+        resourceBundleId:
+          format: int64
+          type: integer
+        sendResult:
+          type: string
+        senderName:
+          type: string
+        senderTimeZoneId:
+          type: string
+        sent:
+          type: boolean
+        status:
+          enum:
+          - A
+          - D
+          type: string
+        title:
+          type: string
+        trainingMode:
+          type: boolean
+        voice:
+          $ref: '#/components/schemas/FileAttachmentWrapper'
+      type: object
+    AlertUsGroup:
+      properties:
+        groupId:
+          format: int64
+          type: integer
+        groupName:
           type: string
       type: object
   securitySchemes:

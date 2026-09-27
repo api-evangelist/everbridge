@@ -13,7 +13,7 @@ paths:
   /privacy-policy/organizations/{organizationId}/policies:
     get:
       description: Retrieve all Privacy Policies for an organization.
-      operationId: EBS List Privacy Policies
+      operationId: EBSListPrivacyPolicies
       parameters:
       - description: The ID of the organization.
         in: path
@@ -138,9 +138,11 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/privacy-policy/organizations/{organizationId}/policies
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS List Privacy Policies
     post:
       description: Create a privacy policy for an organization.
-      operationId: EBS Create Privacy Policy
+      operationId: EBSCreatePrivacyPolicy
       parameters:
       - description: The ID of the organization.
         in: path
@@ -236,10 +238,12 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/privacy-policy/organizations/{organizationId}/policies
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Create Privacy Policy
   /privacy-policy/organizations/{organizationId}/policies/{policyId}:
     delete:
       description: Delete a privacy policy by id.
-      operationId: EBS Delete Privacy Policy
+      operationId: EBSDeletePrivacyPolicy
       parameters:
       - description: The ID of the organization.
         in: path
@@ -328,9 +332,11 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/privacy-policy/organizations/{organizationId}/policies/{policyId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Delete Privacy Policy
     get:
       description: Query privacy policy by ID.
-      operationId: EBS Get Privacy Policy
+      operationId: EBSGetPrivacyPolicy
       parameters:
       - description: The ID of the organization.
         in: path
@@ -438,9 +444,11 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/privacy-policy/organizations/{organizationId}/policies/{policyId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Get Privacy Policy
     put:
       description: Update a privacy policy for an organization.
-      operationId: EBS Update Privacy Policy
+      operationId: EBSUpdatePrivacyPolicy
       parameters:
       - description: The ID of the organization.
         in: path
@@ -543,10 +551,12 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/privacy-policy/organizations/{organizationId}/policies/{policyId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Update Privacy Policy
   /privacy-policy/organizations/{organizationId}/policies/{policyId}/policy-assignment:
     post:
       description: Assign or un-assign the policy to some roles of the organization.
-      operationId: EBS assign or un-assign Privacy Policy
+      operationId: EBSAssignOrUn-assignPrivacyPolicy
       parameters:
       - description: The ID of the organization.
         in: path
@@ -648,10 +658,12 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/privacy-policy/organizations/{organizationId}/policies/{policyId}/policy-assignment
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS assign or un-assign Privacy Policy
   /privacy-policy/organizations/{organizationId}/policy-assignment/bypolicy:
     get:
       description: Retrieve all privacy policies with assigned roles for an organization.
-      operationId: EBS Get Privacy Policy Assigment
+      operationId: EBSGetPrivacyPolicyAssigment
       parameters:
       - description: The ID of the organization.
         in: path
@@ -777,8 +789,60 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/privacy-policy/organizations/{organizationId}/policy-assignment/bypolicy
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Get Privacy Policy Assigment
 components:
   schemas:
+    privacyPolicy:
+      properties:
+        policyItems:
+          items:
+            properties:
+              category:
+                description: Whether the data privacy policy work for 'contactSection' or 'contactField'
+                type: string
+              nameIdentity:
+                description: The data privacy policy will work when it be GENERAL_INFORMATION,DELIVERY_METHODS,STATIC_LOCATIONS,EXPECTED_LOCATIONS,LAST_KNOWN_LOCATIONS,TRAVEL_ARRANGER
+                type: string
+              permission:
+                description: The permission details of the privacy policy:NO_ACCESS,VIEW_ONLY,VIEW_AND_EDIT
+                type: string
+            type: object
+          type: array
+        policyName:
+          description: The name of the privacy policy
+          type: string
+      type: object
+    privacyAssignment:
+      properties:
+        assignedRoles:
+          items:
+            properties:
+              roleId:
+                type: integer
+              roleName:
+                type: string
+              roleType:
+                type: string
+            type: object
+          type: array
+        policyId:
+          type: integer
+        policyName:
+          type: string
+      type: object
+    policyId:
+      default: '0'
+      description: privacy policy ID
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
     getPrivacyPolicies:
       properties:
         summary:
@@ -847,50 +911,6 @@ components:
             type: integer
           type: array
       type: object
-    privacyAssignment:
-      properties:
-        assignedRoles:
-          items:
-            properties:
-              roleId:
-                type: integer
-              roleName:
-                type: string
-              roleType:
-                type: string
-            type: object
-          type: array
-        policyId:
-          type: integer
-        policyName:
-          type: string
-      type: object
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
-    privacyPolicy:
-      properties:
-        policyItems:
-          items:
-            properties:
-              category:
-                description: Whether the data privacy policy work for 'contactSection' or 'contactField'
-                type: string
-              nameIdentity:
-                description: The data privacy policy will work when it be GENERAL_INFORMATION,DELIVERY_METHODS,STATIC_LOCATIONS,EXPECTED_LOCATIONS,LAST_KNOWN_LOCATIONS,TRAVEL_ARRANGER
-                type: string
-              permission:
-                description: The permission details of the privacy policy:NO_ACCESS,VIEW_ONLY,VIEW_AND_EDIT
-                type: string
-            type: object
-          type: array
-        policyName:
-          description: The name of the privacy policy
-          type: string
-      type: object
     postUpdateResponse:
       properties:
         baseUri:
@@ -902,12 +922,6 @@ components:
         message:
           type: string
       type: object
-    policyId:
-      default: '0'
-      description: privacy policy ID
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
   securitySchemes:
     API_Authorizer:
       description: oAuth Token

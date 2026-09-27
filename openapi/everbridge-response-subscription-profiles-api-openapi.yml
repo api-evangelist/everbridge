@@ -13,7 +13,7 @@ paths:
   /profiles/{organizationId}/{profileId}:
     get:
       description: Retrieve a Profile by id within an organization
-      operationId: EBS Get Profiles
+      operationId: EBSGetProfiles
       parameters:
       - description: The id of the organization containing the Profile
         in: path
@@ -53,6 +53,8 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/profiles/{organizationId}/{profileId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Get Profiles
 components:
   securitySchemes:
     API_Authorizer:

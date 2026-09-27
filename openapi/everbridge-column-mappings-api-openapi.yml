@@ -15,7 +15,7 @@ paths:
     get:
       tags:
       - Column Mappings
-      operationId: EB AM List Column Mappings
+      operationId: EBAMListColumnMappings
       summary: List Column Mappings
       parameters:
       - name: X-EB-Organization-Id
@@ -60,10 +60,12 @@ paths:
         requestParameters:
           integration.request.header.Authorization: context.authorizer.override_token
         passthroughBehavior: when_no_match
+      x-operation-id-source: normalized
+      x-operation-id-original: EB AM List Column Mappings
     post:
       tags:
       - Column Mappings
-      operationId: EB AM Create Column Mapping
+      operationId: EBAMCreateColumnMapping
       summary: Create Column Mapping
       parameters:
       - name: X-EB-Organization-Id
@@ -120,11 +122,13 @@ paths:
         requestParameters:
           integration.request.header.Authorization: context.authorizer.override_token
         passthroughBehavior: when_no_match
+      x-operation-id-source: normalized
+      x-operation-id-original: EB AM Create Column Mapping
   /column-mappings/{id}:
     get:
       tags:
       - Column Mappings
-      operationId: EB AM Get Column Mapping
+      operationId: EBAMGetColumnMapping
       summary: Get Column Mapping
       parameters:
       - name: X-EB-Organization-Id
@@ -175,10 +179,12 @@ paths:
           integration.request.path.id: method.request.path.id
           integration.request.header.Authorization: context.authorizer.override_token
         passthroughBehavior: when_no_match
+      x-operation-id-source: normalized
+      x-operation-id-original: EB AM Get Column Mapping
     put:
       tags:
       - Column Mappings
-      operationId: EB AM Update Column Mapping
+      operationId: EBAMUpdateColumnMapping
       summary: Update Column Mapping
       parameters:
       - name: X-EB-Organization-Id
@@ -235,10 +241,12 @@ paths:
           integration.request.path.id: method.request.path.id
           integration.request.header.Authorization: context.authorizer.override_token
         passthroughBehavior: when_no_match
+      x-operation-id-source: normalized
+      x-operation-id-original: EB AM Update Column Mapping
     delete:
       tags:
       - Column Mappings
-      operationId: EB AM Delete Column Mapping
+      operationId: EBAMDeleteColumnMapping
       summary: Delete Column Mapping
       parameters:
       - name: X-EB-Organization-Id
@@ -289,6 +297,8 @@ paths:
           integration.request.path.id: method.request.path.id
           integration.request.header.Authorization: context.authorizer.override_token
         passthroughBehavior: when_no_match
+      x-operation-id-source: normalized
+      x-operation-id-original: EB AM Delete Column Mapping
 components:
   schemas:
     ColumnMappingRequest:
@@ -305,6 +315,12 @@ components:
           maxLength: 200
           minLength: 1
           type: string
+    organizationId:
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      maxLength: 16
+      type: integer
+      example: '1536984111644674'
+      default: '1536984111644674'
     ColumnMapping:
       type: object
       properties:
@@ -340,12 +356,6 @@ components:
         seq:
           type: integer
           format: int32
-    organizationId:
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      maxLength: 16
-      type: integer
-      example: '1536984111644674'
-      default: '1536984111644674'
   securitySchemes:
     BasicAuth:
       type: http

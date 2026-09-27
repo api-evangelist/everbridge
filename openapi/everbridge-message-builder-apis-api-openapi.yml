@@ -90,6 +90,61 @@ paths:
         connectionType: VPC_LINK
 components:
   schemas:
+    ToneOperation:
+      type: object
+      required:
+      - type
+      - value
+      properties:
+        type:
+          type: string
+          enum:
+          - Tone
+        value:
+          type: string
+          enum:
+          - Urgent
+          - Directive
+          - Informational
+          - Reassuring
+          description: The tone to apply
+    ProblemDetail:
+      type: object
+      description: An RFC-7807 compliant model for error details.
+      properties:
+        type:
+          type: string
+          description: A URI that identifies the problem type.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem type.
+        status:
+          type: integer
+          description: The HTTP response status code describing the error.
+        detail:
+          type: string
+          description: A human-readable explanation of the specific problem.
+        instance:
+          type: string
+          description: A URI that identifies the specific problem.
+    GenerateMessageResponse:
+      type: object
+      properties:
+        content:
+          type: string
+          description: The final content.
+        sessionId:
+          type: string
+          description: A unique session identifier used to maintain conversation state across multiple interactions。
+    RectifyOperation:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - Rectify
     GenerateMessageRequest:
       type: object
       required:
@@ -118,34 +173,6 @@ components:
         sessionId:
           type: string
           description: A unique session identifier used to maintain conversation state across multiple interactions。
-    GenerateMessageResponse:
-      type: object
-      properties:
-        content:
-          type: string
-          description: The final content.
-        sessionId:
-          type: string
-          description: A unique session identifier used to maintain conversation state across multiple interactions。
-    ProblemDetail:
-      type: object
-      description: An RFC-7807 compliant model for error details.
-      properties:
-        type:
-          type: string
-          description: A URI that identifies the problem type.
-        title:
-          type: string
-          description: A short, human-readable summary of the problem type.
-        status:
-          type: integer
-          description: The HTTP response status code describing the error.
-        detail:
-          type: string
-          description: A human-readable explanation of the specific problem.
-        instance:
-          type: string
-          description: A URI that identifies the specific problem.
     GenerateMessageOperation:
       type: object
       description: An operation to apply to the source content
@@ -172,33 +199,6 @@ components:
           - Longer
           - Longest
           description: Value for length adjustment
-    RectifyOperation:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          enum:
-          - Rectify
-    ToneOperation:
-      type: object
-      required:
-      - type
-      - value
-      properties:
-        type:
-          type: string
-          enum:
-          - Tone
-        value:
-          type: string
-          enum:
-          - Urgent
-          - Directive
-          - Informational
-          - Reassuring
-          description: The tone to apply
     GenerateMessageContext:
       type: object
       properties:

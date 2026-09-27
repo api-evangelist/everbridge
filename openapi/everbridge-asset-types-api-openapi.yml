@@ -15,7 +15,7 @@ paths:
     get:
       tags:
       - Asset Types
-      operationId: EBS AM List Asset Types
+      operationId: EBSAMListAssetTypes
       summary: List Asset Types
       parameters:
       - name: X-EB-Organization-Id
@@ -94,10 +94,12 @@ paths:
         passthroughBehavior: when_no_match
         requestParameters:
           integration.request.header.Authorization: context.authorizer.override_token
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS AM List Asset Types
     post:
       tags:
       - Asset Types
-      operationId: EBS AM Create Asset Type
+      operationId: EBSAMCreateAssetType
       summary: Create Asset Type
       parameters:
       - name: X-EB-Organization-Id
@@ -192,11 +194,13 @@ paths:
         passthroughBehavior: when_no_match
         requestParameters:
           integration.request.header.Authorization: context.authorizer.override_token
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS AM Create Asset Type
   /asset-types/{id}:
     get:
       tags:
       - Asset Types
-      operationId: EBS AM Get Asset Type
+      operationId: EBSAMGetAssetType
       summary: Get Asset Type
       parameters:
       - name: X-EB-Organization-Id
@@ -272,10 +276,12 @@ paths:
           integration.request.path.id: method.request.path.id
           integration.request.header.Authorization: context.authorizer.override_token
         passthroughBehavior: when_no_match
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS AM Get Asset Type
     put:
       tags:
       - Asset Types
-      operationId: EBS AM Update Asset Type
+      operationId: EBSAMUpdateAssetType
       summary: Update Asset Type
       parameters:
       - name: X-EB-Organization-Id
@@ -362,10 +368,12 @@ paths:
           integration.request.path.id: method.request.path.id
           integration.request.header.Authorization: context.authorizer.override_token
         passthroughBehavior: when_no_match
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS AM Update Asset Type
     delete:
       tags:
       - Asset Types
-      operationId: EBS AM Delete Asset Type
+      operationId: EBSAMDeleteAssetType
       summary: Delete Asset Type
       parameters:
       - name: X-EB-Organization-Id
@@ -434,11 +442,13 @@ paths:
           integration.request.path.id: method.request.path.id
           integration.request.header.Authorization: context.authorizer.override_token
         passthroughBehavior: when_no_match
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS AM Delete Asset Type
   /asset-types/sc-building:
     get:
       tags:
       - Asset Types
-      operationId: EBS AM Get SC Building Asset Type
+      operationId: EBSAMGetSCBuildingAssetType
       summary: Get SC Building Asset Type
       parameters:
       - name: X-EB-Organization-Id
@@ -489,11 +499,13 @@ paths:
         passthroughBehavior: when_no_match
         requestParameters:
           integration.request.header.Authorization: context.authorizer.override_token
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS AM Get SC Building Asset Type
   /asset-types/property-definitions/{id}/linked-to-asset:
     get:
       tags:
       - Asset Types
-      operationId: EBS AM Is Linked To Asset
+      operationId: EBSAMIsLinkedToAsset
       summary: Is Linked To Asset
       parameters:
       - name: X-EB-Organization-Id
@@ -539,11 +551,13 @@ paths:
           integration.request.path.id: method.request.path.id
           integration.request.header.Authorization: context.authorizer.override_token
         passthroughBehavior: when_no_match
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS AM Is Linked To Asset
   /asset-types/property-definitions/names:
     get:
       tags:
       - Asset Types
-      operationId: EBS AM List Asset Property Names
+      operationId: EBSAMListAssetPropertyNames
       summary: List Asset Property Names
       parameters:
       - name: X-EB-Organization-Id
@@ -594,11 +608,13 @@ paths:
         passthroughBehavior: when_no_match
         requestParameters:
           integration.request.header.Authorization: context.authorizer.override_token
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS AM List Asset Property Names
   /asset-types/name:
     get:
       tags:
       - Asset Types
-      operationId: EBS AM List Asset Types By Name
+      operationId: EBSAMListAssetTypesByName
       summary: List Assets Type By Name
       description: List Asset Types By Name
       parameters:
@@ -682,11 +698,13 @@ paths:
         passthroughBehavior: when_no_match
         requestParameters:
           integration.request.header.Authorization: context.authorizer.override_token
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS AM List Asset Types By Name
   /asset-types/name/{name}:
     get:
       tags:
       - Asset Types
-      operationId: EBS AM Get Asset Type By Name
+      operationId: EBSAMGetAssetTypeByName
       summary: Get Asset Type By Name
       parameters:
       - name: X-EB-Organization-Id
@@ -762,11 +780,13 @@ paths:
           integration.request.path.name: method.request.path.name
           integration.request.header.Authorization: context.authorizer.override_token
         passthroughBehavior: when_no_match
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS AM Get Asset Type By Name
   /asset-types/download-template/{id}:
     get:
       tags:
       - Asset Types
-      operationId: EBS AM Download Upload Template
+      operationId: EBSAMDownloadUploadTemplate
       summary: Download Upload Template
       parameters:
       - name: X-EB-Organization-Id
@@ -798,8 +818,33 @@ paths:
           integration.request.path.id: method.request.path.id
           integration.request.header.Authorization: context.authorizer.override_token
         passthroughBehavior: when_no_match
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS AM Download Upload Template
 components:
   schemas:
+    AssetIcon:
+      type: object
+      properties:
+        source:
+          type: string
+          enum:
+          - SYSTEM
+          - CUSTOM
+        id:
+          type: string
+        name:
+          type: string
+        contentUrl:
+          type: string
+        color:
+          type: string
+    AssetTypeDynamicColorMapping:
+      type: object
+      properties:
+        value:
+          type: string
+        color:
+          type: string
     LinkedToAssetResponse:
       type: object
       properties:
@@ -869,6 +914,46 @@ components:
           type: boolean
         icon:
           $ref: '#/components/schemas/AssetTypeIcon'
+    AssetTypeUpdateRequest:
+      required:
+      - iconId
+      - name
+      - propertyDefinitions
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+        description:
+          maxLength: 2000
+          minLength: 0
+          type: string
+        iconId:
+          type: string
+        alertable:
+          type: boolean
+        propertyDefinitions:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetPropertyDefinitionRequest'
+        icon:
+          $ref: '#/components/schemas/AssetTypeIcon'
+    organizationId:
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      maxLength: 16
+      type: integer
+      example: '1536984111644674'
+      default: '1536984111644674'
+    AssetTypeDynamicMappings:
+      type: object
+      properties:
+        attributeId:
+          type: string
+        mappings:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetTypeDynamicColorMapping'
     AssetPropertyDefinitionRequest:
       required:
       - assetPropertyDataType
@@ -923,110 +1008,6 @@ components:
           type: array
           items:
             type: object
-    AssetIcon:
-      type: object
-      properties:
-        source:
-          type: string
-          enum:
-          - SYSTEM
-          - CUSTOM
-        id:
-          type: string
-        name:
-          type: string
-        contentUrl:
-          type: string
-        color:
-          type: string
-    ListAssetTypeResponse:
-      type: array
-      items:
-        type: object
-        properties:
-          id:
-            type: string
-          organizationId:
-            type: number
-          createdId:
-            type: number
-          createdName:
-            type: string
-          lastModifiedId:
-            type: number
-          lastModifiedName:
-            type: string
-          createdTimestamp:
-            type: number
-          lastModifiedTimestamp:
-            type: number
-          name:
-            type: string
-          legacy:
-            type: boolean
-          assetTypeCategory:
-            type: string
-          assetTypeTemplateId:
-            type: string
-          iconId:
-            type: string
-          alertable:
-            type: boolean
-          icon:
-            $ref: '#/components/schemas/AssetTypeIcon'
-    CreateAssetTypeRequest:
-      required:
-      - assetTypeTemplateId
-      - iconId
-      - name
-      - propertyDefinitions
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-        description:
-          maxLength: 2000
-          minLength: 0
-          type: string
-        iconId:
-          type: string
-        alertable:
-          type: boolean
-        propertyDefinitions:
-          type: array
-          items:
-            $ref: '#/components/schemas/AssetPropertyDefinitionRequest'
-        assetTypeTemplateId:
-          type: string
-        icon:
-          $ref: '#/components/schemas/AssetTypeIcon'
-    AssetTypeUpdateRequest:
-      required:
-      - iconId
-      - name
-      - propertyDefinitions
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-        description:
-          maxLength: 2000
-          minLength: 0
-          type: string
-        iconId:
-          type: string
-        alertable:
-          type: boolean
-        propertyDefinitions:
-          type: array
-          items:
-            $ref: '#/components/schemas/AssetPropertyDefinitionRequest'
-        icon:
-          $ref: '#/components/schemas/AssetTypeIcon'
     AssetPropertyDefinition:
       required:
       - assetPropertyDataType
@@ -1112,28 +1093,69 @@ components:
           type: array
           items:
             type: object
-    organizationId:
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      maxLength: 16
-      type: integer
-      example: '1536984111644674'
-      default: '1536984111644674'
-    AssetTypeDynamicMappings:
+    CreateAssetTypeRequest:
+      required:
+      - assetTypeTemplateId
+      - iconId
+      - name
+      - propertyDefinitions
       type: object
       properties:
-        attributeId:
+        name:
+          maxLength: 200
+          minLength: 1
           type: string
-        mappings:
+        description:
+          maxLength: 2000
+          minLength: 0
+          type: string
+        iconId:
+          type: string
+        alertable:
+          type: boolean
+        propertyDefinitions:
           type: array
           items:
-            $ref: '#/components/schemas/AssetTypeDynamicColorMapping'
-    AssetTypeDynamicColorMapping:
-      type: object
-      properties:
-        value:
+            $ref: '#/components/schemas/AssetPropertyDefinitionRequest'
+        assetTypeTemplateId:
           type: string
-        color:
-          type: string
+        icon:
+          $ref: '#/components/schemas/AssetTypeIcon'
+    ListAssetTypeResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+          organizationId:
+            type: number
+          createdId:
+            type: number
+          createdName:
+            type: string
+          lastModifiedId:
+            type: number
+          lastModifiedName:
+            type: string
+          createdTimestamp:
+            type: number
+          lastModifiedTimestamp:
+            type: number
+          name:
+            type: string
+          legacy:
+            type: boolean
+          assetTypeCategory:
+            type: string
+          assetTypeTemplateId:
+            type: string
+          iconId:
+            type: string
+          alertable:
+            type: boolean
+          icon:
+            $ref: '#/components/schemas/AssetTypeIcon'
     AssetTypeIcon:
       allOf:
       - $ref: '#/components/schemas/AssetIcon'

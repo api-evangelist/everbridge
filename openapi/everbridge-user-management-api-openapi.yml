@@ -190,148 +190,6 @@ paths:
                   $ref: '#/components/schemas/UserModel'
 components:
   schemas:
-    ConsumerKind:
-      type: integer
-      description: ''
-      x-enumNames:
-      - User
-      - Machine
-      enum:
-      - 0
-      - 1
-    SorterModel:
-      type: object
-      additionalProperties: false
-      properties:
-        field:
-          type:
-          - string
-          - 'null'
-        order:
-          type:
-          - string
-          - 'null'
-    ConsumerStatus:
-      type: integer
-      description: ''
-      x-enumNames:
-      - Active
-      - Inactive
-      - Deleted
-      - Disabled
-      enum:
-      - 1
-      - 2
-      - 3
-      - 4
-    UserBaseModel:
-      type: object
-      additionalProperties: false
-      properties:
-        consumerId:
-          type: string
-          format: uuid
-        organisationId:
-          type: string
-          format: uuid
-        userName:
-          type:
-          - string
-          - 'null'
-        domainName:
-          type:
-          - string
-          - 'null'
-        fullName:
-          type:
-          - string
-          - 'null'
-        email:
-          type:
-          - string
-          - 'null'
-    GroupDetailModel:
-      allOf:
-      - $ref: '#/components/schemas/GroupBaseModel'
-      - type: object
-        additionalProperties: false
-        properties:
-          organisationId:
-            type: string
-            format: uuid
-          groupId:
-            type: string
-            format: uuid
-          domainName:
-            type:
-            - string
-            - 'null'
-          groupType:
-            type:
-            - string
-            - 'null'
-          autoCreated:
-            type: boolean
-          active:
-            type: boolean
-          createDateUtc:
-            type:
-            - string
-            - 'null'
-            format: date-time
-          numberOfMembers:
-            type: integer
-            format: int32
-    GroupModel:
-      allOf:
-      - $ref: '#/components/schemas/GroupDetailModel'
-      - type: object
-        additionalProperties: false
-        properties:
-          organizationalUnit:
-            type:
-            - string
-            - 'null'
-          corporateGroupKind:
-            type:
-            - string
-            - 'null'
-          distinguishedName:
-            type:
-            - string
-            - 'null'
-    MachineBaseModel:
-      type: object
-      additionalProperties: false
-      properties:
-        status:
-          $ref: '#/components/schemas/ConsumerStatus'
-        deleted:
-          type: boolean
-        consumerId:
-          type: string
-          format: uuid
-        machineName:
-          type:
-          - string
-          - 'null'
-        fullName:
-          type:
-          - string
-          - 'null'
-        organisationId:
-          type: string
-          format: uuid
-        domainName:
-          type:
-          - string
-          - 'null'
-        userNotes:
-          type:
-          - string
-          - 'null'
-        autoCreated:
-          type: boolean
     GroupBaseModel:
       type: object
       additionalProperties: false
@@ -346,6 +204,40 @@ components:
           - 'null'
         corporateGroupKindId:
           $ref: '#/components/schemas/ConsumerKind'
+    GetDataModel:
+      type: object
+      additionalProperties: false
+      properties:
+        filters:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: array
+            items: {}
+        searchTerm:
+          type:
+          - string
+          - 'null'
+        pagination:
+          oneOf:
+          - $ref: '#/components/schemas/PaginationModel'
+        sorter:
+          oneOf:
+          - $ref: '#/components/schemas/SorterModel'
+    ConsumerStatus:
+      type: integer
+      description: ''
+      x-enumNames:
+      - Active
+      - Inactive
+      - Deleted
+      - Disabled
+      enum:
+      - 1
+      - 2
+      - 3
+      - 4
     MachineModel:
       allOf:
       - $ref: '#/components/schemas/MachineBaseModel'
@@ -413,53 +305,56 @@ components:
           numberOfUsers:
             type: integer
             format: int32
-    PaginationModel:
+    MachineBaseModel:
       type: object
       additionalProperties: false
       properties:
-        current:
-          type: integer
-          format: int32
-        pageSize:
-          type: integer
-          format: int32
-        total:
-          type: integer
-          format: int32
-    GetDataResponseModelOfGroupMemberModel:
-      type: object
-      additionalProperties: false
-      properties:
-        results:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/GroupMemberModel'
-        total:
-          type: integer
-          format: int32
-    GetDataModel:
-      type: object
-      additionalProperties: false
-      properties:
-        filters:
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            type: array
-            items: {}
-        searchTerm:
+        status:
+          $ref: '#/components/schemas/ConsumerStatus'
+        deleted:
+          type: boolean
+        consumerId:
+          type: string
+          format: uuid
+        machineName:
           type:
           - string
           - 'null'
-        pagination:
-          oneOf:
-          - $ref: '#/components/schemas/PaginationModel'
-        sorter:
-          oneOf:
-          - $ref: '#/components/schemas/SorterModel'
+        fullName:
+          type:
+          - string
+          - 'null'
+        organisationId:
+          type: string
+          format: uuid
+        domainName:
+          type:
+          - string
+          - 'null'
+        userNotes:
+          type:
+          - string
+          - 'null'
+        autoCreated:
+          type: boolean
+    GroupModel:
+      allOf:
+      - $ref: '#/components/schemas/GroupDetailModel'
+      - type: object
+        additionalProperties: false
+        properties:
+          organizationalUnit:
+            type:
+            - string
+            - 'null'
+          corporateGroupKind:
+            type:
+            - string
+            - 'null'
+          distinguishedName:
+            type:
+            - string
+            - 'null'
     GroupMemberModel:
       type: object
       additionalProperties: false
@@ -528,6 +423,45 @@ components:
           - 'null'
           format: date-time
         dataSourceName:
+          type:
+          - string
+          - 'null'
+    GetDataResponseModelOfGroupMemberModel:
+      type: object
+      additionalProperties: false
+      properties:
+        results:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/GroupMemberModel'
+        total:
+          type: integer
+          format: int32
+    UserBaseModel:
+      type: object
+      additionalProperties: false
+      properties:
+        consumerId:
+          type: string
+          format: uuid
+        organisationId:
+          type: string
+          format: uuid
+        userName:
+          type:
+          - string
+          - 'null'
+        domainName:
+          type:
+          - string
+          - 'null'
+        fullName:
+          type:
+          - string
+          - 'null'
+        email:
           type:
           - string
           - 'null'
@@ -623,6 +557,72 @@ components:
           machineId:
             type: string
             format: uuid
+    ConsumerKind:
+      type: integer
+      description: ''
+      x-enumNames:
+      - User
+      - Machine
+      enum:
+      - 0
+      - 1
+    GroupDetailModel:
+      allOf:
+      - $ref: '#/components/schemas/GroupBaseModel'
+      - type: object
+        additionalProperties: false
+        properties:
+          organisationId:
+            type: string
+            format: uuid
+          groupId:
+            type: string
+            format: uuid
+          domainName:
+            type:
+            - string
+            - 'null'
+          groupType:
+            type:
+            - string
+            - 'null'
+          autoCreated:
+            type: boolean
+          active:
+            type: boolean
+          createDateUtc:
+            type:
+            - string
+            - 'null'
+            format: date-time
+          numberOfMembers:
+            type: integer
+            format: int32
+    PaginationModel:
+      type: object
+      additionalProperties: false
+      properties:
+        current:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    SorterModel:
+      type: object
+      additionalProperties: false
+      properties:
+        field:
+          type:
+          - string
+          - 'null'
+        order:
+          type:
+          - string
+          - 'null'
   securitySchemes:
     bearerAuth:
       type: http

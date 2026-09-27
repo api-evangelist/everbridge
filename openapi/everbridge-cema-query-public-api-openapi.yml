@@ -16,7 +16,7 @@ paths:
     post:
       tags:
       - CEMA Query Public
-      operationId: GraphQL Query
+      operationId: GraphQLQuery
       summary: GraphQL Query
       description: This is used to query CEMA Query Public
       requestBody:
@@ -92,11 +92,13 @@ paths:
             statusCode: '200'
         passthroughBehavior: when_no_match
         connectionType: VPC_LINK
+      x-operation-id-source: normalized
+      x-operation-id-original: GraphQL Query
   /schema:
     get:
       tags:
       - CEMA Query Public
-      operationId: GraphQL Schema
+      operationId: GraphQLSchema
       summary: GraphQL Schema
       description: This is used to get the full GraphQL Schema for Query Public.
       responses:
@@ -117,6 +119,8 @@ paths:
             statusCode: '200'
         passthroughBehavior: when_no_match
         connectionType: VPC_LINK
+      x-operation-id-source: normalized
+      x-operation-id-original: GraphQL Schema
 components:
   schemas:
     Empty:

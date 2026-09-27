@@ -12,7 +12,7 @@ tags:
 paths:
   /incidentNotifications/{organizationId}/scenario:
     get:
-      operationId: EBS List Incident Notifications
+      operationId: EBSListIncidentNotifications
       parameters:
       - description: The ID of the organization containing the incidents
         in: path
@@ -865,9 +865,11 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/incidentNotifications/{organizationId}/scenario
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS List Incident Notifications
   /incidentNotifications/{organizationId}/{incidentId}:
     get:
-      operationId: EBS Get Notifications By Incident
+      operationId: EBSGetNotificationsByIncident
       parameters:
       - description: The ID of the organization containing the incidents
         in: path
@@ -1329,9 +1331,11 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/incidentNotifications/{organizationId}/{incidentId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Get Notifications By Incident
   /incidentNotifications/{organizationId}/{incidentId}/notification:
     get:
-      operationId: EBS Get Incident Notification
+      operationId: EBSGetIncidentNotification
       parameters:
       - description: The ID of the organization containing the incident notification
         in: path
@@ -1802,34 +1806,16 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/incidentNotifications/{organizationId}/{incidentId}/notification
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Get Incident Notification
 components:
   schemas:
-    RestfulCollectionResult:
-      properties:
-        currentPageUri:
-          type: string
-        firstPageUri:
-          type: string
-        lastPageUri:
-          type: string
-        message:
-          type: string
-        nextPageUri:
-          type: string
-        page:
-          $ref: '#/components/schemas/DataPageObject'
-        previousPageUri:
-          type: string
-      title: RestfulCollectionResult
-      type: object
-    RestfulInstanceResult:
-      properties:
-        message:
-          type: string
-        result:
-          type: object
-      title: RestfulInstanceResult
-      type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
     DataPageObject:
       properties:
         currentPageNo:
@@ -1859,12 +1845,32 @@ components:
           type: integer
       title: DataPage«object»
       type: object
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
+    RestfulCollectionResult:
+      properties:
+        currentPageUri:
+          type: string
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        nextPageUri:
+          type: string
+        page:
+          $ref: '#/components/schemas/DataPageObject'
+        previousPageUri:
+          type: string
+      title: RestfulCollectionResult
+      type: object
+    RestfulInstanceResult:
+      properties:
+        message:
+          type: string
+        result:
+          type: object
+      title: RestfulInstanceResult
+      type: object
   securitySchemes:
     API_Authorizer:
       description: oAuth Token

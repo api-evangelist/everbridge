@@ -12,7 +12,7 @@ tags:
 paths:
   /constants:
     get:
-      operationId: EBS Get Constants
+      operationId: EBSGetConstants
       responses:
         '200':
           content:
@@ -36,10 +36,12 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/constants
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Get Constants
   /constants/{type}:
     get:
       description: Retrieve all constant values for a given type
-      operationId: EBS Query Constants
+      operationId: EBSQueryConstants
       parameters:
       - description: Type of constants to retrieve.
         in: path
@@ -87,54 +89,37 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/constants/{type}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Query Constants
 components:
   schemas:
-    ConstantValueWrapper:
+    DataPageConstantValueWrapper:
       properties:
-        code:
-          type: string
-        id:
-          format: int64
-          type: integer
-        key:
-          type: string
-        language:
-          type: string
-        lookupType:
-          type: string
-        seq:
+        currentPageNo:
           format: int32
           type: integer
-        siteSpecific:
-          enum:
-          - Y
-          - N
+        data:
+          items:
+            $ref: '#/components/schemas/ConstantValueWrapper'
+          type: array
+        dataPageList:
+          items:
+            $ref: '#/components/schemas/DataPageConstantValueWrapper'
+          type: array
+        pageSize:
+          format: int32
+          type: integer
+        scrollId:
           type: string
-        status:
-          enum:
-          - A
-          - D
-          type: string
-        value:
-          type: string
-      type: object
-    RestfulCollectionResult:
-      properties:
-        currentPageUri:
-          type: string
-        firstPageUri:
-          type: string
-        lastPageUri:
-          type: string
-        message:
-          type: string
-        nextPageUri:
-          type: string
-        page:
-          $ref: '#/components/schemas/DataPageObject'
-        previousPageUri:
-          type: string
-      title: RestfulCollectionResult
+        start:
+          format: int32
+          type: integer
+        totalCount:
+          format: int64
+          type: integer
+        totalPageCount:
+          format: int32
+          type: integer
       type: object
     DataPageObject:
       properties:
@@ -182,33 +167,52 @@ components:
         previousPageUri:
           type: string
       type: object
-    DataPageConstantValueWrapper:
+    RestfulCollectionResult:
       properties:
-        currentPageNo:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/ConstantValueWrapper'
-          type: array
-        dataPageList:
-          items:
-            $ref: '#/components/schemas/DataPageConstantValueWrapper'
-          type: array
-        pageSize:
-          format: int32
-          type: integer
-        scrollId:
+        currentPageUri:
           type: string
-        start:
-          format: int32
-          type: integer
-        totalCount:
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        nextPageUri:
+          type: string
+        page:
+          $ref: '#/components/schemas/DataPageObject'
+        previousPageUri:
+          type: string
+      title: RestfulCollectionResult
+      type: object
+    ConstantValueWrapper:
+      properties:
+        code:
+          type: string
+        id:
           format: int64
           type: integer
-        totalPageCount:
+        key:
+          type: string
+        language:
+          type: string
+        lookupType:
+          type: string
+        seq:
           format: int32
           type: integer
+        siteSpecific:
+          enum:
+          - Y
+          - N
+          type: string
+        status:
+          enum:
+          - A
+          - D
+          type: string
+        value:
+          type: string
       type: object
   securitySchemes:
     API_Authorizer:

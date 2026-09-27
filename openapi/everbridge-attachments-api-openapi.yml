@@ -12,7 +12,7 @@ tags:
 paths:
   /attachments/{organizationId}:
     post:
-      operationId: EBS Upload Attachment
+      operationId: EBSUploadAttachment
       parameters:
       - description: The ID of the organization containing the attachment
         in: path
@@ -73,9 +73,11 @@ paths:
             statusCode: '200'
         type: aws_proxy
         uri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:apigw-large-file-handler-us-east-1-prod/invocations
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Upload Attachment
   /attachments/{organizationId}/{fileId}:
     get:
-      operationId: EBS Get Attachment
+      operationId: EBSGetAttachment
       parameters:
       - description: The ID of the organization in which to find the attachment
         in: path
@@ -143,31 +145,16 @@ paths:
             statusCode: '200'
         type: aws_proxy
         uri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:apigw-large-file-handler-us-east-1-prod/invocations
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Get Attachment
 components:
   schemas:
-    FileAttachmentWrapperInstanceResult:
-      properties:
-        message:
-          type: string
-        result:
-          $ref: '#/components/schemas/FileAttachmentWrapper'
-      type: object
-    AttachmentRestfulModificationResult:
-      properties:
-        fileId:
-          type: string
-        fileName:
-          type: string
-        image:
-          type: boolean
-        message:
-          type: string
-        mimeType:
-          type: string
-        size:
-          format: int64
-          type: integer
-      type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
     FileAttachmentWrapper:
       properties:
         base64DataValue:
@@ -189,12 +176,29 @@ components:
           format: int64
           type: integer
       type: object
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
+    AttachmentRestfulModificationResult:
+      properties:
+        fileId:
+          type: string
+        fileName:
+          type: string
+        image:
+          type: boolean
+        message:
+          type: string
+        mimeType:
+          type: string
+        size:
+          format: int64
+          type: integer
+      type: object
+    FileAttachmentWrapperInstanceResult:
+      properties:
+        message:
+          type: string
+        result:
+          $ref: '#/components/schemas/FileAttachmentWrapper'
+      type: object
   securitySchemes:
     API_Authorizer:
       description: oAuth Token

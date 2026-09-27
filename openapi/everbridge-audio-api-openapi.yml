@@ -15,7 +15,7 @@ paths:
       description: 'Upload an audio file to use in notifications.
 
         The recommended format is 8KHz, 8bit, mono u-Law or uncompressed PCM WAV and less than 5 minutes in length.'
-      operationId: EBS Upload Audio
+      operationId: EBSUploadAudio
       parameters:
       - description: The ID of the organization containing the audio
         in: path
@@ -75,10 +75,12 @@ paths:
             statusCode: '200'
         type: aws_proxy
         uri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:apigw-large-file-handler-us-east-1-prod/invocations
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Upload Audio
   /audio/{organizationId}/{audioId}:
     get:
       description: Retrieve a specific audio
-      operationId: EBS Get Audio
+      operationId: EBSGetAudio
       parameters:
       - description: The ID of the organization in which to find the audio
         in: path
@@ -166,47 +168,10 @@ paths:
             statusCode: '200'
         type: aws_proxy
         uri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:apigw-large-file-handler-us-east-1-prod/invocations
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Get Audio
 components:
   schemas:
-    FileResourceWrapper:
-      properties:
-        fileName:
-          type: string
-        id:
-          type: string
-        mimeType:
-          type: string
-        size:
-          format: double
-          type: number
-      type: object
-    AudioWrapperInstanceResult:
-      properties:
-        message:
-          type: string
-        result:
-          $ref: '#/components/schemas/AudioWrapper'
-      type: object
-    AudioRestfulModificationResult:
-      properties:
-        audioKey:
-          type: string
-        baseUri:
-          type: string
-        id:
-          format: int64
-          type: integer
-        instanceUri:
-          type: string
-        message:
-          type: string
-      type: object
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
     AudioWrapper:
       properties:
         accountId:
@@ -269,6 +234,45 @@ components:
           - A
           - D
           type: string
+      type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
+    AudioRestfulModificationResult:
+      properties:
+        audioKey:
+          type: string
+        baseUri:
+          type: string
+        id:
+          format: int64
+          type: integer
+        instanceUri:
+          type: string
+        message:
+          type: string
+      type: object
+    FileResourceWrapper:
+      properties:
+        fileName:
+          type: string
+        id:
+          type: string
+        mimeType:
+          type: string
+        size:
+          format: double
+          type: number
+      type: object
+    AudioWrapperInstanceResult:
+      properties:
+        message:
+          type: string
+        result:
+          $ref: '#/components/schemas/AudioWrapper'
       type: object
   securitySchemes:
     API_Authorizer:

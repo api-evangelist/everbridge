@@ -15,7 +15,7 @@ paths:
     post:
       tags:
       - Assets Query
-      operationId: EBS AQ Assets Stream
+      operationId: EBSAQAssetsStream
       summary: Assets Stream
       parameters:
       - name: X-EB-Organization-Id
@@ -133,11 +133,13 @@ paths:
         passthroughBehavior: when_no_match
         contentHandling: CONVERT_TO_TEXT
         type: aws_proxy
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS AQ Assets Stream
   /assets/quick-search:
     post:
       tags:
       - Assets Query
-      operationId: EBS AQ List Assets
+      operationId: EBSAQListAssets
       summary: List Assets
       description: Get All Assets
       parameters:
@@ -248,11 +250,13 @@ paths:
             statusCode: '200'
         requestParameters: {}
         passthroughBehavior: when_no_match
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS AQ List Assets
   /assets/quick-search-across-asset-types:
     post:
       tags:
       - Assets Query
-      operationId: EBS AQ List Assets Across Asset Types
+      operationId: EBSAQListAssetsAcrossAssetTypes
       summary: List Assets Across Asset Types
       parameters:
       - name: X-EB-Organization-Id
@@ -321,11 +325,13 @@ paths:
             statusCode: '200'
         requestParameters: {}
         passthroughBehavior: when_no_match
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS AQ List Assets Across Asset Types
   /assets/polygon:
     post:
       tags:
       - Assets Query
-      operationId: EBS AQ Assets Polygon Aggregation
+      operationId: EBSAQAssetsPolygonAggregation
       summary: Assets Polygon Aggregation
       parameters:
       - name: X-EB-Organization-Id
@@ -388,11 +394,13 @@ paths:
             statusCode: '200'
         requestParameters: {}
         passthroughBehavior: when_no_match
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS AQ Assets Polygon Aggregation
   /assets/pagination:
     post:
       tags:
       - Assets Query
-      operationId: EBS AQ Assets Pagination
+      operationId: EBSAQAssetsPagination
       summary: Assets Pagination
       parameters:
       - name: X-EB-Organization-Id
@@ -555,11 +563,13 @@ paths:
             statusCode: '200'
         requestParameters: {}
         passthroughBehavior: when_no_match
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS AQ Assets Pagination
   /assets/geohash:
     post:
       tags:
       - Assets Query
-      operationId: EBS AQ Assets Geo Grid Aggregation
+      operationId: EBSAQAssetsGeoGridAggregation
       summary: Assets Geo Grid Aggregation
       parameters:
       - name: X-EB-Organization-Id
@@ -612,11 +622,13 @@ paths:
             statusCode: '200'
         requestParameters: {}
         passthroughBehavior: when_no_match
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS AQ Assets Geo Grid Aggregation
   /assets/count:
     post:
       tags:
       - Assets Query
-      operationId: EBS AQ Assets Count
+      operationId: EBSAQAssetsCount
       summary: Assets Count
       parameters:
       - name: X-EB-Organization-Id
@@ -668,11 +680,13 @@ paths:
             statusCode: '200'
         requestParameters: {}
         passthroughBehavior: when_no_match
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS AQ Assets Count
   /assets/bbox:
     post:
       tags:
       - Assets Query
-      operationId: EBS AQ Assets Geo Bounds Aggregation
+      operationId: EBSAQAssetsGeoBoundsAggregation
       summary: Assets Geo Bounds Aggregation
       parameters:
       - name: X-EB-Organization-Id
@@ -739,11 +753,13 @@ paths:
             statusCode: '200'
         requestParameters: {}
         passthroughBehavior: when_no_match
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS AQ Assets Geo Bounds Aggregation
   /assets/attribute-value-max-min:
     post:
       tags:
       - Assets Query
-      operationId: EBS AQ Assets Aggregate By Attribute Max And Min
+      operationId: EBSAQAssetsAggregateByAttributeMaxAndMin
       summary: Assets Aggregate By Attribute Max And Min
       parameters:
       - name: X-EB-Organization-Id
@@ -803,11 +819,13 @@ paths:
             statusCode: '200'
         requestParameters: {}
         passthroughBehavior: when_no_match
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS AQ Assets Aggregate By Attribute Max And Min
   /assets/attribute-value-list:
     post:
       tags:
       - Assets Query
-      operationId: EBS AQ Assets Aggregate By Attribute
+      operationId: EBSAQAssetsAggregateByAttribute
       summary: Assets Aggregate By Attribute
       parameters:
       - name: X-EB-Organization-Id
@@ -879,11 +897,13 @@ paths:
             statusCode: '200'
         requestParameters: {}
         passthroughBehavior: when_no_match
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS AQ Assets Aggregate By Attribute
   /assets/{id}:
     get:
       tags:
       - Assets Query
-      operationId: EBS AQ Get Asset
+      operationId: EBSAQGetAsset
       summary: Get Asset
       parameters:
       - name: X-EB-Organization-Id
@@ -949,33 +969,10 @@ paths:
         requestParameters:
           integration.request.path.id: method.request.path.id
         passthroughBehavior: when_no_match
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS AQ Get Asset
 components:
   schemas:
-    Address:
-      type: object
-      properties:
-        country:
-          type: string
-        state:
-          maxLength: 100
-          minLength: 0
-          type: string
-        city:
-          maxLength: 100
-          minLength: 0
-          type: string
-        postalCode:
-          maxLength: 20
-          minLength: 0
-          type: string
-        streetAddress1:
-          maxLength: 200
-          minLength: 0
-          type: string
-        streetAddress2:
-          maxLength: 200
-          minLength: 0
-          type: string
     AssetIcon:
       type: object
       properties:
@@ -986,15 +983,21 @@ components:
           - CUSTOM
         id:
           type: string
-    AggregationRangeResult:
+    AggregationResult:
       type: object
       properties:
-        min:
-          type: number
-          format: double
-        max:
-          type: number
-          format: double
+        aggregationResults:
+          type: array
+          items:
+            $ref: '#/components/schemas/AggregationResult'
+        key:
+          type: string
+        count:
+          type: integer
+          format: int64
+        travelerCount:
+          type: integer
+          format: int64
     Asset:
       type: object
       properties:
@@ -1095,6 +1098,21 @@ components:
         totalPageCount:
           type: integer
           format: int32
+    organizationId:
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      maxLength: 16
+      type: integer
+      example: '1536984111644674'
+      default: '1536984111644674'
+    AggregationRangeResult:
+      type: object
+      properties:
+        min:
+          type: number
+          format: double
+        max:
+          type: number
+          format: double
     query:
       type: object
       properties:
@@ -1119,68 +1137,6 @@ components:
                         required:
                         - field
                         - value
-    AssetAssociation:
-      type: object
-      properties:
-        associationDefinitionId:
-          maxLength: 2147483647
-          minLength: 1
-          type: string
-        entityType:
-          type: string
-          enum:
-          - Contact
-          - ContactGroup
-          - ContactFilter
-        entityIds:
-          type: array
-          items:
-            type: string
-    organizationId:
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      maxLength: 16
-      type: integer
-      example: '1536984111644674'
-      default: '1536984111644674'
-    AssetRequestBodyWrapper:
-      type: object
-      properties:
-        assetIds:
-          type: array
-          items:
-            type: string
-        assetTypeIds:
-          type: array
-          items:
-            type: string
-        allAssetTypes:
-          type: boolean
-    AssetPropertyValue:
-      type: object
-      properties:
-        propertyId:
-          maxLength: 2147483647
-          minLength: 1
-          type: string
-        value:
-          type: object
-        name:
-          type: string
-    AggregationResult:
-      type: object
-      properties:
-        aggregationResults:
-          type: array
-          items:
-            $ref: '#/components/schemas/AggregationResult'
-        key:
-          type: string
-        count:
-          type: integer
-          format: int64
-        travelerCount:
-          type: integer
-          format: int64
     streamResponse:
       type: array
       items:
@@ -1261,6 +1217,72 @@ components:
             type: string
           category:
             type: string
+    AssetAssociation:
+      type: object
+      properties:
+        associationDefinitionId:
+          maxLength: 2147483647
+          minLength: 1
+          type: string
+        entityType:
+          type: string
+          enum:
+          - Contact
+          - ContactGroup
+          - ContactFilter
+        entityIds:
+          type: array
+          items:
+            type: string
+    AssetRequestBodyWrapper:
+      type: object
+      properties:
+        assetIds:
+          type: array
+          items:
+            type: string
+        assetTypeIds:
+          type: array
+          items:
+            type: string
+        allAssetTypes:
+          type: boolean
+    Address:
+      type: object
+      properties:
+        country:
+          type: string
+        state:
+          maxLength: 100
+          minLength: 0
+          type: string
+        city:
+          maxLength: 100
+          minLength: 0
+          type: string
+        postalCode:
+          maxLength: 20
+          minLength: 0
+          type: string
+        streetAddress1:
+          maxLength: 200
+          minLength: 0
+          type: string
+        streetAddress2:
+          maxLength: 200
+          minLength: 0
+          type: string
+    AssetPropertyValue:
+      type: object
+      properties:
+        propertyId:
+          maxLength: 2147483647
+          minLength: 1
+          type: string
+        value:
+          type: object
+        name:
+          type: string
   securitySchemes:
     BasicAuth:
       type: http

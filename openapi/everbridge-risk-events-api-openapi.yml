@@ -12,7 +12,7 @@ paths:
   /export:
     post:
       description: The Risk Event Export API provides external access to Everbridge risk events so that they can be used outside of the Everbridge platform.
-      operationId: REI Export
+      operationId: REIExport
       summary: Risk Event Export
       tags:
       - Risk Events
@@ -133,6 +133,8 @@ paths:
             statusCode: '200'
         passthroughBehavior: when_no_match
         connectionType: VPC_LINK
+      x-operation-id-source: normalized
+      x-operation-id-original: REI Export
 components:
   schemas:
     exportRiskeventsRequest:

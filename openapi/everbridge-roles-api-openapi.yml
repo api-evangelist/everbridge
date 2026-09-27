@@ -13,7 +13,7 @@ paths:
   /roles/{organizationId}:
     get:
       description: Retrieve all roles for an organization.
-      operationId: EBS List Roles
+      operationId: EBSListRoles
       parameters:
       - description: The ID of the organization.
         in: path
@@ -192,9 +192,11 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/roles/{organizationId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS List Roles
     post:
       description: Create a role for an organization.
-      operationId: EBS Create Role
+      operationId: EBSCreateRole
       parameters:
       - description: The ID of the organization.
         in: path
@@ -355,10 +357,12 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/roles/{organizationId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Create Role
   /roles/{organizationId}/{roleId}:
     delete:
       description: Delete a role for an organization.
-      operationId: EBS Delete Role
+      operationId: EBSDeleteRole
       parameters:
       - description: The ID of the organization containing the role.
         in: path
@@ -468,9 +472,11 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/roles/{organizationId}/{roleId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Delete Role
     get:
       description: Get a role for an organization.
-      operationId: EBS Get Role
+      operationId: EBSGetRole
       parameters:
       - description: The ID of the organization containing the role.
         in: path
@@ -592,9 +598,11 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/roles/{organizationId}/{roleId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Get Role
     put:
       description: Update a role for an organization.
-      operationId: EBS Update Role
+      operationId: EBSUpdateRole
       parameters:
       - description: The ID of the organization.
         in: path
@@ -783,91 +791,16 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/roles/{organizationId}/{roleId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Update Role
 components:
   schemas:
-    roleRequest:
-      properties:
-        name:
-          description: The role's name
-          maxLength: 100
-          type: string
-        permissionScope:
-          properties:
-            accessToAllNotificationFeatures:
-              type: boolean
-            addContactsToGroups:
-              type: boolean
-            createContacts:
-              type: boolean
-            createEditDeleteGroups:
-              type: boolean
-            createEditDeleteSchedules:
-              type: boolean
-            createEditViewCockpitWorkFlows:
-              type: boolean
-            deleteContacts:
-              type: boolean
-            incidentZones:
-              type: boolean
-            incidentZonesRegistered:
-              type: boolean
-            moveRemoveContactsFromGroups:
-              type: boolean
-            onlyEditRulesWithSameRole:
-              type: boolean
-            reopenIncident:
-              type: boolean
-            restrictToIncidentSimulationOnly:
-              type: boolean
-            restrictToSimulationOnly:
-              type: boolean
-            restrictionEditDeleteTemplates:
-              type: boolean
-            uploadContacts:
-              type: boolean
-            viewCockpitWorkFlows:
-              type: boolean
-            viewDownloadAllContacts:
-              type: boolean
-            viewDownloadEditAllContacts:
-              type: boolean
-          type: object
-        roleDataScope:
-          properties:
-            dynamicGroupIds:
-              items:
-                type: integer
-              type: array
-            groupIds:
-              items:
-                type: integer
-              type: array
-          type: object
-        roleTemplate:
-          description: The role's template, supports:INCIDENT_OPERATOR, DISPATCHER, INCIDENT_ADMIN, GROUP_MANAGER
-          maxLength: 100
-          type: string
-      required:
-      - name
-      - roleTemplate
-      type: object
     organizationId:
       default: '1536984111644674'
       description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
       example: '1536984111644674'
       maxLength: 16
       type: integer
-    postUpdateResponse:
-      properties:
-        baseUri:
-          type: string
-        id:
-          type: integer
-        instanceUri:
-          type: string
-        message:
-          type: string
-      type: object
     getRoles:
       properties:
         summary:
@@ -986,12 +919,17 @@ components:
               type: object
           type: object
       type: object
-    roleId:
-      default: '0'
-      description: Role ID
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
+    postUpdateResponse:
+      properties:
+        baseUri:
+          type: string
+        id:
+          type: integer
+        instanceUri:
+          type: string
+        message:
+          type: string
+      type: object
     getRole:
       properties:
         id:
@@ -1071,6 +1009,78 @@ components:
         roleTemplate:
           type: string
       type: object
+    roleRequest:
+      properties:
+        name:
+          description: The role's name
+          maxLength: 100
+          type: string
+        permissionScope:
+          properties:
+            accessToAllNotificationFeatures:
+              type: boolean
+            addContactsToGroups:
+              type: boolean
+            createContacts:
+              type: boolean
+            createEditDeleteGroups:
+              type: boolean
+            createEditDeleteSchedules:
+              type: boolean
+            createEditViewCockpitWorkFlows:
+              type: boolean
+            deleteContacts:
+              type: boolean
+            incidentZones:
+              type: boolean
+            incidentZonesRegistered:
+              type: boolean
+            moveRemoveContactsFromGroups:
+              type: boolean
+            onlyEditRulesWithSameRole:
+              type: boolean
+            reopenIncident:
+              type: boolean
+            restrictToIncidentSimulationOnly:
+              type: boolean
+            restrictToSimulationOnly:
+              type: boolean
+            restrictionEditDeleteTemplates:
+              type: boolean
+            uploadContacts:
+              type: boolean
+            viewCockpitWorkFlows:
+              type: boolean
+            viewDownloadAllContacts:
+              type: boolean
+            viewDownloadEditAllContacts:
+              type: boolean
+          type: object
+        roleDataScope:
+          properties:
+            dynamicGroupIds:
+              items:
+                type: integer
+              type: array
+            groupIds:
+              items:
+                type: integer
+              type: array
+          type: object
+        roleTemplate:
+          description: The role's template, supports:INCIDENT_OPERATOR, DISPATCHER, INCIDENT_ADMIN, GROUP_MANAGER
+          maxLength: 100
+          type: string
+      required:
+      - name
+      - roleTemplate
+      type: object
+    roleId:
+      default: '0'
+      description: Role ID
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
   securitySchemes:
     API_Authorizer:
       description: oAuth Token

@@ -12,7 +12,7 @@ paths:
     post:
       tags:
       - Safety Devices Event
-      operationId: Push a safety device event
+      operationId: PushASafetyDeviceEvent
       summary: Push a safety device event
       description: This method only supports the client_credential grant type authentication. Refer to the OAuth section of the getting started guide as well as to the methods where you can retrieve the token.
       requestBody:
@@ -174,6 +174,8 @@ paths:
         passthroughBehavior: when_no_match
         connectionId: 11ofco
         connectionType: VPC_LINK
+      x-operation-id-source: normalized
+      x-operation-id-original: Push a safety device event
 components:
   schemas:
     Empty:

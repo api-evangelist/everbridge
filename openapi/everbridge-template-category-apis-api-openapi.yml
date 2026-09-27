@@ -97,7 +97,7 @@ paths:
     head:
       tags:
       - Template Category APIs
-      operationId: Check matched category exist or not
+      operationId: CheckMatchedCategoryExistOrNot
       summary: query categories
       description: Check matched category exist or not.
       parameters:
@@ -147,6 +147,8 @@ paths:
             statusCode: '200'
         passthroughBehavior: when_no_match
         connectionType: VPC_LINK
+      x-operation-id-source: normalized
+      x-operation-id-original: Check matched category exist or not
     post:
       tags:
       - Template Category APIs
@@ -277,107 +279,227 @@ paths:
         connectionType: VPC_LINK
 components:
   schemas:
-    PublicMessagePermission:
+    CategoryBase:
       type: object
       properties:
-        webWidget:
+        id:
           type: string
-          enum:
-          - NONE
-          - VIEW
-          - EDIT
-          - ADD_REMOVE
-          description: 'Controls how users can interact with this part of the template when launching a communication:
-
-            - `NONE` or `VIEW`: Users can use this data but cannot modify it.
-
-            - `EDIT`: Users can modify this data.
-
-            - `ADD_REMOVE`: Users can add or remove this data.'
-        alertUs:
+        name:
           type: string
-          enum:
-          - NONE
-          - VIEW
-          - EDIT
-          - ADD_REMOVE
-          description: 'Controls how users can interact with this part of the template when launching a communication:
-
-            - `NONE` or `VIEW`: Users can use this data but cannot modify it.
-
-            - `EDIT`: Users can modify this data.
-
-            - `ADD_REMOVE`: Users can add or remove this data.'
-        genericOneWay:
+        organizationId:
           type: string
-          enum:
-          - NONE
-          - VIEW
-          - EDIT
-          - ADD_REMOVE
-          description: 'Controls how users can interact with this part of the template when launching a communication:
-
-            - `NONE` or `VIEW`: Users can use this data but cannot modify it.
-
-            - `EDIT`: Users can modify this data.
-
-            - `ADD_REMOVE`: Users can add or remove this data.'
-        audioBulletinBoard:
+        created:
           type: string
-          enum:
-          - NONE
-          - VIEW
-          - EDIT
-          - ADD_REMOVE
-          description: 'Controls how users can interact with this part of the template when launching a communication:
-
-            - `NONE` or `VIEW`: Users can use this data but cannot modify it.
-
-            - `EDIT`: Users can modify this data.
-
-            - `ADD_REMOVE`: Users can add or remove this data.'
-        memberPortal:
+        createdBy:
           type: string
-          enum:
-          - NONE
-          - VIEW
-          - EDIT
-          - ADD_REMOVE
-          description: 'Controls how users can interact with this part of the template when launching a communication:
-
-            - `NONE` or `VIEW`: Users can use this data but cannot modify it.
-
-            - `EDIT`: Users can modify this data.
-
-            - `ADD_REMOVE`: Users can add or remove this data.'
-        network:
+        createdByName:
           type: string
-          enum:
-          - NONE
-          - VIEW
-          - EDIT
-          - ADD_REMOVE
-          description: 'Controls how users can interact with this part of the template when launching a communication:
-
-            - `NONE` or `VIEW`: Users can use this data but cannot modify it.
-
-            - `EDIT`: Users can modify this data.
-
-            - `ADD_REMOVE`: Users can add or remove this data.'
-        socialMedia:
+        updated:
           type: string
+        updatedBy:
+          type: string
+        updatedByName:
+          type: string
+        canUpdate:
+          type: boolean
+          description: Whether the current user can update this category.
+        canDelete:
+          type: boolean
+          description: Whether the current user can delete this category.
+    SenderSettings:
+      type: object
+      description: Specify what recipients will see as the "sender" of the notifications sent from the communication (e.g. caller ID upon receiving a phone call.)
+      properties:
+        email:
+          type: object
+          description: Configuration elements that control the display of the sender in email notifications.
+          properties:
+            name:
+              type: string
+              description: The display name used in email notifications.
+            replyToEmail:
+              type: string
+              description: The "reply to" email address to use for email notifications.
+        voice:
+          type: array
+          description: Configuration elements that control the display of the caller in phone call notifications.
+          items:
+            $ref: '#/components/schemas/VoiceSettings'
+        sms:
+          type: array
+          description: Configuration elements that control the display of the sender in SMS notifications.
+          items:
+            $ref: '#/components/schemas/SmsSettings'
+    ApiDeliveryPath:
+      description: Delivery paths are ordered methods of contacting recipients, such as "work email" or "home phone".
+      anyOf:
+      - $ref: '#/components/schemas/ApiDeliveryPathPathId'
+      - $ref: '#/components/schemas/ApiDeliveryPathPrompt'
+    NetworkPublicMessage:
+      type: object
+      description: The Network public message content.
+      required:
+      - body
+      - networkEffectTypes
+      - affectedAreas
+      - groupIds
+      properties:
+        body:
+          type: string
+          description: The core content of network.
+        networkEffectTypes:
+          type: array
+          description: ' The type of network effect'
+          items:
+            type: string
           enum:
-          - NONE
-          - VIEW
-          - EDIT
-          - ADD_REMOVE
-          description: 'Controls how users can interact with this part of the template when launching a communication:
-
-            - `NONE` or `VIEW`: Users can use this data but cannot modify it.
-
-            - `EDIT`: Users can modify this data.
-
-            - `ADD_REMOVE`: Users can add or remove this data.'
+          - PUBLIC
+          - NETWORK_GROUP
+        affectedAreas:
+          type: string
+          description: The shape content.
+        groupIds:
+          type: array
+          description: The  groupIds defined in network setting page.
+          items:
+            type: string
+    MemberPortalPublicMessage:
+      type: object
+      description: The member portal public message content.
+      required:
+      - body
+      - includeSelectedMapShape
+      properties:
+        body:
+          type: string
+          description: The core content that displayed on public member public message  page.
+        includeSelectedMapShape:
+          type: boolean
+          description: 'Whether include the map defined in recipient part  '
+    SupportedLanguages:
+      type: string
+      description: "A combined language and region tag that signifies the default language to use when selecting a message body to send to a recipient.\n *Note:* Currently, all communication message bodies in a single communication are signified as being spoken or written in the language defined in this property."
+      default: en_US
+      enum:
+      - ar_SA
+      - bn_BD
+      - cy_GB
+      - da_DK
+      - de_DE
+      - el_GR
+      - en_GB
+      - en_US
+      - es_ES
+      - es_US
+      - fi_FI
+      - fr_FR
+      - he_IL
+      - ht_HT
+      - id_ID
+      - it_IT
+      - ja_JP
+      - ko_KR
+      - nl_NL
+      - no_NO
+      - pl_PL
+      - pt_BR
+      - pt_PT
+      - ru_RU
+      - sv_SE
+      - th_TH
+      - tr_TR
+      - uk_UA
+      - ur_PK
+      - vi_VN
+      - yi_US
+      - zh_CN
+    AudioBulletinBoardPublicMessage:
+      type: object
+      description: The ABB public message content.
+      required:
+      - title
+      - body
+      - settingId
+      properties:
+        title:
+          type: string
+          description: The title of abb.
+        body:
+          type: string
+          description: The core content of abb.
+        settingId:
+          type: string
+          description: The setting id of abb that defined in setting page.
+        audioKey:
+          type: string
+          description: 'The system-generated audio Key referring to the audio file for this message. '
+        expires:
+          type: string
+          description: How long the message expires. This is in formatted in the ISO 8601 "duration" format.
+          example: PT5H
+    WebPageMessageBody:
+      allOf:
+      - $ref: '#/components/schemas/LaunchMessageBody'
+      - type: object
+        description: ''
+        required:
+        - type
+        - content
+        - paths
+        properties:
+          attachments:
+            type: array
+            description: A set of system-generated IDs representing previously uploaded attachments. Note that attachments are aggregated across all message bodies (i.e. every message body gets the same attachments).
+            items:
+              type: string
+          type:
+            type: string
+            description: A generic classifier of the message body, further refined by `contentType`. Must be set to exactly `WebPage`.
+            enum:
+            - WebPage
+          content:
+            type: string
+            description: Text content to use as the body of the web page.
+          paths:
+            type: array
+            description: A set of contact delivery path types or path categories that this message body should be sent to.
+            items:
+              type: string
+              enum:
+              - CATEGORY:SMS
+          usePrefix:
+            type: boolean
+            description: If set to true, will prefix the message with organization-specific text prior to including the web page URL. Defaults to false.
+          additionalContent:
+            type: string
+            description: Optional additional plain text content to send with the initial message. Not included in the web page.
+    AudioOnlyPathCategory:
+      type: string
+      description: A group of contact path types that only support audio messaging.
+      enum:
+      - CATEGORY:VOICE
+    AudioMessageBody:
+      allOf:
+      - $ref: '#/components/schemas/LaunchMessageBody'
+      - type: object
+        required:
+        - type
+        - attachmentId
+        - paths
+        properties:
+          attachmentId:
+            type: string
+            description: The system-generated attachment ID referring to the audio file for this message.
+          type:
+            type: string
+            description: A generic classifier of the message body, further refined by `contentType`. Must be set to exactly `Audio`.
+            enum:
+            - Audio
+          paths:
+            type: array
+            description: A set of contact delivery path types that this message body should be sent to.
+            items:
+              $ref: '#/components/schemas/AudioOnlyPathCategory'
     RuleRecipientId:
       type: object
       description: Refers to a group of contact rules (filters) by an ID. Retrieve contact rule IDs using the [Everbridge Contact Filters API](https://developers.everbridge.net/internal/reference/ebs-v1-contact-filters)
@@ -393,6 +515,189 @@ components:
         id:
           type: string
           description: The contact rule (filter) ID.
+    RecipientSettings:
+      type: object
+      description: Settings that adjust how recipients respond to the communication.
+      properties:
+        confirm:
+          type: boolean
+          description: Request that recipients confirm that the notification was received.
+        smsCallback:
+          type: boolean
+          description: Request that SMS recipients call to confirm delivery.
+        voiceMailOption:
+          type: string
+          description: "Control how the system responds if it is sent to a recipient's voicemail inbox:\n * `MESSAGEONLY`: Leave a message but do not consider the notification confirmed.\n * `MESSAGEWITHCONFIRMATION`: Leave a message and consider the notification confirmed.\n * `NOMESSAGE`: Do not leave a message; the notification is not confirmed."
+          enum:
+          - MESSAGEONLY
+          - MESSAGEWITHCONFIRMATION
+          - NOMESSAGE
+        mobileSettings:
+          type: object
+          properties:
+            requestImage:
+              type: boolean
+              description: Request an image of recipients and their surroundings.
+            requestLocation:
+              type: boolean
+              description: Request that recipients share their location.
+            allowShare:
+              type: boolean
+              description: Allow recipients to share the message with others.
+            requireConfirm:
+              type: boolean
+              description: Require that recipients confirm receipt.
+            requestComment:
+              type: boolean
+              description: Request that recipients reply to the notification with a brief description of their status.
+    WebWidgetPublicMessage:
+      type: object
+      description: The web widget public message content.
+      required:
+      - title
+      - body
+      - stream
+      properties:
+        title:
+          type: string
+          description: The title of web widget message.
+        body:
+          type: string
+          description: The core content of web widget message.
+        ewwEndDate:
+          type: string
+          description: end date as an ISO 8601-compliant value to custom end data of web widget message.This value must be after the current date
+          example: '2024-07-07T20:06:09.734385Z'
+        stream:
+          type: string
+          description: The steam of web widget message.
+        duration:
+          type: string
+          description: The amount of time, beginning at the web widget message launch, to expiring the message. This is in formatted in the ISO 8601 "duration" format.
+          example: PT5H
+    GroupRecipientId:
+      type: object
+      description: Refers to a group of contact recipients by a group ID.
+      required:
+      - type
+      - id
+      properties:
+        type:
+          type: string
+          description: Must be set to exactly `Id`.
+          enum:
+          - Id
+        id:
+          type: string
+          description: The contact group ID from the [Everbridge Groups API](https://developers.everbridge.net/internal/reference/ebs-list-groups).
+    SemanticQuery:
+      allOf:
+      - $ref: '#/components/schemas/Command'
+      description: A query use for generating a CEM Result built with semantic logic
+      type: object
+      properties:
+        type:
+          type: string
+          description: The type of command to execute
+          enum:
+          - SemanticQuery
+        inArea:
+          $ref: '#/components/schemas/Geometry'
+        starting:
+          type: string
+          format: date-time
+          description: Optional start time for bounding the query. Affects some locations and travel itineraries.
+        ending:
+          type: string
+          format: date-time
+          description: Optional end time for bounding the query. Affects some locations and travel itineraries.
+        ofTypeIds:
+          type: array
+          items:
+            type: string
+          description: A list of contact or asset type IDs to filter the results by.
+        tagged:
+          type: array
+          items:
+            type: string
+          description: A list of tags to filter the results by.
+        inPropertyIds:
+          type: array
+          items:
+            type: string
+          description: A list of property IDs to filter the results by.
+        withProperties:
+          type: array
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/CemResultsBooleanPropertyQuery'
+            - $ref: '#/components/schemas/CemResultsNumberPropertyQuery'
+            - $ref: '#/components/schemas/CemResultsStringPropertyQuery'
+          description: A list of property IDs to filter the results by.
+        named:
+          type: array
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/CemResultsCompleteName'
+          description: A list of names to filter the results by.
+        identified:
+          type: array
+          items:
+            type: string
+          description: A list of identifiers to filter the results by.
+        memberOfIds:
+          type: array
+          items:
+            type: number
+          description: A list of groups IDs to find members of.
+        withLocationTypes:
+          type: array
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/CemResultsStaticLocationType'
+            - $ref: '#/components/schemas/CemResultsLastKnownLocationType'
+            - $ref: '#/components/schemas/CemResultsExpectedLocationType'
+            - $ref: '#/components/schemas/CemResultsTravelLocationType'
+          description: A list of location types to filter the results by.
+        ofRuleIds:
+          type: array
+          items:
+            type: number
+          description: A list of rules to filter the results by.
+        isExpatriate:
+          type: boolean
+          description: If true, include expatriates in the results for contact result sets.
+        isVip:
+          type: boolean
+          description: If true, include VIPs in the results for contact result sets.
+        subscribedToIds:
+          type: array
+          items:
+            type: string
+          description: A list of public feed IDs to retrieve subscribers for. Only applicable to `publicuser` result sets.
+        forZipCodes:
+          type: array
+          items:
+            type: string
+          description: A list of zipcodes to filter subscribers. Only applicable to `publicuser` result set.
+        sendToAorSubscriptions:
+          type: boolean
+          description: If true, include org area-of-responsibility subscriptions. Only applicable to `publicuser` result set.
+    RuleRecipientName:
+      type: object
+      description: Refers to a contact rule (filter) by its name. Retrieve contact rule names using the [Everbridge Contact Filters API](https://developers.everbridge.net/internal/reference/ebs-v1-contact-filters)
+      required:
+      - type
+      - name
+      properties:
+        type:
+          type: string
+          description: Must be set to exactly `Name`.
+          enum:
+          - Name
+        name:
+          type: string
+          description: The name of the contact rule (filter).
     SmsSettings:
       type: object
       description: The SMS short code or phone number shown to recipients of text messages.
@@ -501,660 +806,6 @@ components:
         phase:
           type: string
           description: Optional template phase. Valid values are NEW, UPDATE, CLOSE. When provided, it must satisfy validation rules.
-    CategoryBase:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        organizationId:
-          type: string
-        created:
-          type: string
-        createdBy:
-          type: string
-        createdByName:
-          type: string
-        updated:
-          type: string
-        updatedBy:
-          type: string
-        updatedByName:
-          type: string
-        canUpdate:
-          type: boolean
-          description: Whether the current user can update this category.
-        canDelete:
-          type: boolean
-          description: Whether the current user can delete this category.
-    SocialMediaPublicMessage:
-      type: object
-      description: The social media public message content.
-      required:
-      - tokenIds
-      - incLink
-      properties:
-        body:
-          type: string
-          description: The title of social media.
-        tokenIds:
-          type: array
-          description: The tokens of social media ,it can contain the token of  both twitter and facebook.
-          items:
-            type: string
-        incLink:
-          type: boolean
-          description: Whether the message publish to social media contains a link
-        imageId:
-          type: string
-          description: The system-generated image ID referring to the image file for this message..
-        customContents:
-          type: array
-          description: The bodies of the custom social media  Each type at most has one item.
-          items:
-            anyOf:
-            - $ref: '#/components/schemas/Facebook'
-            - $ref: '#/components/schemas/Twitter'
-    ContactRecipientName:
-      type: object
-      description: Refers to a contact recipient by their name as shown in the [Everbridge Contacts API](https://developers.everbridge.net/internal/reference/ebs-list-contacts).
-      required:
-      - type
-      - firstName
-      - lastName
-      properties:
-        type:
-          type: string
-          description: Must be set to exactly `Name`.
-          enum:
-          - Name
-        firstName:
-          type: string
-          description: The contact's first or given name.
-        middleInitial:
-          type: string
-          description: The contact's middle initial.
-        lastName:
-          type: string
-          description: The contact's last name or surname.
-        suffix:
-          type: string
-          description: A suffix to the contact's name.
-          example: Jr.
-    MessageContent:
-      required:
-      - contents
-      type: object
-      description: Notification message content that is included within the communication. If a `templateId` is present, this value becomes optional and will override the template's message content if provided.
-      properties:
-        conferenceBridgeId:
-          type: string
-          description: The ID of a conference bridge for recipients to join. Retrieve conference bridge IDs from the [Everbridge List Conference Bridges API](https://developers.everbridge.net/internal/reference/ebs-list-conference-bridges). Note that this property is mutually exclusive with `questionnaire`; both may not be set in the same communication.
-        questionnaire:
-          type: object
-          description: A list of answers to a provided question for recipients to respond with during confirmation. Note that this property is mutually exclusive with `conferenceBridgeId`; both may not be set in the same communication.
-          required:
-          - answers
-          properties:
-            answers:
-              type: array
-              items:
-                type: object
-                required:
-                - name
-                properties:
-                  name:
-                    type: string
-                    description: The user-friendly text of the questionnaire answer.
-                  responseQuota:
-                    type: integer
-                    description: Defines a minimum number of recipients that must respond with this questionnaire answer.
-            questionText:
-              type: string
-              description: The text prompt to display to recipients when they are responding to the questionnaire.
-        contents:
-          type: array
-          description: The bodies of the notification message shown to recipients. There may be multiple `Textual` message bodies but at most one `Audio` message body and/or at most one `WebPage` message body.
-          items:
-            anyOf:
-            - $ref: '#/components/schemas/AudioMessageBody'
-            - $ref: '#/components/schemas/TextualMessageBody'
-            - $ref: '#/components/schemas/WebPageMessageBody'
-    SenderSettings:
-      type: object
-      description: Specify what recipients will see as the "sender" of the notifications sent from the communication (e.g. caller ID upon receiving a phone call.)
-      properties:
-        email:
-          type: object
-          description: Configuration elements that control the display of the sender in email notifications.
-          properties:
-            name:
-              type: string
-              description: The display name used in email notifications.
-            replyToEmail:
-              type: string
-              description: The "reply to" email address to use for email notifications.
-        voice:
-          type: array
-          description: Configuration elements that control the display of the caller in phone call notifications.
-          items:
-            $ref: '#/components/schemas/VoiceSettings'
-        sms:
-          type: array
-          description: Configuration elements that control the display of the sender in SMS notifications.
-          items:
-            $ref: '#/components/schemas/SmsSettings'
-    Geometry:
-      type: object
-      description: A geojson representation of a map shape.
-    ApiSettings:
-      type: object
-      description: Settings that adjust how the communication is sent to the recipients.
-      properties:
-        id:
-          type: string
-          description: An optional ID of a preexisting set of settings. If provided along with any other settings in this object, the settings are merged so that any settings defined in this request override those stored in the settings at the given ID.
-        defaultLanguage:
-          $ref: '#/components/schemas/SupportedLanguages'
-        sender:
-          $ref: '#/components/schemas/SenderSettings'
-        delivery:
-          $ref: '#/components/schemas/DeliverySettings'
-        recipientInteraction:
-          $ref: '#/components/schemas/RecipientSettings'
-    ApiDeliveryPathPrompt:
-      type: object
-      description: The unique description, provided by the organization, for the delivery path.
-      required:
-      - type
-      - prompt
-      properties:
-        type:
-          type: string
-          description: Must be set to exactly `Prompt`.
-          enum:
-          - Prompt
-        prompt:
-          type: string
-          description: The unique description, provided by the organization, for the delivery path.
-    CAPPublicMessage:
-      type: object
-      description: A CAP public-message body targeted at one or more CAP modalities (paths). Shared CAP transport metadata is carried under `cap`. Multiple CAP public messages are allowed as long as their paths do not overlap.
-      required:
-      - paths
-      - cap
-      properties:
-        body:
-          type: string
-          description: The CAP message body for the targeted modalities.
-        paths:
-          type: array
-          description: The CAP delivery modalities this body applies to. A modality may be targeted by at most one CAP public message.
-          items:
-            type: string
-            enum:
-            - IPAWS
-            - CAP_GOOGLE
-            - CAP_RSS
-        cap:
-          $ref: '#/components/schemas/CapContent'
-    ContentAttachment:
-      type: object
-      properties:
-        fileId:
-          type: string
-        fileName:
-          type: string
-        mimeType:
-          type: string
-        downloadUrl:
-          type: string
-        size:
-          type: integer
-          format: int64
-    ApiDeliveryPath:
-      description: Delivery paths are ordered methods of contacting recipients, such as "work email" or "home phone".
-      anyOf:
-      - $ref: '#/components/schemas/ApiDeliveryPathPathId'
-      - $ref: '#/components/schemas/ApiDeliveryPathPrompt'
-    RecipientSettings:
-      type: object
-      description: Settings that adjust how recipients respond to the communication.
-      properties:
-        confirm:
-          type: boolean
-          description: Request that recipients confirm that the notification was received.
-        smsCallback:
-          type: boolean
-          description: Request that SMS recipients call to confirm delivery.
-        voiceMailOption:
-          type: string
-          description: "Control how the system responds if it is sent to a recipient's voicemail inbox:\n * `MESSAGEONLY`: Leave a message but do not consider the notification confirmed.\n * `MESSAGEWITHCONFIRMATION`: Leave a message and consider the notification confirmed.\n * `NOMESSAGE`: Do not leave a message; the notification is not confirmed."
-          enum:
-          - MESSAGEONLY
-          - MESSAGEWITHCONFIRMATION
-          - NOMESSAGE
-        mobileSettings:
-          type: object
-          properties:
-            requestImage:
-              type: boolean
-              description: Request an image of recipients and their surroundings.
-            requestLocation:
-              type: boolean
-              description: Request that recipients share their location.
-            allowShare:
-              type: boolean
-              description: Allow recipients to share the message with others.
-            requireConfirm:
-              type: boolean
-              description: Require that recipients confirm receipt.
-            requestComment:
-              type: boolean
-              description: Request that recipients reply to the notification with a brief description of their status.
-    TextOnlyPathCategory:
-      type: string
-      description: A group of contact path types that only support textual messaging.
-      enum:
-      - CATEGORY:BUSINESSMESSAGINGAPPS
-      - CATEGORY:COMMON
-      - CATEGORY:EMAIL
-      - CATEGORY:MOBILEAPP
-      - CATEGORY:PLAINTEXT
-      - CATEGORY:SMS
-    ContactRecipientId:
-      type: object
-      description: Refers to a contact recipient by its contact ID.
-      required:
-      - type
-      - id
-      properties:
-        type:
-          type: string
-          description: Must be set to exactly `Id`.
-          enum:
-          - Id
-        id:
-          type: string
-          description: The contact ID from the [Everbridge Contacts API](https://developers.everbridge.net/internal/reference/ebs-list-contacts).
-    CemResultsStaticLocationType:
-      type: object
-      description: Specifies how to include contacts with static location types in CEM Results.
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          description: Must be set to exactly `Static`.
-          enum:
-          - Static
-        locationTypeIds:
-          type: array
-          description: A list of static location type IDs.
-          items:
-            type: number
-        includeMissingLocationTypeId:
-          type: boolean
-          description: If true, include results that do not have a static location type.
-    CemResultsCompleteName:
-      type: object
-      description: Used to describe a contact's complete name in a CEM Results query.
-      required:
-      - type
-      - first
-      - last
-      properties:
-        type:
-          type: string
-          description: Must be set to exactly `Complete`.
-          enum:
-          - Complete
-        first:
-          type: string
-          description: The first name of the contact.
-        last:
-          type: string
-          description: The last name of the contact.
-        middleInitial:
-          type: string
-          description: The middle initial of the contact.
-        suffix:
-          type: string
-          description: The suffix of the contact's name, such as "Jr." or "III".
-    AlertUsPublicMessage:
-      type: object
-      description: The AlertUs public message content.
-      required:
-      - title
-      - body
-      properties:
-        title:
-          type: string
-          description: The title of web widget message.
-        body:
-          type: string
-          description: The core content of web widget message.
-        alertUsSettingId:
-          type: string
-          description: The soap web setting id that defined in setting page
-        alertUsRestSetting:
-          type: array
-          description: The rest setting configuration list of alert us
-          items:
-            $ref: '#/components/schemas/AlertUsSetting'
-    TemplatePermission:
-      type: object
-      properties:
-        message:
-          type: string
-          enum:
-          - NONE
-          - VIEW
-          - EDIT
-          - ADD_REMOVE
-          description: 'Controls how users can interact with this part of the template when launching a communication:
-
-            - `NONE` or `VIEW`: Users can use this data but cannot modify it.
-
-            - `EDIT`: Users can modify this data.
-
-            - `ADD_REMOVE`: Users can add or remove this data.'
-        settings:
-          type: string
-          enum:
-          - NONE
-          - VIEW
-          - EDIT
-          - ADD_REMOVE
-          description: 'Controls how users can interact with this part of the template when launching a communication:
-
-            - `NONE` or `VIEW`: Users can use this data but cannot modify it.
-
-            - `EDIT`: Users can modify this data.
-
-            - `ADD_REMOVE`: Users can add or remove this data.'
-        recipients:
-          type: string
-          enum:
-          - NONE
-          - VIEW
-          - EDIT
-          - ADD_REMOVE
-          description: 'Controls how users can interact with this part of the template when launching a communication:
-
-            - `NONE` or `VIEW`: Users can use this data but cannot modify it.
-
-            - `EDIT`: Users can modify this data.
-
-            - `ADD_REMOVE`: Users can add or remove this data.'
-        publicMessage:
-          $ref: '#/components/schemas/PublicMessagePermission'
-    CemResultsLastKnownLocationType:
-      type: object
-      description: Specifies how to include contacts with "Last Known" location types in CEM Results.
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          description: Must be set to exactly `LastKnown`.
-          enum:
-          - LastKnown
-        locationSourceIds:
-          type: array
-          description: A list of location source IDs.
-          items:
-            type: number
-    CapContent:
-      type: object
-      description: Shared CAP transport metadata for a public-safety delivery instance. The public-comms webpage shortUrl is not part of this content; it is system-generated and returned at the communication detail level.
-      required:
-      - capCategory
-      - capEventType
-      - capEventCode
-      - capSeverity
-      - capUrgency
-      - capCertainty
-      properties:
-        capCategory:
-          type: string
-          description: CAP category.
-        capEventType:
-          type: string
-          description: CAP event type.
-        capEventCode:
-          type: string
-          description: CAP event code.
-        capSeverity:
-          type: string
-          description: CAP severity.
-        capUrgency:
-          type: string
-          description: CAP urgency.
-        capCertainty:
-          type: string
-          description: CAP certainty.
-    LaunchMessageBody:
-      type: object
-      required:
-      - contentType
-      - title
-      properties:
-        contentType:
-          type: string
-          description: "A MIME type, defined in IETF's [RFC 6838](https://datatracker.ietf.org/doc/html/rfc6838), that describes the content type (e.g. `text/plain` for plain text or `audio/ogg` for an audio file). The content types that are valid for a given message body depends on the `type` of the message body:\n * `AudioMessageBody`: Supports only `audio` MIME types with any of its supported contact delivery path types.\n * `TextualMessageBody`: Supports only `text` MIME types with any of its supported contact delivery path types; for audio-only contact delivery path types, the text content will be translated to spoken audio via text-to-speech.\n * `WebPageMessageBody`: Supports only `text` MIME types with any of its supported contact delivery path types."
-        title:
-          type: string
-          description: A title for the notification. For audio messages, this is used for display purposes within the Everbridge portal.
-          minLength: 1
-          maxLength: 255
-    Twitter:
-      type: object
-      description: The Twitter custom message content.
-      properties:
-        body:
-          type: string
-          description: The core content sent to twitter..
-        imageId:
-          type: string
-          description: The system-generated image ID referring to the image file that will be sent to twitter
-        webPageMessage:
-          type: string
-          description: The web page message sent to twitter
-        image:
-          $ref: '#/components/schemas/ContentAttachment'
-    AlertUsSetting:
-      type: object
-      description: The rest alert us setting content
-      required:
-      - id
-      - profileId
-      properties:
-        id:
-          type: string
-          description: The identity of alert us rest setting that pre-defined on alert us setting page.
-        profileId:
-          type: string
-          description: The profile identity of alert us rest setting that pre-defined on alert us setting page..
-        duration:
-          type: string
-          description: The duration of the message,This is in formatted in the ISO 8601 "duration" format.
-          example: PT5H
-        groupNames:
-          type: array
-          description: The group name of alert us.
-          items:
-            type: string
-    Facebook:
-      type: object
-      description: The Facebook custom message content.
-      properties:
-        body:
-          type: string
-          description: The core content sent to facebook.
-        imageId:
-          type: string
-          description: The system-generated image ID referring to the image file that will be sent to facebook
-        image:
-          $ref: '#/components/schemas/ContentAttachment'
-    SemanticQuery:
-      allOf:
-      - $ref: '#/components/schemas/Command'
-      description: A query use for generating a CEM Result built with semantic logic
-      type: object
-      properties:
-        type:
-          type: string
-          description: The type of command to execute
-          enum:
-          - SemanticQuery
-        inArea:
-          $ref: '#/components/schemas/Geometry'
-        starting:
-          type: string
-          format: date-time
-          description: Optional start time for bounding the query. Affects some locations and travel itineraries.
-        ending:
-          type: string
-          format: date-time
-          description: Optional end time for bounding the query. Affects some locations and travel itineraries.
-        ofTypeIds:
-          type: array
-          items:
-            type: string
-          description: A list of contact or asset type IDs to filter the results by.
-        tagged:
-          type: array
-          items:
-            type: string
-          description: A list of tags to filter the results by.
-        inPropertyIds:
-          type: array
-          items:
-            type: string
-          description: A list of property IDs to filter the results by.
-        withProperties:
-          type: array
-          items:
-            anyOf:
-            - $ref: '#/components/schemas/CemResultsBooleanPropertyQuery'
-            - $ref: '#/components/schemas/CemResultsNumberPropertyQuery'
-            - $ref: '#/components/schemas/CemResultsStringPropertyQuery'
-          description: A list of property IDs to filter the results by.
-        named:
-          type: array
-          items:
-            anyOf:
-            - $ref: '#/components/schemas/CemResultsCompleteName'
-          description: A list of names to filter the results by.
-        identified:
-          type: array
-          items:
-            type: string
-          description: A list of identifiers to filter the results by.
-        memberOfIds:
-          type: array
-          items:
-            type: number
-          description: A list of groups IDs to find members of.
-        withLocationTypes:
-          type: array
-          items:
-            anyOf:
-            - $ref: '#/components/schemas/CemResultsStaticLocationType'
-            - $ref: '#/components/schemas/CemResultsLastKnownLocationType'
-            - $ref: '#/components/schemas/CemResultsExpectedLocationType'
-            - $ref: '#/components/schemas/CemResultsTravelLocationType'
-          description: A list of location types to filter the results by.
-        ofRuleIds:
-          type: array
-          items:
-            type: number
-          description: A list of rules to filter the results by.
-        isExpatriate:
-          type: boolean
-          description: If true, include expatriates in the results for contact result sets.
-        isVip:
-          type: boolean
-          description: If true, include VIPs in the results for contact result sets.
-        subscribedToIds:
-          type: array
-          items:
-            type: string
-          description: A list of public feed IDs to retrieve subscribers for. Only applicable to `publicuser` result sets.
-        forZipCodes:
-          type: array
-          items:
-            type: string
-          description: A list of zipcodes to filter subscribers. Only applicable to `publicuser` result set.
-        sendToAorSubscriptions:
-          type: boolean
-          description: If true, include org area-of-responsibility subscriptions. Only applicable to `publicuser` result set.
-    CemResultsExpectedLocationType:
-      type: object
-      description: Specifies how to include contacts with expected location types in CEM Results.
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          description: Must be set to exactly `Expected`.
-          enum:
-          - Expected
-    GenericOneWayPublicMessage:
-      type: object
-      description: The GenericOneWay public message content.
-      required:
-      - title
-      - body
-      - receiveUrls
-      properties:
-        title:
-          type: string
-          description: The title of generic one way.
-        body:
-          type: string
-          description: The core content of generic one way.
-        receiveUrls:
-          type: string
-          description: The receive url list of generic one way.
-          items:
-            type: string
-    CemResultsNumberPropertyQuery:
-      allOf:
-      - $ref: '#/components/schemas/CemResultsPropertyQuery'
-      - type: object
-        required:
-        - type
-        description: Provides querying against numeric properties in Contacts and Assets.
-        properties:
-          type:
-            type: string
-            description: Must be set to exactly `Number`.
-            enum:
-            - Number
-          lowerBound:
-            type: number
-            description: A lower bound to match against the properties.
-          upperBound:
-            type: number
-            description: An upper bound to match against the properties.
-    GroupRecipientName:
-      type: object
-      description: Refers to a group of contact recipients by a name as shown in the [Everbridge Groups API](https://developers.everbridge.net/internal/reference/ebs-list-groups).
-      required:
-      - type
-      - name
-      properties:
-        type:
-          type: string
-          description: Must be set to exactly `Name`.
-          enum:
-          - Name
-        name:
-          type: string
-          description: The name of the contact group.
     LaunchRecipients:
       type: object
       description: 'Describes the recipients of notifications from the communication. At least one recipient must be provided when `Mode` is `LIVE` or `SIMULATION`.
@@ -1220,322 +871,111 @@ components:
             anyOf:
             - $ref: '#/components/schemas/ResultSetQueryRecipients'
           description: A set of affected contacts from a CEM Alert.
-    ResultSetQueryRecipients:
+    Geometry:
       type: object
-      description: An ID of an existing CEM Results result set where the contacts cached within the result set are included as recipients in the communication.
+      description: A geojson representation of a map shape.
+    GroupRecipientName:
+      type: object
+      description: Refers to a group of contact recipients by a name as shown in the [Everbridge Groups API](https://developers.everbridge.net/internal/reference/ebs-list-groups).
       required:
       - type
-      - id
+      - name
       properties:
         type:
           type: string
-          description: Must be set to exactly `ResultSet`.
+          description: Must be set to exactly `Name`.
           enum:
-          - ResultSet
-        id:
+          - Name
+        name:
           type: string
-          description: A valid result set ID. Must represent a set of entities that can be contacted (e.g. contacts, not assets).
-          example: evbg+result:contact:cemp-1234567890abcdef01234567-abcdef01-2345-6789-abcd-ef0123456789:1697471720114
-    GroupRecipientId:
+          description: The name of the contact group.
+    Facebook:
       type: object
-      description: Refers to a group of contact recipients by a group ID.
-      required:
-      - type
-      - id
+      description: The Facebook custom message content.
       properties:
-        type:
+        body:
           type: string
-          description: Must be set to exactly `Id`.
-          enum:
-          - Id
-        id:
+          description: The core content sent to facebook.
+        imageId:
           type: string
-          description: The contact group ID from the [Everbridge Groups API](https://developers.everbridge.net/internal/reference/ebs-list-groups).
-    ApiDeliveryPathPathId:
+          description: The system-generated image ID referring to the image file that will be sent to facebook
+        image:
+          $ref: '#/components/schemas/ContentAttachment'
+    SocialMediaPublicMessage:
       type: object
-      description: A unique identifier for the delivery path.
+      description: The social media public message content.
       required:
-      - type
-      - pathId
+      - tokenIds
+      - incLink
       properties:
-        type:
+        body:
           type: string
-          description: Must be set to exactly `PathId`.
-          enum:
-          - PathId
-        pathId:
-          type: string
-          description: The path ID itself.
-    CemResultsStringPropertyQuery:
-      allOf:
-      - $ref: '#/components/schemas/CemResultsPropertyQuery'
-      - type: object
-        required:
-        - type
-        description: Provides querying against string properties in Contacts and Assets.
-        properties:
-          type:
+          description: The title of social media.
+        tokenIds:
+          type: array
+          description: The tokens of social media ,it can contain the token of  both twitter and facebook.
+          items:
             type: string
-            description: Must be set to exactly `String`.
-            enum:
-            - String
-          values:
-            type: array
-            description: The values to match against the properties.
-            items:
-              type: string
-    VoiceSettings:
-      type: object
-      description: The caller ID number displayed when contacting recipients via phone.
-      required:
-      - countryCode
-      - callerId
-      - default
-      properties:
-        countryCode:
-          type: string
-          description: The ISO 3166 two-letter code for the country where this phone number is valid. Please refer to [the Wikipedia page on ISO 3166 country codes](https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes) for valid values.
-        callerId:
-          type: string
-          description: The caller ID phone number in E. 164 format.
-        default:
+        incLink:
           type: boolean
-          description: If true, then this is the caller ID number used when no other applies.
-    WebWidgetPublicMessage:
-      type: object
-      description: The web widget public message content.
-      required:
-      - title
-      - body
-      - stream
-      properties:
-        title:
+          description: Whether the message publish to social media contains a link
+        imageId:
           type: string
-          description: The title of web widget message.
-        body:
-          type: string
-          description: The core content of web widget message.
-        ewwEndDate:
-          type: string
-          description: end date as an ISO 8601-compliant value to custom end data of web widget message.This value must be after the current date
-          example: '2024-07-07T20:06:09.734385Z'
-        stream:
-          type: string
-          description: The steam of web widget message.
-        duration:
-          type: string
-          description: The amount of time, beginning at the web widget message launch, to expiring the message. This is in formatted in the ISO 8601 "duration" format.
-          example: PT5H
-    WebPageMessageBody:
-      allOf:
-      - $ref: '#/components/schemas/LaunchMessageBody'
-      - type: object
-        description: ''
-        required:
-        - type
-        - content
-        - paths
-        properties:
-          attachments:
-            type: array
-            description: A set of system-generated IDs representing previously uploaded attachments. Note that attachments are aggregated across all message bodies (i.e. every message body gets the same attachments).
-            items:
-              type: string
-          type:
-            type: string
-            description: A generic classifier of the message body, further refined by `contentType`. Must be set to exactly `WebPage`.
-            enum:
-            - WebPage
-          content:
-            type: string
-            description: Text content to use as the body of the web page.
-          paths:
-            type: array
-            description: A set of contact delivery path types or path categories that this message body should be sent to.
-            items:
-              type: string
-              enum:
-              - CATEGORY:SMS
-          usePrefix:
-            type: boolean
-            description: If set to true, will prefix the message with organization-specific text prior to including the web page URL. Defaults to false.
-          additionalContent:
-            type: string
-            description: Optional additional plain text content to send with the initial message. Not included in the web page.
-    SupportedLanguages:
-      type: string
-      description: "A combined language and region tag that signifies the default language to use when selecting a message body to send to a recipient.\n *Note:* Currently, all communication message bodies in a single communication are signified as being spoken or written in the language defined in this property."
-      default: en_US
-      enum:
-      - ar_SA
-      - bn_BD
-      - cy_GB
-      - da_DK
-      - de_DE
-      - el_GR
-      - en_GB
-      - en_US
-      - es_ES
-      - es_US
-      - fi_FI
-      - fr_FR
-      - he_IL
-      - ht_HT
-      - id_ID
-      - it_IT
-      - ja_JP
-      - ko_KR
-      - nl_NL
-      - no_NO
-      - pl_PL
-      - pt_BR
-      - pt_PT
-      - ru_RU
-      - sv_SE
-      - th_TH
-      - tr_TR
-      - uk_UA
-      - ur_PK
-      - vi_VN
-      - yi_US
-      - zh_CN
-    CommsResponse:
-      required:
-      - id
+          description: The system-generated image ID referring to the image file for this message..
+        customContents:
+          type: array
+          description: The bodies of the custom social media  Each type at most has one item.
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/Facebook'
+            - $ref: '#/components/schemas/Twitter'
+    TemplatePermission:
       type: object
       properties:
-        id:
+        message:
           type: string
-          description: The ID of the communication that was launched.
-    CemResultsTravelLocationType:
-      type: object
-      description: Specifies how to include contacts with travel location types in CEM Results.
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          description: Must be set to exactly `Travel`.
           enum:
-          - Travel
-        domesticInternationalStatuses:
-          type: array
-          description: A list of domestic international travel statuses.
-          items:
-            type: string
-        localTravelStatuses:
-          type: array
-          description: A list of local travel statuses.
-          items:
-            type: string
-        travelTypes:
-          type: array
-          description: Depicts whether a contact is arriving, departing, or transitioning to a location.
-          items:
-            type: string
-            enum:
-            - Arrival
-            - Departure
-            - Transit
-        segmentTypes:
-          type: array
-          description: Depicts a contact's mode of transportation to a location.
-          items:
-            type: string
-            enum:
-            - Car
-            - Hotel
-            - Air
-            - Rail
-    Command:
-      type: object
-      required:
-      - type
-      properties:
-        type:
+          - NONE
+          - VIEW
+          - EDIT
+          - ADD_REMOVE
+          description: 'Controls how users can interact with this part of the template when launching a communication:
+
+            - `NONE` or `VIEW`: Users can use this data but cannot modify it.
+
+            - `EDIT`: Users can modify this data.
+
+            - `ADD_REMOVE`: Users can add or remove this data.'
+        settings:
           type: string
-          description: The type of command to execute
-    NetworkPublicMessage:
-      type: object
-      description: The Network public message content.
-      required:
-      - body
-      - networkEffectTypes
-      - affectedAreas
-      - groupIds
-      properties:
-        body:
-          type: string
-          description: The core content of network.
-        networkEffectTypes:
-          type: array
-          description: ' The type of network effect'
-          items:
-            type: string
           enum:
-          - PUBLIC
-          - NETWORK_GROUP
-        affectedAreas:
+          - NONE
+          - VIEW
+          - EDIT
+          - ADD_REMOVE
+          description: 'Controls how users can interact with this part of the template when launching a communication:
+
+            - `NONE` or `VIEW`: Users can use this data but cannot modify it.
+
+            - `EDIT`: Users can modify this data.
+
+            - `ADD_REMOVE`: Users can add or remove this data.'
+        recipients:
           type: string
-          description: The shape content.
-        groupIds:
-          type: array
-          description: The  groupIds defined in network setting page.
-          items:
-            type: string
-    CategoryApiPaginatedResponse:
-      type: object
-      description: A page of data from an endpoint.
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/CategoryBase'
-        pages:
-          type: object
-          properties:
-            currentPage:
-              type: number
-              description: The requested page number.
-            pageSize:
-              type: number
-              description: The requested page size.
-            pageCount:
-              type: number
-              description: The number of elements in the current page.
-            totalPages:
-              type: number
-              description: The total number of pages available for request.
-            maxSize:
-              type: number
-              description: The maximum size of a single page that is allowed by the API.
-            totalCount:
-              type: number
-              description: The total number of elements across all pages.
-    AudioBulletinBoardPublicMessage:
-      type: object
-      description: The ABB public message content.
-      required:
-      - title
-      - body
-      - settingId
-      properties:
-        title:
-          type: string
-          description: The title of abb.
-        body:
-          type: string
-          description: The core content of abb.
-        settingId:
-          type: string
-          description: The setting id of abb that defined in setting page.
-        audioKey:
-          type: string
-          description: 'The system-generated audio Key referring to the audio file for this message. '
-        expires:
-          type: string
-          description: How long the message expires. This is in formatted in the ISO 8601 "duration" format.
-          example: PT5H
+          enum:
+          - NONE
+          - VIEW
+          - EDIT
+          - ADD_REMOVE
+          description: 'Controls how users can interact with this part of the template when launching a communication:
+
+            - `NONE` or `VIEW`: Users can use this data but cannot modify it.
+
+            - `EDIT`: Users can modify this data.
+
+            - `ADD_REMOVE`: Users can add or remove this data.'
+        publicMessage:
+          $ref: '#/components/schemas/PublicMessagePermission'
     ContactRecipientExternalId:
       type: object
       description: Refers to a contact recipient by its contact external ID.
@@ -1551,46 +991,186 @@ components:
         externalId:
           type: string
           description: The organization-provided contact external ID from the [Everbridge Contacts API](https://developers.everbridge.net/internal/reference/ebs-list-contacts).
-    AudioOnlyPathCategory:
-      type: string
-      description: A group of contact path types that only support audio messaging.
-      enum:
-      - CATEGORY:VOICE
-    AudioMessageBody:
-      allOf:
-      - $ref: '#/components/schemas/LaunchMessageBody'
-      - type: object
-        required:
-        - type
-        - attachmentId
-        - paths
-        properties:
-          attachmentId:
-            type: string
-            description: The system-generated attachment ID referring to the audio file for this message.
-          type:
-            type: string
-            description: A generic classifier of the message body, further refined by `contentType`. Must be set to exactly `Audio`.
-            enum:
-            - Audio
-          paths:
-            type: array
-            description: A set of contact delivery path types that this message body should be sent to.
-            items:
-              $ref: '#/components/schemas/AudioOnlyPathCategory'
-    MemberPortalPublicMessage:
+    GenericOneWayPublicMessage:
       type: object
-      description: The member portal public message content.
+      description: The GenericOneWay public message content.
       required:
+      - title
       - body
-      - includeSelectedMapShape
+      - receiveUrls
+      properties:
+        title:
+          type: string
+          description: The title of generic one way.
+        body:
+          type: string
+          description: The core content of generic one way.
+        receiveUrls:
+          type: string
+          description: The receive url list of generic one way.
+          items:
+            type: string
+    ApiDeliveryPathPrompt:
+      type: object
+      description: The unique description, provided by the organization, for the delivery path.
+      required:
+      - type
+      - prompt
+      properties:
+        type:
+          type: string
+          description: Must be set to exactly `Prompt`.
+          enum:
+          - Prompt
+        prompt:
+          type: string
+          description: The unique description, provided by the organization, for the delivery path.
+    ContentAttachment:
+      type: object
+      properties:
+        fileId:
+          type: string
+        fileName:
+          type: string
+        mimeType:
+          type: string
+        downloadUrl:
+          type: string
+        size:
+          type: integer
+          format: int64
+    Command:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          description: The type of command to execute
+    Twitter:
+      type: object
+      description: The Twitter custom message content.
       properties:
         body:
           type: string
-          description: The core content that displayed on public member public message  page.
-        includeSelectedMapShape:
-          type: boolean
-          description: 'Whether include the map defined in recipient part  '
+          description: The core content sent to twitter..
+        imageId:
+          type: string
+          description: The system-generated image ID referring to the image file that will be sent to twitter
+        webPageMessage:
+          type: string
+          description: The web page message sent to twitter
+        image:
+          $ref: '#/components/schemas/ContentAttachment'
+    ContactRecipientId:
+      type: object
+      description: Refers to a contact recipient by its contact ID.
+      required:
+      - type
+      - id
+      properties:
+        type:
+          type: string
+          description: Must be set to exactly `Id`.
+          enum:
+          - Id
+        id:
+          type: string
+          description: The contact ID from the [Everbridge Contacts API](https://developers.everbridge.net/internal/reference/ebs-list-contacts).
+    ContactRecipientName:
+      type: object
+      description: Refers to a contact recipient by their name as shown in the [Everbridge Contacts API](https://developers.everbridge.net/internal/reference/ebs-list-contacts).
+      required:
+      - type
+      - firstName
+      - lastName
+      properties:
+        type:
+          type: string
+          description: Must be set to exactly `Name`.
+          enum:
+          - Name
+        firstName:
+          type: string
+          description: The contact's first or given name.
+        middleInitial:
+          type: string
+          description: The contact's middle initial.
+        lastName:
+          type: string
+          description: The contact's last name or surname.
+        suffix:
+          type: string
+          description: A suffix to the contact's name.
+          example: Jr.
+    AlertUsPublicMessage:
+      type: object
+      description: The AlertUs public message content.
+      required:
+      - title
+      - body
+      properties:
+        title:
+          type: string
+          description: The title of web widget message.
+        body:
+          type: string
+          description: The core content of web widget message.
+        alertUsSettingId:
+          type: string
+          description: The soap web setting id that defined in setting page
+        alertUsRestSetting:
+          type: array
+          description: The rest setting configuration list of alert us
+          items:
+            $ref: '#/components/schemas/AlertUsSetting'
+    MessageContent:
+      required:
+      - contents
+      type: object
+      description: Notification message content that is included within the communication. If a `templateId` is present, this value becomes optional and will override the template's message content if provided.
+      properties:
+        conferenceBridgeId:
+          type: string
+          description: The ID of a conference bridge for recipients to join. Retrieve conference bridge IDs from the [Everbridge List Conference Bridges API](https://developers.everbridge.net/internal/reference/ebs-list-conference-bridges). Note that this property is mutually exclusive with `questionnaire`; both may not be set in the same communication.
+        questionnaire:
+          type: object
+          description: A list of answers to a provided question for recipients to respond with during confirmation. Note that this property is mutually exclusive with `conferenceBridgeId`; both may not be set in the same communication.
+          required:
+          - answers
+          properties:
+            answers:
+              type: array
+              items:
+                type: object
+                required:
+                - name
+                properties:
+                  name:
+                    type: string
+                    description: The user-friendly text of the questionnaire answer.
+                  responseQuota:
+                    type: integer
+                    description: Defines a minimum number of recipients that must respond with this questionnaire answer.
+            questionText:
+              type: string
+              description: The text prompt to display to recipients when they are responding to the questionnaire.
+        contents:
+          type: array
+          description: The bodies of the notification message shown to recipients. There may be multiple `Textual` message bodies but at most one `Audio` message body and/or at most one `WebPage` message body.
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/AudioMessageBody'
+            - $ref: '#/components/schemas/TextualMessageBody'
+            - $ref: '#/components/schemas/WebPageMessageBody'
+    CemResultsPropertyQuery:
+      type: object
+      required:
+      - ids
+      properties:
+        ids:
+          type: array
+          description: The IDs of the properties to query by.
     DeliverySettings:
       type: object
       description: Settings that adjust the way that notifications are delivered to recipients.
@@ -1636,21 +1216,402 @@ components:
         quietTimeOverride:
           type: boolean
           description: If set to true, then notifications from this communication will ignore recipients' quiet time settings (i.e. phone calls will be made despite the recipient opting to only receive them during a certain time range.)
-    RuleRecipientName:
+    PublicMessagePermission:
       type: object
-      description: Refers to a contact rule (filter) by its name. Retrieve contact rule names using the [Everbridge Contact Filters API](https://developers.everbridge.net/internal/reference/ebs-v1-contact-filters)
+      properties:
+        webWidget:
+          type: string
+          enum:
+          - NONE
+          - VIEW
+          - EDIT
+          - ADD_REMOVE
+          description: 'Controls how users can interact with this part of the template when launching a communication:
+
+            - `NONE` or `VIEW`: Users can use this data but cannot modify it.
+
+            - `EDIT`: Users can modify this data.
+
+            - `ADD_REMOVE`: Users can add or remove this data.'
+        alertUs:
+          type: string
+          enum:
+          - NONE
+          - VIEW
+          - EDIT
+          - ADD_REMOVE
+          description: 'Controls how users can interact with this part of the template when launching a communication:
+
+            - `NONE` or `VIEW`: Users can use this data but cannot modify it.
+
+            - `EDIT`: Users can modify this data.
+
+            - `ADD_REMOVE`: Users can add or remove this data.'
+        genericOneWay:
+          type: string
+          enum:
+          - NONE
+          - VIEW
+          - EDIT
+          - ADD_REMOVE
+          description: 'Controls how users can interact with this part of the template when launching a communication:
+
+            - `NONE` or `VIEW`: Users can use this data but cannot modify it.
+
+            - `EDIT`: Users can modify this data.
+
+            - `ADD_REMOVE`: Users can add or remove this data.'
+        audioBulletinBoard:
+          type: string
+          enum:
+          - NONE
+          - VIEW
+          - EDIT
+          - ADD_REMOVE
+          description: 'Controls how users can interact with this part of the template when launching a communication:
+
+            - `NONE` or `VIEW`: Users can use this data but cannot modify it.
+
+            - `EDIT`: Users can modify this data.
+
+            - `ADD_REMOVE`: Users can add or remove this data.'
+        memberPortal:
+          type: string
+          enum:
+          - NONE
+          - VIEW
+          - EDIT
+          - ADD_REMOVE
+          description: 'Controls how users can interact with this part of the template when launching a communication:
+
+            - `NONE` or `VIEW`: Users can use this data but cannot modify it.
+
+            - `EDIT`: Users can modify this data.
+
+            - `ADD_REMOVE`: Users can add or remove this data.'
+        network:
+          type: string
+          enum:
+          - NONE
+          - VIEW
+          - EDIT
+          - ADD_REMOVE
+          description: 'Controls how users can interact with this part of the template when launching a communication:
+
+            - `NONE` or `VIEW`: Users can use this data but cannot modify it.
+
+            - `EDIT`: Users can modify this data.
+
+            - `ADD_REMOVE`: Users can add or remove this data.'
+        socialMedia:
+          type: string
+          enum:
+          - NONE
+          - VIEW
+          - EDIT
+          - ADD_REMOVE
+          description: 'Controls how users can interact with this part of the template when launching a communication:
+
+            - `NONE` or `VIEW`: Users can use this data but cannot modify it.
+
+            - `EDIT`: Users can modify this data.
+
+            - `ADD_REMOVE`: Users can add or remove this data.'
+    CapContent:
+      type: object
+      description: Shared CAP transport metadata for a public-safety delivery instance. The public-comms webpage shortUrl is not part of this content; it is system-generated and returned at the communication detail level.
+      required:
+      - capCategory
+      - capEventType
+      - capEventCode
+      - capSeverity
+      - capUrgency
+      - capCertainty
+      properties:
+        capCategory:
+          type: string
+          description: CAP category.
+        capEventType:
+          type: string
+          description: CAP event type.
+        capEventCode:
+          type: string
+          description: CAP event code.
+        capSeverity:
+          type: string
+          description: CAP severity.
+        capUrgency:
+          type: string
+          description: CAP urgency.
+        capCertainty:
+          type: string
+          description: CAP certainty.
+    CemResultsLastKnownLocationType:
+      type: object
+      description: Specifies how to include contacts with "Last Known" location types in CEM Results.
       required:
       - type
-      - name
       properties:
         type:
           type: string
-          description: Must be set to exactly `Name`.
+          description: Must be set to exactly `LastKnown`.
           enum:
-          - Name
-        name:
+          - LastKnown
+        locationSourceIds:
+          type: array
+          description: A list of location source IDs.
+          items:
+            type: number
+    LaunchMessageBody:
+      type: object
+      required:
+      - contentType
+      - title
+      properties:
+        contentType:
           type: string
-          description: The name of the contact rule (filter).
+          description: "A MIME type, defined in IETF's [RFC 6838](https://datatracker.ietf.org/doc/html/rfc6838), that describes the content type (e.g. `text/plain` for plain text or `audio/ogg` for an audio file). The content types that are valid for a given message body depends on the `type` of the message body:\n * `AudioMessageBody`: Supports only `audio` MIME types with any of its supported contact delivery path types.\n * `TextualMessageBody`: Supports only `text` MIME types with any of its supported contact delivery path types; for audio-only contact delivery path types, the text content will be translated to spoken audio via text-to-speech.\n * `WebPageMessageBody`: Supports only `text` MIME types with any of its supported contact delivery path types."
+        title:
+          type: string
+          description: A title for the notification. For audio messages, this is used for display purposes within the Everbridge portal.
+          minLength: 1
+          maxLength: 255
+    TemplateCreateAndUpdateRequest:
+      allOf:
+      - $ref: '#/components/schemas/TemplateCreateRequest'
+      deprecated: true
+      description: Deprecated shared request schema. Use TemplateCreateRequest for create operations and TemplateUpdateRequest for partial update operations.
+    CategoryApiPaginatedResponse:
+      type: object
+      description: A page of data from an endpoint.
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryBase'
+        pages:
+          type: object
+          properties:
+            currentPage:
+              type: number
+              description: The requested page number.
+            pageSize:
+              type: number
+              description: The requested page size.
+            pageCount:
+              type: number
+              description: The number of elements in the current page.
+            totalPages:
+              type: number
+              description: The total number of pages available for request.
+            maxSize:
+              type: number
+              description: The maximum size of a single page that is allowed by the API.
+            totalCount:
+              type: number
+              description: The total number of elements across all pages.
+    CemResultsTravelLocationType:
+      type: object
+      description: Specifies how to include contacts with travel location types in CEM Results.
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          description: Must be set to exactly `Travel`.
+          enum:
+          - Travel
+        domesticInternationalStatuses:
+          type: array
+          description: A list of domestic international travel statuses.
+          items:
+            type: string
+        localTravelStatuses:
+          type: array
+          description: A list of local travel statuses.
+          items:
+            type: string
+        travelTypes:
+          type: array
+          description: Depicts whether a contact is arriving, departing, or transitioning to a location.
+          items:
+            type: string
+            enum:
+            - Arrival
+            - Departure
+            - Transit
+        segmentTypes:
+          type: array
+          description: Depicts a contact's mode of transportation to a location.
+          items:
+            type: string
+            enum:
+            - Car
+            - Hotel
+            - Air
+            - Rail
+    CemResultsNumberPropertyQuery:
+      allOf:
+      - $ref: '#/components/schemas/CemResultsPropertyQuery'
+      - type: object
+        required:
+        - type
+        description: Provides querying against numeric properties in Contacts and Assets.
+        properties:
+          type:
+            type: string
+            description: Must be set to exactly `Number`.
+            enum:
+            - Number
+          lowerBound:
+            type: number
+            description: A lower bound to match against the properties.
+          upperBound:
+            type: number
+            description: An upper bound to match against the properties.
+    CAPPublicMessage:
+      type: object
+      description: A CAP public-message body targeted at one or more CAP modalities (paths). Shared CAP transport metadata is carried under `cap`. Multiple CAP public messages are allowed as long as their paths do not overlap.
+      required:
+      - paths
+      - cap
+      properties:
+        body:
+          type: string
+          description: The CAP message body for the targeted modalities.
+        paths:
+          type: array
+          description: The CAP delivery modalities this body applies to. A modality may be targeted by at most one CAP public message.
+          items:
+            type: string
+            enum:
+            - IPAWS
+            - CAP_GOOGLE
+            - CAP_RSS
+        cap:
+          $ref: '#/components/schemas/CapContent'
+    CemResultsExpectedLocationType:
+      type: object
+      description: Specifies how to include contacts with expected location types in CEM Results.
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          description: Must be set to exactly `Expected`.
+          enum:
+          - Expected
+    VoiceSettings:
+      type: object
+      description: The caller ID number displayed when contacting recipients via phone.
+      required:
+      - countryCode
+      - callerId
+      - default
+      properties:
+        countryCode:
+          type: string
+          description: The ISO 3166 two-letter code for the country where this phone number is valid. Please refer to [the Wikipedia page on ISO 3166 country codes](https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes) for valid values.
+        callerId:
+          type: string
+          description: The caller ID phone number in E. 164 format.
+        default:
+          type: boolean
+          description: If true, then this is the caller ID number used when no other applies.
+    CemResultsCompleteName:
+      type: object
+      description: Used to describe a contact's complete name in a CEM Results query.
+      required:
+      - type
+      - first
+      - last
+      properties:
+        type:
+          type: string
+          description: Must be set to exactly `Complete`.
+          enum:
+          - Complete
+        first:
+          type: string
+          description: The first name of the contact.
+        last:
+          type: string
+          description: The last name of the contact.
+        middleInitial:
+          type: string
+          description: The middle initial of the contact.
+        suffix:
+          type: string
+          description: The suffix of the contact's name, such as "Jr." or "III".
+    CemResultsStringPropertyQuery:
+      allOf:
+      - $ref: '#/components/schemas/CemResultsPropertyQuery'
+      - type: object
+        required:
+        - type
+        description: Provides querying against string properties in Contacts and Assets.
+        properties:
+          type:
+            type: string
+            description: Must be set to exactly `String`.
+            enum:
+            - String
+          values:
+            type: array
+            description: The values to match against the properties.
+            items:
+              type: string
+    TextOnlyPathCategory:
+      type: string
+      description: A group of contact path types that only support textual messaging.
+      enum:
+      - CATEGORY:BUSINESSMESSAGINGAPPS
+      - CATEGORY:COMMON
+      - CATEGORY:EMAIL
+      - CATEGORY:MOBILEAPP
+      - CATEGORY:PLAINTEXT
+      - CATEGORY:SMS
+    CemResultsStaticLocationType:
+      type: object
+      description: Specifies how to include contacts with static location types in CEM Results.
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          description: Must be set to exactly `Static`.
+          enum:
+          - Static
+        locationTypeIds:
+          type: array
+          description: A list of static location type IDs.
+          items:
+            type: number
+        includeMissingLocationTypeId:
+          type: boolean
+          description: If true, include results that do not have a static location type.
+    AlertUsSetting:
+      type: object
+      description: The rest alert us setting content
+      required:
+      - id
+      - profileId
+      properties:
+        id:
+          type: string
+          description: The identity of alert us rest setting that pre-defined on alert us setting page.
+        profileId:
+          type: string
+          description: The profile identity of alert us rest setting that pre-defined on alert us setting page..
+        duration:
+          type: string
+          description: The duration of the message,This is in formatted in the ISO 8601 "duration" format.
+          example: PT5H
+        groupNames:
+          type: array
+          description: The group name of alert us.
+          items:
+            type: string
     TextualMessageBody:
       allOf:
       - $ref: '#/components/schemas/LaunchMessageBody'
@@ -1683,6 +1644,60 @@ components:
               anyOf:
               - $ref: '#/components/schemas/AudioOnlyPathCategory'
               - $ref: '#/components/schemas/TextOnlyPathCategory'
+    ResultSetQueryRecipients:
+      type: object
+      description: An ID of an existing CEM Results result set where the contacts cached within the result set are included as recipients in the communication.
+      required:
+      - type
+      - id
+      properties:
+        type:
+          type: string
+          description: Must be set to exactly `ResultSet`.
+          enum:
+          - ResultSet
+        id:
+          type: string
+          description: A valid result set ID. Must represent a set of entities that can be contacted (e.g. contacts, not assets).
+          example: evbg+result:contact:cemp-1234567890abcdef01234567-abcdef01-2345-6789-abcd-ef0123456789:1697471720114
+    CommsResponse:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the communication that was launched.
+    ApiDeliveryPathPathId:
+      type: object
+      description: A unique identifier for the delivery path.
+      required:
+      - type
+      - pathId
+      properties:
+        type:
+          type: string
+          description: Must be set to exactly `PathId`.
+          enum:
+          - PathId
+        pathId:
+          type: string
+          description: The path ID itself.
+    ApiSettings:
+      type: object
+      description: Settings that adjust how the communication is sent to the recipients.
+      properties:
+        id:
+          type: string
+          description: An optional ID of a preexisting set of settings. If provided along with any other settings in this object, the settings are merged so that any settings defined in this request override those stored in the settings at the given ID.
+        defaultLanguage:
+          $ref: '#/components/schemas/SupportedLanguages'
+        sender:
+          $ref: '#/components/schemas/SenderSettings'
+        delivery:
+          $ref: '#/components/schemas/DeliverySettings'
+        recipientInteraction:
+          $ref: '#/components/schemas/RecipientSettings'
     CemResultsBooleanPropertyQuery:
       allOf:
       - $ref: '#/components/schemas/CemResultsPropertyQuery'
@@ -1699,19 +1714,6 @@ components:
           value:
             type: boolean
             description: A boolean value to match against the properties.
-    TemplateCreateAndUpdateRequest:
-      allOf:
-      - $ref: '#/components/schemas/TemplateCreateRequest'
-      deprecated: true
-      description: Deprecated shared request schema. Use TemplateCreateRequest for create operations and TemplateUpdateRequest for partial update operations.
-    CemResultsPropertyQuery:
-      type: object
-      required:
-      - ids
-      properties:
-        ids:
-          type: array
-          description: The IDs of the properties to query by.
   securitySchemes:
     API_Authorizer:
       type: apiKey

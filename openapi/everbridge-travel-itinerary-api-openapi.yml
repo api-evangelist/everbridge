@@ -13,7 +13,7 @@ paths:
   /itineraries/expectedLocations/{organizationId}/{id}:
     get:
       description: GET Expected Locations By Itinerary ID.
-      operationId: EBS Get Expected Locations By Itinerary ID
+      operationId: EBSGetExpectedLocationsByItineraryID
       parameters:
       - description: id
         in: path
@@ -70,10 +70,12 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/itineraries/expectedLocations/{organizationId}/{id}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Get Expected Locations By Itinerary ID
   /itineraries/query/{organizationId}:
     post:
       description: Query Itineraries By Parameters.
-      operationId: EBS Query Itineraries By Parameters
+      operationId: EBSQueryItinerariesByParameters
       parameters:
       - description: Organization ID
         in: path
@@ -187,10 +189,12 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/itineraries/query/{organizationId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Query Itineraries By Parameters
   /itineraries/{organizationId}:
     post:
       description: Add An Itinerary.
-      operationId: EBS Add Itinerary
+      operationId: EBSAddItinerary
       parameters:
       - description: Organization ID
         in: path
@@ -366,10 +370,12 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/itineraries/{organizationId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Add Itinerary
   /itineraries/{organizationId}/batch:
     delete:
       description: Batch delete itineraries.
-      operationId: EBS Delete Batch Itinerary
+      operationId: EBSDeleteBatchItinerary
       parameters:
       - description: Organization ID
         in: path
@@ -467,9 +473,11 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/itineraries/{organizationId}/batch
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Delete Batch Itinerary
     post:
       description: Add Batch of Itineraries.
-      operationId: EBS Add Batch Itinerary
+      operationId: EBSAddBatchItinerary
       parameters:
       - description: Organization ID
         in: path
@@ -650,10 +658,12 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/itineraries/{organizationId}/batch
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Add Batch Itinerary
   /itineraries/{organizationId}/{id}:
     delete:
       description: Delete an Itinerary.
-      operationId: EBS Delete Itinerary
+      operationId: EBSDeleteItinerary
       parameters:
       - description: Organization ID
         in: path
@@ -746,9 +756,11 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/itineraries/{organizationId}/{id}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Delete Itinerary
     put:
       description: Update an Itinerary.
-      operationId: EBS Update Itinerary
+      operationId: EBSUpdateItinerary
       parameters:
       - description: Organization ID
         in: path
@@ -932,6 +944,8 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/itineraries/{organizationId}/{id}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Update Itinerary
 components:
   schemas:
     ExpectedLocationWrapper:
@@ -975,71 +989,6 @@ components:
           type: string
       required:
       - contactId
-      type: object
-    ItineraryResponseWrapper:
-      properties:
-        baseUri:
-          type: string
-        id:
-          type: number
-        instanceUri:
-          type: string
-        message:
-          type: string
-      required:
-      - message
-      - id
-      - baseUri
-      - instanceUri
-      type: object
-    DataPageExpectedLocationWrapper:
-      properties:
-        currentPageNo:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/ExpectedLocationWrapper'
-          type: array
-        dataPageList:
-          items:
-            $ref: '#/components/schemas/DataPageExpectedLocationWrapper'
-          type: array
-        pageSize:
-          format: int32
-          type: integer
-        scrollId:
-          type: string
-        start:
-          format: int32
-          type: integer
-        totalCount:
-          format: int64
-          type: integer
-        totalPageCount:
-          format: int32
-          type: integer
-      type: object
-    GisLocationWrapper:
-      properties:
-        lat:
-          format: double
-          type: number
-        lon:
-          format: double
-          type: number
-      type: object
-    ItineraryBatchDeleteResult:
-      properties:
-        code:
-          format: int32
-          type: integer
-        message:
-          type: string
-      required:
-      - message
-      - code
-      title: ItineraryBatchDeleteResult
       type: object
     ContactAddressWrapper:
       properties:
@@ -1091,6 +1040,34 @@ components:
       - locationName
       - streetAddress
       type: object
+    ItineraryResponseWrapper:
+      properties:
+        baseUri:
+          type: string
+        id:
+          type: number
+        instanceUri:
+          type: string
+        message:
+          type: string
+      required:
+      - message
+      - id
+      - baseUri
+      - instanceUri
+      type: object
+    ItineraryBatchDeleteResult:
+      properties:
+        code:
+          format: int32
+          type: integer
+        message:
+          type: string
+      required:
+      - message
+      - code
+      title: ItineraryBatchDeleteResult
+      type: object
     ItineraryQueryResponseWrapper:
       description: Response wrapper for itinerary query results
       properties:
@@ -1125,46 +1102,6 @@ components:
               format: int32
               type: integer
           type: object
-      type: object
-    ExpectedLocationWrapperCollectionResult:
-      properties:
-        currentPageUri:
-          type: string
-        firstPageUri:
-          type: string
-        lastPageUri:
-          type: string
-        message:
-          type: string
-        nextPageUri:
-          type: string
-        page:
-          $ref: '#/components/schemas/DataPageExpectedLocationWrapper'
-        previousPageUri:
-          type: string
-      type: object
-    ItinerarySearchCriteria:
-      description: JSON object of SearchCriteria
-      properties:
-        fieldName:
-          type: string
-        fieldValues:
-          items:
-            type: string
-          type: array
-      type: object
-    RestfulModificationResult:
-      properties:
-        baseUri:
-          type: string
-        id:
-          format: int64
-          type: integer
-        instanceUri:
-          type: string
-        message:
-          type: string
-      title: RestfulModificationResult
       type: object
     ItineraryRequestWrapper:
       properties:
@@ -1291,6 +1228,83 @@ components:
       - lastModifiedDate
       - segments
       - passengers
+      type: object
+    RestfulModificationResult:
+      properties:
+        baseUri:
+          type: string
+        id:
+          format: int64
+          type: integer
+        instanceUri:
+          type: string
+        message:
+          type: string
+      title: RestfulModificationResult
+      type: object
+    ExpectedLocationWrapperCollectionResult:
+      properties:
+        currentPageUri:
+          type: string
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        nextPageUri:
+          type: string
+        page:
+          $ref: '#/components/schemas/DataPageExpectedLocationWrapper'
+        previousPageUri:
+          type: string
+      type: object
+    ItinerarySearchCriteria:
+      description: JSON object of SearchCriteria
+      properties:
+        fieldName:
+          type: string
+        fieldValues:
+          items:
+            type: string
+          type: array
+      type: object
+    DataPageExpectedLocationWrapper:
+      properties:
+        currentPageNo:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/ExpectedLocationWrapper'
+          type: array
+        dataPageList:
+          items:
+            $ref: '#/components/schemas/DataPageExpectedLocationWrapper'
+          type: array
+        pageSize:
+          format: int32
+          type: integer
+        scrollId:
+          type: string
+        start:
+          format: int32
+          type: integer
+        totalCount:
+          format: int64
+          type: integer
+        totalPageCount:
+          format: int32
+          type: integer
+      type: object
+    GisLocationWrapper:
+      properties:
+        lat:
+          format: double
+          type: number
+        lon:
+          format: double
+          type: number
       type: object
   securitySchemes:
     API_Authorizer:

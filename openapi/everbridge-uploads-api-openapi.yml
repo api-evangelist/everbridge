@@ -13,7 +13,7 @@ paths:
   /dynamicGroups/{organizationId}:
     get:
       description: Retrieve all the dynamic groups for an orgnization.
-      operationId: EBS List Dynamic Groups
+      operationId: EBSListDynamicGroups
       parameters:
       - description: The ID of the organization containing the upload
         in: path
@@ -150,10 +150,12 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/dynamicGroups/{organizationId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS List Dynamic Groups
   /dynamicGroups/{organizationId}/{dynamicGroupId}:
     get:
       description: Retrieve the specified dynamic group for an orgnization.
-      operationId: EBS Get Dynamic Groups Details
+      operationId: EBSGetDynamicGroupsDetails
       parameters:
       - description: The ID of the organization containing the upload
         in: path
@@ -294,12 +296,14 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/dynamicGroups/{organizationId}/{dynamicGroupId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Get Dynamic Groups Details
   /dynamicLocations/{organizationId}:
     post:
       description: 'Upload a CSV with last known location for multiple contacts.
 
         Once the file has been uploaded, use Get DynamicLocation Status to find the status of the upload.'
-      operationId: EBS Upload Dynamic Locations
+      operationId: EBSUploadDynamicLocations
       parameters:
       - in: path
         name: organizationId
@@ -451,10 +455,12 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/dynamicLocations/{organizationId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Upload Dynamic Locations
   /dynamicLocations/{organizationId}/{uploadBatchId}:
     get:
       description: Retrieve the specified dynamic locations uploadBatch details.
-      operationId: EBS Get Dynamic Locations Details
+      operationId: EBSGetDynamicLocationsDetails
       parameters:
       - description: The ID of the organization containing the upload
         in: path
@@ -637,10 +643,12 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/dynamicLocations/{organizationId}/{uploadBatchId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Get Dynamic Locations Details
   /uploadContacts/{organizationId}/groups/{uploadBatchId}:
     get:
       description: Returns the details of a given contact group upload batch ID.
-      operationId: EBS Get Contacts Group Upload Details
+      operationId: EBSGetContactsGroupUploadDetails
       parameters:
       - description: The ID of the organization containing the uploadBatchs
         in: path
@@ -986,10 +994,12 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/uploadContacts/{organizationId}/groups/{uploadBatchId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Get Contacts Group Upload Details
   /uploadContacts/{organizationId}/{uploadBatchId}:
     get:
       description: Returns the details of a given job filtered by upload status (created using Upload Contacts.
-      operationId: EBS Get Contacts Upload Details
+      operationId: EBSGetContactsUploadDetails
       parameters:
       - in: path
         name: organizationId
@@ -1227,10 +1237,12 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/uploadContacts/{organizationId}/{uploadBatchId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Get Contacts Upload Details
   /uploadDynamicLocations/{organizationId}/{uploadBatchId}:
     get:
       description: Returns the details of a given dynamic location upload batch ID.
-      operationId: EBS Get Upload Dynamic Locations Details
+      operationId: EBSGetUploadDynamicLocationsDetails
       parameters:
       - description: The ID of the organization containing the upload
         in: path
@@ -1457,10 +1469,12 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/uploadDynamicLocations/{organizationId}/{uploadBatchId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Get Upload Dynamic Locations Details
   /uploads/{organizationId}:
     get:
       description: List the summary of all previous contact uploads.
-      operationId: EBS List Upload Contacts
+      operationId: EBSListUploadContacts
       parameters:
       - description: The ID of the organization containing the uploads
         in: path
@@ -1772,11 +1786,13 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/uploads/{organizationId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS List Upload Contacts
     post:
       description: 'This API allows adding, updating or deleting contacts in bulk by uploading a file.
 
         Once the file has been uploaded, use Get Contacts Upload Status to find the status of the upload. Use Create Contact to add individual contact.'
-      operationId: EBS Upload Contacts
+      operationId: EBSUploadContacts
       parameters:
       - in: path
         name: organizationId
@@ -1934,10 +1950,12 @@ paths:
         timeoutInMillis: 120000
         type: aws_proxy
         uri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:apigw-large-file-handler-us-east-1-prod/invocations
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Upload Contacts
   /uploads/{organizationId}/groups:
     get:
       description: Returns all the upload contacts groups details.
-      operationId: EBS List Upload Contacts Groups
+      operationId: EBSListUploadContactsGroups
       parameters:
       - description: The ID of the organization containing the uploads
         in: path
@@ -2230,11 +2248,13 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/uploads/{organizationId}/groups
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS List Upload Contacts Groups
     post:
       description: 'This API allows adding, removing contacts to group(s) in bulk by uploading a file.
 
         Once the file has been uploaded, use Get Contacts Groups Upload Status to find the status of the upload.'
-      operationId: EBS Upload Contacts Groups
+      operationId: EBSUploadContactsGroups
       parameters:
       - description: The ID of the organization containing the contacts
         in: path
@@ -2395,10 +2415,12 @@ paths:
         timeoutInMillis: 120000
         type: aws_proxy
         uri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:214792946631:function:apigw-large-file-handler-us-east-1-prod/invocations
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Upload Contacts Groups
   /uploads/{organizationId}/groups/{uploadBatchId}:
     get:
       description: Returns details of a given group(s) upload batch ID. This API is used to find the status of a given job (created using Upload Contacts Groups.
-      operationId: EBS Get Contacts Groups Upload Status
+      operationId: EBSGetContactsGroupsUploadStatus
       parameters:
       - description: The ID of the organization containing the uploadBatchs
         in: path
@@ -2622,10 +2644,12 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/uploads/{organizationId}/groups/{uploadBatchId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Get Contacts Groups Upload Status
   /uploads/{organizationId}/{uploadBatchId}:
     get:
       description: Get the summary of given contact upload.
-      operationId: EBS Get Contacts Upload Status
+      operationId: EBSGetContactsUploadStatus
       parameters:
       - description: The ID of the organization containing the uploadBatchs
         in: path
@@ -2938,8 +2962,16 @@ paths:
             statusCode: '200'
         type: http_proxy
         uri: https://ebs-restapi-prod-us.evbg.io/rest/uploads/{organizationId}/{uploadBatchId}
+      x-operation-id-source: normalized
+      x-operation-id-original: EBS Get Contacts Upload Status
 components:
   schemas:
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
     DynamicGroupResponseListSchema:
       properties:
         firstPageUri:
@@ -3050,12 +3082,6 @@ components:
       - lastPageUri
       - page
       type: object
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
   securitySchemes:
     API_Authorizer:
       description: oAuth Token
