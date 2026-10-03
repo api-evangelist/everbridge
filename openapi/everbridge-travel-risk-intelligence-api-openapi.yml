@@ -272,6 +272,15 @@ paths:
         connectionType: VPC_LINK
 components:
   schemas:
+    CountryRiskRatingResponse:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CountryRiskRating'
     CountryRiskRating:
       type: object
       properties:
@@ -288,6 +297,22 @@ components:
           type: string
           description: UTC timestamp string in ISO 8601 format.
           example: '2026-03-08T08:30:06.032Z'
+    ErrorResponse:
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        reason:
+          type: string
+    CountryRiskRatingByCodeResponse:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          $ref: '#/components/schemas/CountryRiskRating'
     CityRiskRating:
       type: object
       properties:
@@ -307,24 +332,6 @@ components:
           type: string
           description: UTC timestamp string in ISO 8601 format.
           example: '2026-03-08T08:30:06.032Z'
-    CountryRiskRatingResponse:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/CountryRiskRating'
-    ErrorResponse:
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        reason:
-          type: string
     CityRiskRatingResponse:
       type: object
       required:
@@ -349,13 +356,6 @@ components:
           type: string
           description: Error detail message.
           example: Authorization failure.
-    CountryRiskRatingByCodeResponse:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          $ref: '#/components/schemas/CountryRiskRating'
   securitySchemes:
     LambdaAuthorizer:
       type: apiKey

@@ -822,34 +822,102 @@ paths:
       x-operation-id-original: EBS AM Download Upload Template
 components:
   schemas:
-    AssetIcon:
+    ListAssetTypeResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+          organizationId:
+            type: number
+          createdId:
+            type: number
+          createdName:
+            type: string
+          lastModifiedId:
+            type: number
+          lastModifiedName:
+            type: string
+          createdTimestamp:
+            type: number
+          lastModifiedTimestamp:
+            type: number
+          name:
+            type: string
+          legacy:
+            type: boolean
+          assetTypeCategory:
+            type: string
+          assetTypeTemplateId:
+            type: string
+          iconId:
+            type: string
+          alertable:
+            type: boolean
+          icon:
+            $ref: '#/components/schemas/AssetTypeIcon'
+    AssetTypeIcon:
+      allOf:
+      - $ref: '#/components/schemas/AssetIcon'
+      - type: object
+        properties:
+          dynamicMappings:
+            $ref: '#/components/schemas/AssetTypeDynamicMappings'
+    AssetPropertyDefinitionRequest:
+      required:
+      - assetPropertyDataType
+      - assetPropertyDisplayType
+      - assetPropertyType
+      - name
       type: object
       properties:
-        source:
-          type: string
-          enum:
-          - SYSTEM
-          - CUSTOM
         id:
           type: string
+        assetTypeId:
+          maxLength: 2147483647
+          minLength: 1
+          type: string
+        assetPropertyType:
+          type: string
+          enum:
+          - BASIC
+          - ADDRESS
+          - SYSTEM_PROPERTY
+          - CUSTOM_PROPERTY
+        assetPropertyDataType:
+          type: string
+          enum:
+          - STRING
+          - BOOLEAN
+          - LONG
+          - DOUBLE
+          - DATETIME
+          - GEOJSON
+          - URL
+        assetPropertyDisplayType:
+          type: string
+          enum:
+          - SINGLE
+          - TEXTBOX
+          - MULTIPLE
         name:
+          maxLength: 200
+          minLength: 1
           type: string
-        contentUrl:
+        aliasName:
+          maxLength: 200
+          minLength: 1
           type: string
-        color:
+        description:
+          maxLength: 2000
+          minLength: 0
           type: string
-    AssetTypeDynamicColorMapping:
-      type: object
-      properties:
-        value:
-          type: string
-        color:
-          type: string
-    LinkedToAssetResponse:
-      type: object
-      properties:
-        linkedToExistingAsset:
-          type: boolean
+        allowedValues:
+          description: Required when assetPropertyDisplayType is SINGLE or MULTIPLE
+          type: array
+          items:
+            type: object
     AssetType:
       required:
       - iconId
@@ -914,8 +982,34 @@ components:
           type: boolean
         icon:
           $ref: '#/components/schemas/AssetTypeIcon'
-    AssetTypeUpdateRequest:
+    AssetTypeDynamicMappings:
+      type: object
+      properties:
+        attributeId:
+          type: string
+        mappings:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetTypeDynamicColorMapping'
+    AssetIcon:
+      type: object
+      properties:
+        source:
+          type: string
+          enum:
+          - SYSTEM
+          - CUSTOM
+        id:
+          type: string
+        name:
+          type: string
+        contentUrl:
+          type: string
+        color:
+          type: string
+    CreateAssetTypeRequest:
       required:
+      - assetTypeTemplateId
       - iconId
       - name
       - propertyDefinitions
@@ -937,77 +1031,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AssetPropertyDefinitionRequest'
+        assetTypeTemplateId:
+          type: string
         icon:
           $ref: '#/components/schemas/AssetTypeIcon'
-    organizationId:
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      maxLength: 16
-      type: integer
-      example: '1536984111644674'
-      default: '1536984111644674'
-    AssetTypeDynamicMappings:
-      type: object
-      properties:
-        attributeId:
-          type: string
-        mappings:
-          type: array
-          items:
-            $ref: '#/components/schemas/AssetTypeDynamicColorMapping'
-    AssetPropertyDefinitionRequest:
-      required:
-      - assetPropertyDataType
-      - assetPropertyDisplayType
-      - assetPropertyType
-      - name
-      type: object
-      properties:
-        id:
-          type: string
-        assetTypeId:
-          maxLength: 2147483647
-          minLength: 1
-          type: string
-        assetPropertyType:
-          type: string
-          enum:
-          - BASIC
-          - ADDRESS
-          - SYSTEM_PROPERTY
-          - CUSTOM_PROPERTY
-        assetPropertyDataType:
-          type: string
-          enum:
-          - STRING
-          - BOOLEAN
-          - LONG
-          - DOUBLE
-          - DATETIME
-          - GEOJSON
-          - URL
-        assetPropertyDisplayType:
-          type: string
-          enum:
-          - SINGLE
-          - TEXTBOX
-          - MULTIPLE
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-        aliasName:
-          maxLength: 200
-          minLength: 1
-          type: string
-        description:
-          maxLength: 2000
-          minLength: 0
-          type: string
-        allowedValues:
-          description: Required when assetPropertyDisplayType is SINGLE or MULTIPLE
-          type: array
-          items:
-            type: object
     AssetPropertyDefinition:
       required:
       - assetPropertyDataType
@@ -1093,9 +1120,26 @@ components:
           type: array
           items:
             type: object
-    CreateAssetTypeRequest:
+    LinkedToAssetResponse:
+      type: object
+      properties:
+        linkedToExistingAsset:
+          type: boolean
+    organizationId:
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      maxLength: 16
+      type: integer
+      example: '1536984111644674'
+      default: '1536984111644674'
+    AssetTypeDynamicColorMapping:
+      type: object
+      properties:
+        value:
+          type: string
+        color:
+          type: string
+    AssetTypeUpdateRequest:
       required:
-      - assetTypeTemplateId
       - iconId
       - name
       - propertyDefinitions
@@ -1117,52 +1161,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AssetPropertyDefinitionRequest'
-        assetTypeTemplateId:
-          type: string
         icon:
           $ref: '#/components/schemas/AssetTypeIcon'
-    ListAssetTypeResponse:
-      type: array
-      items:
-        type: object
-        properties:
-          id:
-            type: string
-          organizationId:
-            type: number
-          createdId:
-            type: number
-          createdName:
-            type: string
-          lastModifiedId:
-            type: number
-          lastModifiedName:
-            type: string
-          createdTimestamp:
-            type: number
-          lastModifiedTimestamp:
-            type: number
-          name:
-            type: string
-          legacy:
-            type: boolean
-          assetTypeCategory:
-            type: string
-          assetTypeTemplateId:
-            type: string
-          iconId:
-            type: string
-          alertable:
-            type: boolean
-          icon:
-            $ref: '#/components/schemas/AssetTypeIcon'
-    AssetTypeIcon:
-      allOf:
-      - $ref: '#/components/schemas/AssetIcon'
-      - type: object
-        properties:
-          dynamicMappings:
-            $ref: '#/components/schemas/AssetTypeDynamicMappings'
   securitySchemes:
     BasicAuth:
       type: http

@@ -50,53 +50,7 @@ paths:
         passthroughBehavior: when_no_match
 components:
   schemas:
-    WeatherType:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        type:
-          type: string
-          enum:
-          - Warning
-          - Watch
-          - Advisory
-          - Statement
-          - Outlook
-          - Alert
-          - Potentially_Dangerous
-          - Very_Dangerous
-          - Dangerous
-        overridden:
-          type: boolean
-        seq:
-          type: integer
-          format: int32
-        lastModifiedDate:
-          type: string
-          format: date-time
-    ServiceProvider:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        services:
-          type: array
-          items:
-            $ref: '#/components/schemas/Service'
-        categories:
-          type: array
-          items:
-            $ref: '#/components/schemas/Category'
-        categoryGroups:
-          type: array
-          items:
-            $ref: '#/components/schemas/CategoryGroup'
-    CategoryGroup:
+    ServiceGroup:
       type: object
       properties:
         id:
@@ -106,7 +60,7 @@ components:
         categories:
           type: array
           items:
-            $ref: '#/components/schemas/Category'
+            $ref: '#/components/schemas/ServiceCategory'
     Service:
       type: object
       properties:
@@ -149,6 +103,70 @@ components:
           - Events
           - Customized
           - Weather
+    ServiceProvider:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        services:
+          type: array
+          items:
+            $ref: '#/components/schemas/Service'
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
+        categoryGroups:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryGroup'
+    Category:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    CategoryGroup:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
+    WeatherType:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+          enum:
+          - Warning
+          - Watch
+          - Advisory
+          - Statement
+          - Outlook
+          - Alert
+          - Potentially_Dangerous
+          - Very_Dangerous
+          - Dangerous
+        overridden:
+          type: boolean
+        seq:
+          type: integer
+          format: int32
+        lastModifiedDate:
+          type: string
+          format: date-time
     WeatherService:
       type: object
       properties:
@@ -178,24 +196,6 @@ components:
         lastModifiedDate:
           type: string
           format: date-time
-    Category:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-    ServiceGroup:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        categories:
-          type: array
-          items:
-            $ref: '#/components/schemas/ServiceCategory'
   securitySchemes:
     API_Authorizer:
       type: apiKey

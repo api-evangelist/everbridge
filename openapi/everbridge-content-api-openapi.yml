@@ -267,6 +267,14 @@ paths:
           description: Failed - Rate limit is exceeded
 components:
   schemas:
+    ContentStatus:
+      type: string
+      enum:
+      - draft
+      - published
+      - disabled
+      - deleted
+      - expired
     ContentStatistics:
       type: object
       properties:
@@ -284,20 +292,41 @@ components:
           type: integer
         successCount:
           type: integer
-    FieldValue:
+    PreviewFromTemplateRequest:
+      required:
+      - templateId
       type: object
       properties:
-        name:
+        templateId:
           type: string
-        value:
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        fields:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/FieldValue'
+    PublishingTarget:
+      properties:
+        type:
+          type: string
+          description: Target type
+        id:
           type:
           - string
           - 'null'
+          description: 'Target Id relevant to the target type (eg: GroupId). Null if irrelevant for the type'
     BadRequestTemplateId:
       properties:
         message:
           type: string
           example: The request is invalid.
+    PreviewFromTemplateResponse:
+      type: object
+      properties:
+        previewUrl:
+          type: string
     TemplateField:
       type: object
       properties:
@@ -318,38 +347,6 @@ components:
         required:
           type: boolean
           description: True if the field is required for publishing
-    ContentPublish400:
-      properties:
-        message:
-          enum:
-          - TemplateId is invalid
-          - TemplateId could not be found or is not available
-          - BodyFormat is invalid
-          - DurationInMinutes must be greater than 0
-          - The end date must be in the future
-          - ContentName must not exceed 150 charaters
-          - Account does not have permissions to all targeted groups
-          - Invalid targeting type
-          - Invalid attribute ID
-          - Account does not have permissions to target by attributes
-          - Account does not have permissions to target groups
-          type: string
-          example: TemplateId is invalid
-    PreviewFromTemplateRequest:
-      required:
-      - templateId
-      type: object
-      properties:
-        templateId:
-          type: string
-          format: uuid
-          example: d290f1ee-6c54-4b01-90e6-d701748f0851
-        fields:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/FieldValue'
     ContentTemplate:
       properties:
         id:
@@ -398,24 +395,41 @@ components:
           - 'null'
           description: Estimated total number of targeted users by the template default targeting
           example: 42
-    PublishingTarget:
+    ContentTemplates:
       properties:
+        id:
+          type: string
+          format: uuid
+          example: d300f1ee-6c54-4b01-90e6-d701748f0843
+        name:
+          type: string
+          example: Active Shooter!
+        status:
+          enum:
+          - active
+          type: string
+          example: active
         type:
           type: string
-          description: Target type
-        id:
+        tags:
+          type: array
+          items:
+            type: string
+        description:
+          type: string
+          example: Use this for shooter alert
+        previewImageUrl:
+          type: string
+          example: Preview Image URL of a template
+    FieldValue:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
           type:
           - string
           - 'null'
-          description: 'Target Id relevant to the target type (eg: GroupId). Null if irrelevant for the type'
-    ContentStatus:
-      type: string
-      enum:
-      - draft
-      - published
-      - disabled
-      - deleted
-      - expired
     PublishFromTemplateRequest:
       required:
       - templateId
@@ -460,32 +474,23 @@ components:
           - 'null'
           items:
             $ref: '#/components/schemas/FieldValue'
-    ContentTemplates:
+    ContentPublish400:
       properties:
-        id:
-          type: string
-          format: uuid
-          example: d300f1ee-6c54-4b01-90e6-d701748f0843
-        name:
-          type: string
-          example: Active Shooter!
-        status:
+        message:
           enum:
-          - active
+          - TemplateId is invalid
+          - TemplateId could not be found or is not available
+          - BodyFormat is invalid
+          - DurationInMinutes must be greater than 0
+          - The end date must be in the future
+          - ContentName must not exceed 150 charaters
+          - Account does not have permissions to all targeted groups
+          - Invalid targeting type
+          - Invalid attribute ID
+          - Account does not have permissions to target by attributes
+          - Account does not have permissions to target groups
           type: string
-          example: active
-        type:
-          type: string
-        tags:
-          type: array
-          items:
-            type: string
-        description:
-          type: string
-          example: Use this for shooter alert
-        previewImageUrl:
-          type: string
-          example: Preview Image URL of a template
+          example: TemplateId is invalid
     PublishFromTemplateResponse:
       type: object
       properties:
@@ -500,11 +505,6 @@ components:
         targetedUsers:
           type: integer
           example: 1
-    PreviewFromTemplateResponse:
-      type: object
-      properties:
-        previewUrl:
-          type: string
   securitySchemes:
     bearerAuth:
       type: http

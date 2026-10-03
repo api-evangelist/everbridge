@@ -793,56 +793,23 @@ paths:
       x-operation-id-original: EBS Get Privacy Policy Assigment
 components:
   schemas:
-    privacyPolicy:
-      properties:
-        policyItems:
-          items:
-            properties:
-              category:
-                description: Whether the data privacy policy work for 'contactSection' or 'contactField'
-                type: string
-              nameIdentity:
-                description: The data privacy policy will work when it be GENERAL_INFORMATION,DELIVERY_METHODS,STATIC_LOCATIONS,EXPECTED_LOCATIONS,LAST_KNOWN_LOCATIONS,TRAVEL_ARRANGER
-                type: string
-              permission:
-                description: The permission details of the privacy policy:NO_ACCESS,VIEW_ONLY,VIEW_AND_EDIT
-                type: string
-            type: object
-          type: array
-        policyName:
-          description: The name of the privacy policy
-          type: string
-      type: object
-    privacyAssignment:
-      properties:
-        assignedRoles:
-          items:
-            properties:
-              roleId:
-                type: integer
-              roleName:
-                type: string
-              roleType:
-                type: string
-            type: object
-          type: array
-        policyId:
-          type: integer
-        policyName:
-          type: string
-      type: object
     policyId:
       default: '0'
       description: privacy policy ID
       example: '1536984111644674'
       maxLength: 16
       type: integer
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
+    assignOrUnassignPrivacy:
+      properties:
+        assignRoleIds:
+          items:
+            type: integer
+          type: array
+        unassignRoleIds:
+          items:
+            type: integer
+          type: array
+      type: object
     getPrivacyPolicies:
       properties:
         summary:
@@ -900,16 +867,23 @@ components:
               type: object
           type: object
       type: object
-    assignOrUnassignPrivacy:
+    privacyAssignment:
       properties:
-        assignRoleIds:
+        assignedRoles:
           items:
-            type: integer
+            properties:
+              roleId:
+                type: integer
+              roleName:
+                type: string
+              roleType:
+                type: string
+            type: object
           type: array
-        unassignRoleIds:
-          items:
-            type: integer
-          type: array
+        policyId:
+          type: integer
+        policyName:
+          type: string
       type: object
     postUpdateResponse:
       properties:
@@ -920,6 +894,32 @@ components:
         instanceUri:
           type: string
         message:
+          type: string
+      type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
+    privacyPolicy:
+      properties:
+        policyItems:
+          items:
+            properties:
+              category:
+                description: Whether the data privacy policy work for 'contactSection' or 'contactField'
+                type: string
+              nameIdentity:
+                description: The data privacy policy will work when it be GENERAL_INFORMATION,DELIVERY_METHODS,STATIC_LOCATIONS,EXPECTED_LOCATIONS,LAST_KNOWN_LOCATIONS,TRAVEL_ARRANGER
+                type: string
+              permission:
+                description: The permission details of the privacy policy:NO_ACCESS,VIEW_ONLY,VIEW_AND_EDIT
+                type: string
+            type: object
+          type: array
+        policyName:
+          description: The name of the privacy policy
           type: string
       type: object
   securitySchemes:

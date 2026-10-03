@@ -1145,63 +1145,31 @@ paths:
     - url: https://api.everbridge.eu/rest
 components:
   schemas:
-    Sender:
+    MessageSetting:
       required:
-      - firstName
-      - id
-      - lastName
+      - allowShare
+      - requestComment
+      - requestImage
+      - requestLocation
+      - requireConfirm
       type: object
       properties:
-        id:
-          type: string
-          description: Sender ID.
-        firstName:
-          type: string
-          description: The Sender's first name.
-        lastName:
-          type: string
-          description: The Sender's last name.
-      description: Message sender.
-    IncidentV2response:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Incident ID.
-          format: int64
-        name:
-          type: string
-          description: Incident name.
-        incidentStatus:
-          type: string
-          description: Incident status.
-          enum:
-          - Open
-          - Closed
-          - All
-        incidentCreatedDate:
-          type: integer
-          description: Incident created date.
-          format: int64
-        incidentLastModifiedDate:
-          type: integer
-          description: Incident last modified date.
-          format: int64
-        incidentClosedDate:
-          type: integer
-          description: Incident closed date.
-          format: int64
-        incidentDuration:
-          type: integer
-          description: Incident duration.
-          format: int64
-        messages:
-          type: array
-          description: Notification messages belong to this incident.
-          items:
-            $ref: '#/components/schemas/MessageResponseForQuery'
+        requestImage:
+          type: boolean
+          description: Indicates if an image upload has been requested by the message sender.
+        requestLocation:
+          type: boolean
+          description: Indicates if a location has been requested by the message sender.
+        requestComment:
+          type: boolean
+          description: Indicates if comments are requested by the message sender.
+        allowShare:
+          type: boolean
+          description: Indicates if the message is allowed to be shared.
+        requireConfirm:
+          type: boolean
+          description: Indicates if the the message sender has requested confirmation.
+      description: Additional message settings.
     MessageResponseForQuery:
       required:
       - body
@@ -1242,6 +1210,23 @@ components:
           type: integer
           description: Message created time.
           format: int64
+    Sender:
+      required:
+      - firstName
+      - id
+      - lastName
+      type: object
+      properties:
+        id:
+          type: string
+          description: Sender ID.
+        firstName:
+          type: string
+          description: The Sender's first name.
+        lastName:
+          type: string
+          description: The Sender's last name.
+      description: Message sender.
     MessageState:
       required:
       - active
@@ -1271,164 +1256,47 @@ components:
           type: boolean
           description: Indicates whether the message is still active.
       description: Message state.
-    MessageSetting:
+    IncidentV2response:
       required:
-      - allowShare
-      - requestComment
-      - requestImage
-      - requestLocation
-      - requireConfirm
+      - id
       type: object
       properties:
-        requestImage:
-          type: boolean
-          description: Indicates if an image upload has been requested by the message sender.
-        requestLocation:
-          type: boolean
-          description: Indicates if a location has been requested by the message sender.
-        requestComment:
-          type: boolean
-          description: Indicates if comments are requested by the message sender.
-        allowShare:
-          type: boolean
-          description: Indicates if the message is allowed to be shared.
-        requireConfirm:
-          type: boolean
-          description: Indicates if the the message sender has requested confirmation.
-      description: Additional message settings.
-    createIncident:
-      allOf:
-      - properties:
-          incidentAction:
-            description: "Incident Action:\n * `Launch`: This is the most common use case for launching a new incident.\n * `LaunchThenClose`: This closes the incident right after launching the incident."
-            enum:
-            - Launch
-            - LaunchThenClose
-            type: string
-        required:
-        - incidentAction
-        - incidentPhases
-        type: object
-      - $ref: '#/components/schemas/incident'
-    incident:
-      properties:
-        incidentPhases:
-          items:
-            properties:
-              phaseTemplate:
-                properties:
-                  broadcastTemplate:
-                    properties:
-                      broadcastContacts:
-                        properties:
-                          externalIds:
-                            description: Comma separated list of externalIds.  ExternalIds can be found in Manager Portal under contacts.
-                            items:
-                              type: string
-                            type: array
-                          groupIds:
-                            description: Comma separated list of groupIds.  GroupIds can be found using /groups/{organizationId}
-                            items:
-                              type: string
-                            type: array
-                        type: object
-                      broadcastSettings:
-                        properties:
-                          deliverPaths:
-                            description: Contact delivery paths e.g. Phone, SMS, Email etc.
-                            items:
-                              properties:
-                                id:
-                                  description: id returned from /contactPaths/{organizationId}
-                                  type: string
-                              type: object
-                            type: array
-                          duration:
-                            description: Maximum duration of broadcast, without any units
-                            type: integer
-                          durationTimeUnit:
-                            description: 'Associated units for the above duration: MINUTES, HOURS, or DAYS.'
-                            type: string
-                          senderCallerInfos:
-                            description: Sender information for phone call.
-                            items:
-                              properties:
-                                callerId:
-                                  description: Phone number displayed as called ID
-                                  type: string
-                                countryCode:
-                                  description: Two letter country code for the phone number
-                                  type: string
-                                countryName:
-                                  description: Country name from the list of predefined countries for the phone number
-                                  type: string
-                              type: object
-                            type: array
-                          senderEmail:
-                            description: ' Sender E-Mail Display'
-                            type: string
-                        type: object
-                    type: object
-                  formTemplate:
-                    properties:
-                      formVariableItems:
-                        items:
-                          properties:
-                            val:
-                              description: Variable value to be sent in the notification
-                              items:
-                                type: string
-                              type: array
-                            variableId:
-                              description: Variable ID from the template.  Can be found using /incidentVariableItems/{organizationId}/{templateId}/{phase} or /incidentVariableItems/{organizationId}
-                              type: string
-                          type: object
-                        type: array
-                      postMessage:
-                        description: This is the closing instructions (when list of variables is hidden in the template).
-                        type: string
-                      preMessage:
-                        description: Notification content for SMS Text, Fax, Pager, Text-to-speech conversation.
-                        type: string
-                      subject:
-                        description: Subject of the incident and notification.  If name is not provided, it also changes the name/title of incident and the notification.
-                        maxLength: 255
-                        type: string
-                    type: object
-                  templateId:
-                    description: Template ID which can be found from manager portal or using API GET /templates/{organizationId}.
-                    type: integer
-                required:
-                - templateId
-                type: object
-            type: object
-          type: array
+        id:
+          type: integer
+          description: Incident ID.
+          format: int64
         name:
-          description: This replaces the name/title of the incident and notification.  Please note that this is NOT the subject of the notification sent out.
           type: string
-      type: object
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
-    updateIncident:
-      allOf:
-      - properties:
-          incidentAction:
-            default: Update
-            description: "When sending an update to the incident, incidentAction can control the state of the incident.\n * `Update`: Sends an update to the incident using update phase of the template. \n * `UpdateThenClose`: Closes the incident right after updating the incident. \n * `Close` : Closes the incident without sending notification.\n * `CloseWithoutNotification`: Same as Close but does not need additional details in request.\n * `CloseWithNotification`: Sends a notification using close phase and then closes the incident.<br /><br /><b>Note:</b> When using Update/Close/UpdateThenClose, required parameters like templateId must be provided in the request"
-            enum:
-            - Update
-            - Close
-            - UpdateThenClose
-            - CloseWithNotification
-            - CloseWithoutNotification
-            type: string
-        type: object
-      - $ref: '#/components/schemas/incident'
-    previewIncident:
+          description: Incident name.
+        incidentStatus:
+          type: string
+          description: Incident status.
+          enum:
+          - Open
+          - Closed
+          - All
+        incidentCreatedDate:
+          type: integer
+          description: Incident created date.
+          format: int64
+        incidentLastModifiedDate:
+          type: integer
+          description: Incident last modified date.
+          format: int64
+        incidentClosedDate:
+          type: integer
+          description: Incident closed date.
+          format: int64
+        incidentDuration:
+          type: integer
+          description: Incident duration.
+          format: int64
+        messages:
+          type: array
+          description: Notification messages belong to this incident.
+          items:
+            $ref: '#/components/schemas/MessageResponseForQuery'
+    createIncident:
       allOf:
       - properties:
           incidentAction:
@@ -1624,6 +1492,138 @@ components:
       - page
       title: Generated schema for Root
       type: object
+    updateIncident:
+      allOf:
+      - properties:
+          incidentAction:
+            default: Update
+            description: "When sending an update to the incident, incidentAction can control the state of the incident.\n * `Update`: Sends an update to the incident using update phase of the template. \n * `UpdateThenClose`: Closes the incident right after updating the incident. \n * `Close` : Closes the incident without sending notification.\n * `CloseWithoutNotification`: Same as Close but does not need additional details in request.\n * `CloseWithNotification`: Sends a notification using close phase and then closes the incident.<br /><br /><b>Note:</b> When using Update/Close/UpdateThenClose, required parameters like templateId must be provided in the request"
+            enum:
+            - Update
+            - Close
+            - UpdateThenClose
+            - CloseWithNotification
+            - CloseWithoutNotification
+            type: string
+        type: object
+      - $ref: '#/components/schemas/incident'
+    incident:
+      properties:
+        incidentPhases:
+          items:
+            properties:
+              phaseTemplate:
+                properties:
+                  broadcastTemplate:
+                    properties:
+                      broadcastContacts:
+                        properties:
+                          externalIds:
+                            description: Comma separated list of externalIds.  ExternalIds can be found in Manager Portal under contacts.
+                            items:
+                              type: string
+                            type: array
+                          groupIds:
+                            description: Comma separated list of groupIds.  GroupIds can be found using /groups/{organizationId}
+                            items:
+                              type: string
+                            type: array
+                        type: object
+                      broadcastSettings:
+                        properties:
+                          deliverPaths:
+                            description: Contact delivery paths e.g. Phone, SMS, Email etc.
+                            items:
+                              properties:
+                                id:
+                                  description: id returned from /contactPaths/{organizationId}
+                                  type: string
+                              type: object
+                            type: array
+                          duration:
+                            description: Maximum duration of broadcast, without any units
+                            type: integer
+                          durationTimeUnit:
+                            description: 'Associated units for the above duration: MINUTES, HOURS, or DAYS.'
+                            type: string
+                          senderCallerInfos:
+                            description: Sender information for phone call.
+                            items:
+                              properties:
+                                callerId:
+                                  description: Phone number displayed as called ID
+                                  type: string
+                                countryCode:
+                                  description: Two letter country code for the phone number
+                                  type: string
+                                countryName:
+                                  description: Country name from the list of predefined countries for the phone number
+                                  type: string
+                              type: object
+                            type: array
+                          senderEmail:
+                            description: ' Sender E-Mail Display'
+                            type: string
+                        type: object
+                    type: object
+                  formTemplate:
+                    properties:
+                      formVariableItems:
+                        items:
+                          properties:
+                            val:
+                              description: Variable value to be sent in the notification
+                              items:
+                                type: string
+                              type: array
+                            variableId:
+                              description: Variable ID from the template.  Can be found using /incidentVariableItems/{organizationId}/{templateId}/{phase} or /incidentVariableItems/{organizationId}
+                              type: string
+                          type: object
+                        type: array
+                      postMessage:
+                        description: This is the closing instructions (when list of variables is hidden in the template).
+                        type: string
+                      preMessage:
+                        description: Notification content for SMS Text, Fax, Pager, Text-to-speech conversation.
+                        type: string
+                      subject:
+                        description: Subject of the incident and notification.  If name is not provided, it also changes the name/title of incident and the notification.
+                        maxLength: 255
+                        type: string
+                    type: object
+                  templateId:
+                    description: Template ID which can be found from manager portal or using API GET /templates/{organizationId}.
+                    type: integer
+                required:
+                - templateId
+                type: object
+            type: object
+          type: array
+        name:
+          description: This replaces the name/title of the incident and notification.  Please note that this is NOT the subject of the notification sent out.
+          type: string
+      type: object
+    previewIncident:
+      allOf:
+      - properties:
+          incidentAction:
+            description: "Incident Action:\n * `Launch`: This is the most common use case for launching a new incident.\n * `LaunchThenClose`: This closes the incident right after launching the incident."
+            enum:
+            - Launch
+            - LaunchThenClose
+            type: string
+        required:
+        - incidentAction
+        - incidentPhases
+        type: object
+      - $ref: '#/components/schemas/incident'
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
   securitySchemes:
     API_Authorizer:
       type: apiKey

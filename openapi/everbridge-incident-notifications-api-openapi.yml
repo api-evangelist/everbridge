@@ -1810,12 +1810,6 @@ paths:
       x-operation-id-original: EBS Get Incident Notification
 components:
   schemas:
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
     DataPageObject:
       properties:
         currentPageNo:
@@ -1845,6 +1839,20 @@ components:
           type: integer
       title: DataPage«object»
       type: object
+    RestfulInstanceResult:
+      properties:
+        message:
+          type: string
+        result:
+          type: object
+      title: RestfulInstanceResult
+      type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
     RestfulCollectionResult:
       properties:
         currentPageUri:
@@ -1862,14 +1870,6 @@ components:
         previousPageUri:
           type: string
       title: RestfulCollectionResult
-      type: object
-    RestfulInstanceResult:
-      properties:
-        message:
-          type: string
-        result:
-          type: object
-      title: RestfulInstanceResult
       type: object
   securitySchemes:
     API_Authorizer:

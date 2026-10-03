@@ -535,69 +535,6 @@ paths:
       x-operation-id-original: EBS AM Update Upload Asset Batch
 components:
   schemas:
-    UploadBatchAssetResponse:
-      type: object
-      properties:
-        id:
-          type: string
-        organizationId:
-          type: number
-        createdId:
-          type: number
-        createdName:
-          type: string
-        lastModifiedId:
-          type: number
-        lastModifiedName:
-          type: string
-        createdTimestamp:
-          type: number
-        lastModifiedTimestamp:
-          type: number
-        originalFileName:
-          type: string
-        fileSuffix:
-          type: string
-        storedFilePath:
-          type: string
-        fileSize:
-          type: number
-        contentType:
-          type: string
-        type:
-          type: string
-        uploadStatus:
-          type: string
-        uploadType:
-          type: string
-        source:
-          type: string
-        assetTypeId:
-          type: string
-        assetTypeName:
-          type: string
-        totalRecordNum:
-          type: number
-        successNum:
-          type: number
-        withErrorNum:
-          type: number
-        criticalNum:
-          type: number
-        geocodingSuccessNum:
-          type: number
-        geocodingFailureNum:
-          type: number
-        geocodingTotalNum:
-          type: number
-        csvDelimiter:
-          type: string
-    organizationId:
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      maxLength: 16
-      type: integer
-      example: '1536984111644674'
-      default: '1536984111644674'
     ListUploadBatchResponse:
       type: object
       properties:
@@ -670,6 +607,69 @@ components:
           type: number
         totalPageCount:
           type: number
+    organizationId:
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      maxLength: 16
+      type: integer
+      example: '1536984111644674'
+      default: '1536984111644674'
+    UploadBatchAssetResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        organizationId:
+          type: number
+        createdId:
+          type: number
+        createdName:
+          type: string
+        lastModifiedId:
+          type: number
+        lastModifiedName:
+          type: string
+        createdTimestamp:
+          type: number
+        lastModifiedTimestamp:
+          type: number
+        originalFileName:
+          type: string
+        fileSuffix:
+          type: string
+        storedFilePath:
+          type: string
+        fileSize:
+          type: number
+        contentType:
+          type: string
+        type:
+          type: string
+        uploadStatus:
+          type: string
+        uploadType:
+          type: string
+        source:
+          type: string
+        assetTypeId:
+          type: string
+        assetTypeName:
+          type: string
+        totalRecordNum:
+          type: number
+        successNum:
+          type: number
+        withErrorNum:
+          type: number
+        criticalNum:
+          type: number
+        geocodingSuccessNum:
+          type: number
+        geocodingFailureNum:
+          type: number
+        geocodingTotalNum:
+          type: number
+        csvDelimiter:
+          type: string
   securitySchemes:
     BasicAuth:
       type: http

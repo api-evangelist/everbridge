@@ -741,87 +741,67 @@ paths:
       x-operation-id-original: EBS Update Contact Filter
 components:
   schemas:
-    ContactFilterGetResponseRuleWrapper:
+    ContactFilterRequestRuleWrapper:
       properties:
-        message:
+        contactFilterRules:
+          items:
+            properties:
+              attributeId: {}
+              attributeValues: {}
+              clazz: {}
+              columnName:
+                type: string
+              columnValue: {}
+              contactFieldId:
+                type: number
+              contactFilterId:
+                type: number
+              contactFilterOption: {}
+              dataType:
+                type: string
+              defaultValue: {}
+              displayFieldName:
+                type: string
+              displayName:
+                type: string
+              embeddedColumnName: {}
+              fieldName:
+                type: string
+              fieldType: {}
+              fieldValue:
+                type: string
+              moduleType: {}
+              operator:
+                type: string
+              operators: {}
+              searchFieldDisplayType: {}
+              searchName:
+                type: string
+              seq:
+                type: number
+              showType:
+                type: string
+              tableName: {}
+              type:
+                type: string
+              valueCategory: {}
+              variableId: {}
+            required:
+            - type
+            - contactFieldId
+            - operator
+            - dataType
+            - columnName
+            - columnValue
+            type: object
+          type: array
+        contactFilterType:
           type: string
-        result:
-          properties:
-            accountId:
-              type: number
-            contactFilterRules:
-              items:
-                properties:
-                  columnName:
-                    type: string
-                  columnValue:
-                    type: number
-                  contactFieldId:
-                    type: number
-                  dataType:
-                    type: string
-                  type:
-                    type: string
-                required:
-                - contactFieldId
-                - type
-                - dataType
-                - columnName
-                - columnValue
-                type: object
-              type: array
-            contactFilterType:
-              type: string
-            createdDate:
-              type: number
-            createdId:
-              type: number
-            createdName:
-              type: string
-            dirty:
-              type: boolean
-            id:
-              type: number
-            lastModifiedDate:
-              type: number
-            lastModifiedId:
-              type: number
-            lastModifiedName:
-              type: string
-            lastModifiedTime:
-              type: number
-            lastSynchronizedTime:
-              type: number
-            name:
-              type: string
-            organizationId:
-              type: number
-            resourceBundleId:
-              type: number
-            status:
-              type: string
-          required:
-          - createdName
-          - lastModifiedTime
-          - accountId
-          - status
-          - resourceBundleId
-          - contactFilterType
-          - organizationId
-          - id
-          - name
-          - lastModifiedDate
-          - lastModifiedId
-          - createdId
-          - createdDate
-          - lastSynchronizedTime
-          - lastModifiedName
-          - contactFilterRules
-          - dirty
-          type: object
+        name:
+          type: string
       required:
-      - message
-      - result
+      - name
+      - contactFilterRules
       type: object
     ContactFilterListResponseRuleWrapper:
       properties:
@@ -924,6 +904,94 @@ components:
       - lastPageUri
       - page
       type: object
+    ContactFilterGetResponseRuleWrapper:
+      properties:
+        message:
+          type: string
+        result:
+          properties:
+            accountId:
+              type: number
+            contactFilterRules:
+              items:
+                properties:
+                  columnName:
+                    type: string
+                  columnValue:
+                    type: number
+                  contactFieldId:
+                    type: number
+                  dataType:
+                    type: string
+                  type:
+                    type: string
+                required:
+                - contactFieldId
+                - type
+                - dataType
+                - columnName
+                - columnValue
+                type: object
+              type: array
+            contactFilterType:
+              type: string
+            createdDate:
+              type: number
+            createdId:
+              type: number
+            createdName:
+              type: string
+            dirty:
+              type: boolean
+            id:
+              type: number
+            lastModifiedDate:
+              type: number
+            lastModifiedId:
+              type: number
+            lastModifiedName:
+              type: string
+            lastModifiedTime:
+              type: number
+            lastSynchronizedTime:
+              type: number
+            name:
+              type: string
+            organizationId:
+              type: number
+            resourceBundleId:
+              type: number
+            status:
+              type: string
+          required:
+          - createdName
+          - lastModifiedTime
+          - accountId
+          - status
+          - resourceBundleId
+          - contactFilterType
+          - organizationId
+          - id
+          - name
+          - lastModifiedDate
+          - lastModifiedId
+          - createdId
+          - createdDate
+          - lastSynchronizedTime
+          - lastModifiedName
+          - contactFilterRules
+          - dirty
+          type: object
+      required:
+      - message
+      - result
+      type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
     ContactFilterResponseRuleWrapper:
       properties:
         baseUri:
@@ -935,74 +1003,6 @@ components:
           type: string
         message:
           type: string
-      type: object
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
-    ContactFilterRequestRuleWrapper:
-      properties:
-        contactFilterRules:
-          items:
-            properties:
-              attributeId: {}
-              attributeValues: {}
-              clazz: {}
-              columnName:
-                type: string
-              columnValue: {}
-              contactFieldId:
-                type: number
-              contactFilterId:
-                type: number
-              contactFilterOption: {}
-              dataType:
-                type: string
-              defaultValue: {}
-              displayFieldName:
-                type: string
-              displayName:
-                type: string
-              embeddedColumnName: {}
-              fieldName:
-                type: string
-              fieldType: {}
-              fieldValue:
-                type: string
-              moduleType: {}
-              operator:
-                type: string
-              operators: {}
-              searchFieldDisplayType: {}
-              searchName:
-                type: string
-              seq:
-                type: number
-              showType:
-                type: string
-              tableName: {}
-              type:
-                type: string
-              valueCategory: {}
-              variableId: {}
-            required:
-            - type
-            - contactFieldId
-            - operator
-            - dataType
-            - columnName
-            - columnValue
-            type: object
-          type: array
-        contactFilterType:
-          type: string
-        name:
-          type: string
-      required:
-      - name
-      - contactFilterRules
       type: object
   securitySchemes:
     API_Authorizer:

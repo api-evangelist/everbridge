@@ -341,39 +341,6 @@ components:
       - templateId
       - templateName
       - message
-    GlobalTemplateImportToOrgRequest:
-      type: object
-      description: Request to import a global template into an organization.
-      properties:
-        globalTemplateId:
-          type: string
-          format: uuid
-          description: The ID of the global template to import.
-        category:
-          type: object
-          properties:
-            id:
-              type: string
-              description: The org category ID to assign to the imported template.
-            name:
-              type: string
-              description: The org category name.
-          required:
-          - id
-          - name
-      required:
-      - globalTemplateId
-      - category
-    GlobalTemplateImportRequest:
-      type: object
-      description: Request to publish/create a global template from an org template.
-      properties:
-        templateId:
-          type: string
-          format: uuid
-          description: The ID of the org template to publish to the global library.
-      required:
-      - templateId
     GlobalTemplateResponse:
       type: object
       description: A global template from the Global Template Library.
@@ -476,6 +443,39 @@ components:
       - alreadyImported
       - importCount
       - existingTemplates
+    GlobalTemplateImportRequest:
+      type: object
+      description: Request to publish/create a global template from an org template.
+      properties:
+        templateId:
+          type: string
+          format: uuid
+          description: The ID of the org template to publish to the global library.
+      required:
+      - templateId
+    GlobalTemplateImportToOrgRequest:
+      type: object
+      description: Request to import a global template into an organization.
+      properties:
+        globalTemplateId:
+          type: string
+          format: uuid
+          description: The ID of the global template to import.
+        category:
+          type: object
+          properties:
+            id:
+              type: string
+              description: The org category ID to assign to the imported template.
+            name:
+              type: string
+              description: The org category name.
+          required:
+          - id
+          - name
+      required:
+      - globalTemplateId
+      - category
   securitySchemes:
     API_Authorizer:
       type: apiKey

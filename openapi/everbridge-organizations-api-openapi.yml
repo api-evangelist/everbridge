@@ -288,6 +288,74 @@ paths:
       x-operation-id-original: EBS Get Organization
 components:
   schemas:
+    GisLocationWrapper:
+      properties:
+        lat:
+          format: double
+          type: number
+        lon:
+          format: double
+          type: number
+      type: object
+    ThresholdSettingWrapper:
+      properties:
+        accountId:
+          format: int64
+          type: integer
+        createdDate:
+          format: date-time
+          type: string
+        createdId:
+          format: int64
+          type: integer
+        createdName:
+          type: string
+        createdProxyName:
+          type: string
+        id:
+          format: int64
+          type: integer
+        lastModifiedDate:
+          format: date-time
+          type: string
+        lastModifiedId:
+          format: int64
+          type: integer
+        lastModifiedName:
+          type: string
+        lastModifiedProxyName:
+          type: string
+        maxRadiusOfRecipientAppThresholdCircle:
+          format: int32
+          type: integer
+        maxRadiusOfTwitterThresholdCircle:
+          format: int32
+          type: integer
+        messageConstraint:
+          $ref: '#/components/schemas/UnsoicitedMessageConstraintWrapper'
+        organizationId:
+          format: int64
+          type: integer
+        recipientAppThresholdVolumn:
+          format: int32
+          type: integer
+        resourceBundleId:
+          format: int64
+          type: integer
+        status:
+          enum:
+          - A
+          - D
+          type: string
+        tweetConstraint:
+          $ref: '#/components/schemas/TweetConstraintWrapper'
+        twitterthresholdVolumn:
+          format: int32
+          type: integer
+        weatherThresholdVolumn:
+          format: int32
+          type: integer
+      type: object
     OrganizationWrapperInstanceResult:
       properties:
         message:
@@ -295,14 +363,165 @@ components:
         result:
           $ref: '#/components/schemas/OrganizationWrapper'
       type: object
-    UnsoicitedMessageConstraintWrapper:
+    OrganizationWrapper:
       properties:
-        maxMessagesPerHour:
+        accountDisabled:
+          type: boolean
+        accountId:
+          format: int64
+          type: integer
+        accountName:
+          type: string
+        address:
+          $ref: '#/components/schemas/AddressWrapper'
+        adminEmail:
+          type: string
+        adminName:
+          type: string
+        adminPhone:
+          type: string
+        allowSendMessage:
+          type: boolean
+        allowShareMessage:
+          type: boolean
+        awareOrgId:
           format: int32
           type: integer
-        maxMessagesPerMinute:
+        conferenceBridgePermission:
+          type: boolean
+        contactCount:
+          format: int64
+          type: integer
+        createdDate:
+          format: date-time
+          type: string
+        createdId:
+          format: int64
+          type: integer
+        createdName:
+          type: string
+        createdProxyName:
+          type: string
+        dataCenterId:
+          format: int64
+          type: integer
+        dirty:
+          type: boolean
+        email:
+          type: string
+        emailFromDisplay:
+          type: string
+        externalIdDesc:
+          type: string
+        featureIds:
+          items:
+            format: int64
+            type: integer
+          type: array
+        gisSetting:
+          $ref: '#/components/schemas/GisSettingWrapper'
+        id:
+          format: int64
+          type: integer
+        language:
+          format: int64
+          type: integer
+        lastModifiedDate:
+          format: date-time
+          type: string
+        lastModifiedId:
+          format: int64
+          type: integer
+        lastModifiedMsgBy:
+          format: int64
+          type: integer
+        lastModifiedMsgDate:
+          format: date-time
+          type: string
+        lastModifiedName:
+          type: string
+        lastModifiedProxyName:
+          type: string
+        lastModifiedTime:
+          format: int64
+          type: integer
+        lastSynchronizedTime:
+          format: int64
+          type: integer
+        loginMessage:
+          type: string
+        name:
+          type: string
+        orgPhone:
+          type: string
+        organizationBroadcastSetting:
+          $ref: '#/components/schemas/OrganizationBroadcastSettingWrapper'
+        organizationId:
+          format: int64
+          type: integer
+        organizationStatus:
+          enum:
+          - Active
+          - Inactive
+          type: string
+        passwordRefreshDays:
           format: int32
           type: integer
+        processingState:
+          $ref: '#/components/schemas/ProcessingStateWrapper'
+        productIds:
+          items:
+            format: int64
+            type: integer
+          type: array
+        reply2EmailPermission:
+          type: boolean
+        resourceBundleId:
+          format: int64
+          type: integer
+        roleIds:
+          items:
+            format: int64
+            type: integer
+          type: array
+        senderCallerIdPermission:
+          type: boolean
+        senderEmailInfoPermission:
+          type: boolean
+        senderInfoPermission:
+          type: boolean
+        shareMessageStatus:
+          type: boolean
+        shortId:
+          type: string
+        showMessage:
+          type: boolean
+        status:
+          enum:
+          - A
+          - D
+          type: string
+        thresholdSetting:
+          $ref: '#/components/schemas/ThresholdSettingWrapper'
+        throttleSetting:
+          $ref: '#/components/schemas/ThrottleSettingWrapper'
+        twitterThresholdCount:
+          format: int64
+          type: integer
+        type:
+          type: string
+        weatherProvider:
+          enum:
+          - Accuweather
+          - WDT
+          type: string
+      type: object
+    OrganizationPathWrapperInstanceResult:
+      properties:
+        message:
+          type: string
+        result:
+          $ref: '#/components/schemas/OrganizationPathWrapper'
       type: object
     TweetConstraintWrapper:
       properties:
@@ -313,6 +532,98 @@ components:
           format: int32
           type: integer
         maxTweetsPerMinute:
+          format: int32
+          type: integer
+      type: object
+    OrganizationBroadcastSettingWrapper:
+      properties:
+        attachmentLinkDurationDays:
+          format: int32
+          type: integer
+        confirmFlag:
+          type: boolean
+        cycleInterval:
+          format: int32
+          type: integer
+        defaultCycles:
+          format: int32
+          type: integer
+        duplicatePathsFlag:
+          type: boolean
+        emergencyDuration:
+          format: int32
+          type: integer
+        emergencyPriority:
+          format: int32
+          type: integer
+        enableImminentThreatToLife:
+          type: boolean
+        enableVerifyPin:
+          type: boolean
+        exposeSenderID:
+          type: boolean
+        launchByPhoneFlag:
+          format: int32
+          type: integer
+        maxCycles:
+          format: int32
+          type: integer
+        pathInterval:
+          format: int32
+          type: integer
+        requireSecurityCodeFlag:
+          type: boolean
+        simulationMode:
+          type: boolean
+        standardDuration:
+          format: int32
+          type: integer
+        standardPriority:
+          format: int32
+          type: integer
+        useExternalIdFlag:
+          type: boolean
+        vmPreference:
+          enum:
+          - NO_MESSAGE
+          - MESSAGE_ONLY
+          - MESSAGE_WITH_CONFIRMATION
+          type: string
+      type: object
+    ThrottleSettingWrapper:
+      properties:
+        applyByFlag:
+          type: boolean
+        createdBy:
+          format: int64
+          type: integer
+        createdDate:
+          format: date-time
+          type: string
+        defaultAmount:
+          format: int32
+          type: integer
+        enforceAllFlag:
+          type: boolean
+        flag:
+          type: boolean
+        lastModifiedBy:
+          format: int64
+          type: integer
+        lastModifiedDate:
+          format: date-time
+          type: string
+        senderReviewFlag:
+          type: boolean
+        senderToggleFlag:
+          type: boolean
+      type: object
+    UnsoicitedMessageConstraintWrapper:
+      properties:
+        maxMessagesPerHour:
+          format: int32
+          type: integer
+        maxMessagesPerMinute:
           format: int32
           type: integer
       type: object
@@ -469,262 +780,24 @@ components:
           - SLACK
           type: string
       type: object
-    ProcessingStateWrapper:
+    AddressWrapper:
       properties:
-        serverId:
-          format: int64
-          type: integer
-        startTime:
-          format: int64
-          type: integer
-        synchronizeTime:
-          format: int64
-          type: integer
-        threadName:
+        city:
           type: string
-      type: object
-    ThrottleSettingWrapper:
-      properties:
-        applyByFlag:
-          type: boolean
-        createdBy:
-          format: int64
-          type: integer
-        createdDate:
-          format: date-time
+        country:
           type: string
-        defaultAmount:
-          format: int32
-          type: integer
-        enforceAllFlag:
-          type: boolean
-        flag:
-          type: boolean
-        lastModifiedBy:
-          format: int64
-          type: integer
-        lastModifiedDate:
-          format: date-time
+        gisLocation:
+          $ref: '#/components/schemas/GisLocationWrapper'
+        locationName:
           type: string
-        senderReviewFlag:
-          type: boolean
-        senderToggleFlag:
-          type: boolean
-      type: object
-    OrganizationWrapper:
-      properties:
-        accountDisabled:
-          type: boolean
-        accountId:
-          format: int64
-          type: integer
-        accountName:
+        postalCode:
           type: string
-        address:
-          $ref: '#/components/schemas/AddressWrapper'
-        adminEmail:
+        state:
           type: string
-        adminName:
+        streetAddress:
           type: string
-        adminPhone:
+        suite:
           type: string
-        allowSendMessage:
-          type: boolean
-        allowShareMessage:
-          type: boolean
-        awareOrgId:
-          format: int32
-          type: integer
-        conferenceBridgePermission:
-          type: boolean
-        contactCount:
-          format: int64
-          type: integer
-        createdDate:
-          format: date-time
-          type: string
-        createdId:
-          format: int64
-          type: integer
-        createdName:
-          type: string
-        createdProxyName:
-          type: string
-        dataCenterId:
-          format: int64
-          type: integer
-        dirty:
-          type: boolean
-        email:
-          type: string
-        emailFromDisplay:
-          type: string
-        externalIdDesc:
-          type: string
-        featureIds:
-          items:
-            format: int64
-            type: integer
-          type: array
-        gisSetting:
-          $ref: '#/components/schemas/GisSettingWrapper'
-        id:
-          format: int64
-          type: integer
-        language:
-          format: int64
-          type: integer
-        lastModifiedDate:
-          format: date-time
-          type: string
-        lastModifiedId:
-          format: int64
-          type: integer
-        lastModifiedMsgBy:
-          format: int64
-          type: integer
-        lastModifiedMsgDate:
-          format: date-time
-          type: string
-        lastModifiedName:
-          type: string
-        lastModifiedProxyName:
-          type: string
-        lastModifiedTime:
-          format: int64
-          type: integer
-        lastSynchronizedTime:
-          format: int64
-          type: integer
-        loginMessage:
-          type: string
-        name:
-          type: string
-        orgPhone:
-          type: string
-        organizationBroadcastSetting:
-          $ref: '#/components/schemas/OrganizationBroadcastSettingWrapper'
-        organizationId:
-          format: int64
-          type: integer
-        organizationStatus:
-          enum:
-          - Active
-          - Inactive
-          type: string
-        passwordRefreshDays:
-          format: int32
-          type: integer
-        processingState:
-          $ref: '#/components/schemas/ProcessingStateWrapper'
-        productIds:
-          items:
-            format: int64
-            type: integer
-          type: array
-        reply2EmailPermission:
-          type: boolean
-        resourceBundleId:
-          format: int64
-          type: integer
-        roleIds:
-          items:
-            format: int64
-            type: integer
-          type: array
-        senderCallerIdPermission:
-          type: boolean
-        senderEmailInfoPermission:
-          type: boolean
-        senderInfoPermission:
-          type: boolean
-        shareMessageStatus:
-          type: boolean
-        shortId:
-          type: string
-        showMessage:
-          type: boolean
-        status:
-          enum:
-          - A
-          - D
-          type: string
-        thresholdSetting:
-          $ref: '#/components/schemas/ThresholdSettingWrapper'
-        throttleSetting:
-          $ref: '#/components/schemas/ThrottleSettingWrapper'
-        twitterThresholdCount:
-          format: int64
-          type: integer
-        type:
-          type: string
-        weatherProvider:
-          enum:
-          - Accuweather
-          - WDT
-          type: string
-      type: object
-    OrganizationBroadcastSettingWrapper:
-      properties:
-        attachmentLinkDurationDays:
-          format: int32
-          type: integer
-        confirmFlag:
-          type: boolean
-        cycleInterval:
-          format: int32
-          type: integer
-        defaultCycles:
-          format: int32
-          type: integer
-        duplicatePathsFlag:
-          type: boolean
-        emergencyDuration:
-          format: int32
-          type: integer
-        emergencyPriority:
-          format: int32
-          type: integer
-        enableImminentThreatToLife:
-          type: boolean
-        enableVerifyPin:
-          type: boolean
-        exposeSenderID:
-          type: boolean
-        launchByPhoneFlag:
-          format: int32
-          type: integer
-        maxCycles:
-          format: int32
-          type: integer
-        pathInterval:
-          format: int32
-          type: integer
-        requireSecurityCodeFlag:
-          type: boolean
-        simulationMode:
-          type: boolean
-        standardDuration:
-          format: int32
-          type: integer
-        standardPriority:
-          format: int32
-          type: integer
-        useExternalIdFlag:
-          type: boolean
-        vmPreference:
-          enum:
-          - NO_MESSAGE
-          - MESSAGE_ONLY
-          - MESSAGE_WITH_CONFIRMATION
-          type: string
-      type: object
-    OrganizationPathWrapperInstanceResult:
-      properties:
-        message:
-          type: string
-        result:
-          $ref: '#/components/schemas/OrganizationPathWrapper'
       type: object
     GisSettingWrapper:
       properties:
@@ -746,92 +819,19 @@ components:
           format: int64
           type: integer
       type: object
-    AddressWrapper:
+    ProcessingStateWrapper:
       properties:
-        city:
-          type: string
-        country:
-          type: string
-        gisLocation:
-          $ref: '#/components/schemas/GisLocationWrapper'
-        locationName:
-          type: string
-        postalCode:
-          type: string
-        state:
-          type: string
-        streetAddress:
-          type: string
-        suite:
-          type: string
-      type: object
-    ThresholdSettingWrapper:
-      properties:
-        accountId:
+        serverId:
           format: int64
           type: integer
-        createdDate:
-          format: date-time
-          type: string
-        createdId:
+        startTime:
           format: int64
           type: integer
-        createdName:
-          type: string
-        createdProxyName:
-          type: string
-        id:
+        synchronizeTime:
           format: int64
           type: integer
-        lastModifiedDate:
-          format: date-time
+        threadName:
           type: string
-        lastModifiedId:
-          format: int64
-          type: integer
-        lastModifiedName:
-          type: string
-        lastModifiedProxyName:
-          type: string
-        maxRadiusOfRecipientAppThresholdCircle:
-          format: int32
-          type: integer
-        maxRadiusOfTwitterThresholdCircle:
-          format: int32
-          type: integer
-        messageConstraint:
-          $ref: '#/components/schemas/UnsoicitedMessageConstraintWrapper'
-        organizationId:
-          format: int64
-          type: integer
-        recipientAppThresholdVolumn:
-          format: int32
-          type: integer
-        resourceBundleId:
-          format: int64
-          type: integer
-        status:
-          enum:
-          - A
-          - D
-          type: string
-        tweetConstraint:
-          $ref: '#/components/schemas/TweetConstraintWrapper'
-        twitterthresholdVolumn:
-          format: int32
-          type: integer
-        weatherThresholdVolumn:
-          format: int32
-          type: integer
-      type: object
-    GisLocationWrapper:
-      properties:
-        lat:
-          format: double
-          type: number
-        lon:
-          format: double
-          type: number
       type: object
   securitySchemes:
     API_Authorizer:

@@ -730,11 +730,18 @@ paths:
       x-operation-id-original: EBS Update Group
 components:
   schemas:
-    contactGroupsRequest:
-      description: Contact id
-      items:
-        type: string
-      type: array
+    RestfulBatchOperationResult:
+      properties:
+        code:
+          format: int64
+          type: integer
+        data:
+          items:
+            type: string
+          type: array
+        message:
+          type: string
+      type: object
     GroupResponseWrapper:
       properties:
         message:
@@ -798,24 +805,6 @@ components:
       - message
       - result
       type: object
-    RestfulBatchOperationResult:
-      properties:
-        code:
-          format: int64
-          type: integer
-        data:
-          items:
-            type: string
-          type: array
-        message:
-          type: string
-      type: object
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
     groups:
       properties:
         firstPageUri:
@@ -871,27 +860,11 @@ components:
               type: integer
           type: object
       type: object
-    postUpdateResponse:
-      properties:
-        baseUri:
-          type: string
-        id:
-          type: integer
-        instanceUri:
-          type: string
-        message:
-          type: string
-      type: object
-    error:
-      properties:
-        message:
-          type: string
-        status:
-          type: integer
-      required:
-      - status
-      - message
-      type: object
+    contactGroupsRequest:
+      description: Contact id
+      items:
+        type: string
+      type: array
     groupsRequest:
       properties:
         calendarId:
@@ -909,6 +882,33 @@ components:
           type: integer
       required:
       - name
+      type: object
+    postUpdateResponse:
+      properties:
+        baseUri:
+          type: string
+        id:
+          type: integer
+        instanceUri:
+          type: string
+        message:
+          type: string
+      type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
+    error:
+      properties:
+        message:
+          type: string
+        status:
+          type: integer
+      required:
+      - status
+      - message
       type: object
   securitySchemes:
     API_Authorizer:

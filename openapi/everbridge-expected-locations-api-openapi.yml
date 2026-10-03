@@ -587,48 +587,25 @@ paths:
       x-operation-id-original: EBS Update Expected Location For Contact
 components:
   schemas:
-    ContactAddressInstance:
+    GisLocationWrapper:
       properties:
-        arriveDate:
-          format: date-time
-          type: string
-        assetExternalId:
-          type: string
-        city:
-          type: string
-        country:
-          type: string
-        expireDate:
-          format: date-time
-          type: string
-        gisLocation:
-          $ref: '#/components/schemas/GisLocationWrapper'
-        iata:
-          type: string
-        locationId:
+        lat:
+          format: double
+          type: number
+        lon:
+          format: double
+          type: number
+      type: object
+    RestfulBatchOperationResult:
+      properties:
+        code:
           format: int64
           type: integer
-        locationName:
-          type: string
-        locationSource:
-          type: string
-        locationSourceId:
-          format: int64
-          type: integer
-        newAssetId:
-          type: string
-        postalCode:
-          type: string
-        source:
-          enum:
-          - MANUAL
-          - AUTO
-          type: string
-        state:
-          type: string
-        streetAddress:
-          type: string
-        suite:
+        data:
+          items:
+            type: string
+          type: array
+        message:
           type: string
       type: object
     ContactAddressWrapper:
@@ -681,6 +658,30 @@ components:
       - locationName
       - streetAddress
       type: object
+    ExpectedLocationInstanceResult:
+      properties:
+        message:
+          type: string
+        result:
+          $ref: '#/components/schemas/ExpectedLocationInstance'
+      type: object
+    RestfulInstanceResult:
+      properties:
+        message:
+          type: string
+        result:
+          type: object
+      title: RestfulInstanceResult
+      type: object
+    ExpectedLocationCollectionResult:
+      properties:
+        message:
+          type: string
+        result:
+          items:
+            $ref: '#/components/schemas/ExpectedLocationInstance'
+          type: array
+      type: object
     ExpectedLocationWrapper:
       properties:
         address:
@@ -723,6 +724,50 @@ components:
       required:
       - contactId
       type: object
+    ContactAddressInstance:
+      properties:
+        arriveDate:
+          format: date-time
+          type: string
+        assetExternalId:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+        expireDate:
+          format: date-time
+          type: string
+        gisLocation:
+          $ref: '#/components/schemas/GisLocationWrapper'
+        iata:
+          type: string
+        locationId:
+          format: int64
+          type: integer
+        locationName:
+          type: string
+        locationSource:
+          type: string
+        locationSourceId:
+          format: int64
+          type: integer
+        newAssetId:
+          type: string
+        postalCode:
+          type: string
+        source:
+          enum:
+          - MANUAL
+          - AUTO
+          type: string
+        state:
+          type: string
+        streetAddress:
+          type: string
+        suite:
+          type: string
+      type: object
     organizationId:
       default: '1536984111644674'
       description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
@@ -750,18 +795,6 @@ components:
         travelType:
           type: string
       type: object
-    RestfulBatchOperationResult:
-      properties:
-        code:
-          format: int64
-          type: integer
-        data:
-          items:
-            type: string
-          type: array
-        message:
-          type: string
-      type: object
     RestfulModificationResult:
       properties:
         baseUri:
@@ -774,39 +807,6 @@ components:
         message:
           type: string
       title: RestfulModificationResult
-      type: object
-    ExpectedLocationCollectionResult:
-      properties:
-        message:
-          type: string
-        result:
-          items:
-            $ref: '#/components/schemas/ExpectedLocationInstance'
-          type: array
-      type: object
-    RestfulInstanceResult:
-      properties:
-        message:
-          type: string
-        result:
-          type: object
-      title: RestfulInstanceResult
-      type: object
-    ExpectedLocationInstanceResult:
-      properties:
-        message:
-          type: string
-        result:
-          $ref: '#/components/schemas/ExpectedLocationInstance'
-      type: object
-    GisLocationWrapper:
-      properties:
-        lat:
-          format: double
-          type: number
-        lon:
-          format: double
-          type: number
       type: object
   securitySchemes:
     API_Authorizer:

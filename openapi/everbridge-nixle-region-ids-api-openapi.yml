@@ -56,6 +56,16 @@ paths:
       x-operation-id-original: EBS List Nixle Region Ids
 components:
   schemas:
+    NixleRegion:
+      properties:
+        id:
+          format: int64
+          type: integer
+        name:
+          type: string
+        state:
+          type: string
+      type: object
     NixleRegionIdCollectionResult:
       properties:
         cities:
@@ -70,16 +80,6 @@ components:
           items:
             $ref: '#/components/schemas/NixleRegion'
           type: array
-      type: object
-    NixleRegion:
-      properties:
-        id:
-          format: int64
-          type: integer
-        name:
-          type: string
-        state:
-          type: string
       type: object
   securitySchemes:
     API_Authorizer:

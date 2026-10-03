@@ -143,6 +143,143 @@ paths:
       x-operation-id-original: EBS AM Delete batch Assets
 components:
   schemas:
+    AssetRequest:
+      required:
+      - assetTypeId
+      - externalId
+      - name
+      type: object
+      properties:
+        externalId:
+          maxLength: 200
+          minLength: 1
+          type: string
+        assetTypeId:
+          maxLength: 2147483647
+          minLength: 1
+          type: string
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+        address:
+          $ref: '#/components/schemas/Address'
+        iconId:
+          type: string
+        startTimestamp:
+          type: integer
+          format: int64
+        endTimestamp:
+          type: integer
+          format: int64
+        notes:
+          maxLength: 2000
+          minLength: 0
+          type: string
+        properties:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetPropertyValue'
+        category:
+          maxLength: 200
+          minLength: 0
+          type: string
+        geometry:
+          type: string
+        geocodingAddressRequired:
+          type: boolean
+        associations:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetAssociation'
+    Error:
+      type: object
+      properties:
+        field:
+          type: string
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+    Address:
+      type: object
+      properties:
+        country:
+          type: string
+        state:
+          maxLength: 100
+          minLength: 0
+          type: string
+        city:
+          maxLength: 100
+          minLength: 0
+          type: string
+        postalCode:
+          maxLength: 20
+          minLength: 0
+          type: string
+        streetAddress1:
+          maxLength: 200
+          minLength: 0
+          type: string
+        streetAddress2:
+          maxLength: 200
+          minLength: 0
+          type: string
+    BatchResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+        individualResponses:
+          type: array
+          items:
+            $ref: '#/components/schemas/IndividualResponse'
+    AssetAssociation:
+      type: object
+      properties:
+        associationDefinitionId:
+          maxLength: 2147483647
+          minLength: 1
+          type: string
+        entityType:
+          type: string
+          enum:
+          - Contact
+          - ContactGroup
+          - ContactFilter
+        entityIds:
+          type: array
+          items:
+            type: string
+    AssetPropertyValue:
+      type: object
+      properties:
+        propertyId:
+          maxLength: 2147483647
+          minLength: 1
+          type: string
+        value:
+          type: object
+        name:
+          type: string
+    IndividualResponse:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+        id:
+          type: string
     AssetUpdateRequest:
       required:
       - assetTypeId
@@ -196,143 +333,6 @@ components:
         id:
           maxLength: 2147483647
           minLength: 1
-          type: string
-    BatchResponse:
-      type: object
-      properties:
-        status:
-          type: integer
-          format: int32
-        message:
-          type: string
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
-        individualResponses:
-          type: array
-          items:
-            $ref: '#/components/schemas/IndividualResponse'
-    Error:
-      type: object
-      properties:
-        field:
-          type: string
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-    AssetRequest:
-      required:
-      - assetTypeId
-      - externalId
-      - name
-      type: object
-      properties:
-        externalId:
-          maxLength: 200
-          minLength: 1
-          type: string
-        assetTypeId:
-          maxLength: 2147483647
-          minLength: 1
-          type: string
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-        address:
-          $ref: '#/components/schemas/Address'
-        iconId:
-          type: string
-        startTimestamp:
-          type: integer
-          format: int64
-        endTimestamp:
-          type: integer
-          format: int64
-        notes:
-          maxLength: 2000
-          minLength: 0
-          type: string
-        properties:
-          type: array
-          items:
-            $ref: '#/components/schemas/AssetPropertyValue'
-        category:
-          maxLength: 200
-          minLength: 0
-          type: string
-        geometry:
-          type: string
-        geocodingAddressRequired:
-          type: boolean
-        associations:
-          type: array
-          items:
-            $ref: '#/components/schemas/AssetAssociation'
-    IndividualResponse:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
-        id:
-          type: string
-    AssetAssociation:
-      type: object
-      properties:
-        associationDefinitionId:
-          maxLength: 2147483647
-          minLength: 1
-          type: string
-        entityType:
-          type: string
-          enum:
-          - Contact
-          - ContactGroup
-          - ContactFilter
-        entityIds:
-          type: array
-          items:
-            type: string
-    Address:
-      type: object
-      properties:
-        country:
-          type: string
-        state:
-          maxLength: 100
-          minLength: 0
-          type: string
-        city:
-          maxLength: 100
-          minLength: 0
-          type: string
-        postalCode:
-          maxLength: 20
-          minLength: 0
-          type: string
-        streetAddress1:
-          maxLength: 200
-          minLength: 0
-          type: string
-        streetAddress2:
-          maxLength: 200
-          minLength: 0
-          type: string
-    AssetPropertyValue:
-      type: object
-      properties:
-        propertyId:
-          maxLength: 2147483647
-          minLength: 1
-          type: string
-        value:
-          type: object
-        name:
           type: string
   securitySchemes:
     BasicAuth:

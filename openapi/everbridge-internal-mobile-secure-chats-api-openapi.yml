@@ -761,7 +761,23 @@ components:
           - MSTEAMS
         prompt:
           type: string
-    AddContactsToChatRequest:
+    SMUnreadMessageRequest:
+      type: object
+      properties:
+        chatContextStrings:
+          type: array
+          items:
+            type: string
+    RegisterDeviceRequestBody:
+      type: object
+      properties:
+        deviceId:
+          type: string
+        description:
+          type: string
+        publicKey:
+          type: string
+    InviteToVoipChatRequestBody:
       type: object
       properties:
         contactIds:
@@ -769,6 +785,40 @@ components:
           description: Contact Ids
           items:
             type: string
+        displayName:
+          type: string
+        chatType:
+          type: string
+        callerDisplayName:
+          type: string
+        region:
+          type: string
+    MobileContactAttribute:
+      type: object
+      properties:
+        orgAttrId:
+          type: integer
+          format: int64
+        name:
+          type: string
+        values:
+          type: array
+          items:
+            type: object
+        dataType:
+          type: string
+          enum:
+          - STRING
+          - NUMBER
+          - DATE
+          - BOOLEAN
+          - POLYGON
+        displayFormat:
+          type: string
+          enum:
+          - L
+          - F
+          - S
     InviteToChatRequestBody:
       type: object
       properties:
@@ -831,62 +881,6 @@ components:
           type: string
         city:
           type: string
-    SetChatNameRequestBody:
-      type: object
-      properties:
-        channelName:
-          type: string
-    InviteToVoipChatRequestBody:
-      type: object
-      properties:
-        contactIds:
-          type: array
-          description: Contact Ids
-          items:
-            type: string
-        displayName:
-          type: string
-        chatType:
-          type: string
-        callerDisplayName:
-          type: string
-        region:
-          type: string
-    RegisterDeviceRequestBody:
-      type: object
-      properties:
-        deviceId:
-          type: string
-        description:
-          type: string
-        publicKey:
-          type: string
-    MobileContactAttribute:
-      type: object
-      properties:
-        orgAttrId:
-          type: integer
-          format: int64
-        name:
-          type: string
-        values:
-          type: array
-          items:
-            type: object
-        dataType:
-          type: string
-          enum:
-          - STRING
-          - NUMBER
-          - DATE
-          - BOOLEAN
-          - POLYGON
-        displayFormat:
-          type: string
-          enum:
-          - L
-          - F
-          - S
     ChatKeyRequestBody:
       type: object
       properties:
@@ -907,13 +901,19 @@ components:
           format: double
         'null':
           type: boolean
-    SMUnreadMessageRequest:
+    AddContactsToChatRequest:
       type: object
       properties:
-        chatContextStrings:
+        contactIds:
           type: array
+          description: Contact Ids
           items:
             type: string
+    SetChatNameRequestBody:
+      type: object
+      properties:
+        channelName:
+          type: string
   securitySchemes:
     API_Authorizer:
       type: apiKey

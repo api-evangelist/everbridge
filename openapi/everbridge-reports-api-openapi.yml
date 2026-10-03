@@ -633,12 +633,6 @@ paths:
       url: https://api.snapcomms.com/mock
 components:
   schemas:
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
     DataPageObject:
       properties:
         currentPageNo:
@@ -668,6 +662,12 @@ components:
           type: integer
       title: DataPage«object»
       type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
     RestfulCollectionResult:
       properties:
         currentPageUri:
@@ -686,6 +686,157 @@ components:
           type: string
       title: RestfulCollectionResult
       type: object
+    ReportSuccesReportResponse:
+      type: object
+      properties:
+        details:
+          type: array
+          items:
+            required:
+            - userName
+            - contentVersion
+            - reached
+            - success
+            - totalSuccess
+            - consumerId
+            - domainName
+            - itemID
+            - lastConnectDate
+            - completedCount
+            - dismissedCount
+            - alertPopupCount
+            - readLaterCount
+            - timeOutCount
+            - urgentDisplayCount
+            - organizationalUnit
+            - popupOnScreenTime
+            - alertOnScreenTime
+            - urgentOnScreenTime
+            type: object
+            properties:
+              userName:
+                type: string
+              contentVersion:
+                type: string
+              reached:
+                type: string
+              success:
+                type: string
+              totalSuccess:
+                type: string
+              consumerId:
+                type: string
+              domainName:
+                type: string
+              itemID:
+                type: string
+              lastConnectDate:
+                type: string
+              completedCount:
+                type: string
+              dismissedCount:
+                type: string
+              alertPopupCount:
+                type: string
+              readLaterCount:
+                type: string
+              timeOutCount:
+                type: string
+              urgentDisplayCount:
+                type: string
+              organizationalUnit: {}
+              popupOnScreenTime:
+                type: string
+              alertOnScreenTime:
+                type: string
+              urgentOnScreenTime:
+                type: string
+        summary:
+          type: object
+          properties:
+            _AssetType:
+              type: string
+            assetName:
+              type: string
+            _AssetTypeId:
+              type: string
+            assetType:
+              type: string
+            assetTypeName:
+              type: string
+            _AssetStatus:
+              type: string
+            lastPublishDate:
+              type: string
+            publishCount:
+              type: string
+            targetCount:
+              type: string
+            publishDate:
+              type: string
+            campaignName:
+              type: string
+    ReportQuestionnaireSummaryResponse:
+      type: object
+      properties:
+        assetId:
+          type: string
+        questions:
+          type: array
+          items:
+            required:
+            - name
+            - number
+            - numberOfSubmissions
+            - numberOfRespondents
+            - numberOfNotAnswered
+            - mandatory
+            - questionType
+            - responses
+            type: object
+            properties:
+              name:
+                type: string
+              number:
+                type: integer
+              numberOfSubmissions:
+                type: integer
+              numberOfRespondents:
+                type: integer
+              numberOfNotAnswered:
+                type: integer
+              mandatory:
+                type: boolean
+              questionType:
+                type: integer
+              responses:
+                type: array
+                items:
+                  required:
+                  - number
+                  - text
+                  - count
+                  - percentage
+                  - isCorrect
+                  - submissionTime
+                  type: object
+                  properties:
+                    number:
+                      type: integer
+                    text:
+                      type: string
+                    count:
+                      type: integer
+                    percentage:
+                      type: integer
+                    isCorrect: {}
+                    submissionTime: {}
+        version:
+          type: integer
+        startDate:
+          type: string
+        endDate:
+          type: string
     ReportPublishingStatisticsResponse:
       type: object
       properties:
@@ -814,96 +965,6 @@ components:
                 type: string
               value:
                 type: string
-    ReportSuccesReportResponse:
-      type: object
-      properties:
-        details:
-          type: array
-          items:
-            required:
-            - userName
-            - contentVersion
-            - reached
-            - success
-            - totalSuccess
-            - consumerId
-            - domainName
-            - itemID
-            - lastConnectDate
-            - completedCount
-            - dismissedCount
-            - alertPopupCount
-            - readLaterCount
-            - timeOutCount
-            - urgentDisplayCount
-            - organizationalUnit
-            - popupOnScreenTime
-            - alertOnScreenTime
-            - urgentOnScreenTime
-            type: object
-            properties:
-              userName:
-                type: string
-              contentVersion:
-                type: string
-              reached:
-                type: string
-              success:
-                type: string
-              totalSuccess:
-                type: string
-              consumerId:
-                type: string
-              domainName:
-                type: string
-              itemID:
-                type: string
-              lastConnectDate:
-                type: string
-              completedCount:
-                type: string
-              dismissedCount:
-                type: string
-              alertPopupCount:
-                type: string
-              readLaterCount:
-                type: string
-              timeOutCount:
-                type: string
-              urgentDisplayCount:
-                type: string
-              organizationalUnit: {}
-              popupOnScreenTime:
-                type: string
-              alertOnScreenTime:
-                type: string
-              urgentOnScreenTime:
-                type: string
-        summary:
-          type: object
-          properties:
-            _AssetType:
-              type: string
-            assetName:
-              type: string
-            _AssetTypeId:
-              type: string
-            assetType:
-              type: string
-            assetTypeName:
-              type: string
-            _AssetStatus:
-              type: string
-            lastPublishDate:
-              type: string
-            publishCount:
-              type: string
-            targetCount:
-              type: string
-            publishDate:
-              type: string
-            campaignName:
-              type: string
     ReportQuestionnaireResponsesResponse:
       type: object
       properties:
@@ -948,67 +1009,6 @@ components:
                 type: string
         version:
           type: string
-        startDate:
-          type: string
-        endDate:
-          type: string
-    ReportQuestionnaireSummaryResponse:
-      type: object
-      properties:
-        assetId:
-          type: string
-        questions:
-          type: array
-          items:
-            required:
-            - name
-            - number
-            - numberOfSubmissions
-            - numberOfRespondents
-            - numberOfNotAnswered
-            - mandatory
-            - questionType
-            - responses
-            type: object
-            properties:
-              name:
-                type: string
-              number:
-                type: integer
-              numberOfSubmissions:
-                type: integer
-              numberOfRespondents:
-                type: integer
-              numberOfNotAnswered:
-                type: integer
-              mandatory:
-                type: boolean
-              questionType:
-                type: integer
-              responses:
-                type: array
-                items:
-                  required:
-                  - number
-                  - text
-                  - count
-                  - percentage
-                  - isCorrect
-                  - submissionTime
-                  type: object
-                  properties:
-                    number:
-                      type: integer
-                    text:
-                      type: string
-                    count:
-                      type: integer
-                    percentage:
-                      type: integer
-                    isCorrect: {}
-                    submissionTime: {}
-        version:
-          type: integer
         startDate:
           type: string
         endDate:

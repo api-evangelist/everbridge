@@ -234,6 +234,10 @@ paths:
         connectionType: VPC_LINK
 components:
   schemas:
+    TemplateReservationList:
+      type: array
+      items:
+        $ref: '#/components/schemas/TemplateReservation'
     TemplateReservation:
       type: object
       properties:
@@ -262,10 +266,14 @@ components:
         createdUserId:
           type: string
           description: The userId who created the reservation.
-    TemplateReservationList:
-      type: array
-      items:
-        $ref: '#/components/schemas/TemplateReservation'
+    CommsResponse:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the communication that was launched.
     TemplateReservationRequest:
       type: object
       properties:
@@ -292,14 +300,6 @@ components:
       - templateType
       - systemId
       - systemUrl
-    CommsResponse:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          type: string
-          description: The ID of the communication that was launched.
   securitySchemes:
     API_Authorizer:
       type: apiKey

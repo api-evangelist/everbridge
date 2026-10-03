@@ -108,43 +108,6 @@ components:
           - Informational
           - Reassuring
           description: The tone to apply
-    ProblemDetail:
-      type: object
-      description: An RFC-7807 compliant model for error details.
-      properties:
-        type:
-          type: string
-          description: A URI that identifies the problem type.
-        title:
-          type: string
-          description: A short, human-readable summary of the problem type.
-        status:
-          type: integer
-          description: The HTTP response status code describing the error.
-        detail:
-          type: string
-          description: A human-readable explanation of the specific problem.
-        instance:
-          type: string
-          description: A URI that identifies the specific problem.
-    GenerateMessageResponse:
-      type: object
-      properties:
-        content:
-          type: string
-          description: The final content.
-        sessionId:
-          type: string
-          description: A unique session identifier used to maintain conversation state across multiple interactions。
-    RectifyOperation:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          enum:
-          - Rectify
     GenerateMessageRequest:
       type: object
       required:
@@ -180,25 +143,6 @@ components:
       - $ref: '#/components/schemas/ToneOperation'
       - $ref: '#/components/schemas/RectifyOperation'
       - $ref: '#/components/schemas/LengthOperation'
-    LengthOperation:
-      type: object
-      required:
-      - type
-      - value
-      properties:
-        type:
-          type: string
-          enum:
-          - Length
-        value:
-          type: string
-          enum:
-          - Shortest
-          - Shorter
-          - Same
-          - Longer
-          - Longest
-          description: Value for length adjustment
     GenerateMessageContext:
       type: object
       properties:
@@ -245,6 +189,62 @@ components:
               maxItems: 1
               items:
                 type: string
+    GenerateMessageResponse:
+      type: object
+      properties:
+        content:
+          type: string
+          description: The final content.
+        sessionId:
+          type: string
+          description: A unique session identifier used to maintain conversation state across multiple interactions。
+    LengthOperation:
+      type: object
+      required:
+      - type
+      - value
+      properties:
+        type:
+          type: string
+          enum:
+          - Length
+        value:
+          type: string
+          enum:
+          - Shortest
+          - Shorter
+          - Same
+          - Longer
+          - Longest
+          description: Value for length adjustment
+    ProblemDetail:
+      type: object
+      description: An RFC-7807 compliant model for error details.
+      properties:
+        type:
+          type: string
+          description: A URI that identifies the problem type.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem type.
+        status:
+          type: integer
+          description: The HTTP response status code describing the error.
+        detail:
+          type: string
+          description: A human-readable explanation of the specific problem.
+        instance:
+          type: string
+          description: A URI that identifies the specific problem.
+    RectifyOperation:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - Rectify
   securitySchemes:
     API_Authorizer:
       type: apiKey

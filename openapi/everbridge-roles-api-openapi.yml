@@ -795,12 +795,157 @@ paths:
       x-operation-id-original: EBS Update Role
 components:
   schemas:
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+    roleId:
+      default: '0'
+      description: Role ID
       example: '1536984111644674'
       maxLength: 16
       type: integer
+    roleRequest:
+      properties:
+        name:
+          description: The role's name
+          maxLength: 100
+          type: string
+        permissionScope:
+          properties:
+            accessToAllNotificationFeatures:
+              type: boolean
+            addContactsToGroups:
+              type: boolean
+            createContacts:
+              type: boolean
+            createEditDeleteGroups:
+              type: boolean
+            createEditDeleteSchedules:
+              type: boolean
+            createEditViewCockpitWorkFlows:
+              type: boolean
+            deleteContacts:
+              type: boolean
+            incidentZones:
+              type: boolean
+            incidentZonesRegistered:
+              type: boolean
+            moveRemoveContactsFromGroups:
+              type: boolean
+            onlyEditRulesWithSameRole:
+              type: boolean
+            reopenIncident:
+              type: boolean
+            restrictToIncidentSimulationOnly:
+              type: boolean
+            restrictToSimulationOnly:
+              type: boolean
+            restrictionEditDeleteTemplates:
+              type: boolean
+            uploadContacts:
+              type: boolean
+            viewCockpitWorkFlows:
+              type: boolean
+            viewDownloadAllContacts:
+              type: boolean
+            viewDownloadEditAllContacts:
+              type: boolean
+          type: object
+        roleDataScope:
+          properties:
+            dynamicGroupIds:
+              items:
+                type: integer
+              type: array
+            groupIds:
+              items:
+                type: integer
+              type: array
+          type: object
+        roleTemplate:
+          description: The role's template, supports:INCIDENT_OPERATOR, DISPATCHER, INCIDENT_ADMIN, GROUP_MANAGER
+          maxLength: 100
+          type: string
+      required:
+      - name
+      - roleTemplate
+      type: object
+    getRole:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        permissionScope:
+          properties:
+            accessToAllNotificationFeatures:
+              type: boolean
+            addContactsToGroups:
+              type: boolean
+            createContacts:
+              type: boolean
+            createEditDeleteGroups:
+              type: boolean
+            createEditDeleteSchedules:
+              type: boolean
+            createEditViewCockpitWorkFlows:
+              type: boolean
+            deleteContacts:
+              type: boolean
+            incidentZones:
+              type: boolean
+            incidentZonesRegistered:
+              type: boolean
+            moveRemoveContactsFromGroups:
+              type: boolean
+            onlyEditRulesWithSameRole:
+              type: boolean
+            reopenIncident:
+              type: boolean
+            restrictToIncidentSimulationOnly:
+              type: boolean
+            restrictToSimulationOnly:
+              type: boolean
+            restrictionEditDeleteTemplates:
+              type: boolean
+            uploadContacts:
+              type: boolean
+            viewCockpitWorkFlows:
+              type: boolean
+            viewDownloadAllContacts:
+              type: boolean
+            viewDownloadEditAllContacts:
+              type: boolean
+          type: object
+        roleDataScope:
+          properties:
+            broadcastTemplateIds:
+              items:
+                type: integer
+              type: array
+            dynamicGroupIds:
+              items:
+                type: integer
+              type: array
+            groupIds:
+              items:
+                type: integer
+              type: array
+            incidentTemplateIds:
+              items:
+                type: integer
+              type: array
+            isEmpty:
+              type: boolean
+            organizationId:
+              type: integer
+            referenceId:
+              type: integer
+            referenceType:
+              type: string
+            roleId:
+              type: integer
+          type: object
+        roleTemplate:
+          type: string
+      type: object
     getRoles:
       properties:
         summary:
@@ -930,154 +1075,9 @@ components:
         message:
           type: string
       type: object
-    getRole:
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        permissionScope:
-          properties:
-            accessToAllNotificationFeatures:
-              type: boolean
-            addContactsToGroups:
-              type: boolean
-            createContacts:
-              type: boolean
-            createEditDeleteGroups:
-              type: boolean
-            createEditDeleteSchedules:
-              type: boolean
-            createEditViewCockpitWorkFlows:
-              type: boolean
-            deleteContacts:
-              type: boolean
-            incidentZones:
-              type: boolean
-            incidentZonesRegistered:
-              type: boolean
-            moveRemoveContactsFromGroups:
-              type: boolean
-            onlyEditRulesWithSameRole:
-              type: boolean
-            reopenIncident:
-              type: boolean
-            restrictToIncidentSimulationOnly:
-              type: boolean
-            restrictToSimulationOnly:
-              type: boolean
-            restrictionEditDeleteTemplates:
-              type: boolean
-            uploadContacts:
-              type: boolean
-            viewCockpitWorkFlows:
-              type: boolean
-            viewDownloadAllContacts:
-              type: boolean
-            viewDownloadEditAllContacts:
-              type: boolean
-          type: object
-        roleDataScope:
-          properties:
-            broadcastTemplateIds:
-              items:
-                type: integer
-              type: array
-            dynamicGroupIds:
-              items:
-                type: integer
-              type: array
-            groupIds:
-              items:
-                type: integer
-              type: array
-            incidentTemplateIds:
-              items:
-                type: integer
-              type: array
-            isEmpty:
-              type: boolean
-            organizationId:
-              type: integer
-            referenceId:
-              type: integer
-            referenceType:
-              type: string
-            roleId:
-              type: integer
-          type: object
-        roleTemplate:
-          type: string
-      type: object
-    roleRequest:
-      properties:
-        name:
-          description: The role's name
-          maxLength: 100
-          type: string
-        permissionScope:
-          properties:
-            accessToAllNotificationFeatures:
-              type: boolean
-            addContactsToGroups:
-              type: boolean
-            createContacts:
-              type: boolean
-            createEditDeleteGroups:
-              type: boolean
-            createEditDeleteSchedules:
-              type: boolean
-            createEditViewCockpitWorkFlows:
-              type: boolean
-            deleteContacts:
-              type: boolean
-            incidentZones:
-              type: boolean
-            incidentZonesRegistered:
-              type: boolean
-            moveRemoveContactsFromGroups:
-              type: boolean
-            onlyEditRulesWithSameRole:
-              type: boolean
-            reopenIncident:
-              type: boolean
-            restrictToIncidentSimulationOnly:
-              type: boolean
-            restrictToSimulationOnly:
-              type: boolean
-            restrictionEditDeleteTemplates:
-              type: boolean
-            uploadContacts:
-              type: boolean
-            viewCockpitWorkFlows:
-              type: boolean
-            viewDownloadAllContacts:
-              type: boolean
-            viewDownloadEditAllContacts:
-              type: boolean
-          type: object
-        roleDataScope:
-          properties:
-            dynamicGroupIds:
-              items:
-                type: integer
-              type: array
-            groupIds:
-              items:
-                type: integer
-              type: array
-          type: object
-        roleTemplate:
-          description: The role's template, supports:INCIDENT_OPERATOR, DISPATCHER, INCIDENT_ADMIN, GROUP_MANAGER
-          maxLength: 100
-          type: string
-      required:
-      - name
-      - roleTemplate
-      type: object
-    roleId:
-      default: '0'
-      description: Role ID
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
       example: '1536984111644674'
       maxLength: 16
       type: integer

@@ -82,6 +82,21 @@ paths:
       x-operation-id-original: EBS Get Staff Assigned By Calendar ExternalId
 components:
   schemas:
+    TimingInterval:
+      properties:
+        from:
+          format: date-time
+          type: string
+        fromDate:
+          format: date-time
+          type: string
+        to:
+          format: date-time
+          type: string
+        toDate:
+          format: date-time
+          type: string
+      type: object
     StaffShiftAssignmentsWrapper:
       properties:
         externalId:
@@ -102,15 +117,12 @@ components:
         suffix:
           type: string
       type: object
-    CalendarStaffShiftAssignmentsWrapper:
+    CalendarStaffShiftAssignmentsWrapperInstanceResult:
       properties:
-        calendar:
-          $ref: '#/components/schemas/CalendarWrapper'
-        staffAssignments:
-          items:
-            $ref: '#/components/schemas/StaffShiftAssignmentsWrapper'
-          type: array
-          uniqueItems: true
+        message:
+          type: string
+        result:
+          $ref: '#/components/schemas/CalendarStaffShiftAssignmentsWrapper'
       type: object
     Staff:
       properties:
@@ -130,73 +142,15 @@ components:
         unavailable:
           type: boolean
       type: object
-    CalendarStaffShiftAssignmentsWrapperInstanceResult:
+    CalendarStaffShiftAssignmentsWrapper:
       properties:
-        message:
-          type: string
-        result:
-          $ref: '#/components/schemas/CalendarStaffShiftAssignmentsWrapper'
-      type: object
-    CalendarWrapper:
-      properties:
-        accountId:
-          format: int64
-          type: integer
-        active:
-          type: boolean
-        createdDate:
-          format: date-time
-          type: string
-        createdDateString:
-          type: string
-        createdId:
-          format: int64
-          type: integer
-        createdName:
-          type: string
-        createdProxyName:
-          type: string
-        emailNotificationEnabled:
-          type: boolean
-        emailNotificationList:
+        calendar:
+          $ref: '#/components/schemas/CalendarWrapper'
+        staffAssignments:
           items:
-            type: string
+            $ref: '#/components/schemas/StaffShiftAssignmentsWrapper'
           type: array
-        externalId:
-          type: string
-        id:
-          format: int64
-          type: integer
-        lastModifiedDate:
-          format: date-time
-          type: string
-        lastModifiedDateString:
-          type: string
-        lastModifiedId:
-          format: int64
-          type: integer
-        lastModifiedName:
-          type: string
-        lastModifiedProxyName:
-          type: string
-        name:
-          type: string
-        organizationId:
-          format: int64
-          type: integer
-        resourceBundleId:
-          format: int64
-          type: integer
-        shiftIds:
-          items:
-            format: int64
-            type: integer
-          type: array
-        status:
-          enum:
-          - A
-          - D
-          type: string
+          uniqueItems: true
       type: object
     ShiftExceptions:
       properties:
@@ -277,6 +231,67 @@ components:
           - D
           type: string
       type: object
+    CalendarWrapper:
+      properties:
+        accountId:
+          format: int64
+          type: integer
+        active:
+          type: boolean
+        createdDate:
+          format: date-time
+          type: string
+        createdDateString:
+          type: string
+        createdId:
+          format: int64
+          type: integer
+        createdName:
+          type: string
+        createdProxyName:
+          type: string
+        emailNotificationEnabled:
+          type: boolean
+        emailNotificationList:
+          items:
+            type: string
+          type: array
+        externalId:
+          type: string
+        id:
+          format: int64
+          type: integer
+        lastModifiedDate:
+          format: date-time
+          type: string
+        lastModifiedDateString:
+          type: string
+        lastModifiedId:
+          format: int64
+          type: integer
+        lastModifiedName:
+          type: string
+        lastModifiedProxyName:
+          type: string
+        name:
+          type: string
+        organizationId:
+          format: int64
+          type: integer
+        resourceBundleId:
+          format: int64
+          type: integer
+        shiftIds:
+          items:
+            format: int64
+            type: integer
+          type: array
+        status:
+          enum:
+          - A
+          - D
+          type: string
+      type: object
     ShiftAssignmentWrapper:
       properties:
         dayOfShift:
@@ -313,21 +328,6 @@ components:
         staffShiftAssignmentId:
           format: int64
           type: integer
-      type: object
-    TimingInterval:
-      properties:
-        from:
-          format: date-time
-          type: string
-        fromDate:
-          format: date-time
-          type: string
-        to:
-          format: date-time
-          type: string
-        toDate:
-          format: date-time
-          type: string
       type: object
   securitySchemes:
     API_Authorizer:

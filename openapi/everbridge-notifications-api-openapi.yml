@@ -2750,12 +2750,18 @@ paths:
       x-operation-id-original: EBS Update Notification
 components:
   schemas:
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
+    updateNotification:
+      allOf:
+      - properties:
+          notificationStatus:
+            example: Stopped
+            type: string
+        required:
+        - notificationStatus
+        type: object
+    createNotification:
+      allOf:
+      - $ref: '#/components/schemas/notification'
     DataPageObject:
       properties:
         currentPageNo:
@@ -2784,57 +2790,6 @@ components:
           format: int32
           type: integer
       title: DataPage«object»
-      type: object
-    createNotification:
-      allOf:
-      - $ref: '#/components/schemas/notification'
-    RestfulModificationResult:
-      properties:
-        baseUri:
-          type: string
-        id:
-          format: int64
-          type: integer
-        instanceUri:
-          type: string
-        message:
-          type: string
-      title: RestfulModificationResult
-      type: object
-    RestfulCollectionResult:
-      properties:
-        currentPageUri:
-          type: string
-        firstPageUri:
-          type: string
-        lastPageUri:
-          type: string
-        message:
-          type: string
-        nextPageUri:
-          type: string
-        page:
-          $ref: '#/components/schemas/DataPageObject'
-        previousPageUri:
-          type: string
-      title: RestfulCollectionResult
-      type: object
-    updateNotification:
-      allOf:
-      - properties:
-          notificationStatus:
-            example: Stopped
-            type: string
-        required:
-        - notificationStatus
-        type: object
-    RestfulInstanceResult:
-      properties:
-        message:
-          type: string
-        result:
-          type: object
-      title: RestfulInstanceResult
       type: object
     notification:
       properties:
@@ -2944,6 +2899,14 @@ components:
           - Conference
           type: string
       type: object
+    RestfulInstanceResult:
+      properties:
+        message:
+          type: string
+        result:
+          type: object
+      title: RestfulInstanceResult
+      type: object
     NotificationEventWrapper:
       properties:
         accountId:
@@ -2986,6 +2949,43 @@ components:
           - D
           type: string
       title: NotificationEventWrapper
+      type: object
+    RestfulCollectionResult:
+      properties:
+        currentPageUri:
+          type: string
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        nextPageUri:
+          type: string
+        page:
+          $ref: '#/components/schemas/DataPageObject'
+        previousPageUri:
+          type: string
+      title: RestfulCollectionResult
+      type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
+    RestfulModificationResult:
+      properties:
+        baseUri:
+          type: string
+        id:
+          format: int64
+          type: integer
+        instanceUri:
+          type: string
+        message:
+          type: string
+      title: RestfulModificationResult
       type: object
   securitySchemes:
     API_Authorizer:

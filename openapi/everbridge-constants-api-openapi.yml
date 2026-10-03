@@ -93,33 +93,34 @@ paths:
       x-operation-id-original: EBS Query Constants
 components:
   schemas:
-    DataPageConstantValueWrapper:
+    ConstantValueWrapper:
       properties:
-        currentPageNo:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/ConstantValueWrapper'
-          type: array
-        dataPageList:
-          items:
-            $ref: '#/components/schemas/DataPageConstantValueWrapper'
-          type: array
-        pageSize:
-          format: int32
-          type: integer
-        scrollId:
+        code:
           type: string
-        start:
-          format: int32
-          type: integer
-        totalCount:
+        id:
           format: int64
           type: integer
-        totalPageCount:
+        key:
+          type: string
+        language:
+          type: string
+        lookupType:
+          type: string
+        seq:
           format: int32
           type: integer
+        siteSpecific:
+          enum:
+          - Y
+          - N
+          type: string
+        status:
+          enum:
+          - A
+          - D
+          type: string
+        value:
+          type: string
       type: object
     DataPageObject:
       properties:
@@ -150,22 +151,33 @@ components:
           type: integer
       title: DataPage«object»
       type: object
-    RestfulCollectionResultConstantValueWrapper:
+    DataPageConstantValueWrapper:
       properties:
-        currentPageUri:
+        currentPageNo:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/ConstantValueWrapper'
+          type: array
+        dataPageList:
+          items:
+            $ref: '#/components/schemas/DataPageConstantValueWrapper'
+          type: array
+        pageSize:
+          format: int32
+          type: integer
+        scrollId:
           type: string
-        firstPageUri:
-          type: string
-        lastPageUri:
-          type: string
-        message:
-          type: string
-        nextPageUri:
-          type: string
-        page:
-          $ref: '#/components/schemas/DataPageConstantValueWrapper'
-        previousPageUri:
-          type: string
+        start:
+          format: int32
+          type: integer
+        totalCount:
+          format: int64
+          type: integer
+        totalPageCount:
+          format: int32
+          type: integer
       type: object
     RestfulCollectionResult:
       properties:
@@ -185,33 +197,21 @@ components:
           type: string
       title: RestfulCollectionResult
       type: object
-    ConstantValueWrapper:
+    RestfulCollectionResultConstantValueWrapper:
       properties:
-        code:
+        currentPageUri:
           type: string
-        id:
-          format: int64
-          type: integer
-        key:
+        firstPageUri:
           type: string
-        language:
+        lastPageUri:
           type: string
-        lookupType:
+        message:
           type: string
-        seq:
-          format: int32
-          type: integer
-        siteSpecific:
-          enum:
-          - Y
-          - N
+        nextPageUri:
           type: string
-        status:
-          enum:
-          - A
-          - D
-          type: string
-        value:
+        page:
+          $ref: '#/components/schemas/DataPageConstantValueWrapper'
+        previousPageUri:
           type: string
       type: object
   securitySchemes:

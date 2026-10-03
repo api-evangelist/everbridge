@@ -123,15 +123,6 @@ paths:
       x-operation-id-original: EB AM Get Uploaded Asset Detail By Id
 components:
   schemas:
-    UploadAssetPropertyValue:
-      type: object
-      properties:
-        propertyId:
-          type: string
-        propertyName:
-          type: string
-        value:
-          type: string
     Error:
       type: object
       properties:
@@ -142,60 +133,23 @@ components:
           format: int32
         message:
           type: string
-    organizationId:
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      maxLength: 16
-      type: integer
-      example: '1536984111644674'
-      default: '1536984111644674'
-    UploadAssetAssociation:
+    UploadAddress:
       type: object
       properties:
-        associationDefinitionId:
+        country:
           type: string
-        entityType:
+        state:
           type: string
-          enum:
-          - Contact
-          - ContactGroup
-          - ContactFilter
-        entityIds:
-          type: array
-          items:
-            type: string
-        entityValues:
+        city:
           type: string
-        associationDefinitionColumnName:
+        postalCode:
           type: string
-    DataPageUploadAsset:
-      type: object
-      properties:
-        pageSize:
-          type: integer
-          format: int32
-        start:
-          type: integer
-          format: int32
-        totalCount:
-          type: integer
-          format: int64
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/UploadAsset'
-        currentPageNo:
-          type: integer
-          format: int32
-        totalPageCount:
-          type: integer
-          format: int32
-    UploadPoint:
-      type: object
-      properties:
-        lon:
+        streetAddress1:
           type: string
-        lat:
+        streetAddress2:
           type: string
+        point:
+          $ref: '#/components/schemas/UploadPoint'
     UploadAsset:
       type: object
       properties:
@@ -280,23 +234,69 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UploadAssetAssociation'
-    UploadAddress:
+    UploadAssetAssociation:
       type: object
       properties:
-        country:
+        associationDefinitionId:
           type: string
-        state:
+        entityType:
           type: string
-        city:
+          enum:
+          - Contact
+          - ContactGroup
+          - ContactFilter
+        entityIds:
+          type: array
+          items:
+            type: string
+        entityValues:
           type: string
-        postalCode:
+        associationDefinitionColumnName:
           type: string
-        streetAddress1:
+    UploadAssetPropertyValue:
+      type: object
+      properties:
+        propertyId:
           type: string
-        streetAddress2:
+        propertyName:
           type: string
-        point:
-          $ref: '#/components/schemas/UploadPoint'
+        value:
+          type: string
+    DataPageUploadAsset:
+      type: object
+      properties:
+        pageSize:
+          type: integer
+          format: int32
+        start:
+          type: integer
+          format: int32
+        totalCount:
+          type: integer
+          format: int64
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/UploadAsset'
+        currentPageNo:
+          type: integer
+          format: int32
+        totalPageCount:
+          type: integer
+          format: int32
+    organizationId:
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      maxLength: 16
+      type: integer
+      example: '1536984111644674'
+      default: '1536984111644674'
+    UploadPoint:
+      type: object
+      properties:
+        lon:
+          type: string
+        lat:
+          type: string
   securitySchemes:
     BasicAuth:
       type: http

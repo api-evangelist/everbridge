@@ -1249,21 +1249,51 @@ paths:
       x-operation-id-original: EBS Send registration email
 components:
   schemas:
-    CommonErrorResponse:
+    patchEntity:
+      additionalProperties: false
       properties:
-        code:
-          format: int32
-          type: integer
-        details:
-          type: object
-        id:
+        op:
+          description: The operation to perform.
+          enum:
+          - add
+          - replace
+          - remove
           type: string
-        message:
+        path:
+          description: 'A JSON Pointer path. For example: ''/firstName'''
           type: string
-        status:
-          format: int32
-          type: integer
+        value:
+          description: The value to add or replace. This field is not required for remove operation
+          oneOf:
+          - title: string
+            type: string
+          - title: double
+            type: number
+          - title: integer or long
+            type: integer
+          - title: boolean
+            type: boolean
+          - title: object
+            type: object
+          - items:
+              type: integer
+            title: integer array
+            type: array
+          - items:
+              type: string
+            title: string array
+            type: array
+      required:
+      - op
+      - path
+      title: Add, Replace or Remove
       type: object
+    roleId:
+      default: '0'
+      description: Role ID
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
     getUsers:
       properties:
         summary:
@@ -1437,6 +1467,35 @@ components:
               type: object
           type: object
       type: object
+    RoleItem:
+      properties:
+        defaultOrganization:
+          type: boolean
+        defaultRole:
+          type: boolean
+        groupIds:
+          items:
+            format: int64
+            type: integer
+          type: array
+        organizationId:
+          format: int64
+          type: integer
+        roleId:
+          format: int64
+          type: integer
+      type: object
+    postUpdateResponse:
+      properties:
+        baseUri:
+          type: string
+        id:
+          type: integer
+        instanceUri:
+          type: string
+        message:
+          type: string
+      type: object
     getUser:
       properties:
         apiAccess:
@@ -1591,45 +1650,6 @@ components:
           description: Whether the user is Active or Inactive. NotRegistered is an obsolete legacy status.
           type: string
       type: object
-    patchEntity:
-      additionalProperties: false
-      properties:
-        op:
-          description: The operation to perform.
-          enum:
-          - add
-          - replace
-          - remove
-          type: string
-        path:
-          description: 'A JSON Pointer path. For example: ''/firstName'''
-          type: string
-        value:
-          description: The value to add or replace. This field is not required for remove operation
-          oneOf:
-          - title: string
-            type: string
-          - title: double
-            type: number
-          - title: integer or long
-            type: integer
-          - title: boolean
-            type: boolean
-          - title: object
-            type: object
-          - items:
-              type: integer
-            title: integer array
-            type: array
-          - items:
-              type: string
-            title: string array
-            type: array
-      required:
-      - op
-      - path
-      title: Add, Replace or Remove
-      type: object
     userRequest:
       properties:
         apiAccess:
@@ -1695,17 +1715,6 @@ components:
       - lastName
       - email
       - timeZoneId
-      type: object
-    postUpdateResponse:
-      properties:
-        baseUri:
-          type: string
-        id:
-          type: integer
-        instanceUri:
-          type: string
-        message:
-          type: string
       type: object
     UserVO:
       properties:
@@ -1780,30 +1789,21 @@ components:
         usernameLowerCase:
           type: string
       type: object
-    RoleItem:
+    CommonErrorResponse:
       properties:
-        defaultOrganization:
-          type: boolean
-        defaultRole:
-          type: boolean
-        groupIds:
-          items:
-            format: int64
-            type: integer
-          type: array
-        organizationId:
-          format: int64
+        code:
+          format: int32
           type: integer
-        roleId:
-          format: int64
+        details:
+          type: object
+        id:
+          type: string
+        message:
+          type: string
+        status:
+          format: int32
           type: integer
       type: object
-    roleId:
-      default: '0'
-      description: Role ID
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
   securitySchemes:
     API_Authorizer:
       description: oAuth Token

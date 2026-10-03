@@ -973,109 +973,19 @@ paths:
       x-operation-id-original: EBS AQ Get Asset
 components:
   schemas:
-    AssetIcon:
+    AssetRequestBodyWrapper:
       type: object
       properties:
-        source:
-          type: string
-          enum:
-          - SYSTEM
-          - CUSTOM
-        id:
-          type: string
-    AggregationResult:
-      type: object
-      properties:
-        aggregationResults:
+        assetIds:
           type: array
           items:
-            $ref: '#/components/schemas/AggregationResult'
-        key:
-          type: string
-        count:
-          type: integer
-          format: int64
-        travelerCount:
-          type: integer
-          format: int64
-    Asset:
-      type: object
-      properties:
-        id:
-          type: string
-        organizationId:
-          type: integer
-          format: int64
-        createdId:
-          type: integer
-          format: int64
-        createdName:
-          type: string
-        createdProxyName:
-          type: string
-        lastModifiedId:
-          type: integer
-          format: int64
-        lastModifiedName:
-          type: string
-        lastModifiedProxyName:
-          type: string
-        createdTimestamp:
-          type: string
-          format: date-time
-        lastModifiedTimestamp:
-          type: string
-          format: date-time
-        externalId:
-          type: string
-        assetTypeId:
-          type: string
-        name:
-          type: string
-        address:
-          $ref: '#/components/schemas/Address'
-        iconId:
-          type: string
-        startTimestamp:
-          type: integer
-          format: int64
-        endTimestamp:
-          type: integer
-          format: int64
-        notes:
-          type: string
-        category:
-          type: string
-        geometry:
-          type: string
-        assetTypeName:
-          type: string
-        properties:
+            type: string
+        assetTypeIds:
           type: array
           items:
-            $ref: '#/components/schemas/AssetPropertyValue'
-        associations:
-          type: array
-          items:
-            $ref: '#/components/schemas/AssetAssociation'
-        geocodingAddressRequired:
+            type: string
+        allAssetTypes:
           type: boolean
-        geocodingStatus:
-          type: string
-          enum:
-          - Invalid
-          - RequestPending
-          - RequestSubmitted
-          - SubmissionFailed
-          - Succeeded
-          - Failed
-          - NotNeeded
-        smartEnabled:
-          type: boolean
-        icon:
-          $ref: '#/components/schemas/AssetIcon'
-        color:
-          type: string
     DataPageAsset:
       type: object
       properties:
@@ -1098,21 +1008,46 @@ components:
         totalPageCount:
           type: integer
           format: int32
-    organizationId:
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      maxLength: 16
-      type: integer
-      example: '1536984111644674'
-      default: '1536984111644674'
-    AggregationRangeResult:
+    Address:
       type: object
       properties:
-        min:
-          type: number
-          format: double
-        max:
-          type: number
-          format: double
+        country:
+          type: string
+        state:
+          maxLength: 100
+          minLength: 0
+          type: string
+        city:
+          maxLength: 100
+          minLength: 0
+          type: string
+        postalCode:
+          maxLength: 20
+          minLength: 0
+          type: string
+        streetAddress1:
+          maxLength: 200
+          minLength: 0
+          type: string
+        streetAddress2:
+          maxLength: 200
+          minLength: 0
+          type: string
+    AggregationResult:
+      type: object
+      properties:
+        aggregationResults:
+          type: array
+          items:
+            $ref: '#/components/schemas/AggregationResult'
+        key:
+          type: string
+        count:
+          type: integer
+          format: int64
+        travelerCount:
+          type: integer
+          format: int64
     query:
       type: object
       properties:
@@ -1137,6 +1072,25 @@ components:
                         required:
                         - field
                         - value
+    AssetIcon:
+      type: object
+      properties:
+        source:
+          type: string
+          enum:
+          - SYSTEM
+          - CUSTOM
+        id:
+          type: string
+    AggregationRangeResult:
+      type: object
+      properties:
+        min:
+          type: number
+          format: double
+        max:
+          type: number
+          format: double
     streamResponse:
       type: array
       items:
@@ -1234,44 +1188,6 @@ components:
           type: array
           items:
             type: string
-    AssetRequestBodyWrapper:
-      type: object
-      properties:
-        assetIds:
-          type: array
-          items:
-            type: string
-        assetTypeIds:
-          type: array
-          items:
-            type: string
-        allAssetTypes:
-          type: boolean
-    Address:
-      type: object
-      properties:
-        country:
-          type: string
-        state:
-          maxLength: 100
-          minLength: 0
-          type: string
-        city:
-          maxLength: 100
-          minLength: 0
-          type: string
-        postalCode:
-          maxLength: 20
-          minLength: 0
-          type: string
-        streetAddress1:
-          maxLength: 200
-          minLength: 0
-          type: string
-        streetAddress2:
-          maxLength: 200
-          minLength: 0
-          type: string
     AssetPropertyValue:
       type: object
       properties:
@@ -1283,6 +1199,90 @@ components:
           type: object
         name:
           type: string
+    Asset:
+      type: object
+      properties:
+        id:
+          type: string
+        organizationId:
+          type: integer
+          format: int64
+        createdId:
+          type: integer
+          format: int64
+        createdName:
+          type: string
+        createdProxyName:
+          type: string
+        lastModifiedId:
+          type: integer
+          format: int64
+        lastModifiedName:
+          type: string
+        lastModifiedProxyName:
+          type: string
+        createdTimestamp:
+          type: string
+          format: date-time
+        lastModifiedTimestamp:
+          type: string
+          format: date-time
+        externalId:
+          type: string
+        assetTypeId:
+          type: string
+        name:
+          type: string
+        address:
+          $ref: '#/components/schemas/Address'
+        iconId:
+          type: string
+        startTimestamp:
+          type: integer
+          format: int64
+        endTimestamp:
+          type: integer
+          format: int64
+        notes:
+          type: string
+        category:
+          type: string
+        geometry:
+          type: string
+        assetTypeName:
+          type: string
+        properties:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetPropertyValue'
+        associations:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetAssociation'
+        geocodingAddressRequired:
+          type: boolean
+        geocodingStatus:
+          type: string
+          enum:
+          - Invalid
+          - RequestPending
+          - RequestSubmitted
+          - SubmissionFailed
+          - Succeeded
+          - Failed
+          - NotNeeded
+        smartEnabled:
+          type: boolean
+        icon:
+          $ref: '#/components/schemas/AssetIcon'
+        color:
+          type: string
+    organizationId:
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      maxLength: 16
+      type: integer
+      example: '1536984111644674'
+      default: '1536984111644674'
   securitySchemes:
     BasicAuth:
       type: http
