@@ -42,6 +42,9 @@ url: https://www.everbridge.com
 created: 2024-01-09 00:00:00+00:00
 modified: '2026-08-27'
 specificationVersion: '0.23'
+x-docs-platform: readme
+x-docs-platform-confidence: high
+x-docs-platform-checked: 2026-10-03
 tags:
 - Critical Event Management
 - Emergency Management
