@@ -150,6 +150,49 @@ paths:
         connectionType: VPC_LINK
 components:
   schemas:
+    CtxDateTimeVariableProperty:
+      type: object
+      description: Provides date-time formatting information.
+      properties:
+        type:
+          type: string
+          description: Must be set to exactly `DatetimeFormatter`.
+          enum:
+          - DatetimeFormatter
+        value:
+          type: string
+          description: The date-time formatting string that describes the format of the context data.
+          example: yyyy-MM-dd'T'HH:mm:ss.SSSXXX
+    CtxSinglePartialArgument:
+      allOf:
+      - $ref: '#/components/schemas/CtxPartialArgument'
+      - type: object
+        description: A hash argument for a Handlebars partial that accepts an arbitrary value of the given type.
+        properties:
+          type:
+            type: string
+            description: The type of the argument.
+            enum:
+            - Single
+    ProblemDetail:
+      type: object
+      description: An RFC-7807 compliant model for error details.
+      properties:
+        type:
+          type: string
+          description: A URI that identifies the problem type.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem type.
+        status:
+          type: integer
+          description: The HTTP response status code describing the error.
+        detail:
+          type: string
+          description: A human-readable explanation of the specific problem.
+        instance:
+          type: string
+          description: A URI that identifies the specific problem.
     PreviewResponse:
       type: object
       description: Contains information about the rendered values.
@@ -218,55 +261,19 @@ components:
           - Boolean
           - 'Null'
           - Path
-    CtxDateTimeVariableProperty:
+    CtxHandlebarsTemplateVariableProperty:
       type: object
-      description: Provides date-time formatting information.
+      description: Provides the recommended Handlebars template for rendering this variable.
       properties:
         type:
           type: string
-          description: Must be set to exactly `DatetimeFormatter`.
+          description: Must be set to exactly `HandlebarsTemplate`.
           enum:
-          - DatetimeFormatter
+          - HandlebarsTemplate
         value:
           type: string
-          description: The date-time formatting string that describes the format of the context data.
-          example: yyyy-MM-dd'T'HH:mm:ss.SSSXXX
-    Context:
-      type: object
-      description: A context object holding the schema and metadata regarding a particular context
-      required:
-      - name
-      properties:
-        id:
-          type: string
-          minLength: 36
-          maxLength: 36
-          format: uuid
-        name:
-          type: string
-          maxLength: 100
-          minLength: 3
-        shortName:
-          type: string
-          maxLength: 20
-          minLength: 3
-        lastModifiedId:
-          type: string
-        lastModifiedDt:
-          type: string
-          format: date-time
-        organizationId:
-          type: string
-          maxLength: 30
-          minLength: 3
-        schema:
-          type: object
-          additionalProperties: true
-        variables:
-          type: array
-          description: Notable values of the context source.
-          items:
-            $ref: '#/components/schemas/CtxVariable'
+          description: A small Handlebars template that may be directly inserted into another template to render the variable.
+          example: '{{{ printList context.cema.lastEvent.categories }}}'
     CtxEnumerationPartialArgument:
       allOf:
       - $ref: '#/components/schemas/CtxPartialArgument'
@@ -300,22 +307,6 @@ components:
                       value:
                         type: string
                         description: The Handlebars path expression to the value within the context.
-    PreviewRequest:
-      type: object
-      description: Parameters for requesting a preview of various context variables.
-      required:
-      - templateId
-      properties:
-        templateId:
-          type: string
-          description: An ID of a template, retrieved from the Template APIs.
-          example: commsTemplate://f533519a-3475-4ec9-9f4a-58345cd78544
-        contextIds:
-          type: array
-          description: An array of context IDs. See List Context for more information.
-          items:
-            type: string
-            example: cema://cd01f9d6-1e60-42ac-b1a6-bca9644d90c4
     CtxVariable:
       type: object
       description: A value within a context object.
@@ -363,6 +354,22 @@ components:
                 anyOf:
                 - $ref: '#/components/schemas/CtxSinglePartialArgument'
                 - $ref: '#/components/schemas/CtxEnumerationPartialArgument'
+    PreviewRequest:
+      type: object
+      description: Parameters for requesting a preview of various context variables.
+      required:
+      - templateId
+      properties:
+        templateId:
+          type: string
+          description: An ID of a template, retrieved from the Template APIs.
+          example: commsTemplate://f533519a-3475-4ec9-9f4a-58345cd78544
+        contextIds:
+          type: array
+          description: An array of context IDs. See List Context for more information.
+          items:
+            type: string
+            example: cema://cd01f9d6-1e60-42ac-b1a6-bca9644d90c4
     ContextPaginatedResponse:
       type: object
       description: A page of data from an endpoint.
@@ -392,49 +399,42 @@ components:
             totalCount:
               type: number
               description: The total number of elements across all pages.
-    CtxHandlebarsTemplateVariableProperty:
+    Context:
       type: object
-      description: Provides the recommended Handlebars template for rendering this variable.
+      description: A context object holding the schema and metadata regarding a particular context
+      required:
+      - name
       properties:
-        type:
+        id:
           type: string
-          description: Must be set to exactly `HandlebarsTemplate`.
-          enum:
-          - HandlebarsTemplate
-        value:
+          minLength: 36
+          maxLength: 36
+          format: uuid
+        name:
           type: string
-          description: A small Handlebars template that may be directly inserted into another template to render the variable.
-          example: '{{{ printList context.cema.lastEvent.categories }}}'
-    ProblemDetail:
-      type: object
-      description: An RFC-7807 compliant model for error details.
-      properties:
-        type:
+          maxLength: 100
+          minLength: 3
+        shortName:
           type: string
-          description: A URI that identifies the problem type.
-        title:
+          maxLength: 20
+          minLength: 3
+        lastModifiedId:
           type: string
-          description: A short, human-readable summary of the problem type.
-        status:
-          type: integer
-          description: The HTTP response status code describing the error.
-        detail:
+        lastModifiedDt:
           type: string
-          description: A human-readable explanation of the specific problem.
-        instance:
+          format: date-time
+        organizationId:
           type: string
-          description: A URI that identifies the specific problem.
-    CtxSinglePartialArgument:
-      allOf:
-      - $ref: '#/components/schemas/CtxPartialArgument'
-      - type: object
-        description: A hash argument for a Handlebars partial that accepts an arbitrary value of the given type.
-        properties:
-          type:
-            type: string
-            description: The type of the argument.
-            enum:
-            - Single
+          maxLength: 30
+          minLength: 3
+        schema:
+          type: object
+          additionalProperties: true
+        variables:
+          type: array
+          description: Notable values of the context source.
+          items:
+            $ref: '#/components/schemas/CtxVariable'
   securitySchemes:
     API_Authorizer:
       type: apiKey

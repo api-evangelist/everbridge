@@ -973,124 +973,6 @@ paths:
       x-operation-id-original: EBS AQ Get Asset
 components:
   schemas:
-    AssetRequestBodyWrapper:
-      type: object
-      properties:
-        assetIds:
-          type: array
-          items:
-            type: string
-        assetTypeIds:
-          type: array
-          items:
-            type: string
-        allAssetTypes:
-          type: boolean
-    DataPageAsset:
-      type: object
-      properties:
-        pageSize:
-          type: integer
-          format: int32
-        start:
-          type: integer
-          format: int32
-        totalCount:
-          type: integer
-          format: int64
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Asset'
-        currentPageNo:
-          type: integer
-          format: int32
-        totalPageCount:
-          type: integer
-          format: int32
-    Address:
-      type: object
-      properties:
-        country:
-          type: string
-        state:
-          maxLength: 100
-          minLength: 0
-          type: string
-        city:
-          maxLength: 100
-          minLength: 0
-          type: string
-        postalCode:
-          maxLength: 20
-          minLength: 0
-          type: string
-        streetAddress1:
-          maxLength: 200
-          minLength: 0
-          type: string
-        streetAddress2:
-          maxLength: 200
-          minLength: 0
-          type: string
-    AggregationResult:
-      type: object
-      properties:
-        aggregationResults:
-          type: array
-          items:
-            $ref: '#/components/schemas/AggregationResult'
-        key:
-          type: string
-        count:
-          type: integer
-          format: int64
-        travelerCount:
-          type: integer
-          format: int64
-    query:
-      type: object
-      properties:
-        query:
-          type: object
-          properties:
-            bool:
-              type: object
-              properties:
-                and:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      equal:
-                        type: object
-                        properties:
-                          field:
-                            type: string
-                          value:
-                            type: string
-                        required:
-                        - field
-                        - value
-    AssetIcon:
-      type: object
-      properties:
-        source:
-          type: string
-          enum:
-          - SYSTEM
-          - CUSTOM
-        id:
-          type: string
-    AggregationRangeResult:
-      type: object
-      properties:
-        min:
-          type: number
-          format: double
-        max:
-          type: number
-          format: double
     streamResponse:
       type: array
       items:
@@ -1171,23 +1053,19 @@ components:
             type: string
           category:
             type: string
-    AssetAssociation:
+    AssetRequestBodyWrapper:
       type: object
       properties:
-        associationDefinitionId:
-          maxLength: 2147483647
-          minLength: 1
-          type: string
-        entityType:
-          type: string
-          enum:
-          - Contact
-          - ContactGroup
-          - ContactFilter
-        entityIds:
+        assetIds:
           type: array
           items:
             type: string
+        assetTypeIds:
+          type: array
+          items:
+            type: string
+        allAssetTypes:
+          type: boolean
     AssetPropertyValue:
       type: object
       properties:
@@ -1277,12 +1155,134 @@ components:
           $ref: '#/components/schemas/AssetIcon'
         color:
           type: string
+    AssetAssociation:
+      type: object
+      properties:
+        associationDefinitionId:
+          maxLength: 2147483647
+          minLength: 1
+          type: string
+        entityType:
+          type: string
+          enum:
+          - Contact
+          - ContactGroup
+          - ContactFilter
+        entityIds:
+          type: array
+          items:
+            type: string
+    Address:
+      type: object
+      properties:
+        country:
+          type: string
+        state:
+          maxLength: 100
+          minLength: 0
+          type: string
+        city:
+          maxLength: 100
+          minLength: 0
+          type: string
+        postalCode:
+          maxLength: 20
+          minLength: 0
+          type: string
+        streetAddress1:
+          maxLength: 200
+          minLength: 0
+          type: string
+        streetAddress2:
+          maxLength: 200
+          minLength: 0
+          type: string
     organizationId:
       description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
       maxLength: 16
       type: integer
       example: '1536984111644674'
       default: '1536984111644674'
+    AggregationResult:
+      type: object
+      properties:
+        aggregationResults:
+          type: array
+          items:
+            $ref: '#/components/schemas/AggregationResult'
+        key:
+          type: string
+        count:
+          type: integer
+          format: int64
+        travelerCount:
+          type: integer
+          format: int64
+    AggregationRangeResult:
+      type: object
+      properties:
+        min:
+          type: number
+          format: double
+        max:
+          type: number
+          format: double
+    query:
+      type: object
+      properties:
+        query:
+          type: object
+          properties:
+            bool:
+              type: object
+              properties:
+                and:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      equal:
+                        type: object
+                        properties:
+                          field:
+                            type: string
+                          value:
+                            type: string
+                        required:
+                        - field
+                        - value
+    AssetIcon:
+      type: object
+      properties:
+        source:
+          type: string
+          enum:
+          - SYSTEM
+          - CUSTOM
+        id:
+          type: string
+    DataPageAsset:
+      type: object
+      properties:
+        pageSize:
+          type: integer
+          format: int32
+        start:
+          type: integer
+          format: int32
+        totalCount:
+          type: integer
+          format: int64
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Asset'
+        currentPageNo:
+          type: integer
+          format: int32
+        totalPageCount:
+          type: integer
+          format: int32
   securitySchemes:
     BasicAuth:
       type: http

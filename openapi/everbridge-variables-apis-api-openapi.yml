@@ -619,6 +619,55 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    VariableItemPatchVO:
+      type: object
+      properties:
+        displayName:
+          type: string
+          description: Variable display name.
+        variableType:
+          type: string
+          enum:
+          - Single
+          - Multiple
+          - Textbox
+          - Textarea
+          - Date
+          description: Variable types.
+        tooltip:
+          type: string
+          description: Variable description.
+        properties:
+          type: array
+          items:
+            $ref: '#/components/schemas/VariableProperty'
+          description: "Properties of variable. Different variable type has different properties. \n * Textbox and Textarea: Length \n * Date: DatetimeFormatter \n * Single: DefaultValue(required when it has), Option \n * Multiple: DefaultValue(required when it has), Option"
+    VariableItemPostVO:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Variable name.
+        displayName:
+          type: string
+          description: Variable display name.
+        variableType:
+          type: string
+          enum:
+          - Single
+          - Multiple
+          - Textbox
+          - Textarea
+          - Date
+          description: Variable types.
+        tooltip:
+          type: string
+          description: Variable description.
+        properties:
+          type: array
+          items:
+            $ref: '#/components/schemas/VariableProperty'
+          description: "Properties of variable. Different variable type has different properties. \n * Textbox and Textarea: Length \n * Date: DatetimeFormatter \n * Single: DefaultValue(required when it has), Option \n * Multiple: DefaultValue(required when it has), Option"
     VariableDataPage:
       type: object
       properties:
@@ -639,19 +688,24 @@ components:
           format: int64
         scrollId:
           type: string
-    VariableValidationRequestItem:
+    VariableProperty:
       type: object
       properties:
-        id:
+        type:
           type: string
-          description: Variable id.
+          enum:
+          - DefaultValue
+          - Option
+          - Length
+          - DatetimeFormatter
+          description: "* DatetimeFormatter: follow simpleDateFormat. Support pattern: Date pattern: dd-MM-yyyy, MM-dd-yyyy, yyyy-MM-dd; Time pattern: HH:mm, HH:mm:ss, hh:mm aaa, hh:mm:ss aaa \n * Length: max length of text variable value \n * Option: array of option values \n * DefaultValue: default variable value"
         value:
           oneOf:
-          - type: string
+          - type: integer
           - type: array
             items:
               type: string
-          description: Value of variable assigned.
+          - type: string
     VariableItemDetailVO:
       type: object
       properties:
@@ -761,84 +815,6 @@ components:
                     description: The type of the argument's value, which can be used to enforce type checking when using the Handlebars partial.
                     enum:
                     - Path
-    VariableProperty:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-          - DefaultValue
-          - Option
-          - Length
-          - DatetimeFormatter
-          description: "* DatetimeFormatter: follow simpleDateFormat. Support pattern: Date pattern: dd-MM-yyyy, MM-dd-yyyy, yyyy-MM-dd; Time pattern: HH:mm, HH:mm:ss, hh:mm aaa, hh:mm:ss aaa \n * Length: max length of text variable value \n * Option: array of option values \n * DefaultValue: default variable value"
-        value:
-          oneOf:
-          - type: integer
-          - type: array
-            items:
-              type: string
-          - type: string
-    VariableItemPostVO:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Variable name.
-        displayName:
-          type: string
-          description: Variable display name.
-        variableType:
-          type: string
-          enum:
-          - Single
-          - Multiple
-          - Textbox
-          - Textarea
-          - Date
-          description: Variable types.
-        tooltip:
-          type: string
-          description: Variable description.
-        properties:
-          type: array
-          items:
-            $ref: '#/components/schemas/VariableProperty'
-          description: "Properties of variable. Different variable type has different properties. \n * Textbox and Textarea: Length \n * Date: DatetimeFormatter \n * Single: DefaultValue(required when it has), Option \n * Multiple: DefaultValue(required when it has), Option"
-    VariableItemPatchVO:
-      type: object
-      properties:
-        displayName:
-          type: string
-          description: Variable display name.
-        variableType:
-          type: string
-          enum:
-          - Single
-          - Multiple
-          - Textbox
-          - Textarea
-          - Date
-          description: Variable types.
-        tooltip:
-          type: string
-          description: Variable description.
-        properties:
-          type: array
-          items:
-            $ref: '#/components/schemas/VariableProperty'
-          description: "Properties of variable. Different variable type has different properties. \n * Textbox and Textarea: Length \n * Date: DatetimeFormatter \n * Single: DefaultValue(required when it has), Option \n * Multiple: DefaultValue(required when it has), Option"
-    VariableValidationResponseItem:
-      type: object
-      properties:
-        id:
-          type: string
-        code:
-          type: integer
-        source:
-          type: string
-        message:
-          type: string
     VariableValidateResponse:
       type: object
       properties:
@@ -901,6 +877,30 @@ components:
           enum:
           - IC
           - COMMS
+    VariableValidationResponseItem:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: integer
+        source:
+          type: string
+        message:
+          type: string
+    VariableValidationRequestItem:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Variable id.
+        value:
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          description: Value of variable assigned.
   securitySchemes:
     API_Authorizer:
       type: apiKey

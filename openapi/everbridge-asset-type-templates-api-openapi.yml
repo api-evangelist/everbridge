@@ -166,65 +166,6 @@ paths:
       x-operation-id-original: EBS AM Get Asset Type Template
 components:
   schemas:
-    AssetTypeTemplate:
-      required:
-      - name
-      type: object
-      properties:
-        id:
-          type: string
-        organizationId:
-          type: integer
-          format: int64
-        createdId:
-          type: integer
-          format: int64
-        createdName:
-          type: string
-        createdProxyName:
-          type: string
-        lastModifiedId:
-          type: integer
-          format: int64
-        lastModifiedName:
-          type: string
-        lastModifiedProxyName:
-          type: string
-        createdTimestamp:
-          type: string
-          format: date-time
-        lastModifiedTimestamp:
-          type: string
-          format: date-time
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-        description:
-          maxLength: 2000
-          minLength: 0
-          type: string
-        seq:
-          type: integer
-          format: int32
-        legacy:
-          type: boolean
-        assetTypeCategory:
-          type: string
-          enum:
-          - REGULAR
-          - SUPPLY_CHAIN_STOP
-          - SUPPLY_CHAIN_ROUTE
-        propertyDefinitions:
-          type: array
-          items:
-            $ref: '#/components/schemas/AssetPropertyDefinition'
-    organizationId:
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      maxLength: 16
-      type: integer
-      example: '1536984111644674'
-      default: '1536984111644674'
     AssetPropertyDefinition:
       required:
       - assetPropertyDataType
@@ -310,6 +251,65 @@ components:
           type: array
           items:
             type: object
+    organizationId:
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      maxLength: 16
+      type: integer
+      example: '1536984111644674'
+      default: '1536984111644674'
+    AssetTypeTemplate:
+      required:
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+        organizationId:
+          type: integer
+          format: int64
+        createdId:
+          type: integer
+          format: int64
+        createdName:
+          type: string
+        createdProxyName:
+          type: string
+        lastModifiedId:
+          type: integer
+          format: int64
+        lastModifiedName:
+          type: string
+        lastModifiedProxyName:
+          type: string
+        createdTimestamp:
+          type: string
+          format: date-time
+        lastModifiedTimestamp:
+          type: string
+          format: date-time
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+        description:
+          maxLength: 2000
+          minLength: 0
+          type: string
+        seq:
+          type: integer
+          format: int32
+        legacy:
+          type: boolean
+        assetTypeCategory:
+          type: string
+          enum:
+          - REGULAR
+          - SUPPLY_CHAIN_STOP
+          - SUPPLY_CHAIN_ROUTE
+        propertyDefinitions:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetPropertyDefinition'
   securitySchemes:
     BasicAuth:
       type: http

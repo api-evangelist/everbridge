@@ -4536,24 +4536,6 @@ paths:
     - url: https://api.everbridge.eu/rest
 components:
   schemas:
-    StaffSubstitutionV2BulkUpdateRequest:
-      type: object
-      properties:
-        data:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/StaffSubstitution'
-          description: Data
-    Event:
-      type: object
-      properties:
-        end:
-          type: string
-          description: Event end
-        start:
-          type: string
-          description: Event start
-      description: Event Time Range
     StaffSubstitution:
       required:
       - type
@@ -4588,20 +4570,6 @@ components:
           type: string
           description: Applicable dates end
       description: Applicable Date Range
-    Recurrence:
-      type: object
-      properties:
-        type:
-          type: string
-          description: Staffing Assignment type
-        datesApplicable:
-          $ref: '#/components/schemas/DatesApplicable'
-        event:
-          $ref: '#/components/schemas/Event'
-        rrule:
-          type: string
-          description: Recurrence Rule
-      description: Recurrence definition for substitution
     StaffingAssignment:
       type: object
       properties:
@@ -4616,6 +4584,38 @@ components:
             description: Substitution Contact IDs
             format: int64
       description: Staffing Assignment
+    Recurrence:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Staffing Assignment type
+        datesApplicable:
+          $ref: '#/components/schemas/DatesApplicable'
+        event:
+          $ref: '#/components/schemas/Event'
+        rrule:
+          type: string
+          description: Recurrence Rule
+      description: Recurrence definition for substitution
+    Event:
+      type: object
+      properties:
+        end:
+          type: string
+          description: Event end
+        start:
+          type: string
+          description: Event start
+      description: Event Time Range
+    StaffSubstitutionV2BulkUpdateRequest:
+      type: object
+      properties:
+        data:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/StaffSubstitution'
+          description: Data
     StaffSubstitutionV2BulkRequest:
       type: object
       properties:
@@ -4624,30 +4624,155 @@ components:
           description: Data
           items:
             $ref: '#/components/schemas/StaffSubstitution'
-    calendarObj:
+    createStaffSchedule:
       properties:
         data:
           properties:
-            active:
-              type: boolean
-            emailNotificationEnabled:
-              type: boolean
-            emailNotificationList:
-              items:
-                type: string
-              type: array
-            externalId:
-              type: string
+            calendarId:
+              type: number
+            minStaff:
+              type: number
             name:
               type: string
-            notifyScheduled:
+            recurrence:
+              properties:
+                datesApplicable:
+                  properties:
+                    from:
+                      type: string
+                    to:
+                      type: string
+                  required:
+                  - from
+                  type: object
+                everyNRecurrence:
+                  type: number
+                type:
+                  type: string
+              required:
+              - type
+              - datesApplicable
+              type: object
+            seq:
+              type: number
+            shiftScheduleId:
+              type: number
+            staffAssignments:
+              items:
+                properties:
+                  days:
+                    items:
+                      type: number
+                    type: array
+                  ids:
+                    items:
+                      properties:
+                        id:
+                          type: number
+                        type:
+                          type: string
+                      required:
+                      - id
+                      - type
+                      type: object
+                    type: array
+                  type:
+                    type: string
+                required:
+                - type
+                - days
+                - ids
+                type: object
+              type: array
+            staffEachDay:
               type: boolean
-            visibility:
+            status:
               type: string
+            type:
+              type: string
+          required:
+          - name
+          - recurrence
+          - shiftScheduleId
+          - staffAssignments
           type: object
       required:
       - data
       type: object
+    shiftSchedulesRequest:
+      properties:
+        data:
+          properties:
+            calendarId:
+              type: number
+            colorIndicator:
+              type: string
+            datesApplicable:
+              properties:
+                from:
+                  type: string
+                to: {}
+              required:
+              - from
+              - to
+              type: object
+            groupId:
+              type: number
+            name:
+              type: string
+            numDays:
+              type: number
+            override:
+              type: boolean
+            schedule:
+              items:
+                properties:
+                  days:
+                    items:
+                      type: number
+                    type: array
+                  shift:
+                    properties:
+                      end:
+                        type: string
+                      start:
+                        type: string
+                    required:
+                    - start
+                    - end
+                    type: object
+                  type:
+                    type: string
+                required:
+                - days
+                - type
+                - shift
+                type: object
+              type: array
+            sequenced:
+              type: boolean
+            staffTypeRequired:
+              items: {}
+              type: array
+            timeZoneString:
+              type: string
+            weekStartsWith:
+              type: string
+          required:
+          - name
+          - calendarId
+          - timeZoneString
+          - datesApplicable
+          type: object
+      required:
+      - data
+      type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
     FlatAssignmentUnavailability:
       properties:
         period:
@@ -4658,175 +4783,6 @@ components:
         staffSubstitutionId:
           format: int64
           type: integer
-      type: object
-    UpdateSubstitution:
-      properties:
-        data:
-          properties:
-            contactId:
-              type: number
-            recurrence:
-              properties:
-                datesApplicable:
-                  properties:
-                    from:
-                      type: string
-                    to:
-                      type: string
-                  type: object
-                event:
-                  properties:
-                    end:
-                      type: string
-                    start:
-                      type: string
-                  type: object
-                type:
-                  type: string
-              type: object
-            staffAssignment:
-              properties:
-                contactIds:
-                  items:
-                    type: number
-                  type: array
-                type:
-                  type: string
-              type: object
-            timeZoneString:
-              type: string
-          type: object
-      required:
-      - data
-      type: object
-    ZonedDateTimeRange:
-      properties:
-        from:
-          format: date-time
-          type: string
-        to:
-          format: date-time
-          type: string
-      type: object
-    listStaffSchedules:
-      properties:
-        currentPageNo:
-          type: number
-        data:
-          items:
-            properties:
-              accountId:
-                type: number
-              calendarId:
-                type: number
-              createdDate:
-                type: string
-              createdId:
-                type: number
-              createdName:
-                type: string
-              escalationOption:
-                type: string
-              id:
-                type: number
-              lastModifiedDate:
-                type: string
-              lastModifiedId:
-                type: number
-              lastModifiedName:
-                type: string
-              minStaff:
-                type: number
-              name:
-                type: string
-              onCallReminder:
-                properties:
-                  enabled:
-                    type: boolean
-                type: object
-              organizationId:
-                type: number
-              recurrence:
-                properties:
-                  datesApplicable:
-                    properties:
-                      from:
-                        type: string
-                      to:
-                        type: string
-                    type: object
-                  everyNRecurrence:
-                    type: number
-                  type:
-                    type: string
-                type: object
-              resourceBundleId:
-                type: number
-              seq:
-                type: number
-              sequencingOverrideAllowed:
-                type: boolean
-              shiftScheduleId:
-                type: number
-              staffAssignments:
-                items:
-                  properties:
-                    days:
-                      items:
-                        type: number
-                      type: array
-                    ids:
-                      items:
-                        properties:
-                          id:
-                            type: number
-                          type:
-                            type: string
-                        type: object
-                      type: array
-                    type:
-                      type: string
-                  type: object
-                type: array
-              staffEachDay:
-                type: boolean
-              status:
-                type: string
-              type:
-                type: string
-            type: object
-          type: array
-        pageSize:
-          type: number
-        totalCount:
-          type: number
-        totalPageCount:
-          type: number
-      type: object
-    FlatCalendarEvent:
-      properties:
-        assignments:
-          items:
-            $ref: '#/components/schemas/FlatAssignment'
-          type: array
-          uniqueItems: true
-        calendarId:
-          format: int64
-          type: integer
-        end:
-          format: date-time
-          type: string
-        id:
-          type: string
-        organizationId:
-          format: int64
-          type: integer
-        shiftScheduleId:
-          format: int64
-          type: integer
-        start:
-          format: date-time
-          type: string
       type: object
     shiftSchedulesCreateResponse:
       properties:
@@ -4927,6 +4883,774 @@ components:
           type: object
       required:
       - data
+      type: object
+    shiftSchedulesGetResponse:
+      properties:
+        currentPageNo:
+          type: number
+        data:
+          items:
+            properties:
+              accountId:
+                type: number
+              calendarId:
+                type: number
+              colorIndicator:
+                type: string
+              createdDate:
+                type: string
+              createdId:
+                type: number
+              createdName:
+                type: string
+              datesApplicable:
+                properties:
+                  from:
+                    type: string
+                required:
+                - from
+                type: object
+              id:
+                type: number
+              lastModifiedDate:
+                type: string
+              lastModifiedId:
+                type: number
+              lastModifiedName:
+                type: string
+              name:
+                type: string
+              organizationId:
+                type: number
+              resourceBundleId:
+                type: number
+              shiftTimeZoneString:
+                type: string
+              staffTypeRequired:
+                items: {}
+                type: array
+              status:
+                type: string
+              timeZoneString:
+                type: string
+              type:
+                type: string
+            required:
+            - id
+            - type
+            - accountId
+            - calendarId
+            - colorIndicator
+            - createdDate
+            - createdId
+            - createdName
+            - datesApplicable
+            - lastModifiedDate
+            - lastModifiedId
+            - lastModifiedName
+            - name
+            - organizationId
+            - resourceBundleId
+            - shiftTimeZoneString
+            - staffTypeRequired
+            - status
+            - timeZoneString
+            type: object
+          type: array
+        pageSize:
+          type: number
+        totalCount:
+          type: number
+        totalPageCount:
+          type: number
+      required:
+      - currentPageNo
+      - totalPageCount
+      - totalCount
+      - pageSize
+      - data
+      type: object
+    calendar:
+      properties:
+        data:
+          properties:
+            accountId:
+              type: integer
+            active:
+              type: boolean
+            createdDate:
+              type: string
+            createdId:
+              type: integer
+            createdName:
+              type: string
+            emailNotificationEnabled:
+              type: boolean
+            externalId:
+              type: string
+            id:
+              type: integer
+            lastModifiedDate:
+              type: string
+            lastModifiedId:
+              type: integer
+            lastModifiedName:
+              type: string
+            name:
+              type: string
+            notifyScheduled:
+              type: boolean
+            onCallReminder:
+              properties:
+                enabled:
+                  type: boolean
+              type: object
+            organizationId:
+              type: integer
+            resourceBundleId:
+              type: integer
+            status:
+              type: string
+            type:
+              type: string
+            visibility:
+              type: string
+          type: object
+      type: object
+    UpdateSubstitution:
+      properties:
+        data:
+          properties:
+            contactId:
+              type: number
+            recurrence:
+              properties:
+                datesApplicable:
+                  properties:
+                    from:
+                      type: string
+                    to:
+                      type: string
+                  type: object
+                event:
+                  properties:
+                    end:
+                      type: string
+                    start:
+                      type: string
+                  type: object
+                type:
+                  type: string
+              type: object
+            staffAssignment:
+              properties:
+                contactIds:
+                  items:
+                    type: number
+                  type: array
+                type:
+                  type: string
+              type: object
+            timeZoneString:
+              type: string
+          type: object
+      required:
+      - data
+      type: object
+    updateStaffSchedule:
+      properties:
+        data:
+          properties:
+            calendarId:
+              type: number
+            minStaff:
+              type: number
+            name:
+              type: string
+            recurrence:
+              properties:
+                datesApplicable:
+                  properties:
+                    from:
+                      type: string
+                    to:
+                      type: string
+                  type: object
+                everyNRecurrence:
+                  type: number
+                type:
+                  type: string
+              type: object
+            seq:
+              type: number
+            shiftScheduleId:
+              type: number
+            staffAssignments:
+              items:
+                properties:
+                  days:
+                    items:
+                      type: number
+                    type: array
+                  ids:
+                    items:
+                      properties:
+                        id:
+                          type: number
+                        type:
+                          type: string
+                      type: object
+                    type: array
+                  type:
+                    type: string
+                type: object
+              type: array
+            staffEachDay:
+              type: boolean
+            status:
+              type: string
+            type:
+              type: string
+          type: object
+      required:
+      - data
+      type: object
+    substitution:
+      properties:
+        data:
+          properties:
+            accountId:
+              type: number
+            contactId:
+              type: number
+            createdDate:
+              type: string
+            createdId:
+              type: number
+            createdName:
+              type: string
+            id:
+              type: number
+            lastModifiedDate:
+              type: string
+            lastModifiedId:
+              type: number
+            lastModifiedName:
+              type: string
+            organizationId:
+              type: number
+            recurrence:
+              properties:
+                datesApplicable:
+                  properties:
+                    from:
+                      type: string
+                    to:
+                      type: string
+                  type: object
+                event:
+                  properties:
+                    end:
+                      type: string
+                    start:
+                      type: string
+                  type: object
+                type:
+                  type: string
+              type: object
+            resourceBundleId:
+              type: number
+            staffAssignment:
+              properties:
+                contactIds:
+                  items:
+                    type: number
+                  type: array
+                type:
+                  type: string
+              type: object
+            status:
+              type: string
+            timeZoneString:
+              type: string
+            type:
+              type: string
+          type: object
+      type: object
+    staffSchedule:
+      properties:
+        data:
+          properties:
+            accountId:
+              type: number
+            calendarId:
+              type: number
+            createdDate:
+              type: string
+            createdId:
+              type: number
+            createdName:
+              type: string
+            id:
+              type: number
+            lastModifiedDate:
+              type: string
+            lastModifiedId:
+              type: number
+            lastModifiedName:
+              type: string
+            minStaff:
+              type: number
+            name:
+              type: string
+            onCallReminder:
+              properties:
+                enabled:
+                  type: boolean
+              required:
+              - enabled
+              type: object
+            organizationId:
+              type: number
+            recurrence:
+              properties:
+                datesApplicable:
+                  properties:
+                    from:
+                      type: string
+                  required:
+                  - from
+                  type: object
+                everyNRecurrence:
+                  type: number
+                type:
+                  type: string
+              required:
+              - type
+              - datesApplicable
+              - everyNRecurrence
+              type: object
+            resourceBundleId:
+              type: number
+            seq:
+              type: number
+            sequencingOverrideAllowed:
+              type: boolean
+            shiftScheduleId:
+              type: number
+            staffAssignments:
+              items:
+                properties:
+                  days:
+                    items:
+                      type: number
+                    type: array
+                  ids:
+                    items:
+                      properties:
+                        id:
+                          type: number
+                        type:
+                          type: string
+                      required:
+                      - id
+                      - type
+                      type: object
+                    type: array
+                  type:
+                    type: string
+                required:
+                - type
+                - days
+                - ids
+                type: object
+              type: array
+            staffEachDay:
+              type: boolean
+            status:
+              type: string
+            type:
+              type: string
+          required:
+          - id
+          - type
+          - accountId
+          - calendarId
+          - createdDate
+          - createdId
+          - createdName
+          - lastModifiedDate
+          - lastModifiedId
+          - lastModifiedName
+          - minStaff
+          - name
+          - onCallReminder
+          - organizationId
+          - recurrence
+          - resourceBundleId
+          - seq
+          - sequencingOverrideAllowed
+          - shiftScheduleId
+          - staffAssignments
+          - staffEachDay
+          - status
+          type: object
+      required:
+      - data
+      type: object
+    FlatAssignment:
+      properties:
+        contactId:
+          format: int64
+          type: integer
+        groupId:
+          format: int64
+          type: integer
+        replacements:
+          items:
+            $ref: '#/components/schemas/FlatAssignmentReplacement'
+          type: array
+          uniqueItems: true
+        sequence:
+          format: int32
+          type: integer
+        shiftSubstitutionId:
+          format: int64
+          type: integer
+        staffLayerId:
+          format: int64
+          type: integer
+        unavailabilities:
+          items:
+            $ref: '#/components/schemas/FlatAssignmentUnavailability'
+          type: array
+          uniqueItems: true
+      type: object
+    shiftSubstitutionsRequest:
+      properties:
+        data:
+          properties:
+            recurrence:
+              properties:
+                datesApplicable:
+                  items:
+                    type: string
+                  type: array
+                type:
+                  type: string
+              required:
+              - type
+              - datesApplicable
+              type: object
+            shiftScheduleId:
+              type: number
+            staffAssignment:
+              properties:
+                contactIds:
+                  items:
+                    type: number
+                  type: array
+                type:
+                  type: string
+              required:
+              - type
+              - contactIds
+              type: object
+          required:
+          - recurrence
+          - shiftScheduleId
+          - staffAssignment
+          type: object
+      required:
+      - data
+      type: object
+    listStaffSchedules:
+      properties:
+        currentPageNo:
+          type: number
+        data:
+          items:
+            properties:
+              accountId:
+                type: number
+              calendarId:
+                type: number
+              createdDate:
+                type: string
+              createdId:
+                type: number
+              createdName:
+                type: string
+              escalationOption:
+                type: string
+              id:
+                type: number
+              lastModifiedDate:
+                type: string
+              lastModifiedId:
+                type: number
+              lastModifiedName:
+                type: string
+              minStaff:
+                type: number
+              name:
+                type: string
+              onCallReminder:
+                properties:
+                  enabled:
+                    type: boolean
+                type: object
+              organizationId:
+                type: number
+              recurrence:
+                properties:
+                  datesApplicable:
+                    properties:
+                      from:
+                        type: string
+                      to:
+                        type: string
+                    type: object
+                  everyNRecurrence:
+                    type: number
+                  type:
+                    type: string
+                type: object
+              resourceBundleId:
+                type: number
+              seq:
+                type: number
+              sequencingOverrideAllowed:
+                type: boolean
+              shiftScheduleId:
+                type: number
+              staffAssignments:
+                items:
+                  properties:
+                    days:
+                      items:
+                        type: number
+                      type: array
+                    ids:
+                      items:
+                        properties:
+                          id:
+                            type: number
+                          type:
+                            type: string
+                        type: object
+                      type: array
+                    type:
+                      type: string
+                  type: object
+                type: array
+              staffEachDay:
+                type: boolean
+              status:
+                type: string
+              type:
+                type: string
+            type: object
+          type: array
+        pageSize:
+          type: number
+        totalCount:
+          type: number
+        totalPageCount:
+          type: number
+      type: object
+    calendarObj:
+      properties:
+        data:
+          properties:
+            active:
+              type: boolean
+            emailNotificationEnabled:
+              type: boolean
+            emailNotificationList:
+              items:
+                type: string
+              type: array
+            externalId:
+              type: string
+            name:
+              type: string
+            notifyScheduled:
+              type: boolean
+            visibility:
+              type: string
+          type: object
+      required:
+      - data
+      type: object
+    shiftSchedules:
+      properties:
+        currentPageNo:
+          type: integer
+        data:
+          items:
+            properties:
+              accountId:
+                type: integer
+              calendarId:
+                type: integer
+              colorIndicator:
+                type: string
+              createdDate:
+                type: string
+              createdId:
+                type: integer
+              createdName:
+                type: string
+              datesApplicable:
+                properties:
+                  from:
+                    type: string
+                type: object
+              groupId:
+                type: string
+              id:
+                type: integer
+              lastModifiedDate:
+                type: string
+              lastModifiedId:
+                type: integer
+              lastModifiedName:
+                type: string
+              name:
+                type: string
+              numDays:
+                type: integer
+              organizationId:
+                type: integer
+              override:
+                type: boolean
+              resourceBundleId:
+                type: integer
+              schedule:
+                items:
+                  properties:
+                    days:
+                      items:
+                        type: integer
+                      type: array
+                    shift:
+                      properties:
+                        end:
+                          type: string
+                        start:
+                          type: string
+                      type: object
+                    type:
+                      type: string
+                  type: object
+                type: array
+              sequenced:
+                type: boolean
+              shiftTimeZoneString:
+                type: string
+              staffTypeRequired:
+                items:
+                  items: {}
+                type: array
+              status:
+                type: string
+              timeZoneString:
+                type: string
+              type:
+                type: string
+              weekStartsWith:
+                type: string
+            type: object
+          type: array
+        pageSize:
+          type: integer
+        totalCount:
+          type: integer
+        totalPageCount:
+          type: integer
+      type: object
+    FlatCalendarEvent:
+      properties:
+        assignments:
+          items:
+            $ref: '#/components/schemas/FlatAssignment'
+          type: array
+          uniqueItems: true
+        calendarId:
+          format: int64
+          type: integer
+        end:
+          format: date-time
+          type: string
+        id:
+          type: string
+        organizationId:
+          format: int64
+          type: integer
+        shiftScheduleId:
+          format: int64
+          type: integer
+        start:
+          format: date-time
+          type: string
+      type: object
+    listCalendars:
+      properties:
+        currentPageNo:
+          type: integer
+        data:
+          items:
+            properties:
+              accountId:
+                type: integer
+              active:
+                type: boolean
+              createdDate:
+                type: string
+              createdId:
+                type: integer
+              createdName:
+                type: string
+              emailNotificationEnabled:
+                type: boolean
+              externalId:
+                type: string
+              id:
+                type: integer
+              lastModifiedDate:
+                type: string
+              lastModifiedId:
+                type: integer
+              lastModifiedName:
+                type: string
+              name:
+                type: string
+              notifyScheduled:
+                type: boolean
+              onCallReminder:
+                properties:
+                  enabled:
+                    type: boolean
+                type: object
+              organizationId:
+                type: integer
+              resourceBundleId:
+                type: integer
+              status:
+                type: string
+              type:
+                type: string
+              visibility:
+                type: string
+            type: object
+          type: array
+        pageSize:
+          type: integer
+        totalCount:
+          type: integer
+        totalPageCount:
+          type: integer
       type: object
     schedulingAudits:
       properties:
@@ -5119,127 +5843,14 @@ components:
         totalPageCount:
           type: number
       type: object
-    createStaffSchedule:
+    ZonedDateTimeRange:
       properties:
-        data:
-          properties:
-            calendarId:
-              type: number
-            minStaff:
-              type: number
-            name:
-              type: string
-            recurrence:
-              properties:
-                datesApplicable:
-                  properties:
-                    from:
-                      type: string
-                    to:
-                      type: string
-                  required:
-                  - from
-                  type: object
-                everyNRecurrence:
-                  type: number
-                type:
-                  type: string
-              required:
-              - type
-              - datesApplicable
-              type: object
-            seq:
-              type: number
-            shiftScheduleId:
-              type: number
-            staffAssignments:
-              items:
-                properties:
-                  days:
-                    items:
-                      type: number
-                    type: array
-                  ids:
-                    items:
-                      properties:
-                        id:
-                          type: number
-                        type:
-                          type: string
-                      required:
-                      - id
-                      - type
-                      type: object
-                    type: array
-                  type:
-                    type: string
-                required:
-                - type
-                - days
-                - ids
-                type: object
-              type: array
-            staffEachDay:
-              type: boolean
-            status:
-              type: string
-            type:
-              type: string
-          required:
-          - name
-          - recurrence
-          - shiftScheduleId
-          - staffAssignments
-          type: object
-      required:
-      - data
-      type: object
-    calendar:
-      properties:
-        data:
-          properties:
-            accountId:
-              type: integer
-            active:
-              type: boolean
-            createdDate:
-              type: string
-            createdId:
-              type: integer
-            createdName:
-              type: string
-            emailNotificationEnabled:
-              type: boolean
-            externalId:
-              type: string
-            id:
-              type: integer
-            lastModifiedDate:
-              type: string
-            lastModifiedId:
-              type: integer
-            lastModifiedName:
-              type: string
-            name:
-              type: string
-            notifyScheduled:
-              type: boolean
-            onCallReminder:
-              properties:
-                enabled:
-                  type: boolean
-              type: object
-            organizationId:
-              type: integer
-            resourceBundleId:
-              type: integer
-            status:
-              type: string
-            type:
-              type: string
-            visibility:
-              type: string
-          type: object
+        from:
+          format: date-time
+          type: string
+        to:
+          format: date-time
+          type: string
       type: object
     CreateSubstitution:
       properties:
@@ -5298,410 +5909,6 @@ components:
       required:
       - data
       type: object
-    staffSchedule:
-      properties:
-        data:
-          properties:
-            accountId:
-              type: number
-            calendarId:
-              type: number
-            createdDate:
-              type: string
-            createdId:
-              type: number
-            createdName:
-              type: string
-            id:
-              type: number
-            lastModifiedDate:
-              type: string
-            lastModifiedId:
-              type: number
-            lastModifiedName:
-              type: string
-            minStaff:
-              type: number
-            name:
-              type: string
-            onCallReminder:
-              properties:
-                enabled:
-                  type: boolean
-              required:
-              - enabled
-              type: object
-            organizationId:
-              type: number
-            recurrence:
-              properties:
-                datesApplicable:
-                  properties:
-                    from:
-                      type: string
-                  required:
-                  - from
-                  type: object
-                everyNRecurrence:
-                  type: number
-                type:
-                  type: string
-              required:
-              - type
-              - datesApplicable
-              - everyNRecurrence
-              type: object
-            resourceBundleId:
-              type: number
-            seq:
-              type: number
-            sequencingOverrideAllowed:
-              type: boolean
-            shiftScheduleId:
-              type: number
-            staffAssignments:
-              items:
-                properties:
-                  days:
-                    items:
-                      type: number
-                    type: array
-                  ids:
-                    items:
-                      properties:
-                        id:
-                          type: number
-                        type:
-                          type: string
-                      required:
-                      - id
-                      - type
-                      type: object
-                    type: array
-                  type:
-                    type: string
-                required:
-                - type
-                - days
-                - ids
-                type: object
-              type: array
-            staffEachDay:
-              type: boolean
-            status:
-              type: string
-            type:
-              type: string
-          required:
-          - id
-          - type
-          - accountId
-          - calendarId
-          - createdDate
-          - createdId
-          - createdName
-          - lastModifiedDate
-          - lastModifiedId
-          - lastModifiedName
-          - minStaff
-          - name
-          - onCallReminder
-          - organizationId
-          - recurrence
-          - resourceBundleId
-          - seq
-          - sequencingOverrideAllowed
-          - shiftScheduleId
-          - staffAssignments
-          - staffEachDay
-          - status
-          type: object
-      required:
-      - data
-      type: object
-    shiftSubstitutionsRequest:
-      properties:
-        data:
-          properties:
-            recurrence:
-              properties:
-                datesApplicable:
-                  items:
-                    type: string
-                  type: array
-                type:
-                  type: string
-              required:
-              - type
-              - datesApplicable
-              type: object
-            shiftScheduleId:
-              type: number
-            staffAssignment:
-              properties:
-                contactIds:
-                  items:
-                    type: number
-                  type: array
-                type:
-                  type: string
-              required:
-              - type
-              - contactIds
-              type: object
-          required:
-          - recurrence
-          - shiftScheduleId
-          - staffAssignment
-          type: object
-      required:
-      - data
-      type: object
-    shiftSchedulesRequest:
-      properties:
-        data:
-          properties:
-            calendarId:
-              type: number
-            colorIndicator:
-              type: string
-            datesApplicable:
-              properties:
-                from:
-                  type: string
-                to: {}
-              required:
-              - from
-              - to
-              type: object
-            groupId:
-              type: number
-            name:
-              type: string
-            numDays:
-              type: number
-            override:
-              type: boolean
-            schedule:
-              items:
-                properties:
-                  days:
-                    items:
-                      type: number
-                    type: array
-                  shift:
-                    properties:
-                      end:
-                        type: string
-                      start:
-                        type: string
-                    required:
-                    - start
-                    - end
-                    type: object
-                  type:
-                    type: string
-                required:
-                - days
-                - type
-                - shift
-                type: object
-              type: array
-            sequenced:
-              type: boolean
-            staffTypeRequired:
-              items: {}
-              type: array
-            timeZoneString:
-              type: string
-            weekStartsWith:
-              type: string
-          required:
-          - name
-          - calendarId
-          - timeZoneString
-          - datesApplicable
-          type: object
-      required:
-      - data
-      type: object
-    updateStaffSchedule:
-      properties:
-        data:
-          properties:
-            calendarId:
-              type: number
-            minStaff:
-              type: number
-            name:
-              type: string
-            recurrence:
-              properties:
-                datesApplicable:
-                  properties:
-                    from:
-                      type: string
-                    to:
-                      type: string
-                  type: object
-                everyNRecurrence:
-                  type: number
-                type:
-                  type: string
-              type: object
-            seq:
-              type: number
-            shiftScheduleId:
-              type: number
-            staffAssignments:
-              items:
-                properties:
-                  days:
-                    items:
-                      type: number
-                    type: array
-                  ids:
-                    items:
-                      properties:
-                        id:
-                          type: number
-                        type:
-                          type: string
-                      type: object
-                    type: array
-                  type:
-                    type: string
-                type: object
-              type: array
-            staffEachDay:
-              type: boolean
-            status:
-              type: string
-            type:
-              type: string
-          type: object
-      required:
-      - data
-      type: object
-    listCalendars:
-      properties:
-        currentPageNo:
-          type: integer
-        data:
-          items:
-            properties:
-              accountId:
-                type: integer
-              active:
-                type: boolean
-              createdDate:
-                type: string
-              createdId:
-                type: integer
-              createdName:
-                type: string
-              emailNotificationEnabled:
-                type: boolean
-              externalId:
-                type: string
-              id:
-                type: integer
-              lastModifiedDate:
-                type: string
-              lastModifiedId:
-                type: integer
-              lastModifiedName:
-                type: string
-              name:
-                type: string
-              notifyScheduled:
-                type: boolean
-              onCallReminder:
-                properties:
-                  enabled:
-                    type: boolean
-                type: object
-              organizationId:
-                type: integer
-              resourceBundleId:
-                type: integer
-              status:
-                type: string
-              type:
-                type: string
-              visibility:
-                type: string
-            type: object
-          type: array
-        pageSize:
-          type: integer
-        totalCount:
-          type: integer
-        totalPageCount:
-          type: integer
-      type: object
-    substitution:
-      properties:
-        data:
-          properties:
-            accountId:
-              type: number
-            contactId:
-              type: number
-            createdDate:
-              type: string
-            createdId:
-              type: number
-            createdName:
-              type: string
-            id:
-              type: number
-            lastModifiedDate:
-              type: string
-            lastModifiedId:
-              type: number
-            lastModifiedName:
-              type: string
-            organizationId:
-              type: number
-            recurrence:
-              properties:
-                datesApplicable:
-                  properties:
-                    from:
-                      type: string
-                    to:
-                      type: string
-                  type: object
-                event:
-                  properties:
-                    end:
-                      type: string
-                    start:
-                      type: string
-                  type: object
-                type:
-                  type: string
-              type: object
-            resourceBundleId:
-              type: number
-            staffAssignment:
-              properties:
-                contactIds:
-                  items:
-                    type: number
-                  type: array
-                type:
-                  type: string
-              type: object
-            status:
-              type: string
-            timeZoneString:
-              type: string
-            type:
-              type: string
-          type: object
-      type: object
     FlatAssignmentReplacement:
       properties:
         replacedContactId:
@@ -5713,213 +5920,6 @@ components:
           format: int64
           type: integer
       type: object
-    shiftSchedules:
-      properties:
-        currentPageNo:
-          type: integer
-        data:
-          items:
-            properties:
-              accountId:
-                type: integer
-              calendarId:
-                type: integer
-              colorIndicator:
-                type: string
-              createdDate:
-                type: string
-              createdId:
-                type: integer
-              createdName:
-                type: string
-              datesApplicable:
-                properties:
-                  from:
-                    type: string
-                type: object
-              groupId:
-                type: string
-              id:
-                type: integer
-              lastModifiedDate:
-                type: string
-              lastModifiedId:
-                type: integer
-              lastModifiedName:
-                type: string
-              name:
-                type: string
-              numDays:
-                type: integer
-              organizationId:
-                type: integer
-              override:
-                type: boolean
-              resourceBundleId:
-                type: integer
-              schedule:
-                items:
-                  properties:
-                    days:
-                      items:
-                        type: integer
-                      type: array
-                    shift:
-                      properties:
-                        end:
-                          type: string
-                        start:
-                          type: string
-                      type: object
-                    type:
-                      type: string
-                  type: object
-                type: array
-              sequenced:
-                type: boolean
-              shiftTimeZoneString:
-                type: string
-              staffTypeRequired:
-                items:
-                  items: {}
-                type: array
-              status:
-                type: string
-              timeZoneString:
-                type: string
-              type:
-                type: string
-              weekStartsWith:
-                type: string
-            type: object
-          type: array
-        pageSize:
-          type: integer
-        totalCount:
-          type: integer
-        totalPageCount:
-          type: integer
-      type: object
-    FlatAssignment:
-      properties:
-        contactId:
-          format: int64
-          type: integer
-        groupId:
-          format: int64
-          type: integer
-        replacements:
-          items:
-            $ref: '#/components/schemas/FlatAssignmentReplacement'
-          type: array
-          uniqueItems: true
-        sequence:
-          format: int32
-          type: integer
-        shiftSubstitutionId:
-          format: int64
-          type: integer
-        staffLayerId:
-          format: int64
-          type: integer
-        unavailabilities:
-          items:
-            $ref: '#/components/schemas/FlatAssignmentUnavailability'
-          type: array
-          uniqueItems: true
-      type: object
-    shiftSchedulesGetResponse:
-      properties:
-        currentPageNo:
-          type: number
-        data:
-          items:
-            properties:
-              accountId:
-                type: number
-              calendarId:
-                type: number
-              colorIndicator:
-                type: string
-              createdDate:
-                type: string
-              createdId:
-                type: number
-              createdName:
-                type: string
-              datesApplicable:
-                properties:
-                  from:
-                    type: string
-                required:
-                - from
-                type: object
-              id:
-                type: number
-              lastModifiedDate:
-                type: string
-              lastModifiedId:
-                type: number
-              lastModifiedName:
-                type: string
-              name:
-                type: string
-              organizationId:
-                type: number
-              resourceBundleId:
-                type: number
-              shiftTimeZoneString:
-                type: string
-              staffTypeRequired:
-                items: {}
-                type: array
-              status:
-                type: string
-              timeZoneString:
-                type: string
-              type:
-                type: string
-            required:
-            - id
-            - type
-            - accountId
-            - calendarId
-            - colorIndicator
-            - createdDate
-            - createdId
-            - createdName
-            - datesApplicable
-            - lastModifiedDate
-            - lastModifiedId
-            - lastModifiedName
-            - name
-            - organizationId
-            - resourceBundleId
-            - shiftTimeZoneString
-            - staffTypeRequired
-            - status
-            - timeZoneString
-            type: object
-          type: array
-        pageSize:
-          type: number
-        totalCount:
-          type: number
-        totalPageCount:
-          type: number
-      required:
-      - currentPageNo
-      - totalPageCount
-      - totalCount
-      - pageSize
-      - data
-      type: object
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
   securitySchemes:
     API_Authorizer:
       type: apiKey

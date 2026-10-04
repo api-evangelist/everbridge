@@ -281,38 +281,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CountryRiskRating'
-    CountryRiskRating:
-      type: object
-      properties:
-        countryCode:
-          type: string
-          description: ISO 3166-1 alpha-2 country code.
-        countryName:
-          type: string
-          description: Country name.
-        rating:
-          type: string
-          description: Risk rating score from 1 (low) to 5 (high).
-        lastUpdated:
-          type: string
-          description: UTC timestamp string in ISO 8601 format.
-          example: '2026-03-08T08:30:06.032Z'
-    ErrorResponse:
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        reason:
-          type: string
-    CountryRiskRatingByCodeResponse:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          $ref: '#/components/schemas/CountryRiskRating'
     CityRiskRating:
       type: object
       properties:
@@ -341,6 +309,31 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CityRiskRating'
+    CountryRiskRating:
+      type: object
+      properties:
+        countryCode:
+          type: string
+          description: ISO 3166-1 alpha-2 country code.
+        countryName:
+          type: string
+          description: Country name.
+        rating:
+          type: string
+          description: Risk rating score from 1 (low) to 5 (high).
+        lastUpdated:
+          type: string
+          description: UTC timestamp string in ISO 8601 format.
+          example: '2026-03-08T08:30:06.032Z'
+    ErrorResponse:
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        reason:
+          type: string
     GatewayGeneratedErrorResponse:
       type: object
       properties:
@@ -356,6 +349,13 @@ components:
           type: string
           description: Error detail message.
           example: Authorization failure.
+    CountryRiskRatingByCodeResponse:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          $ref: '#/components/schemas/CountryRiskRating'
   securitySchemes:
     LambdaAuthorizer:
       type: apiKey

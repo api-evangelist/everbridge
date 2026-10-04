@@ -587,6 +587,86 @@ paths:
       x-operation-id-original: EBS Update Expected Location For Contact
 components:
   schemas:
+    RestfulInstanceResult:
+      properties:
+        message:
+          type: string
+        result:
+          type: object
+      title: RestfulInstanceResult
+      type: object
+    RestfulModificationResult:
+      properties:
+        baseUri:
+          type: string
+        id:
+          format: int64
+          type: integer
+        instanceUri:
+          type: string
+        message:
+          type: string
+      title: RestfulModificationResult
+      type: object
+    ContactAddressInstance:
+      properties:
+        arriveDate:
+          format: date-time
+          type: string
+        assetExternalId:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+        expireDate:
+          format: date-time
+          type: string
+        gisLocation:
+          $ref: '#/components/schemas/GisLocationWrapper'
+        iata:
+          type: string
+        locationId:
+          format: int64
+          type: integer
+        locationName:
+          type: string
+        locationSource:
+          type: string
+        locationSourceId:
+          format: int64
+          type: integer
+        newAssetId:
+          type: string
+        postalCode:
+          type: string
+        source:
+          enum:
+          - MANUAL
+          - AUTO
+          type: string
+        state:
+          type: string
+        streetAddress:
+          type: string
+        suite:
+          type: string
+      type: object
+    ExpectedLocationCollectionResult:
+      properties:
+        message:
+          type: string
+        result:
+          items:
+            $ref: '#/components/schemas/ExpectedLocationInstance'
+          type: array
+      type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
     GisLocationWrapper:
       properties:
         lat:
@@ -595,6 +675,27 @@ components:
         lon:
           format: double
           type: number
+      type: object
+    ExpectedLocationInstance:
+      properties:
+        address:
+          $ref: '#/components/schemas/ContactAddressInstance'
+        contactExternalId:
+          type: string
+        contactId:
+          format: int64
+          type: integer
+        id:
+          format: int64
+          type: integer
+        isInternationalTravel:
+          type: boolean
+        isLocalTravel:
+          type: boolean
+        travelCategory:
+          type: string
+        travelType:
+          type: string
       type: object
     RestfulBatchOperationResult:
       properties:
@@ -665,23 +766,6 @@ components:
         result:
           $ref: '#/components/schemas/ExpectedLocationInstance'
       type: object
-    RestfulInstanceResult:
-      properties:
-        message:
-          type: string
-        result:
-          type: object
-      title: RestfulInstanceResult
-      type: object
-    ExpectedLocationCollectionResult:
-      properties:
-        message:
-          type: string
-        result:
-          items:
-            $ref: '#/components/schemas/ExpectedLocationInstance'
-          type: array
-      type: object
     ExpectedLocationWrapper:
       properties:
         address:
@@ -723,90 +807,6 @@ components:
           type: string
       required:
       - contactId
-      type: object
-    ContactAddressInstance:
-      properties:
-        arriveDate:
-          format: date-time
-          type: string
-        assetExternalId:
-          type: string
-        city:
-          type: string
-        country:
-          type: string
-        expireDate:
-          format: date-time
-          type: string
-        gisLocation:
-          $ref: '#/components/schemas/GisLocationWrapper'
-        iata:
-          type: string
-        locationId:
-          format: int64
-          type: integer
-        locationName:
-          type: string
-        locationSource:
-          type: string
-        locationSourceId:
-          format: int64
-          type: integer
-        newAssetId:
-          type: string
-        postalCode:
-          type: string
-        source:
-          enum:
-          - MANUAL
-          - AUTO
-          type: string
-        state:
-          type: string
-        streetAddress:
-          type: string
-        suite:
-          type: string
-      type: object
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
-    ExpectedLocationInstance:
-      properties:
-        address:
-          $ref: '#/components/schemas/ContactAddressInstance'
-        contactExternalId:
-          type: string
-        contactId:
-          format: int64
-          type: integer
-        id:
-          format: int64
-          type: integer
-        isInternationalTravel:
-          type: boolean
-        isLocalTravel:
-          type: boolean
-        travelCategory:
-          type: string
-        travelType:
-          type: string
-      type: object
-    RestfulModificationResult:
-      properties:
-        baseUri:
-          type: string
-        id:
-          format: int64
-          type: integer
-        instanceUri:
-          type: string
-        message:
-          type: string
-      title: RestfulModificationResult
       type: object
   securitySchemes:
     API_Authorizer:

@@ -93,6 +93,23 @@ paths:
       x-operation-id-original: EBS Query Constants
 components:
   schemas:
+    RestfulCollectionResultConstantValueWrapper:
+      properties:
+        currentPageUri:
+          type: string
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        nextPageUri:
+          type: string
+        page:
+          $ref: '#/components/schemas/DataPageConstantValueWrapper'
+        previousPageUri:
+          type: string
+      type: object
     ConstantValueWrapper:
       properties:
         code:
@@ -121,6 +138,24 @@ components:
           type: string
         value:
           type: string
+      type: object
+    RestfulCollectionResult:
+      properties:
+        currentPageUri:
+          type: string
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        nextPageUri:
+          type: string
+        page:
+          $ref: '#/components/schemas/DataPageObject'
+        previousPageUri:
+          type: string
+      title: RestfulCollectionResult
       type: object
     DataPageObject:
       properties:
@@ -178,41 +213,6 @@ components:
         totalPageCount:
           format: int32
           type: integer
-      type: object
-    RestfulCollectionResult:
-      properties:
-        currentPageUri:
-          type: string
-        firstPageUri:
-          type: string
-        lastPageUri:
-          type: string
-        message:
-          type: string
-        nextPageUri:
-          type: string
-        page:
-          $ref: '#/components/schemas/DataPageObject'
-        previousPageUri:
-          type: string
-      title: RestfulCollectionResult
-      type: object
-    RestfulCollectionResultConstantValueWrapper:
-      properties:
-        currentPageUri:
-          type: string
-        firstPageUri:
-          type: string
-        lastPageUri:
-          type: string
-        message:
-          type: string
-        nextPageUri:
-          type: string
-        page:
-          $ref: '#/components/schemas/DataPageConstantValueWrapper'
-        previousPageUri:
-          type: string
       type: object
   securitySchemes:
     API_Authorizer:

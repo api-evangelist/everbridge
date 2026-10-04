@@ -133,23 +133,19 @@ components:
           format: int32
         message:
           type: string
-    UploadAddress:
+    UploadPoint:
       type: object
       properties:
-        country:
+        lon:
           type: string
-        state:
+        lat:
           type: string
-        city:
-          type: string
-        postalCode:
-          type: string
-        streetAddress1:
-          type: string
-        streetAddress2:
-          type: string
-        point:
-          $ref: '#/components/schemas/UploadPoint'
+    organizationId:
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      maxLength: 16
+      type: integer
+      example: '1536984111644674'
+      default: '1536984111644674'
     UploadAsset:
       type: object
       properties:
@@ -234,25 +230,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UploadAssetAssociation'
-    UploadAssetAssociation:
-      type: object
-      properties:
-        associationDefinitionId:
-          type: string
-        entityType:
-          type: string
-          enum:
-          - Contact
-          - ContactGroup
-          - ContactFilter
-        entityIds:
-          type: array
-          items:
-            type: string
-        entityValues:
-          type: string
-        associationDefinitionColumnName:
-          type: string
     UploadAssetPropertyValue:
       type: object
       properties:
@@ -284,18 +261,41 @@ components:
         totalPageCount:
           type: integer
           format: int32
-    organizationId:
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      maxLength: 16
-      type: integer
-      example: '1536984111644674'
-      default: '1536984111644674'
-    UploadPoint:
+    UploadAddress:
       type: object
       properties:
-        lon:
+        country:
           type: string
-        lat:
+        state:
+          type: string
+        city:
+          type: string
+        postalCode:
+          type: string
+        streetAddress1:
+          type: string
+        streetAddress2:
+          type: string
+        point:
+          $ref: '#/components/schemas/UploadPoint'
+    UploadAssetAssociation:
+      type: object
+      properties:
+        associationDefinitionId:
+          type: string
+        entityType:
+          type: string
+          enum:
+          - Contact
+          - ContactGroup
+          - ContactFilter
+        entityIds:
+          type: array
+          items:
+            type: string
+        entityValues:
+          type: string
+        associationDefinitionColumnName:
           type: string
   securitySchemes:
     BasicAuth:

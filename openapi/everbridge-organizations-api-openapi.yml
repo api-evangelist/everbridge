@@ -288,14 +288,54 @@ paths:
       x-operation-id-original: EBS Get Organization
 components:
   schemas:
-    GisLocationWrapper:
+    UnsoicitedMessageConstraintWrapper:
       properties:
-        lat:
-          format: double
-          type: number
-        lon:
-          format: double
-          type: number
+        maxMessagesPerHour:
+          format: int32
+          type: integer
+        maxMessagesPerMinute:
+          format: int32
+          type: integer
+      type: object
+    OrganizationPathWrapperInstanceResult:
+      properties:
+        message:
+          type: string
+        result:
+          $ref: '#/components/schemas/OrganizationPathWrapper'
+      type: object
+    ProcessingStateWrapper:
+      properties:
+        serverId:
+          format: int64
+          type: integer
+        startTime:
+          format: int64
+          type: integer
+        synchronizeTime:
+          format: int64
+          type: integer
+        threadName:
+          type: string
+      type: object
+    AddressWrapper:
+      properties:
+        city:
+          type: string
+        country:
+          type: string
+        gisLocation:
+          $ref: '#/components/schemas/GisLocationWrapper'
+        locationName:
+          type: string
+        postalCode:
+          type: string
+        state:
+          type: string
+        streetAddress:
+          type: string
+        suite:
+          type: string
       type: object
     ThresholdSettingWrapper:
       properties:
@@ -356,12 +396,81 @@ components:
           format: int32
           type: integer
       type: object
+    ThrottleSettingWrapper:
+      properties:
+        applyByFlag:
+          type: boolean
+        createdBy:
+          format: int64
+          type: integer
+        createdDate:
+          format: date-time
+          type: string
+        defaultAmount:
+          format: int32
+          type: integer
+        enforceAllFlag:
+          type: boolean
+        flag:
+          type: boolean
+        lastModifiedBy:
+          format: int64
+          type: integer
+        lastModifiedDate:
+          format: date-time
+          type: string
+        senderReviewFlag:
+          type: boolean
+        senderToggleFlag:
+          type: boolean
+      type: object
+    GisLocationWrapper:
+      properties:
+        lat:
+          format: double
+          type: number
+        lon:
+          format: double
+          type: number
+      type: object
+    TweetConstraintWrapper:
+      properties:
+        maxTotalTweets:
+          format: int64
+          type: integer
+        maxTweetsPerHour:
+          format: int32
+          type: integer
+        maxTweetsPerMinute:
+          format: int32
+          type: integer
+      type: object
     OrganizationWrapperInstanceResult:
       properties:
         message:
           type: string
         result:
           $ref: '#/components/schemas/OrganizationWrapper'
+      type: object
+    GisSettingWrapper:
+      properties:
+        baseMap:
+          format: int64
+          type: integer
+        latitude:
+          format: double
+          type: number
+        longitude:
+          format: double
+          type: number
+        mapCenter:
+          type: string
+        mapZoomLevel:
+          format: int64
+          type: integer
+        projection:
+          format: int64
+          type: integer
       type: object
     OrganizationWrapper:
       properties:
@@ -516,25 +625,6 @@ components:
           - WDT
           type: string
       type: object
-    OrganizationPathWrapperInstanceResult:
-      properties:
-        message:
-          type: string
-        result:
-          $ref: '#/components/schemas/OrganizationPathWrapper'
-      type: object
-    TweetConstraintWrapper:
-      properties:
-        maxTotalTweets:
-          format: int64
-          type: integer
-        maxTweetsPerHour:
-          format: int32
-          type: integer
-        maxTweetsPerMinute:
-          format: int32
-          type: integer
-      type: object
     OrganizationBroadcastSettingWrapper:
       properties:
         attachmentLinkDurationDays:
@@ -589,43 +679,6 @@ components:
           - MESSAGE_ONLY
           - MESSAGE_WITH_CONFIRMATION
           type: string
-      type: object
-    ThrottleSettingWrapper:
-      properties:
-        applyByFlag:
-          type: boolean
-        createdBy:
-          format: int64
-          type: integer
-        createdDate:
-          format: date-time
-          type: string
-        defaultAmount:
-          format: int32
-          type: integer
-        enforceAllFlag:
-          type: boolean
-        flag:
-          type: boolean
-        lastModifiedBy:
-          format: int64
-          type: integer
-        lastModifiedDate:
-          format: date-time
-          type: string
-        senderReviewFlag:
-          type: boolean
-        senderToggleFlag:
-          type: boolean
-      type: object
-    UnsoicitedMessageConstraintWrapper:
-      properties:
-        maxMessagesPerHour:
-          format: int32
-          type: integer
-        maxMessagesPerMinute:
-          format: int32
-          type: integer
       type: object
     OrganizationPathWrapper:
       properties:
@@ -778,59 +831,6 @@ components:
           - PLAINTEXTEMAIL
           - MSTEAMS
           - SLACK
-          type: string
-      type: object
-    AddressWrapper:
-      properties:
-        city:
-          type: string
-        country:
-          type: string
-        gisLocation:
-          $ref: '#/components/schemas/GisLocationWrapper'
-        locationName:
-          type: string
-        postalCode:
-          type: string
-        state:
-          type: string
-        streetAddress:
-          type: string
-        suite:
-          type: string
-      type: object
-    GisSettingWrapper:
-      properties:
-        baseMap:
-          format: int64
-          type: integer
-        latitude:
-          format: double
-          type: number
-        longitude:
-          format: double
-          type: number
-        mapCenter:
-          type: string
-        mapZoomLevel:
-          format: int64
-          type: integer
-        projection:
-          format: int64
-          type: integer
-      type: object
-    ProcessingStateWrapper:
-      properties:
-        serverId:
-          format: int64
-          type: integer
-        startTime:
-          format: int64
-          type: integer
-        synchronizeTime:
-          format: int64
-          type: integer
-        threadName:
           type: string
       type: object
   securitySchemes:

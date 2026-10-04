@@ -98,6 +98,25 @@ paths:
       x-operation-id-original: EBS Create Dynamic Location For Contact
 components:
   schemas:
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
+    RestfulModificationResult:
+      properties:
+        baseUri:
+          type: string
+        id:
+          format: int64
+          type: integer
+        instanceUri:
+          type: string
+        message:
+          type: string
+      title: RestfulModificationResult
+      type: object
     LastKnownLocationWrapper:
       anyOf:
       - required:
@@ -132,25 +151,6 @@ components:
       required:
       - arriveDate
       - expireDate
-      type: object
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
-    RestfulModificationResult:
-      properties:
-        baseUri:
-          type: string
-        id:
-          format: int64
-          type: integer
-        instanceUri:
-          type: string
-        message:
-          type: string
-      title: RestfulModificationResult
       type: object
   securitySchemes:
     API_Authorizer:

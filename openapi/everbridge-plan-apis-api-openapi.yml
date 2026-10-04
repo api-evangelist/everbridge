@@ -306,10 +306,6 @@ paths:
         connectionType: VPC_LINK
 components:
   schemas:
-    Tag:
-      type: string
-      description: A value used to contain a simple categorization.
-      example: eventType:hurricane
     PlanDetail:
       type: object
       properties:
@@ -369,66 +365,6 @@ components:
           items:
             type: string
           description: A list of communication template IDs for intended for closing communications.
-    PlanBase:
-      type: object
-      required:
-      - id
-      - name
-      - status
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-        status:
-          type: string
-          enum:
-          - DRAFT
-          - LIVE
-        eventTypes:
-          type: array
-          items:
-            type: string
-          description: Event types for the plan. Each value must exist in the event type library.
-        tags:
-          type: array
-          items:
-            $ref: '#/components/schemas/Tag'
-          description: A list of tags assigned to the communication plan.
-        templateCounts:
-          type: object
-          additionalProperties:
-            type: integer
-          description: A map from phase name (NEW, UPDATE, CLOSE) to the number of templates in that phase.
-        createdAt:
-          type: string
-          description: ISO 8601 formatted date-time string representing when the plan was created.
-        createdBy:
-          type: string
-        createdByName:
-          type: string
-        updatedAt:
-          type: string
-          description: ISO 8601 formatted date-time string representing when the plan was last updated.
-        updatedBy:
-          type: string
-        updatedByName:
-          type: string
-        createdRoleId:
-          type: string
-        updatedRoleId:
-          type: string
-        canEdit:
-          type: boolean
-          description: Whether the current caller can edit this plan.
-        canDelete:
-          type: boolean
-          description: Whether the current caller can delete this plan.
-        lastUsedAt:
-          type: string
-          description: ISO 8601 formatted date-time string representing when the plan was last updated by the logged in user.
     UpsertPlanRequest:
       type: object
       required:
@@ -502,6 +438,70 @@ components:
             totalCount:
               type: number
               description: The total number of elements across all pages.
+    PlanBase:
+      type: object
+      required:
+      - id
+      - name
+      - status
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum:
+          - DRAFT
+          - LIVE
+        eventTypes:
+          type: array
+          items:
+            type: string
+          description: Event types for the plan. Each value must exist in the event type library.
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+          description: A list of tags assigned to the communication plan.
+        templateCounts:
+          type: object
+          additionalProperties:
+            type: integer
+          description: A map from phase name (NEW, UPDATE, CLOSE) to the number of templates in that phase.
+        createdAt:
+          type: string
+          description: ISO 8601 formatted date-time string representing when the plan was created.
+        createdBy:
+          type: string
+        createdByName:
+          type: string
+        updatedAt:
+          type: string
+          description: ISO 8601 formatted date-time string representing when the plan was last updated.
+        updatedBy:
+          type: string
+        updatedByName:
+          type: string
+        createdRoleId:
+          type: string
+        updatedRoleId:
+          type: string
+        canEdit:
+          type: boolean
+          description: Whether the current caller can edit this plan.
+        canDelete:
+          type: boolean
+          description: Whether the current caller can delete this plan.
+        lastUsedAt:
+          type: string
+          description: ISO 8601 formatted date-time string representing when the plan was last updated by the logged in user.
+    Tag:
+      type: string
+      description: A value used to contain a simple categorization.
+      example: eventType:hurricane
   securitySchemes:
     API_Authorizer:
       type: apiKey

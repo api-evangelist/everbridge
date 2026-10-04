@@ -822,133 +822,20 @@ paths:
       x-operation-id-original: EBS AM Download Upload Template
 components:
   schemas:
-    ListAssetTypeResponse:
-      type: array
-      items:
-        type: object
-        properties:
-          id:
-            type: string
-          organizationId:
-            type: number
-          createdId:
-            type: number
-          createdName:
-            type: string
-          lastModifiedId:
-            type: number
-          lastModifiedName:
-            type: string
-          createdTimestamp:
-            type: number
-          lastModifiedTimestamp:
-            type: number
-          name:
-            type: string
-          legacy:
-            type: boolean
-          assetTypeCategory:
-            type: string
-          assetTypeTemplateId:
-            type: string
-          iconId:
-            type: string
-          alertable:
-            type: boolean
-          icon:
-            $ref: '#/components/schemas/AssetTypeIcon'
-    AssetTypeIcon:
-      allOf:
-      - $ref: '#/components/schemas/AssetIcon'
-      - type: object
-        properties:
-          dynamicMappings:
-            $ref: '#/components/schemas/AssetTypeDynamicMappings'
-    AssetPropertyDefinitionRequest:
-      required:
-      - assetPropertyDataType
-      - assetPropertyDisplayType
-      - assetPropertyType
-      - name
+    AssetTypeDynamicColorMapping:
       type: object
       properties:
-        id:
+        value:
           type: string
-        assetTypeId:
-          maxLength: 2147483647
-          minLength: 1
+        color:
           type: string
-        assetPropertyType:
-          type: string
-          enum:
-          - BASIC
-          - ADDRESS
-          - SYSTEM_PROPERTY
-          - CUSTOM_PROPERTY
-        assetPropertyDataType:
-          type: string
-          enum:
-          - STRING
-          - BOOLEAN
-          - LONG
-          - DOUBLE
-          - DATETIME
-          - GEOJSON
-          - URL
-        assetPropertyDisplayType:
-          type: string
-          enum:
-          - SINGLE
-          - TEXTBOX
-          - MULTIPLE
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-        aliasName:
-          maxLength: 200
-          minLength: 1
-          type: string
-        description:
-          maxLength: 2000
-          minLength: 0
-          type: string
-        allowedValues:
-          description: Required when assetPropertyDisplayType is SINGLE or MULTIPLE
-          type: array
-          items:
-            type: object
-    AssetType:
+    AssetTypeUpdateRequest:
       required:
       - iconId
       - name
+      - propertyDefinitions
       type: object
       properties:
-        id:
-          type: string
-        organizationId:
-          type: integer
-          format: int64
-        createdId:
-          type: integer
-          format: int64
-        createdName:
-          type: string
-        createdProxyName:
-          type: string
-        lastModifiedId:
-          type: integer
-          format: int64
-        lastModifiedName:
-          type: string
-        lastModifiedProxyName:
-          type: string
-        createdTimestamp:
-          type: string
-          format: date-time
-        lastModifiedTimestamp:
-          type: string
-          format: date-time
         name:
           maxLength: 200
           minLength: 1
@@ -956,57 +843,17 @@ components:
         description:
           maxLength: 2000
           minLength: 0
-          type: string
-        seq:
-          type: integer
-          format: int32
-        legacy:
-          type: boolean
-        assetTypeCategory:
-          type: string
-          enum:
-          - REGULAR
-          - SUPPLY_CHAIN_STOP
-          - SUPPLY_CHAIN_ROUTE
-        propertyDefinitions:
-          type: array
-          items:
-            $ref: '#/components/schemas/AssetPropertyDefinition'
-        assetTypeTemplateId:
-          type: string
-        assetTypeTemplateName:
           type: string
         iconId:
           type: string
         alertable:
           type: boolean
-        icon:
-          $ref: '#/components/schemas/AssetTypeIcon'
-    AssetTypeDynamicMappings:
-      type: object
-      properties:
-        attributeId:
-          type: string
-        mappings:
+        propertyDefinitions:
           type: array
           items:
-            $ref: '#/components/schemas/AssetTypeDynamicColorMapping'
-    AssetIcon:
-      type: object
-      properties:
-        source:
-          type: string
-          enum:
-          - SYSTEM
-          - CUSTOM
-        id:
-          type: string
-        name:
-          type: string
-        contentUrl:
-          type: string
-        color:
-          type: string
+            $ref: '#/components/schemas/AssetPropertyDefinitionRequest'
+        icon:
+          $ref: '#/components/schemas/AssetTypeIcon'
     CreateAssetTypeRequest:
       required:
       - assetTypeTemplateId
@@ -1120,31 +967,37 @@ components:
           type: array
           items:
             type: object
-    LinkedToAssetResponse:
-      type: object
-      properties:
-        linkedToExistingAsset:
-          type: boolean
-    organizationId:
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      maxLength: 16
-      type: integer
-      example: '1536984111644674'
-      default: '1536984111644674'
-    AssetTypeDynamicColorMapping:
-      type: object
-      properties:
-        value:
-          type: string
-        color:
-          type: string
-    AssetTypeUpdateRequest:
+    AssetType:
       required:
       - iconId
       - name
-      - propertyDefinitions
       type: object
       properties:
+        id:
+          type: string
+        organizationId:
+          type: integer
+          format: int64
+        createdId:
+          type: integer
+          format: int64
+        createdName:
+          type: string
+        createdProxyName:
+          type: string
+        lastModifiedId:
+          type: integer
+          format: int64
+        lastModifiedName:
+          type: string
+        lastModifiedProxyName:
+          type: string
+        createdTimestamp:
+          type: string
+          format: date-time
+        lastModifiedTimestamp:
+          type: string
+          format: date-time
         name:
           maxLength: 200
           minLength: 1
@@ -1153,16 +1006,163 @@ components:
           maxLength: 2000
           minLength: 0
           type: string
+        seq:
+          type: integer
+          format: int32
+        legacy:
+          type: boolean
+        assetTypeCategory:
+          type: string
+          enum:
+          - REGULAR
+          - SUPPLY_CHAIN_STOP
+          - SUPPLY_CHAIN_ROUTE
+        propertyDefinitions:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetPropertyDefinition'
+        assetTypeTemplateId:
+          type: string
+        assetTypeTemplateName:
+          type: string
         iconId:
           type: string
         alertable:
           type: boolean
-        propertyDefinitions:
-          type: array
-          items:
-            $ref: '#/components/schemas/AssetPropertyDefinitionRequest'
         icon:
           $ref: '#/components/schemas/AssetTypeIcon'
+    organizationId:
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      maxLength: 16
+      type: integer
+      example: '1536984111644674'
+      default: '1536984111644674'
+    ListAssetTypeResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+          organizationId:
+            type: number
+          createdId:
+            type: number
+          createdName:
+            type: string
+          lastModifiedId:
+            type: number
+          lastModifiedName:
+            type: string
+          createdTimestamp:
+            type: number
+          lastModifiedTimestamp:
+            type: number
+          name:
+            type: string
+          legacy:
+            type: boolean
+          assetTypeCategory:
+            type: string
+          assetTypeTemplateId:
+            type: string
+          iconId:
+            type: string
+          alertable:
+            type: boolean
+          icon:
+            $ref: '#/components/schemas/AssetTypeIcon'
+    AssetTypeIcon:
+      allOf:
+      - $ref: '#/components/schemas/AssetIcon'
+      - type: object
+        properties:
+          dynamicMappings:
+            $ref: '#/components/schemas/AssetTypeDynamicMappings'
+    AssetTypeDynamicMappings:
+      type: object
+      properties:
+        attributeId:
+          type: string
+        mappings:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetTypeDynamicColorMapping'
+    LinkedToAssetResponse:
+      type: object
+      properties:
+        linkedToExistingAsset:
+          type: boolean
+    AssetPropertyDefinitionRequest:
+      required:
+      - assetPropertyDataType
+      - assetPropertyDisplayType
+      - assetPropertyType
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+        assetTypeId:
+          maxLength: 2147483647
+          minLength: 1
+          type: string
+        assetPropertyType:
+          type: string
+          enum:
+          - BASIC
+          - ADDRESS
+          - SYSTEM_PROPERTY
+          - CUSTOM_PROPERTY
+        assetPropertyDataType:
+          type: string
+          enum:
+          - STRING
+          - BOOLEAN
+          - LONG
+          - DOUBLE
+          - DATETIME
+          - GEOJSON
+          - URL
+        assetPropertyDisplayType:
+          type: string
+          enum:
+          - SINGLE
+          - TEXTBOX
+          - MULTIPLE
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+        aliasName:
+          maxLength: 200
+          minLength: 1
+          type: string
+        description:
+          maxLength: 2000
+          minLength: 0
+          type: string
+        allowedValues:
+          description: Required when assetPropertyDisplayType is SINGLE or MULTIPLE
+          type: array
+          items:
+            type: object
+    AssetIcon:
+      type: object
+      properties:
+        source:
+          type: string
+          enum:
+          - SYSTEM
+          - CUSTOM
+        id:
+          type: string
+        name:
+          type: string
+        contentUrl:
+          type: string
+        color:
+          type: string
   securitySchemes:
     BasicAuth:
       type: http

@@ -684,6 +684,12 @@ components:
       - lastPageUri
       - page
       type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
     ConferenceBridgeUpdateRequestSchema:
       properties:
         countryCode:
@@ -707,12 +713,6 @@ components:
             type: object
           type: array
       type: object
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
     ConferenceBridgeRequestSchema:
       properties:
         countryCode:

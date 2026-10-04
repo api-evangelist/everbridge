@@ -54,6 +54,12 @@ paths:
       x-operation-id-original: EBS AM Get Asset License Limit Stats
 components:
   schemas:
+    organizationId:
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      maxLength: 16
+      type: integer
+      example: '1536984111644674'
+      default: '1536984111644674'
     AssetLicenseLimitStats:
       type: object
       properties:
@@ -63,12 +69,6 @@ components:
         alertableAssetsCount:
           type: integer
           format: int64
-    organizationId:
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      maxLength: 16
-      type: integer
-      example: '1536984111644674'
-      default: '1536984111644674'
   securitySchemes:
     BasicAuth:
       type: http

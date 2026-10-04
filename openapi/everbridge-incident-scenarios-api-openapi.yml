@@ -266,16 +266,113 @@ paths:
       x-operation-id-original: EBS Update Incident Scenario
 components:
   schemas:
-    CascadingSetting:
+    Option:
       properties:
-        cascadingLevels:
-          items:
-            type: string
-          type: array
-        cascadingOptions:
-          items:
-            $ref: '#/components/schemas/Option'
-          type: array
+        name:
+          type: string
+      type: object
+    RestfulInstanceResult:
+      properties:
+        message:
+          type: string
+        result:
+          type: object
+      title: RestfulInstanceResult
+      type: object
+    VariableOption:
+      properties:
+        accountId:
+          format: int64
+          type: integer
+        createdAmsRoleId:
+          type: string
+        createdDate:
+          format: date-time
+          type: string
+        createdId:
+          format: int64
+          type: integer
+        createdName:
+          type: string
+        createdProxyName:
+          type: string
+        id:
+          format: int64
+          type: integer
+        isSelected:
+          type: boolean
+        lastModifiedAmsRoleId:
+          type: string
+        lastModifiedDate:
+          format: date-time
+          type: string
+        lastModifiedId:
+          format: int64
+          type: integer
+        lastModifiedName:
+          type: string
+        lastModifiedProxyName:
+          type: string
+        organizationId:
+          format: int64
+          type: integer
+        resourceBundleId:
+          format: int64
+          type: integer
+        seq:
+          format: int32
+          type: integer
+        shortId:
+          type: string
+        status:
+          enum:
+          - A
+          - D
+          type: string
+        txt:
+          type: string
+        val:
+          type: string
+        variableId:
+          format: int64
+          type: integer
+      type: object
+    RestfulModificationResult:
+      properties:
+        baseUri:
+          type: string
+        id:
+          format: int64
+          type: integer
+        instanceUri:
+          type: string
+        message:
+          type: string
+      title: RestfulModificationResult
+      type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
+    RestfulCollectionResult:
+      properties:
+        currentPageUri:
+          type: string
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        nextPageUri:
+          type: string
+        page:
+          $ref: '#/components/schemas/DataPageObject'
+        previousPageUri:
+          type: string
+      title: RestfulCollectionResult
       type: object
     IncidentScenarioWrapper:
       description: An incidentScenario object to launch.
@@ -329,18 +426,19 @@ components:
             $ref: '#/components/schemas/IncidentTemplateBO'
           type: array
       type: object
-    FormCascadingItem:
+    IncidentTemplateBO:
       properties:
-        cascadingVars:
-          items:
-            $ref: '#/components/schemas/Option'
-          type: array
-        requiredLevel:
-          format: int32
+        id:
+          format: int64
           type: integer
-        selectedLevel:
-          format: int32
-          type: integer
+        name:
+          type: string
+        status:
+          type: string
+        sysVarCurrentTimeFormat:
+          type: string
+        sysVarTodayDateFormat:
+          type: string
       type: object
     DataPageObject:
       properties:
@@ -371,121 +469,16 @@ components:
           type: integer
       title: DataPage«object»
       type: object
-    Option:
+    CascadingSetting:
       properties:
-        name:
-          type: string
-      type: object
-    RestfulInstanceResult:
-      properties:
-        message:
-          type: string
-        result:
-          type: object
-      title: RestfulInstanceResult
-      type: object
-    VariableItem:
-      properties:
-        accountId:
-          format: int64
-          type: integer
-        cascadingSetting:
-          $ref: '#/components/schemas/CascadingSetting'
-        cascadingSettingStr:
-          type: string
-        createdAmsRoleId:
-          type: string
-        createdDate:
-          format: date-time
-          type: string
-        createdId:
-          format: int64
-          type: integer
-        createdName:
-          type: string
-        createdProxyName:
-          type: string
-        extProperties:
-          additionalProperties:
-            type: string
-          type: object
-        id:
-          format: int64
-          type: integer
-        lastModifiedAmsRoleId:
-          type: string
-        lastModifiedDate:
-          format: date-time
-          type: string
-        lastModifiedId:
-          format: int64
-          type: integer
-        lastModifiedName:
-          type: string
-        lastModifiedProxyName:
-          type: string
-        module:
-          type: string
-        name:
-          type: string
-        organizationId:
-          format: int64
-          type: integer
-        resourceBundleId:
-          format: int64
-          type: integer
-        seq:
-          format: int32
-          type: integer
-        shortId:
-          type: string
-        status:
-          enum:
-          - A
-          - D
-          type: string
-        token:
-          type: string
-        tooltip:
-          type: string
-        topType:
-          type: string
-        uniqueKey:
-          type: string
-        validation:
-          type: string
-        varType:
-          enum:
-          - Textbox
-          - Textarea
-          - Date
-          - DateRange
-          - Single
-          - Multiple
-          - ComboBox
-          - LocationGeoPoint
-          - LocationGeoShapes
-          - SingleRadio
-          - Cascading
-          type: string
-        variableOptions:
+        cascadingLevels:
           items:
-            $ref: '#/components/schemas/VariableOption'
+            type: string
           type: array
-      type: object
-    IncidentTemplateBO:
-      properties:
-        id:
-          format: int64
-          type: integer
-        name:
-          type: string
-        status:
-          type: string
-        sysVarCurrentTimeFormat:
-          type: string
-        sysVarTodayDateFormat:
-          type: string
+        cascadingOptions:
+          items:
+            $ref: '#/components/schemas/Option'
+          type: array
       type: object
     FormVariableItem:
       properties:
@@ -605,29 +598,28 @@ components:
           deprecated: true
           type: string
       type: object
-    RestfulCollectionResult:
+    FormCascadingItem:
       properties:
-        currentPageUri:
-          type: string
-        firstPageUri:
-          type: string
-        lastPageUri:
-          type: string
-        message:
-          type: string
-        nextPageUri:
-          type: string
-        page:
-          $ref: '#/components/schemas/DataPageObject'
-        previousPageUri:
-          type: string
-      title: RestfulCollectionResult
+        cascadingVars:
+          items:
+            $ref: '#/components/schemas/Option'
+          type: array
+        requiredLevel:
+          format: int32
+          type: integer
+        selectedLevel:
+          format: int32
+          type: integer
       type: object
-    VariableOption:
+    VariableItem:
       properties:
         accountId:
           format: int64
           type: integer
+        cascadingSetting:
+          $ref: '#/components/schemas/CascadingSetting'
+        cascadingSettingStr:
+          type: string
         createdAmsRoleId:
           type: string
         createdDate:
@@ -640,11 +632,13 @@ components:
           type: string
         createdProxyName:
           type: string
+        extProperties:
+          additionalProperties:
+            type: string
+          type: object
         id:
           format: int64
           type: integer
-        isSelected:
-          type: boolean
         lastModifiedAmsRoleId:
           type: string
         lastModifiedDate:
@@ -656,6 +650,10 @@ components:
         lastModifiedName:
           type: string
         lastModifiedProxyName:
+          type: string
+        module:
+          type: string
+        name:
           type: string
         organizationId:
           format: int64
@@ -673,32 +671,34 @@ components:
           - A
           - D
           type: string
-        txt:
+        token:
           type: string
-        val:
+        tooltip:
           type: string
-        variableId:
-          format: int64
-          type: integer
-      type: object
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
-    RestfulModificationResult:
-      properties:
-        baseUri:
+        topType:
           type: string
-        id:
-          format: int64
-          type: integer
-        instanceUri:
+        uniqueKey:
           type: string
-        message:
+        validation:
           type: string
-      title: RestfulModificationResult
+        varType:
+          enum:
+          - Textbox
+          - Textarea
+          - Date
+          - DateRange
+          - Single
+          - Multiple
+          - ComboBox
+          - LocationGeoPoint
+          - LocationGeoShapes
+          - SingleRadio
+          - Cascading
+          type: string
+        variableOptions:
+          items:
+            $ref: '#/components/schemas/VariableOption'
+          type: array
       type: object
   securitySchemes:
     API_Authorizer:

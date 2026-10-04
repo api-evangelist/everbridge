@@ -149,22 +149,6 @@ paths:
       x-operation-id-original: EBS Get Attachment
 components:
   schemas:
-    AttachmentRestfulModificationResult:
-      properties:
-        fileId:
-          type: string
-        fileName:
-          type: string
-        image:
-          type: boolean
-        message:
-          type: string
-        mimeType:
-          type: string
-        size:
-          format: int64
-          type: integer
-      type: object
     organizationId:
       default: '1536984111644674'
       description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
@@ -186,6 +170,22 @@ components:
           type: string
         image:
           type: boolean
+        mimeType:
+          type: string
+        size:
+          format: int64
+          type: integer
+      type: object
+    AttachmentRestfulModificationResult:
+      properties:
+        fileId:
+          type: string
+        fileName:
+          type: string
+        image:
+          type: boolean
+        message:
+          type: string
         mimeType:
           type: string
         size:

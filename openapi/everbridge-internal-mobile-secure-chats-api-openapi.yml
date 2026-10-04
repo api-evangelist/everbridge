@@ -722,6 +722,124 @@ paths:
         passthroughBehavior: when_no_match
 components:
   schemas:
+    MobileContactAddress:
+      type: object
+      properties:
+        streetAddress:
+          type: string
+        postalCode:
+          type: string
+        source:
+          type: string
+          enum:
+          - MANUAL
+          - AUTO
+        state:
+          type: string
+        locationName:
+          type: string
+        suite:
+          type: string
+        gisLocation:
+          $ref: '#/components/schemas/GisLocation'
+        country:
+          type: string
+        city:
+          type: string
+    GisLocation:
+      type: object
+      properties:
+        lon:
+          type: number
+          format: double
+        lat:
+          type: number
+          format: double
+        'null':
+          type: boolean
+    MobileContactAttribute:
+      type: object
+      properties:
+        orgAttrId:
+          type: integer
+          format: int64
+        name:
+          type: string
+        values:
+          type: array
+          items:
+            type: object
+        dataType:
+          type: string
+          enum:
+          - STRING
+          - NUMBER
+          - DATE
+          - BOOLEAN
+          - POLYGON
+        displayFormat:
+          type: string
+          enum:
+          - L
+          - F
+          - S
+    AddContactsToChatRequest:
+      type: object
+      properties:
+        contactIds:
+          type: array
+          description: Contact Ids
+          items:
+            type: string
+    SMUnreadMessageRequest:
+      type: object
+      properties:
+        chatContextStrings:
+          type: array
+          items:
+            type: string
+    InviteToVoipChatRequestBody:
+      type: object
+      properties:
+        contactIds:
+          type: array
+          description: Contact Ids
+          items:
+            type: string
+        displayName:
+          type: string
+        chatType:
+          type: string
+        callerDisplayName:
+          type: string
+        region:
+          type: string
+    MobileContactDetail:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        firstName:
+          type: string
+        lastName:
+          type: string
+        smUserId:
+          type: string
+        contactAttributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/MobileContactAttribute'
+        paths:
+          type: array
+          items:
+            $ref: '#/components/schemas/MobileContactPath'
+        address:
+          type: array
+          items:
+            $ref: '#/components/schemas/MobileContactAddress'
+        smUser:
+          type: boolean
     MobileContactPath:
       type: object
       properties:
@@ -761,13 +879,15 @@ components:
           - MSTEAMS
         prompt:
           type: string
-    SMUnreadMessageRequest:
+    ChatKeyRequestBody:
       type: object
       properties:
-        chatContextStrings:
-          type: array
-          items:
-            type: string
+        channelName:
+          type: string
+        deviceId:
+          type: string
+        publicKey:
+          type: string
     RegisterDeviceRequestBody:
       type: object
       properties:
@@ -777,48 +897,11 @@ components:
           type: string
         publicKey:
           type: string
-    InviteToVoipChatRequestBody:
+    SetChatNameRequestBody:
       type: object
       properties:
-        contactIds:
-          type: array
-          description: Contact Ids
-          items:
-            type: string
-        displayName:
+        channelName:
           type: string
-        chatType:
-          type: string
-        callerDisplayName:
-          type: string
-        region:
-          type: string
-    MobileContactAttribute:
-      type: object
-      properties:
-        orgAttrId:
-          type: integer
-          format: int64
-        name:
-          type: string
-        values:
-          type: array
-          items:
-            type: object
-        dataType:
-          type: string
-          enum:
-          - STRING
-          - NUMBER
-          - DATE
-          - BOOLEAN
-          - POLYGON
-        displayFormat:
-          type: string
-          enum:
-          - L
-          - F
-          - S
     InviteToChatRequestBody:
       type: object
       properties:
@@ -830,89 +913,6 @@ components:
         displayName:
           type: string
         chatType:
-          type: string
-    MobileContactDetail:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        firstName:
-          type: string
-        lastName:
-          type: string
-        smUserId:
-          type: string
-        contactAttributes:
-          type: array
-          items:
-            $ref: '#/components/schemas/MobileContactAttribute'
-        paths:
-          type: array
-          items:
-            $ref: '#/components/schemas/MobileContactPath'
-        address:
-          type: array
-          items:
-            $ref: '#/components/schemas/MobileContactAddress'
-        smUser:
-          type: boolean
-    MobileContactAddress:
-      type: object
-      properties:
-        streetAddress:
-          type: string
-        postalCode:
-          type: string
-        source:
-          type: string
-          enum:
-          - MANUAL
-          - AUTO
-        state:
-          type: string
-        locationName:
-          type: string
-        suite:
-          type: string
-        gisLocation:
-          $ref: '#/components/schemas/GisLocation'
-        country:
-          type: string
-        city:
-          type: string
-    ChatKeyRequestBody:
-      type: object
-      properties:
-        channelName:
-          type: string
-        deviceId:
-          type: string
-        publicKey:
-          type: string
-    GisLocation:
-      type: object
-      properties:
-        lon:
-          type: number
-          format: double
-        lat:
-          type: number
-          format: double
-        'null':
-          type: boolean
-    AddContactsToChatRequest:
-      type: object
-      properties:
-        contactIds:
-          type: array
-          description: Contact Ids
-          items:
-            type: string
-    SetChatNameRequestBody:
-      type: object
-      properties:
-        channelName:
           type: string
   securitySchemes:
     API_Authorizer:

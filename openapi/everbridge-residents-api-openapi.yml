@@ -77,50 +77,18 @@ paths:
       x-operation-id-original: EBS Query Residents By Filters
 components:
   schemas:
-    ResidentPropertyFilterWrapper:
+    JsonResult:
       properties:
-        field:
+        data:
+          type: object
+        message:
           type: string
-        values:
-          items:
-            type: string
-          type: array
-      type: object
-    ResidentFiltersWrapper:
-      properties:
-        residents:
-          $ref: '#/components/schemas/UmsContactsWrapper'
-        searchShapes:
-          items:
-            $ref: '#/components/schemas/SearchShapeWrapper'
-          type: array
-      type: object
-    GeoPointWrapper:
-      properties:
-        x:
-          format: double
-          type: number
-        y:
-          format: double
-          type: number
-      type: object
-    GeoShapeWrapper:
-      properties:
-        points:
-          items:
-            $ref: '#/components/schemas/GeoPointWrapper'
-          type: array
-      type: object
-    UmsUploadWrapper:
-      properties:
-        pattern:
+        resultCode:
           type: string
-        values:
-          items:
-            additionalProperties:
-              type: string
-            type: object
-          type: array
+        success:
+          type: boolean
+        type:
+          type: string
       type: object
     SearchShapeWrapper:
       properties:
@@ -154,6 +122,42 @@ components:
         shape:
           $ref: '#/components/schemas/GeoShapeWrapper'
       type: object
+    ResidentFiltersWrapper:
+      properties:
+        residents:
+          $ref: '#/components/schemas/UmsContactsWrapper'
+        searchShapes:
+          items:
+            $ref: '#/components/schemas/SearchShapeWrapper'
+          type: array
+      type: object
+    GeoShapeWrapper:
+      properties:
+        points:
+          items:
+            $ref: '#/components/schemas/GeoPointWrapper'
+          type: array
+      type: object
+    UmsUploadWrapper:
+      properties:
+        pattern:
+          type: string
+        values:
+          items:
+            additionalProperties:
+              type: string
+            type: object
+          type: array
+      type: object
+    GeoPointWrapper:
+      properties:
+        x:
+          format: double
+          type: number
+        y:
+          format: double
+          type: number
+      type: object
     UmsContactsWrapper:
       properties:
         properties:
@@ -167,18 +171,14 @@ components:
             $ref: '#/components/schemas/UmsUploadWrapper'
           type: array
       type: object
-    JsonResult:
+    ResidentPropertyFilterWrapper:
       properties:
-        data:
-          type: object
-        message:
+        field:
           type: string
-        resultCode:
-          type: string
-        success:
-          type: boolean
-        type:
-          type: string
+        values:
+          items:
+            type: string
+          type: array
       type: object
   securitySchemes:
     API_Authorizer:

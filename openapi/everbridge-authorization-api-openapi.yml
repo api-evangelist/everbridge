@@ -214,6 +214,64 @@ components:
           format: date-time
         value:
           type: string
+    ServerClientAuthorizeRequest:
+      required:
+      - clientId
+      - clientKey
+      - externalAttributeValue
+      - organizationId
+      type: object
+      properties:
+        clientId:
+          type: string
+          description: App Client ID
+          example: 3efb35a2-fdee-44bb-b476-2a45cada8b00
+        clientKey:
+          type: string
+          description: App Client Key
+          example: ZZ6cQ5a0txW4gFjbHe8DNtsSjRPIo8PCU6zm3RmYdvHREO8QYNseWdsUOvoWQxvllOsexRDam0rSiDSWfrv1hQaWr2moAtMtQszYZNlH2N6m6WBV3luv9XW83QJ+ePG8
+        organizationId:
+          pattern: ^\d+$
+          type: string
+          description: The Organization ID of the Contact the request is being made on behalf of
+          example: '1328214341321073'
+        externalAttributeName:
+          maxLength: 50
+          minLength: 1
+          type: string
+          description: The name of the Attribute stored on the Everbridge Contact to match the External Attribute Value against. If this parameter is blank or is not provided then the External ID attribute will be used to search for the contact.
+          example: uniqueAttributeName
+        externalAttributeValue:
+          maxLength: 50
+          minLength: 1
+          type: string
+          description: The External Attribute value. This value should be unique for each Contact across the Organization.If the External Attribute Name parameter is blank or not provided then the External ID attribute will be used to search for the contact.
+          example: uuid
+    AuthorizeV2Request:
+      required:
+      - grant_type
+      - password
+      - username
+      type: object
+      properties:
+        username:
+          type: string
+          description: The resource owner username.
+          example: username
+        password:
+          type: string
+          description: The resource owner password.
+          example: password
+        grant_type:
+          type: string
+          description: Value MUST be set to "password".
+          example: password
+        scope:
+          type: string
+          description: The scope of the access request.
+        organizationId:
+          type: string
+          description: The user's organization id.
     ServerClientAuthorizeResponse:
       required:
       - accessToken
@@ -259,64 +317,6 @@ components:
           type: string
           description: Organization id
           example: '295910361798625'
-    AuthorizeV2Request:
-      required:
-      - grant_type
-      - password
-      - username
-      type: object
-      properties:
-        username:
-          type: string
-          description: The resource owner username.
-          example: username
-        password:
-          type: string
-          description: The resource owner password.
-          example: password
-        grant_type:
-          type: string
-          description: Value MUST be set to "password".
-          example: password
-        scope:
-          type: string
-          description: The scope of the access request.
-        organizationId:
-          type: string
-          description: The user's organization id.
-    ServerClientAuthorizeRequest:
-      required:
-      - clientId
-      - clientKey
-      - externalAttributeValue
-      - organizationId
-      type: object
-      properties:
-        clientId:
-          type: string
-          description: App Client ID
-          example: 3efb35a2-fdee-44bb-b476-2a45cada8b00
-        clientKey:
-          type: string
-          description: App Client Key
-          example: ZZ6cQ5a0txW4gFjbHe8DNtsSjRPIo8PCU6zm3RmYdvHREO8QYNseWdsUOvoWQxvllOsexRDam0rSiDSWfrv1hQaWr2moAtMtQszYZNlH2N6m6WBV3luv9XW83QJ+ePG8
-        organizationId:
-          pattern: ^\d+$
-          type: string
-          description: The Organization ID of the Contact the request is being made on behalf of
-          example: '1328214341321073'
-        externalAttributeName:
-          maxLength: 50
-          minLength: 1
-          type: string
-          description: The name of the Attribute stored on the Everbridge Contact to match the External Attribute Value against. If this parameter is blank or is not provided then the External ID attribute will be used to search for the contact.
-          example: uniqueAttributeName
-        externalAttributeValue:
-          maxLength: 50
-          minLength: 1
-          type: string
-          description: The External Attribute value. This value should be unique for each Contact across the Organization.If the External Attribute Name parameter is blank or not provided then the External ID attribute will be used to search for the contact.
-          example: uuid
   securitySchemes:
     API_Authorizer:
       type: apiKey

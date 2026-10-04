@@ -730,15 +730,103 @@ paths:
       x-operation-id-original: EBS Update Group
 components:
   schemas:
-    RestfulBatchOperationResult:
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
+    groups:
       properties:
-        code:
-          format: int64
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        page:
+          properties:
+            currentPageNo:
+              type: integer
+            data:
+              items:
+                properties:
+                  accountId:
+                    type: integer
+                  createdId:
+                    type: integer
+                  dirty:
+                    type: boolean
+                  enableSequencedContact:
+                    type: boolean
+                  id:
+                    type: integer
+                  lastModifiedDate:
+                    type: integer
+                  lastModifiedId:
+                    type: integer
+                  lastModifiedName:
+                    type: string
+                  lastModifiedTime:
+                    type: integer
+                  lastSynchronizedTime:
+                    type: integer
+                  name:
+                    type: string
+                  organizationId:
+                    type: integer
+                  parentId:
+                    type: integer
+                  resourceBundleId:
+                    type: integer
+                type: object
+              type: array
+            pageSize:
+              type: integer
+            start:
+              type: integer
+            totalCount:
+              type: integer
+            totalPageCount:
+              type: integer
+          type: object
+      type: object
+    groupsRequest:
+      properties:
+        calendarId:
+          description: Id of the scheduled calendar event
           type: integer
-        data:
-          items:
-            type: string
-          type: array
+        description:
+          description: The description for this group
+          type: string
+        name:
+          description: The name of the group
+          example: ''
+          type: string
+        parentId:
+          description: The ID of the parent group. This value is -1 if there is no parent
+          type: integer
+      required:
+      - name
+      type: object
+    error:
+      properties:
+        message:
+          type: string
+        status:
+          type: integer
+      required:
+      - status
+      - message
+      type: object
+    postUpdateResponse:
+      properties:
+        baseUri:
+          type: string
+        id:
+          type: integer
+        instanceUri:
+          type: string
         message:
           type: string
       type: object
@@ -805,111 +893,23 @@ components:
       - message
       - result
       type: object
-    groups:
+    RestfulBatchOperationResult:
       properties:
-        firstPageUri:
-          type: string
-        lastPageUri:
-          type: string
+        code:
+          format: int64
+          type: integer
+        data:
+          items:
+            type: string
+          type: array
         message:
           type: string
-        page:
-          properties:
-            currentPageNo:
-              type: integer
-            data:
-              items:
-                properties:
-                  accountId:
-                    type: integer
-                  createdId:
-                    type: integer
-                  dirty:
-                    type: boolean
-                  enableSequencedContact:
-                    type: boolean
-                  id:
-                    type: integer
-                  lastModifiedDate:
-                    type: integer
-                  lastModifiedId:
-                    type: integer
-                  lastModifiedName:
-                    type: string
-                  lastModifiedTime:
-                    type: integer
-                  lastSynchronizedTime:
-                    type: integer
-                  name:
-                    type: string
-                  organizationId:
-                    type: integer
-                  parentId:
-                    type: integer
-                  resourceBundleId:
-                    type: integer
-                type: object
-              type: array
-            pageSize:
-              type: integer
-            start:
-              type: integer
-            totalCount:
-              type: integer
-            totalPageCount:
-              type: integer
-          type: object
       type: object
     contactGroupsRequest:
       description: Contact id
       items:
         type: string
       type: array
-    groupsRequest:
-      properties:
-        calendarId:
-          description: Id of the scheduled calendar event
-          type: integer
-        description:
-          description: The description for this group
-          type: string
-        name:
-          description: The name of the group
-          example: ''
-          type: string
-        parentId:
-          description: The ID of the parent group. This value is -1 if there is no parent
-          type: integer
-      required:
-      - name
-      type: object
-    postUpdateResponse:
-      properties:
-        baseUri:
-          type: string
-        id:
-          type: integer
-        instanceUri:
-          type: string
-        message:
-          type: string
-      type: object
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
-    error:
-      properties:
-        message:
-          type: string
-        status:
-          type: integer
-      required:
-      - status
-      - message
-      type: object
   securitySchemes:
     API_Authorizer:
       description: oAuth Token

@@ -234,10 +234,44 @@ paths:
         connectionType: VPC_LINK
 components:
   schemas:
+    CommsResponse:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the communication that was launched.
     TemplateReservationList:
       type: array
       items:
         $ref: '#/components/schemas/TemplateReservation'
+    TemplateReservationRequest:
+      type: object
+      properties:
+        templateId:
+          type: string
+          description: The template being reserved.
+        templateType:
+          type: string
+          description: The type of the communication template to reserve.
+          enum:
+          - legacy
+          - communication
+        systemId:
+          type: string
+          description: The identifier of the system that is reserving the template.
+        systemEntityId:
+          type: string
+          description: A unique identifier, allowing the caller to indicate which item on it’s end is holding the reservation.
+        systemUrl:
+          type: string
+          description: A self-generated URL offering a helpful link back to the reservation holder.
+      required:
+      - templateId
+      - templateType
+      - systemId
+      - systemUrl
     TemplateReservation:
       type: object
       properties:
@@ -266,40 +300,6 @@ components:
         createdUserId:
           type: string
           description: The userId who created the reservation.
-    CommsResponse:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          type: string
-          description: The ID of the communication that was launched.
-    TemplateReservationRequest:
-      type: object
-      properties:
-        templateId:
-          type: string
-          description: The template being reserved.
-        templateType:
-          type: string
-          description: The type of the communication template to reserve.
-          enum:
-          - legacy
-          - communication
-        systemId:
-          type: string
-          description: The identifier of the system that is reserving the template.
-        systemEntityId:
-          type: string
-          description: A unique identifier, allowing the caller to indicate which item on it’s end is holding the reservation.
-        systemUrl:
-          type: string
-          description: A self-generated URL offering a helpful link back to the reservation holder.
-      required:
-      - templateId
-      - templateType
-      - systemId
-      - systemUrl
   securitySchemes:
     API_Authorizer:
       type: apiKey

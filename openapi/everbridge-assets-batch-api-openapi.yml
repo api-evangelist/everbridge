@@ -202,30 +202,16 @@ components:
           format: int32
         message:
           type: string
-    Address:
+    AssetPropertyValue:
       type: object
       properties:
-        country:
+        propertyId:
+          maxLength: 2147483647
+          minLength: 1
           type: string
-        state:
-          maxLength: 100
-          minLength: 0
-          type: string
-        city:
-          maxLength: 100
-          minLength: 0
-          type: string
-        postalCode:
-          maxLength: 20
-          minLength: 0
-          type: string
-        streetAddress1:
-          maxLength: 200
-          minLength: 0
-          type: string
-        streetAddress2:
-          maxLength: 200
-          minLength: 0
+        value:
+          type: object
+        name:
           type: string
     BatchResponse:
       type: object
@@ -260,16 +246,30 @@ components:
           type: array
           items:
             type: string
-    AssetPropertyValue:
+    Address:
       type: object
       properties:
-        propertyId:
-          maxLength: 2147483647
-          minLength: 1
+        country:
           type: string
-        value:
-          type: object
-        name:
+        state:
+          maxLength: 100
+          minLength: 0
+          type: string
+        city:
+          maxLength: 100
+          minLength: 0
+          type: string
+        postalCode:
+          maxLength: 20
+          minLength: 0
+          type: string
+        streetAddress1:
+          maxLength: 200
+          minLength: 0
+          type: string
+        streetAddress2:
+          maxLength: 200
+          minLength: 0
           type: string
     IndividualResponse:
       type: object

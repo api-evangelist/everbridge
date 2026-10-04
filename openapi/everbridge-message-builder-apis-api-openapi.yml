@@ -108,31 +108,40 @@ components:
           - Informational
           - Reassuring
           description: The tone to apply
-    GenerateMessageRequest:
+    RectifyOperation:
       type: object
       required:
-      - operations
+      - type
       properties:
-        sourceContent:
+        type:
           type: string
-          description: The source input content to process.
-        contentType:
+          enum:
+          - Rectify
+    LengthOperation:
+      type: object
+      required:
+      - type
+      - value
+      properties:
+        type:
           type: string
-          default: text/plain
-          description: Content type of the source content
-        contentChunkIndex:
-          type: integer
-          description: The chunk index. 0 is first chunk.-1 is the last chunk
-        operations:
-          type: array
-          items:
-            $ref: '#/components/schemas/GenerateMessageOperation'
-          description: Operations to apply to the source content
-        messageContext:
-          $ref: '#/components/schemas/GenerateMessageContext'
-        maxChars:
-          type: integer
-          description: Maximum character limit for the generated message
+          enum:
+          - Length
+        value:
+          type: string
+          enum:
+          - Shortest
+          - Shorter
+          - Same
+          - Longer
+          - Longest
+          description: Value for length adjustment
+    GenerateMessageResponse:
+      type: object
+      properties:
+        content:
+          type: string
+          description: The final content.
         sessionId:
           type: string
           description: A unique session identifier used to maintain conversation state across multiple interactions。
@@ -189,34 +198,34 @@ components:
               maxItems: 1
               items:
                 type: string
-    GenerateMessageResponse:
+    GenerateMessageRequest:
       type: object
+      required:
+      - operations
       properties:
-        content:
+        sourceContent:
           type: string
-          description: The final content.
+          description: The source input content to process.
+        contentType:
+          type: string
+          default: text/plain
+          description: Content type of the source content
+        contentChunkIndex:
+          type: integer
+          description: The chunk index. 0 is first chunk.-1 is the last chunk
+        operations:
+          type: array
+          items:
+            $ref: '#/components/schemas/GenerateMessageOperation'
+          description: Operations to apply to the source content
+        messageContext:
+          $ref: '#/components/schemas/GenerateMessageContext'
+        maxChars:
+          type: integer
+          description: Maximum character limit for the generated message
         sessionId:
           type: string
           description: A unique session identifier used to maintain conversation state across multiple interactions。
-    LengthOperation:
-      type: object
-      required:
-      - type
-      - value
-      properties:
-        type:
-          type: string
-          enum:
-          - Length
-        value:
-          type: string
-          enum:
-          - Shortest
-          - Shorter
-          - Same
-          - Longer
-          - Longest
-          description: Value for length adjustment
     ProblemDetail:
       type: object
       description: An RFC-7807 compliant model for error details.
@@ -236,15 +245,6 @@ components:
         instance:
           type: string
           description: A URI that identifies the specific problem.
-    RectifyOperation:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          enum:
-          - Rectify
   securitySchemes:
     API_Authorizer:
       type: apiKey

@@ -234,6 +234,23 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    CreateCheckRequest:
+      type: object
+      properties:
+        customerAccountId:
+          type: string
+        sourceId:
+          type: string
+        agencyOfficeId:
+          type: string
+        path:
+          type: string
+        expectedValues:
+          type: array
+          items:
+            type: string
+        contentType:
+          type: string
     Check:
       type: object
       properties:
@@ -259,23 +276,6 @@ components:
         updatedAt:
           type: string
           format: date-time
-    CreateCheckRequest:
-      type: object
-      properties:
-        customerAccountId:
-          type: string
-        sourceId:
-          type: string
-        agencyOfficeId:
-          type: string
-        path:
-          type: string
-        expectedValues:
-          type: array
-          items:
-            type: string
-        contentType:
-          type: string
   securitySchemes:
     API_Authorizer:
       type: apiKey

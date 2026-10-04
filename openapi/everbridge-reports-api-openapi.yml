@@ -633,6 +633,12 @@ paths:
       url: https://api.snapcomms.com/mock
 components:
   schemas:
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
     DataPageObject:
       properties:
         currentPageNo:
@@ -662,12 +668,6 @@ components:
           type: integer
       title: DataPage«object»
       type: object
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
     RestfulCollectionResult:
       properties:
         currentPageUri:
@@ -686,6 +686,115 @@ components:
           type: string
       title: RestfulCollectionResult
       type: object
+    ReportQuestionnaireSummaryResponse:
+      type: object
+      properties:
+        assetId:
+          type: string
+        questions:
+          type: array
+          items:
+            required:
+            - name
+            - number
+            - numberOfSubmissions
+            - numberOfRespondents
+            - numberOfNotAnswered
+            - mandatory
+            - questionType
+            - responses
+            type: object
+            properties:
+              name:
+                type: string
+              number:
+                type: integer
+              numberOfSubmissions:
+                type: integer
+              numberOfRespondents:
+                type: integer
+              numberOfNotAnswered:
+                type: integer
+              mandatory:
+                type: boolean
+              questionType:
+                type: integer
+              responses:
+                type: array
+                items:
+                  required:
+                  - number
+                  - text
+                  - count
+                  - percentage
+                  - isCorrect
+                  - submissionTime
+                  type: object
+                  properties:
+                    number:
+                      type: integer
+                    text:
+                      type: string
+                    count:
+                      type: integer
+                    percentage:
+                      type: integer
+                    isCorrect: {}
+                    submissionTime: {}
+        version:
+          type: integer
+        startDate:
+          type: string
+        endDate:
+          type: string
+    ReportQuestionnaireResponsesResponse:
+      type: object
+      properties:
+        responses:
+          type: array
+          items:
+            required:
+            - version
+            - questionNo
+            - questionText
+            - submissionTime
+            - completionTime
+            - consumerId
+            - userName
+            - fullName
+            - response
+            - score
+            - type
+            type: object
+            properties:
+              version:
+                type: string
+              questionNo:
+                type: string
+              questionText:
+                type: string
+              submissionTime:
+                type: string
+              completionTime:
+                type: string
+              consumerId:
+                type: string
+              userName:
+                type: string
+              fullName:
+                type: string
+              response:
+                type: string
+              score:
+                type: string
+              type:
+                type: string
+        version:
+          type: string
+        startDate:
+          type: string
+        endDate:
+          type: string
     ReportSuccesReportResponse:
       type: object
       properties:
@@ -776,67 +885,6 @@ components:
               type: string
             campaignName:
               type: string
-    ReportQuestionnaireSummaryResponse:
-      type: object
-      properties:
-        assetId:
-          type: string
-        questions:
-          type: array
-          items:
-            required:
-            - name
-            - number
-            - numberOfSubmissions
-            - numberOfRespondents
-            - numberOfNotAnswered
-            - mandatory
-            - questionType
-            - responses
-            type: object
-            properties:
-              name:
-                type: string
-              number:
-                type: integer
-              numberOfSubmissions:
-                type: integer
-              numberOfRespondents:
-                type: integer
-              numberOfNotAnswered:
-                type: integer
-              mandatory:
-                type: boolean
-              questionType:
-                type: integer
-              responses:
-                type: array
-                items:
-                  required:
-                  - number
-                  - text
-                  - count
-                  - percentage
-                  - isCorrect
-                  - submissionTime
-                  type: object
-                  properties:
-                    number:
-                      type: integer
-                    text:
-                      type: string
-                    count:
-                      type: integer
-                    percentage:
-                      type: integer
-                    isCorrect: {}
-                    submissionTime: {}
-        version:
-          type: integer
-        startDate:
-          type: string
-        endDate:
-          type: string
     ReportPublishingStatisticsResponse:
       type: object
       properties:
@@ -965,54 +1013,6 @@ components:
                 type: string
               value:
                 type: string
-    ReportQuestionnaireResponsesResponse:
-      type: object
-      properties:
-        responses:
-          type: array
-          items:
-            required:
-            - version
-            - questionNo
-            - questionText
-            - submissionTime
-            - completionTime
-            - consumerId
-            - userName
-            - fullName
-            - response
-            - score
-            - type
-            type: object
-            properties:
-              version:
-                type: string
-              questionNo:
-                type: string
-              questionText:
-                type: string
-              submissionTime:
-                type: string
-              completionTime:
-                type: string
-              consumerId:
-                type: string
-              userName:
-                type: string
-              fullName:
-                type: string
-              response:
-                type: string
-              score:
-                type: string
-              type:
-                type: string
-        version:
-          type: string
-        startDate:
-          type: string
-        endDate:
-          type: string
   securitySchemes:
     API_Authorizer:
       description: oAuth Token

@@ -4192,36 +4192,67 @@ paths:
     - url: https://api.everbridge.eu/rest
 components:
   schemas:
-    StopSafeCorridorV2Request:
+    AccountV2Response:
       required:
-      - latitude
-      - longitude
+      - accountId
       type: object
       properties:
-        latitude:
-          maximum: 90
-          minimum: -90
-          type: number
-          description: Location latitude range [-90, 90]
-          format: double
-          example: 44.999326
-        longitude:
-          maximum: 180
-          minimum: -180
-          type: number
-          description: Location longitude range [-180, 180]
-          format: double
-          example: -123.126128
-        fakeGis:
-          type: boolean
-          description: fake Gis
-        buttonId:
-          type: integer
-          description: Custom button id
-          format: int64
-        buttonName:
+        accountId:
           type: string
-          description: Custom button name
+          description: Account Id
+        firstName:
+          type: string
+          description: Account first name
+        lastName:
+          type: string
+          description: Account last name
+        contactId:
+          type: string
+          description: Account contact Id
+        status:
+          type: string
+          description: Account status
+    MemberAccountSetting:
+      type: object
+      properties:
+        individualAccountId:
+          type: string
+        acceptUnsolicitedMessage:
+          type: boolean
+        prioritySound:
+          type: string
+        nonPrioritySound:
+          type: string
+        criticalSound:
+          type: string
+        privacyPushEnabled:
+          type: boolean
+        messageLiveDuration:
+          type: integer
+          format: int32
+        messageLiveDurationEnabled:
+          type: boolean
+    SafetyV2Response:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Safety Connection response id
+          format: int64
+    PanicOperationV2Response:
+      type: object
+      properties:
+        sessionId:
+          type: string
+          description: OpenTok session id.
+        archiveId:
+          type: string
+          description: Panic archive id.
+        state:
+          type: string
+          description: The state of panic operation.
     EmergencyCallV2Request:
       required:
       - latitude
@@ -4264,116 +4295,6 @@ components:
         deviceDate:
           type: string
           description: ISO 8601 UTC date representing the time a safety event was triggered from a mobile phone event (2025-05-09T15:20:00Z)
-    GisLocation:
-      type: object
-      properties:
-        lon:
-          type: number
-          format: double
-        lat:
-          type: number
-          format: double
-        'null':
-          type: boolean
-    ContactPreference:
-      type: object
-      properties:
-        prioritySound:
-          type: string
-          description: Priority alert sound.
-        nonPrioritySound:
-          type: string
-          description: Non-priority alert sound.
-        criticalSound:
-          type: string
-          description: Critical alert sound.
-    PanicResponse:
-      type: object
-      properties:
-        panicId:
-          type: integer
-          format: int64
-        sessionId:
-          type: string
-        token:
-          type: string
-        archiveId:
-          type: string
-        appKey:
-          type: string
-    PanicOperationV2Response:
-      type: object
-      properties:
-        sessionId:
-          type: string
-          description: OpenTok session id.
-        archiveId:
-          type: string
-          description: Panic archive id.
-        state:
-          type: string
-          description: The state of panic operation.
-    CheckinResponse:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          type: string
-          description: The stored ID of the check-in record
-    DeviceRequest:
-      required:
-      - provider
-      - token
-      type: object
-      properties:
-        token:
-          maxLength: 200
-          minLength: 64
-          type: string
-          description: APNS token or FCM token.
-          example: 535a3f31be9ee76506c7280d7255abf148208fc784f74b6145d6356aaf70b3c4
-        provider:
-          type: string
-          description: The device token provider mush be either APNS or FCM
-          example: APNS
-          enum:
-          - APNS
-          - FCM
-    AccountV2Response:
-      required:
-      - accountId
-      type: object
-      properties:
-        accountId:
-          type: string
-          description: Account Id
-        firstName:
-          type: string
-          description: Account first name
-        lastName:
-          type: string
-          description: Account last name
-        contactId:
-          type: string
-          description: Account contact Id
-        status:
-          type: string
-          description: Account status
-    SafeCorridorServerHandledVo:
-      type: object
-      properties:
-        safeCorridorId:
-          type: integer
-          format: int64
-        intervalInSeconds:
-          type: integer
-          format: int64
-        nextCheckInTime:
-          type: string
-        buttonId:
-          type: integer
-          format: int64
     ButtonSubmitFormEvent:
       type: object
       properties:
@@ -4419,97 +4340,43 @@ components:
           type: string
         location:
           $ref: '#/components/schemas/GisLocation'
-    MemberAccountSetting:
+    PanicResponse:
       type: object
       properties:
-        individualAccountId:
+        panicId:
+          type: integer
+          format: int64
+        sessionId:
           type: string
-        acceptUnsolicitedMessage:
-          type: boolean
+        token:
+          type: string
+        archiveId:
+          type: string
+        appKey:
+          type: string
+    ContactPreference:
+      type: object
+      properties:
         prioritySound:
           type: string
+          description: Priority alert sound.
         nonPrioritySound:
           type: string
+          description: Non-priority alert sound.
         criticalSound:
           type: string
-        privacyPushEnabled:
-          type: boolean
-        messageLiveDuration:
-          type: integer
-          format: int32
-        messageLiveDurationEnabled:
-          type: boolean
-    PanicV2Request:
-      required:
-      - latitude
-      - longitude
+          description: Critical alert sound.
+    GisLocation:
       type: object
       properties:
-        latitude:
-          maximum: 90
-          minimum: -90
+        lon:
           type: number
-          description: Location latitude range [-90, 90]
           format: double
-          example: 44.999326
-        longitude:
-          maximum: 180
-          minimum: -180
+        lat:
           type: number
-          description: Location longitude range [-180, 180]
           format: double
-          example: -123.126128
-        fakeGis:
+        'null':
           type: boolean
-          description: fake Gis
-        buttonId:
-          type: integer
-          description: Custom button id
-          format: int64
-        buttonName:
-          type: string
-          description: Custom button name
-        safeCorridorId:
-          type: integer
-          description: Safe corridor id
-          format: int64
-        title:
-          type: string
-          description: Panic title
-        message:
-          type: string
-          description: Panic message
-        phoneNumber:
-          type: string
-          description: Panic phone number
-        archive:
-          type: boolean
-        deviceDate:
-          type: string
-          description: ISO 8601 UTC date representing the time a safety event was triggered from a mobile phone event (2025-05-09T15:20:00Z)
-    CheckinRequest:
-      required:
-      - latitude
-      - longitude
-      type: object
-      properties:
-        latitude:
-          maximum: 90
-          minimum: -90
-          type: number
-          description: Location latitude range [-90, 90]
-          format: double
-          example: 44.999326
-        longitude:
-          maximum: 180
-          minimum: -180
-          type: number
-          description: Location longitude range [-180, 180]
-          format: double
-          example: -123.126128
-        deviceDate:
-          type: string
-          description: ISO 8601 UTC date representing the time a safety event was triggered from a mobile phone event (2025-05-09T15:20:00Z)
     SafeCorridorV2Request:
       required:
       - latitude
@@ -4568,6 +4435,62 @@ components:
           type: string
           description: Device ID
           example: '1884704663928841'
+    PanicV2Request:
+      required:
+      - latitude
+      - longitude
+      type: object
+      properties:
+        latitude:
+          maximum: 90
+          minimum: -90
+          type: number
+          description: Location latitude range [-90, 90]
+          format: double
+          example: 44.999326
+        longitude:
+          maximum: 180
+          minimum: -180
+          type: number
+          description: Location longitude range [-180, 180]
+          format: double
+          example: -123.126128
+        fakeGis:
+          type: boolean
+          description: fake Gis
+        buttonId:
+          type: integer
+          description: Custom button id
+          format: int64
+        buttonName:
+          type: string
+          description: Custom button name
+        safeCorridorId:
+          type: integer
+          description: Safe corridor id
+          format: int64
+        title:
+          type: string
+          description: Panic title
+        message:
+          type: string
+          description: Panic message
+        phoneNumber:
+          type: string
+          description: Panic phone number
+        archive:
+          type: boolean
+        deviceDate:
+          type: string
+          description: ISO 8601 UTC date representing the time a safety event was triggered from a mobile phone event (2025-05-09T15:20:00Z)
+    CheckinResponse:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          description: The stored ID of the check-in record
     FormItem:
       type: object
       properties:
@@ -4580,6 +4503,92 @@ components:
           type: array
           items:
             type: string
+    CheckinRequest:
+      required:
+      - latitude
+      - longitude
+      type: object
+      properties:
+        latitude:
+          maximum: 90
+          minimum: -90
+          type: number
+          description: Location latitude range [-90, 90]
+          format: double
+          example: 44.999326
+        longitude:
+          maximum: 180
+          minimum: -180
+          type: number
+          description: Location longitude range [-180, 180]
+          format: double
+          example: -123.126128
+        deviceDate:
+          type: string
+          description: ISO 8601 UTC date representing the time a safety event was triggered from a mobile phone event (2025-05-09T15:20:00Z)
+    SafeCorridorServerHandledVo:
+      type: object
+      properties:
+        safeCorridorId:
+          type: integer
+          format: int64
+        intervalInSeconds:
+          type: integer
+          format: int64
+        nextCheckInTime:
+          type: string
+        buttonId:
+          type: integer
+          format: int64
+    DeviceRequest:
+      required:
+      - provider
+      - token
+      type: object
+      properties:
+        token:
+          maxLength: 200
+          minLength: 64
+          type: string
+          description: APNS token or FCM token.
+          example: 535a3f31be9ee76506c7280d7255abf148208fc784f74b6145d6356aaf70b3c4
+        provider:
+          type: string
+          description: The device token provider mush be either APNS or FCM
+          example: APNS
+          enum:
+          - APNS
+          - FCM
+    StopSafeCorridorV2Request:
+      required:
+      - latitude
+      - longitude
+      type: object
+      properties:
+        latitude:
+          maximum: 90
+          minimum: -90
+          type: number
+          description: Location latitude range [-90, 90]
+          format: double
+          example: 44.999326
+        longitude:
+          maximum: 180
+          minimum: -180
+          type: number
+          description: Location longitude range [-180, 180]
+          format: double
+          example: -123.126128
+        fakeGis:
+          type: boolean
+          description: fake Gis
+        buttonId:
+          type: integer
+          description: Custom button id
+          format: int64
+        buttonName:
+          type: string
+          description: Custom button name
     PanicOperationV2Request:
       required:
       - operation
@@ -4597,121 +4606,6 @@ components:
         sessionId:
           type: string
           description: OpenTok session id.
-    SafetyV2Response:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Safety Connection response id
-          format: int64
-    GisLocationWrapper:
-      properties:
-        lat:
-          format: double
-          type: number
-        lon:
-          format: double
-          type: number
-      type: object
-    ContactAttributeWrapper:
-      properties:
-        name:
-          type: string
-        orgAttrId:
-          format: int64
-          type: integer
-        values:
-          items:
-            type: object
-          type: array
-      type: object
-    contactPaths:
-      properties:
-        firstPageUri:
-          type: string
-        lastPageUri:
-          type: string
-        message:
-          type: string
-        page:
-          properties:
-            currentPageNo:
-              type: integer
-            data:
-              items:
-                properties:
-                  awarePathId:
-                    type: integer
-                  code:
-                    type: string
-                  confirmType:
-                    type: string
-                  createdDate:
-                    type: integer
-                  createdId:
-                    type: integer
-                  createdName:
-                    type: string
-                  default:
-                    type: boolean
-                  displayFlag:
-                    type: boolean
-                  editable:
-                    type: boolean
-                  expose:
-                    type: boolean
-                  extRequired:
-                    type: boolean
-                  formatFlag:
-                    type: string
-                  id:
-                    type: integer
-                  isDefault:
-                    type: boolean
-                  lastModifiedDate:
-                    type: integer
-                  lastModifiedId:
-                    type: integer
-                  lastModifiedName:
-                    type: string
-                  mandatory:
-                    type: boolean
-                  messageCode:
-                    type: string
-                  organizationId:
-                    type: integer
-                  pathDeliveryType:
-                    type: string
-                  pathFlag:
-                    type: integer
-                  pathId:
-                    type: integer
-                  pathType:
-                    type: string
-                  prompt:
-                    type: string
-                  seq:
-                    type: integer
-                  status:
-                    type: string
-                  sysPrompt:
-                    type: string
-                  type:
-                    type: string
-                type: object
-              type: array
-            pageSize:
-              type: integer
-            start:
-              type: integer
-            totalCount:
-              type: integer
-            totalPageCount:
-              type: integer
-          type: object
-      type: object
     ContactWrapper:
       properties:
         accountId:
@@ -4836,73 +4730,192 @@ components:
         vip:
           type: boolean
       type: object
-    locationTypeCreateRequestWrapper:
+    DataPageContactWrapper:
       properties:
-        code:
+        currentPageNo:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/ContactWrapper'
+          type: array
+        dataPageList:
+          items:
+            $ref: '#/components/schemas/DataPageContactWrapper'
+          type: array
+        pageSize:
+          format: int32
+          type: integer
+        scrollId:
           type: string
-        prompt:
-          type: string
-      required:
-      - code
-      - prompt
-      type: object
-    ContactPathWrapper:
-      properties:
-        countryCode:
-          type: string
-        pathEnable:
-          type: boolean
-        pathId:
+        start:
+          format: int32
+          type: integer
+        totalCount:
           format: int64
           type: integer
-        phoneExt:
-          type: string
-        prompt:
-          type: string
-        quietTimeFrames:
-          items:
-            $ref: '#/components/schemas/TimeFrameWrapper'
-          type: array
-        skipValidation:
-          type: boolean
-        status:
-          enum:
-          - A
-          - D
-          type: string
-        systemRequirement:
-          type: string
-        value:
-          type: string
-        waitTime:
+        totalPageCount:
           format: int32
           type: integer
       type: object
-    patchRequest:
+    UpdateContactBatchRequest:
       items:
-        $ref: '#/components/schemas/patchEntity'
+        properties:
+          accountId:
+            type: number
+          country:
+            type: string
+          createdDate:
+            type: number
+          createdId:
+            type: number
+          createdName:
+            type: string
+          expatriate:
+            type: boolean
+          externalId:
+            type: string
+          firstName:
+            type: string
+          groups:
+            items:
+              type: number
+            type: array
+          id:
+            type: number
+          lastModifiedDate:
+            type: number
+          lastModifiedId:
+            type: number
+          lastModifiedName:
+            type: string
+          lastModifiedTime:
+            type: number
+          lastName:
+            type: string
+          organizationId:
+            type: number
+          paths:
+            items:
+              properties:
+                countryCode:
+                  type: string
+                pathEnable:
+                  type: boolean
+                pathId:
+                  type: number
+                skipValidation:
+                  type: boolean
+                value:
+                  type: string
+                waitTime:
+                  type: number
+              required:
+              - waitTime
+              - pathId
+              - countryCode
+              - value
+              - skipValidation
+              - pathEnable
+              type: object
+            type: array
+          preferredLanguage:
+            type: string
+          recordTypeId:
+            type: number
+          resourceBundleId:
+            type: number
+          status:
+            type: string
+          timezoneId:
+            type: string
+          uploadProcessing:
+            type: boolean
+          vip:
+            type: boolean
+        required:
+        - firstName
+        - lastName
+        - externalId
+        - recordTypeId
+        type: object
       type: array
-    postUpdateResponse:
-      properties:
-        baseUri:
-          type: string
-        id:
-          type: integer
-        instanceUri:
-          type: string
-        message:
-          type: string
-      type: object
-    error:
+    contactPath:
       properties:
         message:
           type: string
-        status:
-          type: integer
-      required:
-      - status
-      - message
+        result:
+          properties:
+            accountId:
+              type: integer
+            awarePathId:
+              type: integer
+            code:
+              type: string
+            confirmType:
+              type: string
+            createdDate:
+              type: integer
+            createdId:
+              type: integer
+            createdName:
+              type: string
+            default:
+              type: boolean
+            displayFlag:
+              type: boolean
+            editable:
+              type: boolean
+            expose:
+              type: boolean
+            extRequired:
+              type: boolean
+            formatFlag:
+              type: string
+            id:
+              type: integer
+            isDefault:
+              type: boolean
+            lastModifiedDate:
+              type: integer
+            lastModifiedId:
+              type: integer
+            lastModifiedName:
+              type: string
+            mandatory:
+              type: boolean
+            messageCode:
+              type: string
+            organizationId:
+              type: integer
+            pathDeliveryType:
+              type: string
+            pathFlag:
+              type: integer
+            pathId:
+              type: integer
+            pathType:
+              type: string
+            prompt:
+              type: string
+            resourceBundleId:
+              type: integer
+            seq:
+              type: integer
+            status:
+              type: string
+            sysPrompt:
+              type: string
+            type:
+              type: string
+          type: object
       type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
     patchEntity:
       additionalProperties: false
       properties:
@@ -4941,56 +4954,6 @@ components:
       - op
       - path
       title: Add, Replace or Remove
-      type: object
-    ContactAddressWrapper:
-      properties:
-        arriveDate:
-          format: date-time
-          type: string
-        assetExternalId:
-          type: string
-        city:
-          type: string
-        country:
-          type: string
-        expireDate:
-          format: date-time
-          type: string
-        gisLocation:
-          $ref: '#/components/schemas/GisLocationWrapper'
-        iata:
-          type: string
-        locationId:
-          format: int64
-          type: integer
-        locationName:
-          type: string
-        locationSource:
-          type: string
-        locationSourceId:
-          format: int64
-          type: integer
-        newAssetId:
-          type: string
-        postalCode:
-          type: string
-        source:
-          enum:
-          - MANUAL
-          - AUTO
-          type: string
-        state:
-          type: string
-        streetAddress:
-          type: string
-        suite:
-          type: string
-      required:
-      - arriveDate
-      - country
-      - expireDate
-      - locationName
-      - streetAddress
       type: object
     getContact:
       properties:
@@ -5180,6 +5143,36 @@ components:
         uploadProcessing:
           type: boolean
       type: object
+    postUpdateResponse:
+      properties:
+        baseUri:
+          type: string
+        id:
+          type: integer
+        instanceUri:
+          type: string
+        message:
+          type: string
+      type: object
+    GeoPointWrapper:
+      properties:
+        x:
+          format: double
+          type: number
+        y:
+          format: double
+          type: number
+      type: object
+    locationTypeCreateRequestWrapper:
+      properties:
+        code:
+          type: string
+        prompt:
+          type: string
+      required:
+      - code
+      - prompt
+      type: object
     locationTypeSingleResponseWrapper:
       properties:
         accountId:
@@ -5222,6 +5215,151 @@ components:
       - code
       - prompt
       - status
+      type: object
+    contactAttributesResponse:
+      properties:
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        page:
+          properties:
+            currentPageNo:
+              type: number
+            data:
+              items:
+                properties:
+                  accountId:
+                    type: number
+                  createdDate:
+                    type: number
+                  createdId:
+                    type: number
+                  createdName:
+                    type: string
+                  dataType:
+                    type: string
+                  definedValues:
+                    items:
+                      type: string
+                    type: array
+                  displayFormat:
+                    type: string
+                  editable:
+                    type: boolean
+                  expose:
+                    type: boolean
+                  id:
+                    type: number
+                  lastModifiedDate:
+                    type: number
+                  lastModifiedId:
+                    type: number
+                  lastModifiedName:
+                    type: string
+                  mandatory:
+                    type: boolean
+                  name:
+                    type: string
+                  organizationId:
+                    type: number
+                  resourceBundleId:
+                    type: number
+                  seq:
+                    type: number
+                  status:
+                    type: string
+                type: object
+              type: array
+            pageSize:
+              type: number
+            start:
+              type: number
+            totalCount:
+              type: number
+            totalPageCount:
+              type: number
+          type: object
+      type: object
+    badPatchResponse:
+      properties:
+        detail:
+          items:
+            properties:
+              details: {}
+              errorMessage:
+                type: string
+              errorPatch:
+                $ref: '#/components/schemas/patchEntity'
+            type: object
+          type: array
+        message:
+          type: string
+        status:
+          type: integer
+      type: object
+    DeleteContactBatchRequest:
+      items:
+        type: string
+      type: array
+    ContactAddressWrapper:
+      properties:
+        arriveDate:
+          format: date-time
+          type: string
+        assetExternalId:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+        expireDate:
+          format: date-time
+          type: string
+        gisLocation:
+          $ref: '#/components/schemas/GisLocationWrapper'
+        iata:
+          type: string
+        locationId:
+          format: int64
+          type: integer
+        locationName:
+          type: string
+        locationSource:
+          type: string
+        locationSourceId:
+          format: int64
+          type: integer
+        newAssetId:
+          type: string
+        postalCode:
+          type: string
+        source:
+          enum:
+          - MANUAL
+          - AUTO
+          type: string
+        state:
+          type: string
+        streetAddress:
+          type: string
+        suite:
+          type: string
+      required:
+      - arriveDate
+      - country
+      - expireDate
+      - locationName
+      - streetAddress
+      type: object
+    ContactBatchResponse:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
       type: object
     contactRequest:
       properties:
@@ -5433,228 +5571,239 @@ components:
       - lastName
       - externalId
       type: object
-    contactAttributesRequest:
+    patchRequest:
+      items:
+        $ref: '#/components/schemas/patchEntity'
+      type: array
+    TimeFrameWrapper:
       properties:
-        dataType:
+        days:
+          items:
+            format: int32
+            type: integer
+          type: array
+        fromHour:
+          format: int32
+          type: integer
+        fromMin:
+          format: int32
+          type: integer
+        name:
           type: string
-        definedValues:
+        toHour:
+          format: int32
+          type: integer
+        toMin:
+          format: int32
+          type: integer
+      type: object
+    ContactAttributeWrapper:
+      properties:
+        name:
+          type: string
+        orgAttrId:
+          format: int64
+          type: integer
+        values:
+          items:
+            type: object
+          type: array
+      type: object
+    GeoShapeWrapper:
+      properties:
+        points:
+          items:
+            $ref: '#/components/schemas/GeoPointWrapper'
+          type: array
+      type: object
+    ContactQueryParam:
+      description: Query conditions
+      properties:
+        contactFilterIds:
+          items:
+            format: int64
+            type: integer
+          type: array
+        contactIds:
+          items:
+            format: int64
+            type: integer
+          type: array
+        direction:
+          description: Whether to sort data as ASC or DESC.
+          enum:
+          - ASC
+          - DESC
+          type: string
+        enableGroupCalendar:
+          type: boolean
+        excludedShapeContactIds:
+          items:
+            format: int64
+            type: integer
+          type: array
+        externalIds:
           items:
             type: string
           type: array
-        displayFormat:
+        groupIds:
+          items:
+            format: int64
+            type: integer
+          type: array
+        incidentRules:
+          items:
+            items:
+              $ref: '#/components/schemas/ContactFilterRuleWrapper'
+            type: array
+          type: array
+        pageNumber:
+          description: The page number of contacts to return. Default value is 1
+          format: int32
+          type: integer
+        pageSize:
+          description: The page size for contacts to return. Default value is 100
+          format: int32
+          type: integer
+        shapeSearchConditions:
+          $ref: '#/components/schemas/ContactSearchConditionWrapper'
+        shapes:
+          items:
+            $ref: '#/components/schemas/SearchShapeWrapper'
+          type: array
+        sortBy:
+          description: Whether to sort data by lastModifiedDate, externalId or lastName
           enum:
-          - S
-          - L
-          - F
-        editable:
-          type: boolean
-        expose:
-          type: boolean
-        mandatory:
-          type: boolean
-        name:
+          - lastModifiedDate
+          - externalId
+          - lastName
           type: string
-        seq:
-          type: number
-      required:
-      - displayFormat
-      - dataType
-      - name
-      - definedValues
       type: object
-    DeleteContactBatchRequest:
-      items:
-        type: string
-      type: array
-    locationTypeListResponseWrapper:
+    error:
       properties:
+        message:
+          type: string
+        status:
+          type: integer
+      required:
+      - status
+      - message
+      type: object
+    ContactFilterRuleWrapper:
+      properties:
+        attributeId:
+          format: int64
+          type: integer
+        attributeValues:
+          items:
+            type: object
+          type: array
+        columnName:
+          type: string
+        columnValue:
+          type: object
+        contactFieldId:
+          format: int64
+          type: integer
+        contactFilterOption:
+          enum:
+          - ISNULL
+          - ISNULLARRAY
+          - NOTNULL
+          - ISEMPTY
+          - NOTEMPTY
+          - IN
+          - NIN
+          - GT
+          - LT
+          - GTE
+          - LTE
+          - NE
+          - NENLC
+          - E
+          - ENLC
+          - LIKE
+          - LIKENLC
+          - NLIKE
+          - NLIKENLC
+          - STARTWITH
+          - STARTWITHNLC
+          - ENDWITH
+          - ENDWITHNLC
+          - INPOLYGON
+          - NINPOLYGON
+          - OVERLAP
+          - NONEOVERLAP
+          - ELEMENTEQUAL
+          - ELEMENTNOTEQUAL
+          - BETWEEN
+          type: string
+        dataType:
+          enum:
+          - STRING
+          - NUMBER
+          - DATE
+          - BOOLEAN
+          - POLYGON
+          type: string
+        defaultValue:
+          type: object
+        displayFieldName:
+          type: string
+        embeddedColumnName:
+          type: string
+        fieldName:
+          type: string
+        fieldType:
+          enum:
+          - DATE
+          - STRING
+          - INT
+          - LONG
+          - BOOLEAN
+          - LIST
+          - NUMBER
+          - ARRAY
+          type: string
+        fieldValue:
+          type: object
+        operator:
+          type: string
+        showType:
+          enum:
+          - SINGLE
+          - MULTIPLE
+          - TEXT
+          type: string
+        type:
+          enum:
+          - SYSTEM
+          - CUSTOM
+          - SYSTEM_OBJECT
+          - SYSTEM_ARRAY
+          - CUSTOM_ARRAY
+          - SYSTEM_SCHEDULING
+          - SYSTEM_EXPECTED_OBJECT
+          - SYSTEM_POLYGON_ARRAY
+          type: string
+      type: object
+    ContactWrapperCollectionResult:
+      properties:
+        currentPageUri:
+          type: string
         firstPageUri:
           type: string
         lastPageUri:
           type: string
         message:
           type: string
-        page:
-          properties:
-            currentPageNo:
-              type: number
-            data:
-              items:
-                properties:
-                  accountId:
-                    type: number
-                  code:
-                    type: string
-                  createdDate:
-                    type: string
-                  createdId:
-                    type: number
-                  createdName:
-                    type: string
-                  createdProxyName:
-                    type: string
-                  id:
-                    type: number
-                  lastModifiedDate:
-                    type: string
-                  lastModifiedId:
-                    type: number
-                  lastModifiedName:
-                    type: string
-                  organizationId:
-                    type: number
-                  prompt:
-                    type: string
-                  resourceBundleId:
-                    type: number
-                  status:
-                    type: string
-                required:
-                - id
-                - organizationId
-                - createdId
-                - createdName
-                - lastModifiedId
-                - lastModifiedName
-                - createdDate
-                - lastModifiedDate
-                - code
-                - prompt
-                - status
-                type: object
-              type: array
-            pageSize:
-              type: number
-            start:
-              type: number
-            totalCount:
-              type: number
-            totalPageCount:
-              type: number
-          required:
-          - pageSize
-          - start
-          - data
-          - totalCount
-          - totalPageCount
-          - currentPageNo
-          type: object
-      required:
-      - message
-      - firstPageUri
-      - lastPageUri
-      - page
-      type: object
-    DataPageContactWrapper:
-      properties:
-        currentPageNo:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/ContactWrapper'
-          type: array
-        dataPageList:
-          items:
-            $ref: '#/components/schemas/DataPageContactWrapper'
-          type: array
-        pageSize:
-          format: int32
-          type: integer
-        scrollId:
+        nextPageUri:
           type: string
-        start:
-          format: int32
-          type: integer
-        totalCount:
-          format: int64
-          type: integer
-        totalPageCount:
-          format: int32
-          type: integer
+        page:
+          $ref: '#/components/schemas/DataPageContactWrapper'
+        previousPageUri:
+          type: string
       type: object
-    UpdateContactBatchRequest:
-      items:
-        properties:
-          accountId:
-            type: number
-          country:
-            type: string
-          createdDate:
-            type: number
-          createdId:
-            type: number
-          createdName:
-            type: string
-          expatriate:
-            type: boolean
-          externalId:
-            type: string
-          firstName:
-            type: string
-          groups:
-            items:
-              type: number
-            type: array
-          id:
-            type: number
-          lastModifiedDate:
-            type: number
-          lastModifiedId:
-            type: number
-          lastModifiedName:
-            type: string
-          lastModifiedTime:
-            type: number
-          lastName:
-            type: string
-          organizationId:
-            type: number
-          paths:
-            items:
-              properties:
-                countryCode:
-                  type: string
-                pathEnable:
-                  type: boolean
-                pathId:
-                  type: number
-                skipValidation:
-                  type: boolean
-                value:
-                  type: string
-                waitTime:
-                  type: number
-              required:
-              - waitTime
-              - pathId
-              - countryCode
-              - value
-              - skipValidation
-              - pathEnable
-              type: object
-            type: array
-          preferredLanguage:
-            type: string
-          recordTypeId:
-            type: number
-          resourceBundleId:
-            type: number
-          status:
-            type: string
-          timezoneId:
-            type: string
-          uploadProcessing:
-            type: boolean
-          vip:
-            type: boolean
-        required:
-        - firstName
-        - lastName
-        - externalId
-        - recordTypeId
-        type: object
-      type: array
     CreateContactBatchRequest:
       items:
         properties:
@@ -5737,144 +5886,6 @@ components:
         - recordTypeId
         type: object
       type: array
-    ContactSearchConditionWrapper:
-      properties:
-        contactFilterRules:
-          items:
-            $ref: '#/components/schemas/ContactFilterRuleWrapper'
-          type: array
-        contactSearchExpression:
-          enum:
-          - AllOr
-          - AllAnd
-          type: string
-        expectedDate:
-          items:
-            type: object
-          type: array
-        expectedDateContactIds:
-          items:
-            format: int64
-            type: integer
-          type: array
-        filterIds:
-          items:
-            format: int64
-            type: integer
-          type: array
-        filters:
-          items:
-            items:
-              $ref: '#/components/schemas/ContactFilterRuleWrapper'
-            type: array
-          type: array
-        groupIds:
-          items:
-            format: int64
-            type: integer
-          type: array
-      type: object
-    contactAttributesResponse:
-      properties:
-        firstPageUri:
-          type: string
-        lastPageUri:
-          type: string
-        message:
-          type: string
-        page:
-          properties:
-            currentPageNo:
-              type: number
-            data:
-              items:
-                properties:
-                  accountId:
-                    type: number
-                  createdDate:
-                    type: number
-                  createdId:
-                    type: number
-                  createdName:
-                    type: string
-                  dataType:
-                    type: string
-                  definedValues:
-                    items:
-                      type: string
-                    type: array
-                  displayFormat:
-                    type: string
-                  editable:
-                    type: boolean
-                  expose:
-                    type: boolean
-                  id:
-                    type: number
-                  lastModifiedDate:
-                    type: number
-                  lastModifiedId:
-                    type: number
-                  lastModifiedName:
-                    type: string
-                  mandatory:
-                    type: boolean
-                  name:
-                    type: string
-                  organizationId:
-                    type: number
-                  resourceBundleId:
-                    type: number
-                  seq:
-                    type: number
-                  status:
-                    type: string
-                type: object
-              type: array
-            pageSize:
-              type: number
-            start:
-              type: number
-            totalCount:
-              type: number
-            totalPageCount:
-              type: number
-          type: object
-      type: object
-    badPatchResponse:
-      properties:
-        detail:
-          items:
-            properties:
-              details: {}
-              errorMessage:
-                type: string
-              errorPatch:
-                $ref: '#/components/schemas/patchEntity'
-            type: object
-          type: array
-        message:
-          type: string
-        status:
-          type: integer
-      type: object
-    ContactWrapperCollectionResult:
-      properties:
-        currentPageUri:
-          type: string
-        firstPageUri:
-          type: string
-        lastPageUri:
-          type: string
-        message:
-          type: string
-        nextPageUri:
-          type: string
-        page:
-          $ref: '#/components/schemas/DataPageContactWrapper'
-        previousPageUri:
-          type: string
-      type: object
     SearchShapeWrapper:
       properties:
         boundaryId:
@@ -5907,147 +5918,207 @@ components:
         shape:
           $ref: '#/components/schemas/GeoShapeWrapper'
       type: object
-    contactPath:
+    locationTypeListResponseWrapper:
       properties:
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
         message:
           type: string
-        result:
+        page:
           properties:
-            accountId:
+            currentPageNo:
+              type: number
+            data:
+              items:
+                properties:
+                  accountId:
+                    type: number
+                  code:
+                    type: string
+                  createdDate:
+                    type: string
+                  createdId:
+                    type: number
+                  createdName:
+                    type: string
+                  createdProxyName:
+                    type: string
+                  id:
+                    type: number
+                  lastModifiedDate:
+                    type: string
+                  lastModifiedId:
+                    type: number
+                  lastModifiedName:
+                    type: string
+                  organizationId:
+                    type: number
+                  prompt:
+                    type: string
+                  resourceBundleId:
+                    type: number
+                  status:
+                    type: string
+                required:
+                - id
+                - organizationId
+                - createdId
+                - createdName
+                - lastModifiedId
+                - lastModifiedName
+                - createdDate
+                - lastModifiedDate
+                - code
+                - prompt
+                - status
+                type: object
+              type: array
+            pageSize:
+              type: number
+            start:
+              type: number
+            totalCount:
+              type: number
+            totalPageCount:
+              type: number
+          required:
+          - pageSize
+          - start
+          - data
+          - totalCount
+          - totalPageCount
+          - currentPageNo
+          type: object
+      required:
+      - message
+      - firstPageUri
+      - lastPageUri
+      - page
+      type: object
+    contactPaths:
+      properties:
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        page:
+          properties:
+            currentPageNo:
               type: integer
-            awarePathId:
+            data:
+              items:
+                properties:
+                  awarePathId:
+                    type: integer
+                  code:
+                    type: string
+                  confirmType:
+                    type: string
+                  createdDate:
+                    type: integer
+                  createdId:
+                    type: integer
+                  createdName:
+                    type: string
+                  default:
+                    type: boolean
+                  displayFlag:
+                    type: boolean
+                  editable:
+                    type: boolean
+                  expose:
+                    type: boolean
+                  extRequired:
+                    type: boolean
+                  formatFlag:
+                    type: string
+                  id:
+                    type: integer
+                  isDefault:
+                    type: boolean
+                  lastModifiedDate:
+                    type: integer
+                  lastModifiedId:
+                    type: integer
+                  lastModifiedName:
+                    type: string
+                  mandatory:
+                    type: boolean
+                  messageCode:
+                    type: string
+                  organizationId:
+                    type: integer
+                  pathDeliveryType:
+                    type: string
+                  pathFlag:
+                    type: integer
+                  pathId:
+                    type: integer
+                  pathType:
+                    type: string
+                  prompt:
+                    type: string
+                  seq:
+                    type: integer
+                  status:
+                    type: string
+                  sysPrompt:
+                    type: string
+                  type:
+                    type: string
+                type: object
+              type: array
+            pageSize:
               type: integer
-            code:
-              type: string
-            confirmType:
-              type: string
-            createdDate:
+            start:
               type: integer
-            createdId:
+            totalCount:
               type: integer
-            createdName:
-              type: string
-            default:
-              type: boolean
-            displayFlag:
-              type: boolean
-            editable:
-              type: boolean
-            expose:
-              type: boolean
-            extRequired:
-              type: boolean
-            formatFlag:
-              type: string
-            id:
+            totalPageCount:
               type: integer
-            isDefault:
-              type: boolean
-            lastModifiedDate:
-              type: integer
-            lastModifiedId:
-              type: integer
-            lastModifiedName:
-              type: string
-            mandatory:
-              type: boolean
-            messageCode:
-              type: string
-            organizationId:
-              type: integer
-            pathDeliveryType:
-              type: string
-            pathFlag:
-              type: integer
-            pathId:
-              type: integer
-            pathType:
-              type: string
-            prompt:
-              type: string
-            resourceBundleId:
-              type: integer
-            seq:
-              type: integer
-            status:
-              type: string
-            sysPrompt:
-              type: string
-            type:
-              type: string
           type: object
       type: object
-    locationTypeUpdateRequestWrapper:
+    GisLocationWrapper:
       properties:
-        code:
-          type: string
-        prompt:
-          type: string
-      required:
-      - prompt
+        lat:
+          format: double
+          type: number
+        lon:
+          format: double
+          type: number
       type: object
-    ContactQueryParam:
-      description: Query conditions
+    contactAttributesRequest:
       properties:
-        contactFilterIds:
-          items:
-            format: int64
-            type: integer
-          type: array
-        contactIds:
-          items:
-            format: int64
-            type: integer
-          type: array
-        direction:
-          description: Whether to sort data as ASC or DESC.
-          enum:
-          - ASC
-          - DESC
+        dataType:
           type: string
-        enableGroupCalendar:
-          type: boolean
-        excludedShapeContactIds:
-          items:
-            format: int64
-            type: integer
-          type: array
-        externalIds:
+        definedValues:
           items:
             type: string
           type: array
-        groupIds:
-          items:
-            format: int64
-            type: integer
-          type: array
-        incidentRules:
-          items:
-            items:
-              $ref: '#/components/schemas/ContactFilterRuleWrapper'
-            type: array
-          type: array
-        pageNumber:
-          description: The page number of contacts to return. Default value is 1
-          format: int32
-          type: integer
-        pageSize:
-          description: The page size for contacts to return. Default value is 100
-          format: int32
-          type: integer
-        shapeSearchConditions:
-          $ref: '#/components/schemas/ContactSearchConditionWrapper'
-        shapes:
-          items:
-            $ref: '#/components/schemas/SearchShapeWrapper'
-          type: array
-        sortBy:
-          description: Whether to sort data by lastModifiedDate, externalId or lastName
+        displayFormat:
           enum:
-          - lastModifiedDate
-          - externalId
-          - lastName
+          - S
+          - L
+          - F
+        editable:
+          type: boolean
+        expose:
+          type: boolean
+        mandatory:
+          type: boolean
+        name:
           type: string
+        seq:
+          type: number
+      required:
+      - displayFormat
+      - dataType
+      - name
+      - definedValues
       type: object
     getContacts:
       properties:
@@ -6264,155 +6335,84 @@ components:
               type: object
           type: object
       type: object
-    GeoPointWrapper:
-      properties:
-        x:
-          format: double
-          type: number
-        y:
-          format: double
-          type: number
-      type: object
-    TimeFrameWrapper:
-      properties:
-        days:
-          items:
-            format: int32
-            type: integer
-          type: array
-        fromHour:
-          format: int32
-          type: integer
-        fromMin:
-          format: int32
-          type: integer
-        name:
-          type: string
-        toHour:
-          format: int32
-          type: integer
-        toMin:
-          format: int32
-          type: integer
-      type: object
-    GeoShapeWrapper:
-      properties:
-        points:
-          items:
-            $ref: '#/components/schemas/GeoPointWrapper'
-          type: array
-      type: object
-    ContactBatchResponse:
+    locationTypeUpdateRequestWrapper:
       properties:
         code:
-          type: integer
-        message:
           type: string
+        prompt:
+          type: string
+      required:
+      - prompt
       type: object
-    ContactFilterRuleWrapper:
+    ContactPathWrapper:
       properties:
-        attributeId:
+        countryCode:
+          type: string
+        pathEnable:
+          type: boolean
+        pathId:
           format: int64
           type: integer
-        attributeValues:
+        phoneExt:
+          type: string
+        prompt:
+          type: string
+        quietTimeFrames:
+          items:
+            $ref: '#/components/schemas/TimeFrameWrapper'
+          type: array
+        skipValidation:
+          type: boolean
+        status:
+          enum:
+          - A
+          - D
+          type: string
+        systemRequirement:
+          type: string
+        value:
+          type: string
+        waitTime:
+          format: int32
+          type: integer
+      type: object
+    ContactSearchConditionWrapper:
+      properties:
+        contactFilterRules:
+          items:
+            $ref: '#/components/schemas/ContactFilterRuleWrapper'
+          type: array
+        contactSearchExpression:
+          enum:
+          - AllOr
+          - AllAnd
+          type: string
+        expectedDate:
           items:
             type: object
           type: array
-        columnName:
-          type: string
-        columnValue:
-          type: object
-        contactFieldId:
-          format: int64
-          type: integer
-        contactFilterOption:
-          enum:
-          - ISNULL
-          - ISNULLARRAY
-          - NOTNULL
-          - ISEMPTY
-          - NOTEMPTY
-          - IN
-          - NIN
-          - GT
-          - LT
-          - GTE
-          - LTE
-          - NE
-          - NENLC
-          - E
-          - ENLC
-          - LIKE
-          - LIKENLC
-          - NLIKE
-          - NLIKENLC
-          - STARTWITH
-          - STARTWITHNLC
-          - ENDWITH
-          - ENDWITHNLC
-          - INPOLYGON
-          - NINPOLYGON
-          - OVERLAP
-          - NONEOVERLAP
-          - ELEMENTEQUAL
-          - ELEMENTNOTEQUAL
-          - BETWEEN
-          type: string
-        dataType:
-          enum:
-          - STRING
-          - NUMBER
-          - DATE
-          - BOOLEAN
-          - POLYGON
-          type: string
-        defaultValue:
-          type: object
-        displayFieldName:
-          type: string
-        embeddedColumnName:
-          type: string
-        fieldName:
-          type: string
-        fieldType:
-          enum:
-          - DATE
-          - STRING
-          - INT
-          - LONG
-          - BOOLEAN
-          - LIST
-          - NUMBER
-          - ARRAY
-          type: string
-        fieldValue:
-          type: object
-        operator:
-          type: string
-        showType:
-          enum:
-          - SINGLE
-          - MULTIPLE
-          - TEXT
-          type: string
-        type:
-          enum:
-          - SYSTEM
-          - CUSTOM
-          - SYSTEM_OBJECT
-          - SYSTEM_ARRAY
-          - CUSTOM_ARRAY
-          - SYSTEM_SCHEDULING
-          - SYSTEM_EXPECTED_OBJECT
-          - SYSTEM_POLYGON_ARRAY
-          type: string
+        expectedDateContactIds:
+          items:
+            format: int64
+            type: integer
+          type: array
+        filterIds:
+          items:
+            format: int64
+            type: integer
+          type: array
+        filters:
+          items:
+            items:
+              $ref: '#/components/schemas/ContactFilterRuleWrapper'
+            type: array
+          type: array
+        groupIds:
+          items:
+            format: int64
+            type: integer
+          type: array
       type: object
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
   securitySchemes:
     API_Authorizer:
       type: apiKey

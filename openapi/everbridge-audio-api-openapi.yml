@@ -172,6 +172,32 @@ paths:
       x-operation-id-original: EBS Get Audio
 components:
   schemas:
+    FileResourceWrapper:
+      properties:
+        fileName:
+          type: string
+        id:
+          type: string
+        mimeType:
+          type: string
+        size:
+          format: double
+          type: number
+      type: object
+    AudioRestfulModificationResult:
+      properties:
+        audioKey:
+          type: string
+        baseUri:
+          type: string
+        id:
+          format: int64
+          type: integer
+        instanceUri:
+          type: string
+        message:
+          type: string
+      type: object
     AudioWrapper:
       properties:
         accountId:
@@ -235,32 +261,12 @@ components:
           - D
           type: string
       type: object
-    FileResourceWrapper:
-      properties:
-        fileName:
-          type: string
-        id:
-          type: string
-        mimeType:
-          type: string
-        size:
-          format: double
-          type: number
-      type: object
-    AudioRestfulModificationResult:
-      properties:
-        audioKey:
-          type: string
-        baseUri:
-          type: string
-        id:
-          format: int64
-          type: integer
-        instanceUri:
-          type: string
-        message:
-          type: string
-      type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
     AudioWrapperInstanceResult:
       properties:
         message:
@@ -268,12 +274,6 @@ components:
         result:
           $ref: '#/components/schemas/AudioWrapper'
       type: object
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
   securitySchemes:
     API_Authorizer:
       description: oAuth Token

@@ -228,35 +228,6 @@ paths:
       x-operation-id-original: EBS Get Notification Category
 components:
   schemas:
-    DataPageObject:
-      properties:
-        currentPageNo:
-          format: int32
-          type: integer
-        data:
-          items:
-            type: object
-          type: array
-        dataPageList:
-          items:
-            $ref: '#/components/schemas/DataPageObject'
-          type: array
-        pageSize:
-          format: int32
-          type: integer
-        scrollId:
-          type: string
-        start:
-          format: int32
-          type: integer
-        totalCount:
-          format: int64
-          type: integer
-        totalPageCount:
-          format: int32
-          type: integer
-      title: DataPage«object»
-      type: object
     RestfulInstanceResult:
       properties:
         message:
@@ -264,6 +235,43 @@ components:
         result:
           type: object
       title: RestfulInstanceResult
+      type: object
+    RestfulModificationResult:
+      properties:
+        baseUri:
+          type: string
+        id:
+          format: int64
+          type: integer
+        instanceUri:
+          type: string
+        message:
+          type: string
+      title: RestfulModificationResult
+      type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
+    RestfulCollectionResult:
+      properties:
+        currentPageUri:
+          type: string
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        nextPageUri:
+          type: string
+        page:
+          $ref: '#/components/schemas/DataPageObject'
+        previousPageUri:
+          type: string
+      title: RestfulCollectionResult
       type: object
     CategoryWrapper:
       description: The notificationCategory object to create
@@ -308,42 +316,34 @@ components:
           - D
           type: string
       type: object
-    RestfulCollectionResult:
+    DataPageObject:
       properties:
-        currentPageUri:
+        currentPageNo:
+          format: int32
+          type: integer
+        data:
+          items:
+            type: object
+          type: array
+        dataPageList:
+          items:
+            $ref: '#/components/schemas/DataPageObject'
+          type: array
+        pageSize:
+          format: int32
+          type: integer
+        scrollId:
           type: string
-        firstPageUri:
-          type: string
-        lastPageUri:
-          type: string
-        message:
-          type: string
-        nextPageUri:
-          type: string
-        page:
-          $ref: '#/components/schemas/DataPageObject'
-        previousPageUri:
-          type: string
-      title: RestfulCollectionResult
-      type: object
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
-    RestfulModificationResult:
-      properties:
-        baseUri:
-          type: string
-        id:
+        start:
+          format: int32
+          type: integer
+        totalCount:
           format: int64
           type: integer
-        instanceUri:
-          type: string
-        message:
-          type: string
-      title: RestfulModificationResult
+        totalPageCount:
+          format: int32
+          type: integer
+      title: DataPage«object»
       type: object
   securitySchemes:
     API_Authorizer:

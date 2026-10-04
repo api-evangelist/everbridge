@@ -260,34 +260,26 @@ paths:
       x-operation-id-original: EBS Update Record Type
 components:
   schemas:
-    DataPageObject:
+    RestfulInstanceResult:
       properties:
-        currentPageNo:
-          format: int32
-          type: integer
-        data:
-          items:
-            type: object
-          type: array
-        dataPageList:
-          items:
-            $ref: '#/components/schemas/DataPageObject'
-          type: array
-        pageSize:
-          format: int32
-          type: integer
-        scrollId:
+        message:
           type: string
-        start:
-          format: int32
-          type: integer
-        totalCount:
+        result:
+          type: object
+      title: RestfulInstanceResult
+      type: object
+    RestfulModificationResult:
+      properties:
+        baseUri:
+          type: string
+        id:
           format: int64
           type: integer
-        totalPageCount:
-          format: int32
-          type: integer
-      title: DataPage«object»
+        instanceUri:
+          type: string
+        message:
+          type: string
+      title: RestfulModificationResult
       type: object
     ContactRecordTypeWrapper:
       description: JSON object describing the new contactRecordType
@@ -343,14 +335,6 @@ components:
           - D
           type: string
       type: object
-    RestfulInstanceResult:
-      properties:
-        message:
-          type: string
-        result:
-          type: object
-      title: RestfulInstanceResult
-      type: object
     RestfulCollectionResult:
       properties:
         currentPageUri:
@@ -369,18 +353,34 @@ components:
           type: string
       title: RestfulCollectionResult
       type: object
-    RestfulModificationResult:
+    DataPageObject:
       properties:
-        baseUri:
+        currentPageNo:
+          format: int32
+          type: integer
+        data:
+          items:
+            type: object
+          type: array
+        dataPageList:
+          items:
+            $ref: '#/components/schemas/DataPageObject'
+          type: array
+        pageSize:
+          format: int32
+          type: integer
+        scrollId:
           type: string
-        id:
+        start:
+          format: int32
+          type: integer
+        totalCount:
           format: int64
           type: integer
-        instanceUri:
-          type: string
-        message:
-          type: string
-      title: RestfulModificationResult
+        totalPageCount:
+          format: int32
+          type: integer
+      title: DataPage«object»
       type: object
   securitySchemes:
     API_Authorizer:

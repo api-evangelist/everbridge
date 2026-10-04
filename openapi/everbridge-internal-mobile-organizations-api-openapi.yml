@@ -341,112 +341,9 @@ paths:
         passthroughBehavior: when_no_match
 components:
   schemas:
-    EmergencyPhoneNumber:
+    KeywordSubscriptionResponse:
       type: object
       properties:
-        country:
-          type: string
-        countryCode:
-          type: string
-        phoneNumber:
-          type: string
-        authority:
-          type: boolean
-        ignoreValidation:
-          type: boolean
-    IndividualAccountInfoVo:
-      type: object
-      properties:
-        uuid:
-          type: string
-        individualAccountId:
-          type: string
-        contactId:
-          type: integer
-          format: int64
-        contactFirstName:
-          type: string
-        contactLastName:
-          type: string
-    MobileAccountContactTracingSetting:
-      type: object
-      properties:
-        individualAccountId:
-          type: string
-    MobileOrganizationSafetySetting:
-      type: object
-      properties:
-        enableSafetyFeature:
-          type: boolean
-        duration:
-          type: integer
-          format: int32
-        unit:
-          type: string
-          enum:
-          - SECONDS
-          - MINUTES
-          - HOURS
-        allowCustomDuration:
-          type: boolean
-        accountSafetySettings:
-          type: array
-          items:
-            $ref: '#/components/schemas/MobileAccountSafetySetting'
-        emergencyPhoneNumbers:
-          type: array
-          items:
-            $ref: '#/components/schemas/EmergencyPhoneNumber'
-        defaultEmergencyPhoneNumber:
-          $ref: '#/components/schemas/EmergencyPhoneNumber'
-        enableLandingPage:
-          type: boolean
-    GeoPoint:
-      type: object
-      properties:
-        x:
-          type: number
-          format: double
-        y:
-          type: number
-          format: double
-    MobileAccountLocationTracingSetting:
-      type: object
-      properties:
-        individualAccountId:
-          type: string
-    MobileLocationTracingSetting:
-      type: object
-      properties:
-        enableLocationTracingInsideGeofence:
-          type: boolean
-        enteringGeofenceMessage:
-          $ref: '#/components/schemas/EnteringGeofenceMessage'
-        exitingGeofenceMessage:
-          $ref: '#/components/schemas/ExitingGeofenceMessage'
-        geofences:
-          type: array
-          items:
-            $ref: '#/components/schemas/Geofence'
-        accountLocationTracingSettings:
-          type: array
-          items:
-            $ref: '#/components/schemas/MobileAccountLocationTracingSetting'
-    ExitingGeofenceMessage:
-      type: object
-      properties:
-        enabled:
-          type: boolean
-        message:
-          type: string
-    KeywordSearchResponse:
-      type: object
-      properties:
-        keywordId:
-          type: integer
-          format: int64
-        keywordName:
-          type: string
         organizationId:
           type: integer
           format: int64
@@ -456,26 +353,31 @@ components:
           type: string
         appBrandedFileId:
           type: string
-        createdTime:
+        keywordId:
+          type: integer
+          format: int64
+        keywordName:
           type: string
-          format: date-time
-        enableAnonymousSubscribe:
-          type: boolean
-    MobileContactTracingSetting:
+        individualAccountInfo:
+          $ref: '#/components/schemas/IndividualAccountInfoVo'
+    ExitingGeofenceMessage:
       type: object
       properties:
-        enableBlueToothProximity:
+        enabled:
           type: boolean
-        anonymousReport:
-          type: boolean
-        exposureEventNotification:
-          $ref: '#/components/schemas/ExposureEventNotification'
-        exposureEventIncident:
-          $ref: '#/components/schemas/ExposureEventIncident'
-        accountContactTracingSettings:
-          type: array
-          items:
-            $ref: '#/components/schemas/MobileAccountContactTracingSetting'
+        message:
+          type: string
+    IncidentZoneAgency:
+      type: object
+      properties:
+        name:
+          type: string
+        designation:
+          type: string
+        logoFileId:
+          type: string
+        smartPing:
+          $ref: '#/components/schemas/SmartPing'
     MobileCustomButton:
       type: object
       properties:
@@ -498,34 +400,46 @@ components:
             $ref: '#/components/schemas/MobileAction'
         classic:
           type: boolean
-    MobileAccountSafetySetting:
+    ExposureEventIncident:
       type: object
       properties:
-        individualAccountId:
+        enabled:
+          type: boolean
+        templateId:
+          type: integer
+          format: int64
+    EmergencyPhoneNumber:
+      type: object
+      properties:
+        country:
           type: string
-        useCheckIn:
+        countryCode:
+          type: string
+        phoneNumber:
+          type: string
+        authority:
           type: boolean
-        usePanicAndSafeCorridor:
+        ignoreValidation:
           type: boolean
-        useEmergencyCall:
-          type: boolean
-        useSOS:
-          type: boolean
-        useSafeCorridor:
-          type: boolean
-        activeForSOS:
-          type: boolean
-        customButtons:
-          type: array
-          items:
-            $ref: '#/components/schemas/MobileCustomButton'
-    SmartPing:
+    OrganizationCode:
       type: object
       properties:
-        available:
+        region:
+          type: string
+        organizationId:
+          type: string
+        organizationCode:
+          type: string
+        isEnabled:
           type: boolean
-        enableSmartPing:
+    PasscodeSetting:
+      type: object
+      properties:
+        enabled:
           type: boolean
+        interval:
+          type: integer
+          format: int32
     GeoCircle:
       type: object
       properties:
@@ -541,6 +455,20 @@ components:
           - METER
           - MILE
           - FOOT
+    IndividualAccountInfoVo:
+      type: object
+      properties:
+        uuid:
+          type: string
+        individualAccountId:
+          type: string
+        contactId:
+          type: integer
+          format: int64
+        contactFirstName:
+          type: string
+        contactLastName:
+          type: string
     KeywordV2Request:
       required:
       - individualAccountInfoVo
@@ -555,58 +483,23 @@ components:
           - UNSUBSCRIBE
         individualAccountInfoVo:
           $ref: '#/components/schemas/IndividualAccountInfoVo'
-    PasscodeSetting:
+    MobileLocationTracingSetting:
       type: object
       properties:
-        enabled:
+        enableLocationTracingInsideGeofence:
           type: boolean
-        interval:
-          type: integer
-          format: int32
-    EnteringGeofenceMessage:
-      type: object
-      properties:
-        enabled:
-          type: boolean
-        message:
-          type: string
-    Geofence:
-      type: object
-      properties:
-        name:
-          type: string
-        circle:
-          $ref: '#/components/schemas/GeoCircle'
-    MobileAction:
-      type: object
-      properties:
-        name:
-          type: string
-    ExposureEventNotification:
-      type: object
-      properties:
-        enabled:
-          type: boolean
-        message:
-          type: string
-    OrganizationV2Response:
-      type: object
-      properties:
-        organizationId:
-          type: string
-          description: Organization Id
-        organizationName:
-          type: string
-          description: Organization name
-        organizationLogoId:
-          type: string
-          description: Organization logo
-        ssoSetting:
-          type: object
-          additionalProperties:
-            type: string
-            description: Organization's SSO settings
-          description: Organization's SSO settings
+        enteringGeofenceMessage:
+          $ref: '#/components/schemas/EnteringGeofenceMessage'
+        exitingGeofenceMessage:
+          $ref: '#/components/schemas/ExitingGeofenceMessage'
+        geofences:
+          type: array
+          items:
+            $ref: '#/components/schemas/Geofence'
+        accountLocationTracingSettings:
+          type: array
+          items:
+            $ref: '#/components/schemas/MobileAccountLocationTracingSetting'
     MobileOrganizationSetting:
       type: object
       properties:
@@ -663,25 +556,77 @@ components:
           type: boolean
         enableChatReceipt:
           type: boolean
-    ExposureEventIncident:
+    EnteringGeofenceMessage:
       type: object
       properties:
         enabled:
           type: boolean
-        templateId:
-          type: integer
-          format: int64
-    OrganizationCode:
+        message:
+          type: string
+    Geofence:
       type: object
       properties:
-        region:
+        name:
           type: string
-        organizationId:
-          type: string
-        organizationCode:
-          type: string
-        isEnabled:
+        circle:
+          $ref: '#/components/schemas/GeoCircle'
+    GeoPoint:
+      type: object
+      properties:
+        x:
+          type: number
+          format: double
+        y:
+          type: number
+          format: double
+    MobileContactTracingSetting:
+      type: object
+      properties:
+        enableBlueToothProximity:
           type: boolean
+        anonymousReport:
+          type: boolean
+        exposureEventNotification:
+          $ref: '#/components/schemas/ExposureEventNotification'
+        exposureEventIncident:
+          $ref: '#/components/schemas/ExposureEventIncident'
+        accountContactTracingSettings:
+          type: array
+          items:
+            $ref: '#/components/schemas/MobileAccountContactTracingSetting'
+    SmartPing:
+      type: object
+      properties:
+        available:
+          type: boolean
+        enableSmartPing:
+          type: boolean
+    MobileAccountSafetySetting:
+      type: object
+      properties:
+        individualAccountId:
+          type: string
+        useCheckIn:
+          type: boolean
+        usePanicAndSafeCorridor:
+          type: boolean
+        useEmergencyCall:
+          type: boolean
+        useSOS:
+          type: boolean
+        useSafeCorridor:
+          type: boolean
+        activeForSOS:
+          type: boolean
+        customButtons:
+          type: array
+          items:
+            $ref: '#/components/schemas/MobileCustomButton'
+    MobileAction:
+      type: object
+      properties:
+        name:
+          type: string
     ButtonFrequency:
       type: object
       properties:
@@ -696,20 +641,77 @@ components:
           format: int32
         customized:
           type: boolean
-    IncidentZoneAgency:
+    MobileAccountLocationTracingSetting:
       type: object
       properties:
-        name:
+        individualAccountId:
           type: string
-        designation:
-          type: string
-        logoFileId:
-          type: string
-        smartPing:
-          $ref: '#/components/schemas/SmartPing'
-    KeywordSubscriptionResponse:
+    MobileAccountContactTracingSetting:
       type: object
       properties:
+        individualAccountId:
+          type: string
+    ExposureEventNotification:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        message:
+          type: string
+    MobileOrganizationSafetySetting:
+      type: object
+      properties:
+        enableSafetyFeature:
+          type: boolean
+        duration:
+          type: integer
+          format: int32
+        unit:
+          type: string
+          enum:
+          - SECONDS
+          - MINUTES
+          - HOURS
+        allowCustomDuration:
+          type: boolean
+        accountSafetySettings:
+          type: array
+          items:
+            $ref: '#/components/schemas/MobileAccountSafetySetting'
+        emergencyPhoneNumbers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EmergencyPhoneNumber'
+        defaultEmergencyPhoneNumber:
+          $ref: '#/components/schemas/EmergencyPhoneNumber'
+        enableLandingPage:
+          type: boolean
+    OrganizationV2Response:
+      type: object
+      properties:
+        organizationId:
+          type: string
+          description: Organization Id
+        organizationName:
+          type: string
+          description: Organization name
+        organizationLogoId:
+          type: string
+          description: Organization logo
+        ssoSetting:
+          type: object
+          additionalProperties:
+            type: string
+            description: Organization's SSO settings
+          description: Organization's SSO settings
+    KeywordSearchResponse:
+      type: object
+      properties:
+        keywordId:
+          type: integer
+          format: int64
+        keywordName:
+          type: string
         organizationId:
           type: integer
           format: int64
@@ -719,13 +721,11 @@ components:
           type: string
         appBrandedFileId:
           type: string
-        keywordId:
-          type: integer
-          format: int64
-        keywordName:
+        createdTime:
           type: string
-        individualAccountInfo:
-          $ref: '#/components/schemas/IndividualAccountInfoVo'
+          format: date-time
+        enableAnonymousSubscribe:
+          type: boolean
   securitySchemes:
     API_Authorizer:
       type: apiKey

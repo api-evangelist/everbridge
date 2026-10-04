@@ -97,61 +97,6 @@ components:
           format: date-time
           type: string
       type: object
-    StaffShiftAssignmentsWrapper:
-      properties:
-        externalId:
-          type: string
-        firstName:
-          type: string
-        lastName:
-          type: string
-        middleInitial:
-          type: string
-        shiftAssignments:
-          items:
-            $ref: '#/components/schemas/ShiftAssignmentWrapper'
-          type: array
-        staffId:
-          format: int64
-          type: integer
-        suffix:
-          type: string
-      type: object
-    CalendarStaffShiftAssignmentsWrapperInstanceResult:
-      properties:
-        message:
-          type: string
-        result:
-          $ref: '#/components/schemas/CalendarStaffShiftAssignmentsWrapper'
-      type: object
-    Staff:
-      properties:
-        externalId:
-          type: string
-        firstName:
-          type: string
-        id:
-          format: int64
-          type: integer
-        lastName:
-          type: string
-        middleInitial:
-          type: string
-        suffix:
-          type: string
-        unavailable:
-          type: boolean
-      type: object
-    CalendarStaffShiftAssignmentsWrapper:
-      properties:
-        calendar:
-          $ref: '#/components/schemas/CalendarWrapper'
-        staffAssignments:
-          items:
-            $ref: '#/components/schemas/StaffShiftAssignmentsWrapper'
-          type: array
-          uniqueItems: true
-      type: object
     ShiftExceptions:
       properties:
         accountId:
@@ -231,6 +176,36 @@ components:
           - D
           type: string
       type: object
+    StaffShiftAssignmentsWrapper:
+      properties:
+        externalId:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        middleInitial:
+          type: string
+        shiftAssignments:
+          items:
+            $ref: '#/components/schemas/ShiftAssignmentWrapper'
+          type: array
+        staffId:
+          format: int64
+          type: integer
+        suffix:
+          type: string
+      type: object
+    CalendarStaffShiftAssignmentsWrapper:
+      properties:
+        calendar:
+          $ref: '#/components/schemas/CalendarWrapper'
+        staffAssignments:
+          items:
+            $ref: '#/components/schemas/StaffShiftAssignmentsWrapper'
+          type: array
+          uniqueItems: true
+      type: object
     CalendarWrapper:
       properties:
         accountId:
@@ -292,6 +267,13 @@ components:
           - D
           type: string
       type: object
+    CalendarStaffShiftAssignmentsWrapperInstanceResult:
+      properties:
+        message:
+          type: string
+        result:
+          $ref: '#/components/schemas/CalendarStaffShiftAssignmentsWrapper'
+      type: object
     ShiftAssignmentWrapper:
       properties:
         dayOfShift:
@@ -328,6 +310,24 @@ components:
         staffShiftAssignmentId:
           format: int64
           type: integer
+      type: object
+    Staff:
+      properties:
+        externalId:
+          type: string
+        firstName:
+          type: string
+        id:
+          format: int64
+          type: integer
+        lastName:
+          type: string
+        middleInitial:
+          type: string
+        suffix:
+          type: string
+        unavailable:
+          type: boolean
       type: object
   securitySchemes:
     API_Authorizer:
