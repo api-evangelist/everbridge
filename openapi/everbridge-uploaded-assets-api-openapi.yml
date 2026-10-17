@@ -123,29 +123,29 @@ paths:
       x-operation-id-original: EB AM Get Uploaded Asset Detail By Id
 components:
   schemas:
-    Error:
-      type: object
-      properties:
-        field:
-          type: string
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-    UploadPoint:
-      type: object
-      properties:
-        lon:
-          type: string
-        lat:
-          type: string
     organizationId:
       description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
       maxLength: 16
       type: integer
       example: '1536984111644674'
       default: '1536984111644674'
+    UploadAddress:
+      type: object
+      properties:
+        country:
+          type: string
+        state:
+          type: string
+        city:
+          type: string
+        postalCode:
+          type: string
+        streetAddress1:
+          type: string
+        streetAddress2:
+          type: string
+        point:
+          $ref: '#/components/schemas/UploadPoint'
     UploadAsset:
       type: object
       properties:
@@ -230,6 +230,42 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UploadAssetAssociation'
+    UploadPoint:
+      type: object
+      properties:
+        lon:
+          type: string
+        lat:
+          type: string
+    Error:
+      type: object
+      properties:
+        field:
+          type: string
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+    UploadAssetAssociation:
+      type: object
+      properties:
+        associationDefinitionId:
+          type: string
+        entityType:
+          type: string
+          enum:
+          - Contact
+          - ContactGroup
+          - ContactFilter
+        entityIds:
+          type: array
+          items:
+            type: string
+        entityValues:
+          type: string
+        associationDefinitionColumnName:
+          type: string
     UploadAssetPropertyValue:
       type: object
       properties:
@@ -261,42 +297,6 @@ components:
         totalPageCount:
           type: integer
           format: int32
-    UploadAddress:
-      type: object
-      properties:
-        country:
-          type: string
-        state:
-          type: string
-        city:
-          type: string
-        postalCode:
-          type: string
-        streetAddress1:
-          type: string
-        streetAddress2:
-          type: string
-        point:
-          $ref: '#/components/schemas/UploadPoint'
-    UploadAssetAssociation:
-      type: object
-      properties:
-        associationDefinitionId:
-          type: string
-        entityType:
-          type: string
-          enum:
-          - Contact
-          - ContactGroup
-          - ContactFilter
-        entityIds:
-          type: array
-          items:
-            type: string
-        entityValues:
-          type: string
-        associationDefinitionColumnName:
-          type: string
   securitySchemes:
     BasicAuth:
       type: http

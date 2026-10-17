@@ -166,6 +166,12 @@ paths:
       x-operation-id-original: EBS AM Get Asset Type Template
 components:
   schemas:
+    organizationId:
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      maxLength: 16
+      type: integer
+      example: '1536984111644674'
+      default: '1536984111644674'
     AssetPropertyDefinition:
       required:
       - assetPropertyDataType
@@ -251,12 +257,6 @@ components:
           type: array
           items:
             type: object
-    organizationId:
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      maxLength: 16
-      type: integer
-      example: '1536984111644674'
-      default: '1536984111644674'
     AssetTypeTemplate:
       required:
       - name

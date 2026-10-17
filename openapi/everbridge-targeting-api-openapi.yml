@@ -66,10 +66,22 @@ paths:
           description: Failed - Rate limit is exceeded
 components:
   schemas:
-    TargetingAttributeResponse:
-      type: array
-      items:
-        $ref: '#/components/schemas/TargetingAttribute'
+    TargetingAttribute:
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the attribute
+          example: d300f1ee-6c54-4b01-90e6-d701748f0843
+        name:
+          type: string
+          description: Attribute Name
+          example: Department
+        type:
+          type: string
+          description: Type of attribute
+          enum:
+          - User
+          - Machine
     Group:
       properties:
         id:
@@ -90,22 +102,10 @@ components:
           - 'null'
           description: Group Description
           example: All Auckland users
-    TargetingAttribute:
-      properties:
-        id:
-          type: string
-          description: Unique identifier for the attribute
-          example: d300f1ee-6c54-4b01-90e6-d701748f0843
-        name:
-          type: string
-          description: Attribute Name
-          example: Department
-        type:
-          type: string
-          description: Type of attribute
-          enum:
-          - User
-          - Machine
+    TargetingAttributeResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/TargetingAttribute'
     GroupResponse:
       type: array
       items:

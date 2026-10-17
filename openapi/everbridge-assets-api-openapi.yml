@@ -875,10 +875,12 @@ paths:
       x-operation-id-original: EBS AM Get Asset By ExternalId Path
 components:
   schemas:
-    assetTypeId:
-      description: Available on manager portal (Settings --> Organization --> Contacts/Assets --> Assert Types)
-      type: string
-      example: 665ff8e1a1b61d39e577b9c6
+    organizationId:
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      maxLength: 16
+      type: integer
+      example: '1536984111644674'
+      default: '1536984111644674'
     assetsManagementListResponseWrapper:
       type: object
       properties:
@@ -946,12 +948,81 @@ components:
           type: number
         totalPageCount:
           type: number
-    organizationId:
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      maxLength: 16
-      type: integer
-      example: '1536984111644674'
-      default: '1536984111644674'
+    assetsManagementResponseWrapper:
+      type: object
+      properties:
+        id:
+          type: string
+        organizationId:
+          type: number
+        createdId:
+          type: number
+        createdName:
+          type: string
+        lastModifiedId:
+          type: number
+        lastModifiedName:
+          type: string
+        createdTimestamp:
+          type: number
+        lastModifiedTimestamp:
+          type: number
+        externalId:
+          type: string
+        assetTypeId:
+          type: string
+        name:
+          type: string
+        address:
+          type: object
+          properties:
+            country:
+              type: string
+            state:
+              type: string
+            city:
+              type: string
+            postalCode:
+              type: string
+        iconId:
+          type: string
+        geocodingAddressRequired:
+          type: boolean
+        smartEnabled:
+          type: boolean
+        icon:
+          $ref: '#/components/schemas/AssetIcon'
+        color:
+          type: string
+    assetsManagementQuickSearchRequestWrapper:
+      type: array
+      description: Asset ids
+      items:
+        type: string
+    AssetIcon:
+      type: object
+      properties:
+        source:
+          type: string
+          enum:
+          - SYSTEM
+          - CUSTOM
+        id:
+          type: string
+        name:
+          type: string
+        contentUrl:
+          type: string
+        color:
+          type: string
+    assetTypeId:
+      description: Available on manager portal (Settings --> Organization --> Contacts/Assets --> Assert Types)
+      type: string
+      example: 665ff8e1a1b61d39e577b9c6
+    externalId:
+      description: The External ID
+      type: string
+      example: externalId@everbridge.com
     assetsManagementSingleResponseWrapper:
       type: object
       properties:
@@ -1047,61 +1118,6 @@ components:
       - properties
       - geocodingAddressRequired
       - smartEnabled
-    assetsManagementQuickSearchRequestWrapper:
-      type: array
-      description: Asset ids
-      items:
-        type: string
-    externalId:
-      description: The External ID
-      type: string
-      example: externalId@everbridge.com
-    assetsManagementResponseWrapper:
-      type: object
-      properties:
-        id:
-          type: string
-        organizationId:
-          type: number
-        createdId:
-          type: number
-        createdName:
-          type: string
-        lastModifiedId:
-          type: number
-        lastModifiedName:
-          type: string
-        createdTimestamp:
-          type: number
-        lastModifiedTimestamp:
-          type: number
-        externalId:
-          type: string
-        assetTypeId:
-          type: string
-        name:
-          type: string
-        address:
-          type: object
-          properties:
-            country:
-              type: string
-            state:
-              type: string
-            city:
-              type: string
-            postalCode:
-              type: string
-        iconId:
-          type: string
-        geocodingAddressRequired:
-          type: boolean
-        smartEnabled:
-          type: boolean
-        icon:
-          $ref: '#/components/schemas/AssetIcon'
-        color:
-          type: string
     assetsManagementRequestWrapper:
       type: object
       properties:
@@ -1178,22 +1194,6 @@ components:
       - assetTypeId
       - name
       - externalId
-    AssetIcon:
-      type: object
-      properties:
-        source:
-          type: string
-          enum:
-          - SYSTEM
-          - CUSTOM
-        id:
-          type: string
-        name:
-          type: string
-        contentUrl:
-          type: string
-        color:
-          type: string
   securitySchemes:
     BasicAuth:
       type: http

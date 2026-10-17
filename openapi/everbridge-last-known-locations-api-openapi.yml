@@ -104,19 +104,6 @@ components:
       example: '1536984111644674'
       maxLength: 16
       type: integer
-    RestfulModificationResult:
-      properties:
-        baseUri:
-          type: string
-        id:
-          format: int64
-          type: integer
-        instanceUri:
-          type: string
-        message:
-          type: string
-      title: RestfulModificationResult
-      type: object
     LastKnownLocationWrapper:
       anyOf:
       - required:
@@ -151,6 +138,19 @@ components:
       required:
       - arriveDate
       - expireDate
+      type: object
+    RestfulModificationResult:
+      properties:
+        baseUri:
+          type: string
+        id:
+          format: int64
+          type: integer
+        instanceUri:
+          type: string
+        message:
+          type: string
+      title: RestfulModificationResult
       type: object
   securitySchemes:
     API_Authorizer:

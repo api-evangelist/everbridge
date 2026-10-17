@@ -288,36 +288,6 @@ paths:
       x-operation-id-original: EBS Get Organization
 components:
   schemas:
-    UnsoicitedMessageConstraintWrapper:
-      properties:
-        maxMessagesPerHour:
-          format: int32
-          type: integer
-        maxMessagesPerMinute:
-          format: int32
-          type: integer
-      type: object
-    OrganizationPathWrapperInstanceResult:
-      properties:
-        message:
-          type: string
-        result:
-          $ref: '#/components/schemas/OrganizationPathWrapper'
-      type: object
-    ProcessingStateWrapper:
-      properties:
-        serverId:
-          format: int64
-          type: integer
-        startTime:
-          format: int64
-          type: integer
-        synchronizeTime:
-          format: int64
-          type: integer
-        threadName:
-          type: string
-      type: object
     AddressWrapper:
       properties:
         city:
@@ -336,6 +306,18 @@ components:
           type: string
         suite:
           type: string
+      type: object
+    TweetConstraintWrapper:
+      properties:
+        maxTotalTweets:
+          format: int64
+          type: integer
+        maxTweetsPerHour:
+          format: int32
+          type: integer
+        maxTweetsPerMinute:
+          format: int32
+          type: integer
       type: object
     ThresholdSettingWrapper:
       properties:
@@ -396,6 +378,24 @@ components:
           format: int32
           type: integer
       type: object
+    GisLocationWrapper:
+      properties:
+        lat:
+          format: double
+          type: number
+        lon:
+          format: double
+          type: number
+      type: object
+    UnsoicitedMessageConstraintWrapper:
+      properties:
+        maxMessagesPerHour:
+          format: int32
+          type: integer
+        maxMessagesPerMinute:
+          format: int32
+          type: integer
+      type: object
     ThrottleSettingWrapper:
       properties:
         applyByFlag:
@@ -424,53 +424,19 @@ components:
         senderToggleFlag:
           type: boolean
       type: object
-    GisLocationWrapper:
+    ProcessingStateWrapper:
       properties:
-        lat:
-          format: double
-          type: number
-        lon:
-          format: double
-          type: number
-      type: object
-    TweetConstraintWrapper:
-      properties:
-        maxTotalTweets:
+        serverId:
           format: int64
           type: integer
-        maxTweetsPerHour:
-          format: int32
+        startTime:
+          format: int64
           type: integer
-        maxTweetsPerMinute:
-          format: int32
+        synchronizeTime:
+          format: int64
           type: integer
-      type: object
-    OrganizationWrapperInstanceResult:
-      properties:
-        message:
+        threadName:
           type: string
-        result:
-          $ref: '#/components/schemas/OrganizationWrapper'
-      type: object
-    GisSettingWrapper:
-      properties:
-        baseMap:
-          format: int64
-          type: integer
-        latitude:
-          format: double
-          type: number
-        longitude:
-          format: double
-          type: number
-        mapCenter:
-          type: string
-        mapZoomLevel:
-          format: int64
-          type: integer
-        projection:
-          format: int64
-          type: integer
       type: object
     OrganizationWrapper:
       properties:
@@ -625,6 +591,33 @@ components:
           - WDT
           type: string
       type: object
+    GisSettingWrapper:
+      properties:
+        baseMap:
+          format: int64
+          type: integer
+        latitude:
+          format: double
+          type: number
+        longitude:
+          format: double
+          type: number
+        mapCenter:
+          type: string
+        mapZoomLevel:
+          format: int64
+          type: integer
+        projection:
+          format: int64
+          type: integer
+      type: object
+    OrganizationPathWrapperInstanceResult:
+      properties:
+        message:
+          type: string
+        result:
+          $ref: '#/components/schemas/OrganizationPathWrapper'
+      type: object
     OrganizationBroadcastSettingWrapper:
       properties:
         attachmentLinkDurationDays:
@@ -679,6 +672,13 @@ components:
           - MESSAGE_ONLY
           - MESSAGE_WITH_CONFIRMATION
           type: string
+      type: object
+    OrganizationWrapperInstanceResult:
+      properties:
+        message:
+          type: string
+        result:
+          $ref: '#/components/schemas/OrganizationWrapper'
       type: object
     OrganizationPathWrapper:
       properties:

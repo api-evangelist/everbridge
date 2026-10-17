@@ -348,6 +348,24 @@ components:
       - alreadyImported
       - importCount
       - existingTemplates
+    GlobalTemplateImportToOrgResponse:
+      type: object
+      description: Response after importing a global template to an org.
+      properties:
+        templateId:
+          type: string
+          format: uuid
+          description: The ID of the newly created org template.
+        templateName:
+          type: string
+          description: The name of the newly created org template.
+        message:
+          type: string
+          description: Success message.
+      required:
+      - templateId
+      - templateName
+      - message
     GlobalTemplateImportToOrgRequest:
       type: object
       description: Request to import a global template into an organization.
@@ -458,24 +476,6 @@ components:
       - importedAt
       - createdAt
       - createdBy
-    GlobalTemplateImportToOrgResponse:
-      type: object
-      description: Response after importing a global template to an org.
-      properties:
-        templateId:
-          type: string
-          format: uuid
-          description: The ID of the newly created org template.
-        templateName:
-          type: string
-          description: The name of the newly created org template.
-        message:
-          type: string
-          description: Success message.
-      required:
-      - templateId
-      - templateName
-      - message
   securitySchemes:
     API_Authorizer:
       type: apiKey

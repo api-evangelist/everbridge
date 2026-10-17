@@ -2750,15 +2750,12 @@ paths:
       x-operation-id-original: EBS Update Notification
 components:
   schemas:
-    updateNotification:
-      allOf:
-      - properties:
-          notificationStatus:
-            example: Stopped
-            type: string
-        required:
-        - notificationStatus
-        type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
     RestfulModificationResult:
       properties:
         baseUri:
@@ -2771,6 +2768,35 @@ components:
         message:
           type: string
       title: RestfulModificationResult
+      type: object
+    DataPageObject:
+      properties:
+        currentPageNo:
+          format: int32
+          type: integer
+        data:
+          items:
+            type: object
+          type: array
+        dataPageList:
+          items:
+            $ref: '#/components/schemas/DataPageObject'
+          type: array
+        pageSize:
+          format: int32
+          type: integer
+        scrollId:
+          type: string
+        start:
+          format: int32
+          type: integer
+        totalCount:
+          format: int64
+          type: integer
+        totalPageCount:
+          format: int32
+          type: integer
+      title: DataPage«object»
       type: object
     notification:
       properties:
@@ -2880,6 +2906,9 @@ components:
           - Conference
           type: string
       type: object
+    createNotification:
+      allOf:
+      - $ref: '#/components/schemas/notification'
     RestfulInstanceResult:
       properties:
         message:
@@ -2888,15 +2917,15 @@ components:
           type: object
       title: RestfulInstanceResult
       type: object
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
-    createNotification:
+    updateNotification:
       allOf:
-      - $ref: '#/components/schemas/notification'
+      - properties:
+          notificationStatus:
+            example: Stopped
+            type: string
+        required:
+        - notificationStatus
+        type: object
     RestfulCollectionResult:
       properties:
         currentPageUri:
@@ -2914,35 +2943,6 @@ components:
         previousPageUri:
           type: string
       title: RestfulCollectionResult
-      type: object
-    DataPageObject:
-      properties:
-        currentPageNo:
-          format: int32
-          type: integer
-        data:
-          items:
-            type: object
-          type: array
-        dataPageList:
-          items:
-            $ref: '#/components/schemas/DataPageObject'
-          type: array
-        pageSize:
-          format: int32
-          type: integer
-        scrollId:
-          type: string
-        start:
-          format: int32
-          type: integer
-        totalCount:
-          format: int64
-          type: integer
-        totalPageCount:
-          format: int32
-          type: integer
-      title: DataPage«object»
       type: object
     NotificationEventWrapper:
       properties:

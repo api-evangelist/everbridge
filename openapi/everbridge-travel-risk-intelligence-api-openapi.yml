@@ -272,15 +272,6 @@ paths:
         connectionType: VPC_LINK
 components:
   schemas:
-    CountryRiskRatingResponse:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/CountryRiskRating'
     CityRiskRating:
       type: object
       properties:
@@ -309,22 +300,22 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CityRiskRating'
-    CountryRiskRating:
+    CountryRiskRatingByCodeResponse:
       type: object
+      required:
+      - data
       properties:
-        countryCode:
-          type: string
-          description: ISO 3166-1 alpha-2 country code.
-        countryName:
-          type: string
-          description: Country name.
-        rating:
-          type: string
-          description: Risk rating score from 1 (low) to 5 (high).
-        lastUpdated:
-          type: string
-          description: UTC timestamp string in ISO 8601 format.
-          example: '2026-03-08T08:30:06.032Z'
+        data:
+          $ref: '#/components/schemas/CountryRiskRating'
+    CountryRiskRatingResponse:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CountryRiskRating'
     ErrorResponse:
       type: object
       required:
@@ -349,13 +340,22 @@ components:
           type: string
           description: Error detail message.
           example: Authorization failure.
-    CountryRiskRatingByCodeResponse:
+    CountryRiskRating:
       type: object
-      required:
-      - data
       properties:
-        data:
-          $ref: '#/components/schemas/CountryRiskRating'
+        countryCode:
+          type: string
+          description: ISO 3166-1 alpha-2 country code.
+        countryName:
+          type: string
+          description: Country name.
+        rating:
+          type: string
+          description: Risk rating score from 1 (low) to 5 (high).
+        lastUpdated:
+          type: string
+          description: UTC timestamp string in ISO 8601 format.
+          example: '2026-03-08T08:30:06.032Z'
   securitySchemes:
     LambdaAuthorizer:
       type: apiKey

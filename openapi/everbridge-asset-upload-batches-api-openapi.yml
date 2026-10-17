@@ -535,6 +535,12 @@ paths:
       x-operation-id-original: EBS AM Update Upload Asset Batch
 components:
   schemas:
+    organizationId:
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      maxLength: 16
+      type: integer
+      example: '1536984111644674'
+      default: '1536984111644674'
     ListUploadBatchResponse:
       type: object
       properties:
@@ -607,12 +613,6 @@ components:
           type: number
         totalPageCount:
           type: number
-    organizationId:
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      maxLength: 16
-      type: integer
-      example: '1536984111644674'
-      default: '1536984111644674'
     UploadBatchAssetResponse:
       type: object
       properties:

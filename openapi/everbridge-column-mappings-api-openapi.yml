@@ -301,6 +301,12 @@ paths:
       x-operation-id-original: EB AM Delete Column Mapping
 components:
   schemas:
+    organizationId:
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      maxLength: 16
+      type: integer
+      example: '1536984111644674'
+      default: '1536984111644674'
     ColumnMapping:
       type: object
       properties:
@@ -336,12 +342,6 @@ components:
         seq:
           type: integer
           format: int32
-    organizationId:
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      maxLength: 16
-      type: integer
-      example: '1536984111644674'
-      default: '1536984111644674'
     ColumnMappingRequest:
       required:
       - from

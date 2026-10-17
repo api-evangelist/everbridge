@@ -406,25 +406,17 @@ paths:
       x-operation-id-original: EB AM Get Asset Association Definition By Name
 components:
   schemas:
-    AssetAssociationDefinitionRequest:
-      required:
-      - name
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-        associationType:
-          type: string
-          enum:
-          - AssetToContact
     organizationId:
       description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
       maxLength: 16
       type: integer
       example: '1536984111644674'
       default: '1536984111644674'
+    LinkedToAssetResponse:
+      type: object
+      properties:
+        linkedToExistingAsset:
+          type: boolean
     AssetAssociationDefinition:
       type: object
       properties:
@@ -459,11 +451,19 @@ components:
           type: string
           enum:
           - AssetToContact
-    LinkedToAssetResponse:
+    AssetAssociationDefinitionRequest:
+      required:
+      - name
       type: object
       properties:
-        linkedToExistingAsset:
-          type: boolean
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+        associationType:
+          type: string
+          enum:
+          - AssetToContact
   securitySchemes:
     BasicAuth:
       type: http

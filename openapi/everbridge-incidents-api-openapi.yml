@@ -1185,6 +1185,60 @@ components:
           type: integer
           description: Message created time.
           format: int64
+    MessageState:
+      required:
+      - active
+      - confirmed
+      - read
+      - shared
+      type: object
+      properties:
+        read:
+          type: boolean
+          description: Indicates whether the message has been marked as read for the Contact.
+        shared:
+          type: boolean
+          description: Indicates whether the message has been marked as shared for the Contact.
+        confirmed:
+          type: boolean
+          description: Indicates whether the message has been marked as confirmed for the Contact.
+        confirmedAt:
+          type: integer
+          description: The time the message was marked as confirmed for the Contact.
+          format: int64
+        readAt:
+          type: integer
+          description: The time the message was marked as read for the Contact.
+          format: int64
+        active:
+          type: boolean
+          description: Indicates whether the message is still active.
+      description: Message state.
+    MessageSetting:
+      required:
+      - allowShare
+      - requestComment
+      - requestImage
+      - requestLocation
+      - requireConfirm
+      type: object
+      properties:
+        requestImage:
+          type: boolean
+          description: Indicates if an image upload has been requested by the message sender.
+        requestLocation:
+          type: boolean
+          description: Indicates if a location has been requested by the message sender.
+        requestComment:
+          type: boolean
+          description: Indicates if comments are requested by the message sender.
+        allowShare:
+          type: boolean
+          description: Indicates if the message is allowed to be shared.
+        requireConfirm:
+          type: boolean
+          description: Indicates if the the message sender has requested confirmation.
+      description: Additional message settings.
     IncidentV2response:
       required:
       - id
@@ -1225,35 +1279,6 @@ components:
           description: Notification messages belong to this incident.
           items:
             $ref: '#/components/schemas/MessageResponseForQuery'
-    MessageState:
-      required:
-      - active
-      - confirmed
-      - read
-      - shared
-      type: object
-      properties:
-        read:
-          type: boolean
-          description: Indicates whether the message has been marked as read for the Contact.
-        shared:
-          type: boolean
-          description: Indicates whether the message has been marked as shared for the Contact.
-        confirmed:
-          type: boolean
-          description: Indicates whether the message has been marked as confirmed for the Contact.
-        confirmedAt:
-          type: integer
-          description: The time the message was marked as confirmed for the Contact.
-          format: int64
-        readAt:
-          type: integer
-          description: The time the message was marked as read for the Contact.
-          format: int64
-        active:
-          type: boolean
-          description: Indicates whether the message is still active.
-      description: Message state.
     Sender:
       required:
       - firstName
@@ -1271,31 +1296,6 @@ components:
           type: string
           description: The Sender's last name.
       description: Message sender.
-    MessageSetting:
-      required:
-      - allowShare
-      - requestComment
-      - requestImage
-      - requestLocation
-      - requireConfirm
-      type: object
-      properties:
-        requestImage:
-          type: boolean
-          description: Indicates if an image upload has been requested by the message sender.
-        requestLocation:
-          type: boolean
-          description: Indicates if a location has been requested by the message sender.
-        requestComment:
-          type: boolean
-          description: Indicates if comments are requested by the message sender.
-        allowShare:
-          type: boolean
-          description: Indicates if the message is allowed to be shared.
-        requireConfirm:
-          type: boolean
-          description: Indicates if the the message sender has requested confirmation.
-      description: Additional message settings.
     organizationId:
       default: '1536984111644674'
       description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
@@ -1399,20 +1399,6 @@ components:
           description: This replaces the name/title of the incident and notification.  Please note that this is NOT the subject of the notification sent out.
           type: string
       type: object
-    previewIncident:
-      allOf:
-      - properties:
-          incidentAction:
-            description: "Incident Action:\n * `Launch`: This is the most common use case for launching a new incident.\n * `LaunchThenClose`: This closes the incident right after launching the incident."
-            enum:
-            - Launch
-            - LaunchThenClose
-            type: string
-        required:
-        - incidentAction
-        - incidentPhases
-        type: object
-      - $ref: '#/components/schemas/incident'
     updateIncident:
       allOf:
       - properties:
@@ -1426,6 +1412,34 @@ components:
             - CloseWithNotification
             - CloseWithoutNotification
             type: string
+        type: object
+      - $ref: '#/components/schemas/incident'
+    createIncident:
+      allOf:
+      - properties:
+          incidentAction:
+            description: "Incident Action:\n * `Launch`: This is the most common use case for launching a new incident.\n * `LaunchThenClose`: This closes the incident right after launching the incident."
+            enum:
+            - Launch
+            - LaunchThenClose
+            type: string
+        required:
+        - incidentAction
+        - incidentPhases
+        type: object
+      - $ref: '#/components/schemas/incident'
+    previewIncident:
+      allOf:
+      - properties:
+          incidentAction:
+            description: "Incident Action:\n * `Launch`: This is the most common use case for launching a new incident.\n * `LaunchThenClose`: This closes the incident right after launching the incident."
+            enum:
+            - Launch
+            - LaunchThenClose
+            type: string
+        required:
+        - incidentAction
+        - incidentPhases
         type: object
       - $ref: '#/components/schemas/incident'
     IncidentResponse:
@@ -1610,20 +1624,6 @@ components:
       - page
       title: Generated schema for Root
       type: object
-    createIncident:
-      allOf:
-      - properties:
-          incidentAction:
-            description: "Incident Action:\n * `Launch`: This is the most common use case for launching a new incident.\n * `LaunchThenClose`: This closes the incident right after launching the incident."
-            enum:
-            - Launch
-            - LaunchThenClose
-            type: string
-        required:
-        - incidentAction
-        - incidentPhases
-        type: object
-      - $ref: '#/components/schemas/incident'
   securitySchemes:
     API_Authorizer:
       type: apiKey

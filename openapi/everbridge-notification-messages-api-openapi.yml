@@ -289,67 +289,57 @@ paths:
         passthroughBehavior: when_no_match
 components:
   schemas:
-    LocationRequest:
+    MessageSetting:
       required:
-      - latitude
-      - longitude
+      - allowShare
+      - requestComment
+      - requestImage
+      - requestLocation
+      - requireConfirm
       type: object
       properties:
-        latitude:
-          maximum: 90
-          minimum: -90
-          type: number
-          description: Location latitude, range [-90, 90]
-          format: double
-          example: 44.999326
-        longitude:
-          maximum: 180
-          minimum: -180
-          type: number
-          description: Location longitude, range [-180, 180]
-          format: double
-          example: -123.126128
-      description: Location to include with the reply.
-    MessageResponseForQuery:
+        requestImage:
+          type: boolean
+          description: Indicates if an image upload has been requested by the message sender.
+        requestLocation:
+          type: boolean
+          description: Indicates if a location has been requested by the message sender.
+        requestComment:
+          type: boolean
+          description: Indicates if comments are requested by the message sender.
+        allowShare:
+          type: boolean
+          description: Indicates if the message is allowed to be shared.
+        requireConfirm:
+          type: boolean
+          description: Indicates if the the message sender has requested confirmation.
+      description: Additional message settings.
+    MessageReply:
       required:
       - body
-      - id
-      - priority
-      - sender
-      - setting
-      - source
-      - state
-      - title
       type: object
       properties:
-        id:
-          type: string
-          description: Message ID.
-        title:
-          type: string
-          description: Message title.
         body:
           type: string
           description: Message content.
-        priority:
-          type: boolean
-          description: Message priority.
-        sender:
-          $ref: '#/components/schemas/Sender'
-        source:
-          type: string
-          description: Message source.
-        setting:
-          $ref: '#/components/schemas/MessageSetting'
-        state:
-          $ref: '#/components/schemas/MessageState'
-        incidentName:
-          type: string
-          description: Incident name. Only available if the message was triggered from an incident.
-        createdAt:
-          type: integer
-          description: Message created time.
-          format: int64
+        location:
+          $ref: '#/components/schemas/LocationResponse'
+        images:
+          type: array
+          description: Message images.
+          items:
+            $ref: '#/components/schemas/ImageResponse'
+        attachments:
+          type: array
+          description: Message attachments.
+          items:
+            $ref: '#/components/schemas/Attachment'
+        audios:
+          type: array
+          description: Message audio resources.
+          items:
+            $ref: '#/components/schemas/Audio'
+      description: Message replies.
     ImageRequest:
       required:
       - id
@@ -360,7 +350,31 @@ components:
           description: Image ID.
           example: 629a233923b4b6410329fc84
       description: Message images. If a reply is made with images, the images must be uploaded first (using Image Upload API) to generate the required IDs.
-    Attachment:
+    MarkMessageResponse:
+      required:
+      - id
+      - state
+      type: object
+      properties:
+        id:
+          type: string
+          description: Message ID.
+        state:
+          $ref: '#/components/schemas/MessageState'
+    SurveyOption:
+      required:
+      - id
+      - text
+      type: object
+      properties:
+        id:
+          type: string
+          description: Question option ID
+        text:
+          type: string
+          description: Question option value
+      description: Selected option.
+    ImageResponse:
       required:
       - id
       - metadata
@@ -369,13 +383,13 @@ components:
       properties:
         id:
           type: string
-          description: Attachment ID.
+          description: Image ID.
         name:
           type: string
-          description: Attachment name
+          description: Image name
         metadata:
-          $ref: '#/components/schemas/AttachmentMetadata'
-      description: Message attachments.
+          $ref: '#/components/schemas/ImageMetadata'
+      description: Message images.
     MessageResponse:
       required:
       - body
@@ -450,31 +464,27 @@ components:
           description: Message replies.
           items:
             $ref: '#/components/schemas/MessageReply'
-    MessageSetting:
+    LocationRequest:
       required:
-      - allowShare
-      - requestComment
-      - requestImage
-      - requestLocation
-      - requireConfirm
+      - latitude
+      - longitude
       type: object
       properties:
-        requestImage:
-          type: boolean
-          description: Indicates if an image upload has been requested by the message sender.
-        requestLocation:
-          type: boolean
-          description: Indicates if a location has been requested by the message sender.
-        requestComment:
-          type: boolean
-          description: Indicates if comments are requested by the message sender.
-        allowShare:
-          type: boolean
-          description: Indicates if the message is allowed to be shared.
-        requireConfirm:
-          type: boolean
-          description: Indicates if the the message sender has requested confirmation.
-      description: Additional message settings.
+        latitude:
+          maximum: 90
+          minimum: -90
+          type: number
+          description: Location latitude, range [-90, 90]
+          format: double
+          example: 44.999326
+        longitude:
+          maximum: 180
+          minimum: -180
+          type: number
+          description: Location longitude, range [-180, 180]
+          format: double
+          example: -123.126128
+      description: Location to include with the reply.
     Survey:
       required:
       - id
@@ -501,45 +511,6 @@ components:
           type: string
           description: The new input option type.
       description: Message surveys.
-    ImageMetadata:
-      required:
-      - contentType
-      type: object
-      properties:
-        contentType:
-          type: string
-          description: File type.
-          example: image/png
-      description: Image metadata.
-    SurveyResponse:
-      required:
-      - surveyId
-      - surveyOptionId
-      type: object
-      properties:
-        surveyId:
-          type: string
-          description: Survey ID.
-        surveyOptionId:
-          type: string
-          description: Selected Survey Option ID.
-    LocationResponse:
-      required:
-      - latitude
-      - longitude
-      type: object
-      properties:
-        latitude:
-          type: number
-          description: Location latitude
-          format: double
-          example: 44.999326
-        longitude:
-          type: number
-          description: Location longitude
-          format: double
-          example: -123.126128
-      description: Location info.
     Sender:
       required:
       - firstName
@@ -557,44 +528,22 @@ components:
           type: string
           description: The Sender's last name.
       description: Message sender.
-    SurveyRequest:
+    Audio:
       required:
-      - surveyId
-      - surveyOptionId
+      - id
+      - metadata
+      - name
       type: object
       properties:
-        surveyId:
+        id:
           type: string
-          description: Survey ID.
-        surveyOptionId:
+          description: Audio ID.
+        name:
           type: string
-          description: Selected Survey Option ID.
-    MessageReply:
-      required:
-      - body
-      type: object
-      properties:
-        body:
-          type: string
-          description: Message content.
-        location:
-          $ref: '#/components/schemas/LocationResponse'
-        images:
-          type: array
-          description: Message images.
-          items:
-            $ref: '#/components/schemas/ImageResponse'
-        attachments:
-          type: array
-          description: Message attachments.
-          items:
-            $ref: '#/components/schemas/Attachment'
-        audios:
-          type: array
-          description: Message audio resources.
-          items:
-            $ref: '#/components/schemas/Audio'
-      description: Message replies.
+          description: Audio name
+        metadata:
+          $ref: '#/components/schemas/AudioMetadata'
+      description: Message audio resources.
     AudioMetadata:
       required:
       - contentType
@@ -605,47 +554,54 @@ components:
           description: File type.
           example: image/png
       description: Audio metadata.
-    MarkMessageResponse:
+    ReplyMessageResponse:
       required:
       - id
-      - state
       type: object
       properties:
         id:
           type: string
           description: Message ID.
-        state:
-          $ref: '#/components/schemas/MessageState'
-    ReplyMessageRequest:
+    MessageResponseForQuery:
       required:
       - body
+      - id
+      - priority
+      - sender
+      - setting
+      - source
+      - state
+      - title
       type: object
       properties:
-        body:
-          maxLength: 1000
-          minLength: 1
+        id:
           type: string
-          description: Text to include as the message reply.
-        location:
-          $ref: '#/components/schemas/LocationRequest'
-        images:
-          type: array
-          description: Message images. If a reply is made with images, the images must be uploaded first (using Image Upload API) to generate the required IDs.
-          items:
-            $ref: '#/components/schemas/ImageRequest'
-    SurveyResult:
-      required:
-      - respondedTime
-      - selectedOption
-      type: object
-      properties:
-        selectedOption:
-          $ref: '#/components/schemas/SurveyOption'
-        respondedTime:
+          description: Message ID.
+        title:
+          type: string
+          description: Message title.
+        body:
+          type: string
+          description: Message content.
+        priority:
+          type: boolean
+          description: Message priority.
+        sender:
+          $ref: '#/components/schemas/Sender'
+        source:
+          type: string
+          description: Message source.
+        setting:
+          $ref: '#/components/schemas/MessageSetting'
+        state:
+          $ref: '#/components/schemas/MessageState'
+        incidentName:
+          type: string
+          description: Incident name. Only available if the message was triggered from an incident.
+        createdAt:
           type: integer
-          description: The time that the Contact's survey response was sent.
+          description: Message created time.
           format: int64
-      description: Message survey results.
     MessageState:
       required:
       - active
@@ -675,6 +631,74 @@ components:
           type: boolean
           description: Indicates whether the message is still active.
       description: Message state.
+    LocationResponse:
+      required:
+      - latitude
+      - longitude
+      type: object
+      properties:
+        latitude:
+          type: number
+          description: Location latitude
+          format: double
+          example: 44.999326
+        longitude:
+          type: number
+          description: Location longitude
+          format: double
+          example: -123.126128
+      description: Location info.
+    SurveyResult:
+      required:
+      - respondedTime
+      - selectedOption
+      type: object
+      properties:
+        selectedOption:
+          $ref: '#/components/schemas/SurveyOption'
+        respondedTime:
+          type: integer
+          description: The time that the Contact's survey response was sent.
+          format: int64
+      description: Message survey results.
+    SurveyRequest:
+      required:
+      - surveyId
+      - surveyOptionId
+      type: object
+      properties:
+        surveyId:
+          type: string
+          description: Survey ID.
+        surveyOptionId:
+          type: string
+          description: Selected Survey Option ID.
+    Attachment:
+      required:
+      - id
+      - metadata
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+          description: Attachment ID.
+        name:
+          type: string
+          description: Attachment name
+        metadata:
+          $ref: '#/components/schemas/AttachmentMetadata'
+      description: Message attachments.
+    ImageMetadata:
+      required:
+      - contentType
+      type: object
+      properties:
+        contentType:
+          type: string
+          description: File type.
+          example: image/png
+      description: Image metadata.
     AttachmentMetadata:
       required:
       - contentType
@@ -685,59 +709,23 @@ components:
           description: File type.
           example: image/png
       description: Attachment metadata.
-    ImageResponse:
+    ReplyMessageRequest:
       required:
-      - id
-      - metadata
-      - name
+      - body
       type: object
       properties:
-        id:
+        body:
+          maxLength: 1000
+          minLength: 1
           type: string
-          description: Image ID.
-        name:
-          type: string
-          description: Image name
-        metadata:
-          $ref: '#/components/schemas/ImageMetadata'
-      description: Message images.
-    SurveyOption:
-      required:
-      - id
-      - text
-      type: object
-      properties:
-        id:
-          type: string
-          description: Question option ID
-        text:
-          type: string
-          description: Question option value
-      description: Selected option.
-    Audio:
-      required:
-      - id
-      - metadata
-      - name
-      type: object
-      properties:
-        id:
-          type: string
-          description: Audio ID.
-        name:
-          type: string
-          description: Audio name
-        metadata:
-          $ref: '#/components/schemas/AudioMetadata'
-      description: Message audio resources.
-    ReplyMessageResponse:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          type: string
-          description: Message ID.
+          description: Text to include as the message reply.
+        location:
+          $ref: '#/components/schemas/LocationRequest'
+        images:
+          type: array
+          description: Message images. If a reply is made with images, the images must be uploaded first (using Image Upload API) to generate the required IDs.
+          items:
+            $ref: '#/components/schemas/ImageRequest'
     ConferenceInfo:
       required:
       - accessCode
@@ -751,6 +739,18 @@ components:
           type: string
           description: Conference access code.
       description: Conference information.
+    SurveyResponse:
+      required:
+      - surveyId
+      - surveyOptionId
+      type: object
+      properties:
+        surveyId:
+          type: string
+          description: Survey ID.
+        surveyOptionId:
+          type: string
+          description: Selected Survey Option ID.
   securitySchemes:
     API_Authorizer:
       type: apiKey

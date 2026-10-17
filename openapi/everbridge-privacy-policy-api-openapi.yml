@@ -799,6 +799,12 @@ components:
       example: '1536984111644674'
       maxLength: 16
       type: integer
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
     privacyPolicy:
       properties:
         policyItems:
@@ -819,23 +825,6 @@ components:
           description: The name of the privacy policy
           type: string
       type: object
-    assignOrUnassignPrivacy:
-      properties:
-        assignRoleIds:
-          items:
-            type: integer
-          type: array
-        unassignRoleIds:
-          items:
-            type: integer
-          type: array
-      type: object
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
     privacyAssignment:
       properties:
         assignedRoles:
@@ -852,17 +841,6 @@ components:
         policyId:
           type: integer
         policyName:
-          type: string
-      type: object
-    postUpdateResponse:
-      properties:
-        baseUri:
-          type: string
-        id:
-          type: integer
-        instanceUri:
-          type: string
-        message:
           type: string
       type: object
     getPrivacyPolicies:
@@ -921,6 +899,28 @@ components:
                   type: integer
               type: object
           type: object
+      type: object
+    assignOrUnassignPrivacy:
+      properties:
+        assignRoleIds:
+          items:
+            type: integer
+          type: array
+        unassignRoleIds:
+          items:
+            type: integer
+          type: array
+      type: object
+    postUpdateResponse:
+      properties:
+        baseUri:
+          type: string
+        id:
+          type: integer
+        instanceUri:
+          type: string
+        message:
+          type: string
       type: object
   securitySchemes:
     API_Authorizer:

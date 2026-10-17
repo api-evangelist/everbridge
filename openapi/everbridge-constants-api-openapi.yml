@@ -93,23 +93,6 @@ paths:
       x-operation-id-original: EBS Query Constants
 components:
   schemas:
-    RestfulCollectionResultConstantValueWrapper:
-      properties:
-        currentPageUri:
-          type: string
-        firstPageUri:
-          type: string
-        lastPageUri:
-          type: string
-        message:
-          type: string
-        nextPageUri:
-          type: string
-        page:
-          $ref: '#/components/schemas/DataPageConstantValueWrapper'
-        previousPageUri:
-          type: string
-      type: object
     ConstantValueWrapper:
       properties:
         code:
@@ -139,24 +122,6 @@ components:
         value:
           type: string
       type: object
-    RestfulCollectionResult:
-      properties:
-        currentPageUri:
-          type: string
-        firstPageUri:
-          type: string
-        lastPageUri:
-          type: string
-        message:
-          type: string
-        nextPageUri:
-          type: string
-        page:
-          $ref: '#/components/schemas/DataPageObject'
-        previousPageUri:
-          type: string
-      title: RestfulCollectionResult
-      type: object
     DataPageObject:
       properties:
         currentPageNo:
@@ -185,6 +150,41 @@ components:
           format: int32
           type: integer
       title: DataPage«object»
+      type: object
+    RestfulCollectionResultConstantValueWrapper:
+      properties:
+        currentPageUri:
+          type: string
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        nextPageUri:
+          type: string
+        page:
+          $ref: '#/components/schemas/DataPageConstantValueWrapper'
+        previousPageUri:
+          type: string
+      type: object
+    RestfulCollectionResult:
+      properties:
+        currentPageUri:
+          type: string
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        nextPageUri:
+          type: string
+        page:
+          $ref: '#/components/schemas/DataPageObject'
+        previousPageUri:
+          type: string
+      title: RestfulCollectionResult
       type: object
     DataPageConstantValueWrapper:
       properties:

@@ -172,18 +172,12 @@ paths:
       x-operation-id-original: EBS Get Audio
 components:
   schemas:
-    FileResourceWrapper:
-      properties:
-        fileName:
-          type: string
-        id:
-          type: string
-        mimeType:
-          type: string
-        size:
-          format: double
-          type: number
-      type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
     AudioRestfulModificationResult:
       properties:
         audioKey:
@@ -261,12 +255,18 @@ components:
           - D
           type: string
       type: object
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
+    FileResourceWrapper:
+      properties:
+        fileName:
+          type: string
+        id:
+          type: string
+        mimeType:
+          type: string
+        size:
+          format: double
+          type: number
+      type: object
     AudioWrapperInstanceResult:
       properties:
         message:

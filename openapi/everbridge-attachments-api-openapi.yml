@@ -155,27 +155,6 @@ components:
       example: '1536984111644674'
       maxLength: 16
       type: integer
-    FileAttachmentWrapper:
-      properties:
-        base64DataValue:
-          type: string
-        fileData:
-          items:
-            format: byte
-            type: string
-          type: array
-        fileId:
-          type: string
-        fileName:
-          type: string
-        image:
-          type: boolean
-        mimeType:
-          type: string
-        size:
-          format: int64
-          type: integer
-      type: object
     AttachmentRestfulModificationResult:
       properties:
         fileId:
@@ -198,6 +177,27 @@ components:
           type: string
         result:
           $ref: '#/components/schemas/FileAttachmentWrapper'
+      type: object
+    FileAttachmentWrapper:
+      properties:
+        base64DataValue:
+          type: string
+        fileData:
+          items:
+            format: byte
+            type: string
+          type: array
+        fileId:
+          type: string
+        fileName:
+          type: string
+        image:
+          type: boolean
+        mimeType:
+          type: string
+        size:
+          format: int64
+          type: integer
       type: object
   securitySchemes:
     API_Authorizer:

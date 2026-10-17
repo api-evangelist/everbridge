@@ -247,6 +247,26 @@ components:
           type: string
           description: The External Attribute value. This value should be unique for each Contact across the Organization.If the External Attribute Name parameter is blank or not provided then the External ID attribute will be used to search for the contact.
           example: uuid
+    AuthorizeV2Response:
+      required:
+      - accessToken
+      - clientId
+      - individualAccountId
+      - refreshToken
+      type: object
+      properties:
+        clientId:
+          type: string
+        accessToken:
+          $ref: '#/components/schemas/ResponseToken'
+        refreshToken:
+          $ref: '#/components/schemas/ResponseToken'
+        individualAccountId:
+          type: string
+        organizationId:
+          type: string
+          description: Organization id
+          example: '295910361798625'
     AuthorizeV2Request:
       required:
       - grant_type
@@ -272,6 +292,15 @@ components:
         organizationId:
           type: string
           description: The user's organization id.
+    LogoutResponse:
+      required:
+      - individualAccountId
+      type: object
+      properties:
+        individualAccountId:
+          type: string
+          description: Individual account ID
+          example: '1843747855794178'
     ServerClientAuthorizeResponse:
       required:
       - accessToken
@@ -288,35 +317,6 @@ components:
           $ref: '#/components/schemas/ResponseToken'
         individualAccountId:
           type: string
-    LogoutResponse:
-      required:
-      - individualAccountId
-      type: object
-      properties:
-        individualAccountId:
-          type: string
-          description: Individual account ID
-          example: '1843747855794178'
-    AuthorizeV2Response:
-      required:
-      - accessToken
-      - clientId
-      - individualAccountId
-      - refreshToken
-      type: object
-      properties:
-        clientId:
-          type: string
-        accessToken:
-          $ref: '#/components/schemas/ResponseToken'
-        refreshToken:
-          $ref: '#/components/schemas/ResponseToken'
-        individualAccountId:
-          type: string
-        organizationId:
-          type: string
-          description: Organization id
-          example: '295910361798625'
   securitySchemes:
     API_Authorizer:
       type: apiKey
