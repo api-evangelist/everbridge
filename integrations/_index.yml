@@ -42,3 +42,29 @@
       latest_authorization: '2018-06-07'
   status: not-a-workflow
   arazzo: null
+- slug: everbridge-microsoft-teams-own
+  label: Microsoft Teams (own)
+  partner: microsoft-teams
+  partner_name: Microsoft Teams (own)
+  category: Microsoft Teams app
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://appsource.microsoft.com/en-us/product/office/WA200007009
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: everbridge-slack-own
+  label: Slack (own)
+  partner: slack
+  partner_name: Slack (own)
+  category: Slack app
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://slack.com/marketplace/A07JEH4GN3A-everbridge
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
