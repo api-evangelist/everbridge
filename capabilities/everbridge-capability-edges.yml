@@ -3,6 +3,7 @@ provider: Everbridge
 generated_by: planning/capability-mapping/scripts/classify_capabilities.py
 model: claude-opus-5
 frame:
+- Infrastructure
 - Software & Technology
 min_confidence: 0.7
 capability_model:
@@ -11,7 +12,7 @@ capability_model:
   attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
     CC BY 4.0
   notice: NOTICE
-edge_count: 5
+edge_count: 11
 edges:
 - tag: Crisis Management
   spec_file: everbridge-crisis-management-api-openapi.yml
@@ -22,6 +23,17 @@ edges:
   evidence: GET /cm/v1/crisisEvent  EBS List Critical Events  List Critical Events
   reason: Endpoint lists crisis/critical events for the CEM platform, aligning with crisis response management.
     Only one operation, so confidence is not maximal.
+- tag: Roles
+  spec_file: everbridge-roles-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.78
+  evidence: EBSCreateRole 'Create Role', EBSUpdateRole 'Update Role', EBSListRoles 'List Roles' with schemas
+    roleRequest, getRole
+  reason: Full CRUD over organisation roles is role-based access administration, i.e. identity and access
+    management. Slight uncertainty because 'role' in Everbridge may also denote an operational duty rather
+    than a permission set.
 - tag: Notifications
   spec_file: everbridge-notifications-api-openapi.yml
   capability_id: BC-850.50
@@ -33,6 +45,17 @@ edges:
   reason: Launching and managing mass notifications and notification events is the core emergency/critical-event
     communication motion of this CEM platform, best matched by Crisis Communications Management under
     Corporate Communications.
+- tag: Custom Roles
+  spec_file: everbridge-custom-roles-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.72
+  evidence: GET /v1/roles EBSGetCustomRolesInOrganization List Custom Roles; POST /v1/roles Create Custom
+    Role
+  reason: CRUD over custom roles within an organization is role-based access administration, i.e. identity
+    & access management plumbing for the platform. Moderate confidence because role definitions could
+    also be read as generic tenant configuration.
 - tag: Comms APIs
   spec_file: everbridge-comms-apis-api-openapi.yml
   capability_id: BC-850
@@ -44,6 +67,17 @@ edges:
   reason: Operations launch, stop, resend and confirm mass communications to recipients across delivery
     paths (voice, social, bulletin board) — an organisational communications capability. Which L2 (crisis
     vs stakeholder comms) is not determinable from the generic surface, so L1 only.
+- tag: Incidents
+  spec_file: everbridge-incidents-api-openapi.yml
+  capability_id: BC-5120.40
+  capability_id_l1: BC-5120
+  capability_name: Emergency & Crisis Management
+  confidence: 0.7
+  evidence: POST /incidents/{organizationId} EBSLaunchIncident Launch Incident; POST /incidentJournals/{organizationId}/{incidentId}
+    Add Incident Journal
+  reason: Launching, updating and journaling critical-event incidents on a critical event management platform
+    is emergency/crisis response management. Some ambiguity with IT service incident management, so not
+    maximal confidence.
 - tag: Notification Templates
   spec_file: everbridge-notification-templates-api-openapi.yml
   capability_id: BC-850.50
@@ -66,3 +100,37 @@ edges:
   reason: Defines and assigns privacy policies governing handling of contact personal data, which is privacy
     & data protection management. Some chance it is better classed as generic Policy Management, hence
     0.7.
+- tag: Template APIs
+  spec_file: everbridge-template-apis-api-openapi.yml
+  capability_id: BC-850
+  capability_id_l1: BC-850
+  capability_name: Corporate Communications Management
+  confidence: 0.7
+  evidence: POST /templates/ createTemplate Create Template; schemas LaunchRecipients, DeliverySettings,
+    VoiceSettings, WebPageMessageBody, SupportedLanguages
+  reason: Full CRUD over notification message templates including recipients, delivery paths and voice/web
+    message bodies — i.e. management of the content used for mass communication to employees and stakeholders.
+    Maps to Corporate Communications Management at L1; the evidence does not pin whether these are crisis,
+    internal or stakeholder messages, so no L2.
+- tag: User Management
+  spec_file: everbridge-user-management-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.7
+  evidence: POST /User/Disable user-management-disable-users Disable Users; POST /user/delete/ Delete
+    Users; GET /Group user-management-groups Groups
+  reason: Administration of user and machine accounts and group membership including disable and delete
+    — account lifecycle and access administration, which fits Identity & Access Management. Not the vendor's
+    notification business, so mapped to the cross-industry IT/security capability.
+- tag: Users
+  spec_file: everbridge-users-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.7
+  evidence: POST /users EBSCreateUser Create User; DELETE /users/{id} EBSDeleteUser Delete user; POST
+    /users/{id}/sendEmail EBSSendRegistrationEmail Send registration email; schemas roleId, RoleItem
+  reason: Create/update/delete of platform user accounts with role assignment and registration email —
+    joiner/mover/leaver style account administration, i.e. Identity & Access Management rather than any
+    HR or operational capability.
