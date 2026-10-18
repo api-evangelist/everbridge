@@ -12,7 +12,7 @@ capability_model:
   attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
     CC BY 4.0
   notice: NOTICE
-edge_count: 11
+edge_count: 12
 edges:
 - tag: Crisis Management
   spec_file: everbridge-crisis-management-api-openapi.yml
@@ -56,6 +56,17 @@ edges:
   reason: CRUD over custom roles within an organization is role-based access administration, i.e. identity
     & access management plumbing for the platform. Moderate confidence because role definitions could
     also be read as generic tenant configuration.
+- tag: Assets
+  spec_file: everbridge-assets-api-openapi.yml
+  capability_id: BC-5070.20
+  capability_id_l1: BC-5070
+  capability_name: Asset Register & Information
+  confidence: 0.7
+  evidence: POST /assets EBSAMCreateAsset Create Asset; GET /assets/asset-type-id/{assetTypeId}/external-id
+    Get Asset By ExternalId
+  reason: CRUD maintenance of an asset record set with addresses, property values and external-system
+    identifiers — an asset register and information base. Not raised higher because Everbridge maintains
+    this register to support risk/response rather than ISO 55000 asset management.
 - tag: Comms APIs
   spec_file: everbridge-comms-apis-api-openapi.yml
   capability_id: BC-850
