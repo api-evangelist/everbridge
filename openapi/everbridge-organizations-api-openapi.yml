@@ -288,6 +288,171 @@ paths:
       x-operation-id-original: EBS Get Organization
 components:
   schemas:
+    OrganizationPathWrapper:
+      properties:
+        accountId:
+          format: int64
+          type: integer
+        awarePathId:
+          format: int32
+          type: integer
+        code:
+          type: string
+        confirmType:
+          enum:
+          - REPLY_TO
+          - PHONE
+          - HTTP
+          type: string
+        createdDate:
+          format: date-time
+          type: string
+        createdId:
+          format: int64
+          type: integer
+        createdName:
+          type: string
+        createdProxyName:
+          type: string
+        default:
+          type: boolean
+        displayFlag:
+          type: boolean
+        editable:
+          type: boolean
+        expose:
+          type: boolean
+        extFlag:
+          enum:
+          - Y
+          - N
+          type: string
+        extPrompt:
+          enum:
+          - Pin
+          - Ext
+          - Provider
+          - System
+          type: string
+        extRequired:
+          type: boolean
+        extValue:
+          type: string
+        formatFlag:
+          enum:
+          - P
+          - N
+          - E
+          type: string
+        id:
+          format: int64
+          type: integer
+        isDefault:
+          type: boolean
+        lastModifiedDate:
+          format: date-time
+          type: string
+        lastModifiedId:
+          format: int64
+          type: integer
+        lastModifiedName:
+          type: string
+        lastModifiedProxyName:
+          type: string
+        mandatory:
+          type: boolean
+        messageCode:
+          enum:
+          - P
+          - T
+          - E
+          - F
+          type: string
+        organizationId:
+          format: int64
+          type: integer
+        pathDeliveryType:
+          enum:
+          - T
+          type: string
+        pathFlag:
+          format: int64
+          type: integer
+        pathId:
+          format: int64
+          type: integer
+        pathType:
+          enum:
+          - EMAIL
+          - TTYTDD
+          - SMS
+          - PHONE
+          - EXTPHONE
+          - RECIP
+          - FAX
+          - NUMERICPAGER
+          - TAPPAGER
+          - PLAINTEXTEMAIL
+          - ONEWAYSMS
+          - SECUREPUSH
+          - ONEBRIDGE
+          - MSTEAMS
+          - SLACK
+          type: string
+        prompt:
+          type: string
+        resourceBundleId:
+          format: int64
+          type: integer
+        seq:
+          format: int32
+          type: integer
+        status:
+          enum:
+          - A
+          - D
+          type: string
+        sysPrompt:
+          type: string
+        type:
+          enum:
+          - EMAIL
+          - TA
+          - CALLIN
+          - FAX
+          - TTYTTD
+          - ALPHA
+          - IM
+          - SMS
+          - TELEX
+          - TTYTDD
+          - IPHONE
+          - PHONE
+          - COMPACT
+          - PAGER
+          - RECIP
+          - SECUREPUSH
+          - ONEBRIDGE
+          - NUMERICPAGER
+          - TAPPAGER
+          - EXTPHONE
+          - PLAINTEXTEMAIL
+          - MSTEAMS
+          - SLACK
+          type: string
+      type: object
+    TweetConstraintWrapper:
+      properties:
+        maxTotalTweets:
+          format: int64
+          type: integer
+        maxTweetsPerHour:
+          format: int32
+          type: integer
+        maxTweetsPerMinute:
+          format: int32
+          type: integer
+      type: object
     AddressWrapper:
       properties:
         city:
@@ -307,15 +472,12 @@ components:
         suite:
           type: string
       type: object
-    TweetConstraintWrapper:
+    UnsoicitedMessageConstraintWrapper:
       properties:
-        maxTotalTweets:
-          format: int64
-          type: integer
-        maxTweetsPerHour:
+        maxMessagesPerHour:
           format: int32
           type: integer
-        maxTweetsPerMinute:
+        maxMessagesPerMinute:
           format: int32
           type: integer
       type: object
@@ -378,22 +540,45 @@ components:
           format: int32
           type: integer
       type: object
-    GisLocationWrapper:
+    OrganizationWrapperInstanceResult:
       properties:
-        lat:
-          format: double
-          type: number
-        lon:
-          format: double
-          type: number
+        message:
+          type: string
+        result:
+          $ref: '#/components/schemas/OrganizationWrapper'
       type: object
-    UnsoicitedMessageConstraintWrapper:
+    ProcessingStateWrapper:
       properties:
-        maxMessagesPerHour:
-          format: int32
+        serverId:
+          format: int64
           type: integer
-        maxMessagesPerMinute:
-          format: int32
+        startTime:
+          format: int64
+          type: integer
+        synchronizeTime:
+          format: int64
+          type: integer
+        threadName:
+          type: string
+      type: object
+    GisSettingWrapper:
+      properties:
+        baseMap:
+          format: int64
+          type: integer
+        latitude:
+          format: double
+          type: number
+        longitude:
+          format: double
+          type: number
+        mapCenter:
+          type: string
+        mapZoomLevel:
+          format: int64
+          type: integer
+        projection:
+          format: int64
           type: integer
       type: object
     ThrottleSettingWrapper:
@@ -423,20 +608,6 @@ components:
           type: boolean
         senderToggleFlag:
           type: boolean
-      type: object
-    ProcessingStateWrapper:
-      properties:
-        serverId:
-          format: int64
-          type: integer
-        startTime:
-          format: int64
-          type: integer
-        synchronizeTime:
-          format: int64
-          type: integer
-        threadName:
-          type: string
       type: object
     OrganizationWrapper:
       properties:
@@ -591,26 +762,6 @@ components:
           - WDT
           type: string
       type: object
-    GisSettingWrapper:
-      properties:
-        baseMap:
-          format: int64
-          type: integer
-        latitude:
-          format: double
-          type: number
-        longitude:
-          format: double
-          type: number
-        mapCenter:
-          type: string
-        mapZoomLevel:
-          format: int64
-          type: integer
-        projection:
-          format: int64
-          type: integer
-      type: object
     OrganizationPathWrapperInstanceResult:
       properties:
         message:
@@ -673,165 +824,14 @@ components:
           - MESSAGE_WITH_CONFIRMATION
           type: string
       type: object
-    OrganizationWrapperInstanceResult:
+    GisLocationWrapper:
       properties:
-        message:
-          type: string
-        result:
-          $ref: '#/components/schemas/OrganizationWrapper'
-      type: object
-    OrganizationPathWrapper:
-      properties:
-        accountId:
-          format: int64
-          type: integer
-        awarePathId:
-          format: int32
-          type: integer
-        code:
-          type: string
-        confirmType:
-          enum:
-          - REPLY_TO
-          - PHONE
-          - HTTP
-          type: string
-        createdDate:
-          format: date-time
-          type: string
-        createdId:
-          format: int64
-          type: integer
-        createdName:
-          type: string
-        createdProxyName:
-          type: string
-        default:
-          type: boolean
-        displayFlag:
-          type: boolean
-        editable:
-          type: boolean
-        expose:
-          type: boolean
-        extFlag:
-          enum:
-          - Y
-          - N
-          type: string
-        extPrompt:
-          enum:
-          - Pin
-          - Ext
-          - Provider
-          - System
-          type: string
-        extRequired:
-          type: boolean
-        extValue:
-          type: string
-        formatFlag:
-          enum:
-          - P
-          - N
-          - E
-          type: string
-        id:
-          format: int64
-          type: integer
-        isDefault:
-          type: boolean
-        lastModifiedDate:
-          format: date-time
-          type: string
-        lastModifiedId:
-          format: int64
-          type: integer
-        lastModifiedName:
-          type: string
-        lastModifiedProxyName:
-          type: string
-        mandatory:
-          type: boolean
-        messageCode:
-          enum:
-          - P
-          - T
-          - E
-          - F
-          type: string
-        organizationId:
-          format: int64
-          type: integer
-        pathDeliveryType:
-          enum:
-          - T
-          type: string
-        pathFlag:
-          format: int64
-          type: integer
-        pathId:
-          format: int64
-          type: integer
-        pathType:
-          enum:
-          - EMAIL
-          - TTYTDD
-          - SMS
-          - PHONE
-          - EXTPHONE
-          - RECIP
-          - FAX
-          - NUMERICPAGER
-          - TAPPAGER
-          - PLAINTEXTEMAIL
-          - ONEWAYSMS
-          - SECUREPUSH
-          - ONEBRIDGE
-          - MSTEAMS
-          - SLACK
-          type: string
-        prompt:
-          type: string
-        resourceBundleId:
-          format: int64
-          type: integer
-        seq:
-          format: int32
-          type: integer
-        status:
-          enum:
-          - A
-          - D
-          type: string
-        sysPrompt:
-          type: string
-        type:
-          enum:
-          - EMAIL
-          - TA
-          - CALLIN
-          - FAX
-          - TTYTTD
-          - ALPHA
-          - IM
-          - SMS
-          - TELEX
-          - TTYTDD
-          - IPHONE
-          - PHONE
-          - COMPACT
-          - PAGER
-          - RECIP
-          - SECUREPUSH
-          - ONEBRIDGE
-          - NUMERICPAGER
-          - TAPPAGER
-          - EXTPHONE
-          - PLAINTEXTEMAIL
-          - MSTEAMS
-          - SLACK
-          type: string
+        lat:
+          format: double
+          type: number
+        lon:
+          format: double
+          type: number
       type: object
   securitySchemes:
     API_Authorizer:

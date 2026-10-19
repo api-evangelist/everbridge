@@ -587,20 +587,33 @@ paths:
       x-operation-id-original: EBS Update Expected Location For Contact
 components:
   schemas:
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
-    GisLocationWrapper:
+    ExpectedLocationInstance:
       properties:
-        lat:
-          format: double
-          type: number
-        lon:
-          format: double
-          type: number
+        address:
+          $ref: '#/components/schemas/ContactAddressInstance'
+        contactExternalId:
+          type: string
+        contactId:
+          format: int64
+          type: integer
+        id:
+          format: int64
+          type: integer
+        isInternationalTravel:
+          type: boolean
+        isLocalTravel:
+          type: boolean
+        travelCategory:
+          type: string
+        travelType:
+          type: string
+      type: object
+    ExpectedLocationInstanceResult:
+      properties:
+        message:
+          type: string
+        result:
+          $ref: '#/components/schemas/ExpectedLocationInstance'
       type: object
     ContactAddressWrapper:
       properties:
@@ -665,27 +678,6 @@ components:
           type: string
       title: RestfulModificationResult
       type: object
-    ExpectedLocationInstance:
-      properties:
-        address:
-          $ref: '#/components/schemas/ContactAddressInstance'
-        contactExternalId:
-          type: string
-        contactId:
-          format: int64
-          type: integer
-        id:
-          format: int64
-          type: integer
-        isInternationalTravel:
-          type: boolean
-        isLocalTravel:
-          type: boolean
-        travelCategory:
-          type: string
-        travelType:
-          type: string
-      type: object
     RestfulBatchOperationResult:
       properties:
         code:
@@ -740,21 +732,6 @@ components:
       required:
       - contactId
       type: object
-    ExpectedLocationInstanceResult:
-      properties:
-        message:
-          type: string
-        result:
-          $ref: '#/components/schemas/ExpectedLocationInstance'
-      type: object
-    RestfulInstanceResult:
-      properties:
-        message:
-          type: string
-        result:
-          type: object
-      title: RestfulInstanceResult
-      type: object
     ContactAddressInstance:
       properties:
         arriveDate:
@@ -799,6 +776,20 @@ components:
         suite:
           type: string
       type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
+    RestfulInstanceResult:
+      properties:
+        message:
+          type: string
+        result:
+          type: object
+      title: RestfulInstanceResult
+      type: object
     ExpectedLocationCollectionResult:
       properties:
         message:
@@ -807,6 +798,15 @@ components:
           items:
             $ref: '#/components/schemas/ExpectedLocationInstance'
           type: array
+      type: object
+    GisLocationWrapper:
+      properties:
+        lat:
+          format: double
+          type: number
+        lon:
+          format: double
+          type: number
       type: object
   securitySchemes:
     API_Authorizer:

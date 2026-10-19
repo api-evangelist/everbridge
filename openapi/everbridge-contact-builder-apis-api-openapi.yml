@@ -863,20 +863,138 @@ paths:
         connectionType: VPC_LINK
 components:
   schemas:
-    ApiQuerySemanticQuery:
+    ApiSession:
       type: object
-      description: Include a set of individual contacts by a CEM Results `SemanticQuery`.
+      description: The current session metadata.
+      properties:
+        sessionId:
+          type: string
+          description: The unique identifier for the newly created session.
+          example: 73ef9c42-df40-41c8-9b2d-6618ed5c31c1
+        created:
+          type: string
+          format: date-time
+          description: The created time of the session in ISO 8601 format.
+          example: '2024-07-03T20:06:09.734385Z'
+        expiration:
+          type: string
+          format: date-time
+          description: The expiration time of the session in ISO 8601 format.
+          example: '2024-07-03T20:06:09.734385Z'
+        buckets:
+          type: array
+          description: A list of buckets created in the session.
+          items:
+            type: string
+            description: The unique identifier for each bucket created in the session.
+        status:
+          type: string
+          description: 'The current status of the session.
+
+
+            * `IDLE`: The session is idle and ready for additional modifications to its buckets.
+
+            * `PROCESSING`: The session is currently processing modifications to its buckets.
+
+            * `FINALIZING`: The session is currently generating result sets based on the contents of the buckets. The session will not accept new modifications to its buckets.
+
+            * `COMPLETED`: The session has been completed and no further modifications can be made.
+
+            * `FAILED`: The session failed to create result sets based on the contents of the buckets.'
+          enum:
+          - IDLE
+          - PROCESSING
+          - FINALIZING
+          - COMPLETED
+          - FAILED
+        estimationMode:
+          type: boolean
+          description: 'If `true`, the session is in estimation mode. This implies that the summary may return estimates of the totals instead of exact counts and the contacts returned from the preview may be a subset of the total contacts that match the buckets.
+
+
+            Note that the generated result sets from completing the session are always exact and are not based on estimates, regardless of whether the session is in estimation mode or not.'
+    ApiPublicUserResultSet:
+      type: object
+      description: Include a set of public subscribers by a CEM Results ID (Result Set Identifier).
       properties:
         type:
           type: string
           enum:
-          - SemanticQuery
-          description: Must be set to `SemanticQuery`.
-        command:
-          $ref: '#/components/schemas/SemanticQuery'
+          - ResultSet
+          description: Must be set to `ResultSet`.
+        resultSetId:
+          type: string
+          description: The unique system ID of the CEM Results to include. Only IDs in the `publicuser` or `resultset` domains are valid.
+          example: evbg+result:publicuser:subscriptions:1697471720114
       required:
       - type
-      - command
+      - resultSetId
+    CemResultsLastKnownLocationType:
+      type: object
+      description: Specifies how to include contacts with "Last Known" location types in CEM Results.
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          description: Must be set to exactly `LastKnown`.
+          enum:
+          - LastKnown
+        locationSourceIds:
+          type: array
+          description: A list of location source IDs.
+          items:
+            type: number
+    CreateSessionRequest:
+      type: object
+      description: Request body to start a new session.
+      properties:
+        data:
+          $ref: '#/components/schemas/BucketData'
+        threadSets:
+          type: object
+          description: A map of bucket names to result set IDs from a previous communication. By intersecting these result sets with the final results from the `thread` bucket, the service can recategorize results into the buckets they belonged to previously.
+          properties:
+            individual:
+              type: array
+              items:
+                type: string
+              description: Result set IDs representing the set of recipients added to a previous communication through the `individual` bucket.
+            group:
+              type: array
+              items:
+                type: string
+              description: Result set IDs representing the set of recipients added to a previous communication through the `group` bucket.
+            rule:
+              type: array
+              items:
+                type: string
+              description: Result set IDs representing the set of recipients added to a previous communication through the `rule` bucket.
+            query:
+              type: array
+              items:
+                type: string
+              description: Result set IDs representing the set of recipients added to a previous communication through the `query` bucket.
+            alert:
+              type: array
+              items:
+                type: string
+              description: Result set IDs representing the set of recipients added to a previous communication through the `alert` bucket.
+            public:
+              type: array
+              items:
+                type: string
+              description: Result set IDs representing the set of recipients added to a previous communication through the `public` bucket.
+    GroupBucketData:
+      type: object
+      description: Data to be stored in a bucket that supports contact groups.
+      properties:
+        groups:
+          type: array
+          description: A list of contact groups to be included in the bucket.
+          maxItems: 10
+          items:
+            $ref: '#/components/schemas/ApiGroupId'
     ClearBucketsRequest:
       type: object
       description: Request body to clear all data from the listed buckets.
@@ -898,22 +1016,144 @@ components:
             - alert
             - thread
             - public
-    QueryResponseItemResultSetId:
+    CreateSessionResponse:
       type: object
-      description: A CEM Results identifier that was previously added to this bucket.
+      description: Response body returned after starting a new Contact Builder session.
+      properties:
+        sessionId:
+          type: string
+          description: The unique identifier for the newly created session.
+          example: 73ef9c42-df40-41c8-9b2d-6618ed5c31c1
+        expiration:
+          type: string
+          format: date-time
+          description: The expiration time of the session in ISO 8601 format.
+          example: '2024-07-03T20:06:09.734385Z'
+        buckets:
+          type: array
+          description: A list of buckets created in the session.
+          items:
+            type: string
+            description: The unique identifier for each bucket created in the session.
+      required:
+      - sessionId
+    CemResultsStaticLocationType:
+      type: object
+      description: Specifies how to include contacts with static location types in CEM Results.
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          description: Must be set to exactly `Static`.
+          enum:
+          - Static
+        locationTypeIds:
+          type: array
+          description: A list of static location type IDs.
+          items:
+            type: number
+        includeMissingLocationTypeId:
+          type: boolean
+          description: If true, include results that do not have a static location type.
+    ModificationRequest:
+      type: object
+      description: Request body to modify an existing session.
+      properties:
+        data:
+          $ref: '#/components/schemas/BucketData'
+      required:
+      - data
+    CemResultsNumberPropertyQuery:
+      allOf:
+      - $ref: '#/components/schemas/CemResultsPropertyQuery'
+      - type: object
+        required:
+        - type
+        description: Provides querying against numeric properties in Contacts and Assets.
+        properties:
+          type:
+            type: string
+            description: Must be set to exactly `Number`.
+            enum:
+            - Number
+          lowerBound:
+            type: number
+            description: A lower bound to match against the properties.
+          upperBound:
+            type: number
+            description: An upper bound to match against the properties.
+    QueryBucketData:
+      type: object
+      description: Data to be stored in a bucket that supports generic queries.
+      properties:
+        query:
+          type: array
+          description: A list of generic queries to be included in the bucket.
+          maxItems: 10
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/ApiQueryResultSet'
+            - $ref: '#/components/schemas/ApiQuerySemanticQuery'
+            - $ref: '#/components/schemas/ApiQueryNotificationReportLog'
+    ProblemDetail:
+      type: object
+      description: An RFC-7807 compliant model for error details.
+      properties:
+        type:
+          type: string
+          description: A URI that identifies the problem type.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem type.
+        status:
+          type: integer
+          description: The HTTP response status code describing the error.
+        detail:
+          type: string
+          description: A human-readable explanation of the specific problem.
+        instance:
+          type: string
+          description: A URI that identifies the specific problem.
+    CemResultsPropertyQuery:
+      type: object
+      required:
+      - ids
+      properties:
+        ids:
+          type: array
+          description: The IDs of the properties to query by.
+    Geometry:
+      type: object
+      description: A geojson representation of a map shape.
+    ApiGroupId:
+      type: object
+      description: Include a set of individual contacts by their membership in a contact group.
       properties:
         type:
           type: string
           enum:
-          - ResultSetId
-          description: Must be set to `ResultSetId`.
-        id:
-          type: string
-          description: The CEM Result identifier.
-          example: evbg+result:contact:my-contacts:1697471720114
+          - Id
+          description: Must be set to `Id`.
+        groupId:
+          type: integer
+          format: int64
+          description: The unique system ID of the contact group.
       required:
       - type
-      - id
+      - groupId
+    PublicUserBucketData:
+      type: object
+      description: Include a set of public users via subscriptions.
+      properties:
+        public:
+          type: array
+          description: A list of subscriber queries to be included in the bucket.
+          maxItems: 10
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/ApiPublicUserResultSet'
+            - $ref: '#/components/schemas/ApiPublicUserSemanticQuery'
     ApiQueryNotificationReportLog:
       type: object
       description: Include a set of individual contacts and/or public users via the report log of an existing notification.
@@ -954,6 +1194,18 @@ components:
       required:
       - type
       - notificationId
+    ContactBucketData:
+      type: object
+      description: Data to be stored in a bucket that supports individual contacts.
+      properties:
+        contacts:
+          type: array
+          description: A list of individual contacts to be included in the bucket.
+          maxItems: 5000
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/ApiContactId'
+            - $ref: '#/components/schemas/ApiContactExternalId'
     QueryResponseItemResultSetCommandFilter:
       type: object
       description: A `Filter` command for filtering another result set based on its items' properties.
@@ -977,78 +1229,84 @@ components:
       required:
       - type
       - ids
-    ProblemDetail:
+    SummarySubsetTypes:
       type: object
-      description: An RFC-7807 compliant model for error details.
       properties:
-        type:
-          type: string
-          description: A URI that identifies the problem type.
-        title:
-          type: string
-          description: A short, human-readable summary of the problem type.
-        status:
-          type: integer
-          description: The HTTP response status code describing the error.
-        detail:
-          type: string
-          description: A human-readable explanation of the specific problem.
-        instance:
-          type: string
-          description: A URI that identifies the specific problem.
-    QueryResponseItemResultSetCommandRecipientsOf:
-      type: object
-      description: A `RecipientsOf` command for retrieving recipients directly from the notification report log.
-      properties:
-        type:
-          type: string
-          enum:
-          - RecipientsOf
-          description: Must be set to `RecipientsOf`.
-        notificationId:
-          type: number
-          description: The ID of the notification to read the report log of.
-          format: int64
-        confirmationStatuses:
-          type: array
-          description: The list of confirmation statuses to include in the results. If empty, then contacts with any confirmation status will be included.
-          items:
-            type: string
-            enum:
-            - Confirmed
-            - Attempted
-            - ConfirmedLate
-            - Unreachable
-            - Duplicate
-            - Dismissed
-        confirmedPathIds:
-          type:
-          - number
-          - 'null'
-          format: int64
-          description: Not currently used.
-      required:
-      - type
-      - notificationId
-    CemResultsNumberPropertyQuery:
+        groups:
+          type: object
+          description: A map of contact group IDs to the number of contacts in each group.
+          additionalProperties:
+            type: object
+            properties:
+              count:
+                type: integer
+                format: int64
+                description: The number of contacts in the session that are a part of this contact group.
+        rules:
+          type: object
+          description: A map of contact rule (filter) IDs to the number of contacts that match the rule.
+          additionalProperties:
+            type: object
+            properties:
+              count:
+                type: integer
+                format: int64
+                description: The number of contacts in the session that match the rule.
+        queries:
+          type: object
+          description: A map of CEM Result Set IDs to the number of contacts in each Result Set.
+          additionalProperties:
+            type: object
+            properties:
+              count:
+                type: integer
+                format: int64
+                description: The number of contacts that are included as a part of the Result Set.
+    CemResultsStringPropertyQuery:
       allOf:
       - $ref: '#/components/schemas/CemResultsPropertyQuery'
       - type: object
         required:
         - type
-        description: Provides querying against numeric properties in Contacts and Assets.
+        description: Provides querying against string properties in Contacts and Assets.
         properties:
           type:
             type: string
-            description: Must be set to exactly `Number`.
+            description: Must be set to exactly `String`.
             enum:
-            - Number
-          lowerBound:
-            type: number
-            description: A lower bound to match against the properties.
-          upperBound:
-            type: number
-            description: An upper bound to match against the properties.
+            - String
+          values:
+            type: array
+            description: The values to match against the properties.
+            items:
+              type: string
+    CemResultsExpectedLocationType:
+      type: object
+      description: Specifies how to include contacts with expected location types in CEM Results.
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          description: Must be set to exactly `Expected`.
+          enum:
+          - Expected
+    ApiQueryResultSet:
+      type: object
+      description: Include a set of individual contacts by a CEM Results ID (Result Set Identifier).
+      properties:
+        type:
+          type: string
+          enum:
+          - ResultSet
+          description: Must be set to `ResultSet`.
+        resultSetId:
+          type: string
+          description: The unique system ID of the CEM Results to include. Only IDs in the `contact` or `resultset` domains are valid.
+          example: evbg+result:contact:my-contacts:1697471720114
+      required:
+      - type
+      - resultSetId
     ApiContactId:
       type: object
       description: Include an individual contact by their unique system ID.
@@ -1065,39 +1323,320 @@ components:
       required:
       - type
       - contactId
-    CreateSessionResponse:
+    RuleBucketData:
       type: object
-      description: Response body returned after starting a new Contact Builder session.
+      description: Data to be stored in a bucket that supports contact rules (filters).
       properties:
-        sessionId:
-          type: string
-          description: The unique identifier for the newly created session.
-          example: 73ef9c42-df40-41c8-9b2d-6618ed5c31c1
-        expiration:
-          type: string
-          format: date-time
-          description: The expiration time of the session in ISO 8601 format.
-          example: '2024-07-03T20:06:09.734385Z'
-        buckets:
+        rules:
           type: array
-          description: A list of buckets created in the session.
+          description: A list of contact rules (filters) to be included in the bucket
+          maxItems: 10
+          items:
+            $ref: '#/components/schemas/ApiRuleId'
+    QueryResponseItemResultSetId:
+      type: object
+      description: A CEM Results identifier that was previously added to this bucket.
+      properties:
+        type:
+          type: string
+          enum:
+          - ResultSetId
+          description: Must be set to `ResultSetId`.
+        id:
+          type: string
+          description: The CEM Result identifier.
+          example: evbg+result:contact:my-contacts:1697471720114
+      required:
+      - type
+      - id
+    ContactsFromCsvResult:
+      type: object
+      properties:
+        success:
+          type: boolean
+        resultCode:
+          type: integer
+        message:
+          type:
+          - string
+          - 'null'
+        processedCSVRecordCount:
+          type: integer
+        externalIdCount:
+          type: integer
+        contactCount:
+          type: integer
+        contacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Contact'
+        additionalInfos:
+          type:
+          - array
+          - 'null'
           items:
             type: string
-            description: The unique identifier for each bucket created in the session.
       required:
-      - sessionId
-    PublicBucketSummary:
+      - success
+      - resultCode
+      - processedCSVRecordCount
+      - externalIdCount
+      - contactCount
+      - contacts
+    CemResultsTravelLocationType:
+      type: object
+      description: Specifies how to include contacts with travel location types in CEM Results.
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          description: Must be set to exactly `Travel`.
+          enum:
+          - Travel
+        domesticInternationalStatuses:
+          type: array
+          description: A list of domestic international travel statuses.
+          items:
+            type: string
+        localTravelStatuses:
+          type: array
+          description: A list of local travel statuses.
+          items:
+            type: string
+        travelTypes:
+          type: array
+          description: Depicts whether a contact is arriving, departing, or transitioning to a location.
+          items:
+            type: string
+            enum:
+            - Arrival
+            - Departure
+            - Transit
+        segmentTypes:
+          type: array
+          description: Depicts a contact's mode of transportation to a location.
+          items:
+            type: string
+            enum:
+            - Car
+            - Hotel
+            - Air
+            - Rail
+    CemResultsBooleanPropertyQuery:
+      allOf:
+      - $ref: '#/components/schemas/CemResultsPropertyQuery'
+      - type: object
+        required:
+        - type
+        description: Provides querying against boolean properties in Contacts and Assets.
+        properties:
+          type:
+            type: string
+            description: Must be set to exactly `Boolean`.
+            enum:
+            - Boolean
+          value:
+            type: boolean
+            description: A boolean value to match against the properties.
+    CemResultsCompleteName:
+      type: object
+      description: Used to describe a contact's complete name in a CEM Results query.
+      required:
+      - type
+      - first
+      - last
+      properties:
+        type:
+          type: string
+          description: Must be set to exactly `Complete`.
+          enum:
+          - Complete
+        first:
+          type: string
+          description: The first name of the contact.
+        last:
+          type: string
+          description: The last name of the contact.
+        middleInitial:
+          type: string
+          description: The middle initial of the contact.
+        suffix:
+          type: string
+          description: The suffix of the contact's name, such as "Jr." or "III".
+    BaseApiPaginatedResponse:
       type: object
       properties:
-        provisionalCount:
+        pages:
+          type: object
+          properties:
+            currentPage:
+              type: number
+              description: The requested page number.
+            pageSize:
+              type: number
+              description: The requested page size.
+            pageCount:
+              type: number
+              description: The number of elements in the current page.
+            totalPages:
+              type: number
+              description: The total number of pages available for request.
+            maxSize:
+              type: number
+              description: The maximum size of a single page that is allowed by the API.
+            totalCount:
+              type: number
+              description: The total number of elements across all pages.
+    SummaryCounts:
+      type: object
+      description: A summary of the number of contacts within each bucket in a session. A bucket may not be present if it has no contacts.
+      required:
+      - total
+      - buckets
+      properties:
+        total:
           type: integer
           format: int64
-          description: A provisional count of the number of public users that are in the current bucket. The actual number may be lower than this number when the session is ended.
-        subscribedToIds:
-          type: array
-          description: The list of known subscription IDs that are included in the bucket.
-          items:
-            type: string
+          description: The total number of contacts across all buckets in the session. The `exclusion` bucket is subtracted from the total.
+        buckets:
+          type: object
+          description: A map of bucket names to the number of contacts in each bucket.
+          properties:
+            individual:
+              type: integer
+              format: int64
+              description: The number of contacts in the "individual" bucket.
+            group:
+              type: integer
+              format: int64
+              description: The number of contacts in the "group" bucket.
+            rule:
+              type: integer
+              format: int64
+              description: The number of contacts in the "rule" bucket.
+            query:
+              type: integer
+              format: int64
+              description: The number of contacts in the "query" bucket.
+            exclusion:
+              type: integer
+              format: int64
+              description: The number of contacts in the "exclusion" bucket.
+            alert:
+              type: integer
+              format: int64
+              description: The number of contacts in the "alert" bucket.
+            thread:
+              type: integer
+              format: int64
+              description: The number of contacts in the "thread" bucket.
+        subsets:
+          $ref: '#/components/schemas/SummarySubsetCounts'
+        public:
+          type: object
+          description: The counts of public users within the session's buckets.
+          properties:
+            provisionalCount:
+              type: integer
+              format: int64
+              description: A provisional count of the total number public users that are a part of this session. The actual number may be lower than this number when the session is ended.
+            subscribedToIds:
+              type: array
+              description: The aggregated list of known subscription IDs that are included in the session.
+              items:
+                type: string
+            buckets:
+              type: object
+              description: A map of bucket names to the number of public users in each bucket.
+              properties:
+                individual:
+                  $ref: '#/components/schemas/PublicBucketSummary'
+                group:
+                  $ref: '#/components/schemas/PublicBucketSummary'
+                rule:
+                  $ref: '#/components/schemas/PublicBucketSummary'
+                query:
+                  $ref: '#/components/schemas/PublicBucketSummary'
+                exclusion:
+                  $ref: '#/components/schemas/PublicBucketSummary'
+                alert:
+                  $ref: '#/components/schemas/PublicBucketSummary'
+                thread:
+                  $ref: '#/components/schemas/PublicBucketSummary'
+                public:
+                  $ref: '#/components/schemas/PublicBucketSummary'
+            subsets:
+              $ref: '#/components/schemas/SummarySubsetCounts'
+    QueryResponseItemResultSetCommand:
+      type: object
+      description: The accumulated CEM Results command based on previous modifications to the bucket.
+      properties:
+        type:
+          type: string
+          enum:
+          - ResultSetCommand
+          description: Must be set to `ResultSetCommand`.
+        id:
+          type: string
+          description: The unique system ID of the CEM Results command. The domain of the result set varies based on the `command`; valid domains may be any of `contact`, `publicuser`, `recipient`, or `resultset`. If the domain is `recipient` or `resultset`, then the tag will contain either `contact` or `publicuser` to help differentiate the type of results that will be returned from the command.
+          example: evbg+result:recipient:comms-contact-builder-9e1077f6-91a2-4076-b301-fd9458a4ea3e:thread-notified-contact-0
+        command:
+          type: object
+          description: The CEM Result command body.
+          oneOf:
+          - $ref: '#/components/schemas/SemanticQuery'
+          - $ref: '#/components/schemas/QueryResponseItemResultSetCommandRecipientsOf'
+          - $ref: '#/components/schemas/QueryResponseItemResultSetCommandFilter'
+          - $ref: '#/components/schemas/QueryResponseItemResultSetCommandFixedSet'
+      required:
+      - type
+      - id
+      - command
+    BucketData:
+      type: object
+      description: Data to be stored in a bucket.
+      properties:
+        individual:
+          $ref: '#/components/schemas/ContactBucketData'
+        group:
+          $ref: '#/components/schemas/GroupBucketData'
+        rule:
+          $ref: '#/components/schemas/RuleBucketData'
+        query:
+          $ref: '#/components/schemas/QueryBucketData'
+        exclusion:
+          $ref: '#/components/schemas/ContactBucketData'
+        alert:
+          anyOf:
+          - $ref: '#/components/schemas/ContactBucketData'
+          - $ref: '#/components/schemas/GroupBucketData'
+          - $ref: '#/components/schemas/RuleBucketData'
+          - $ref: '#/components/schemas/QueryBucketData'
+        thread:
+          anyOf:
+          - $ref: '#/components/schemas/ContactBucketData'
+          - $ref: '#/components/schemas/GroupBucketData'
+          - $ref: '#/components/schemas/RuleBucketData'
+          - $ref: '#/components/schemas/QueryBucketData'
+          - $ref: '#/components/schemas/PublicUserBucketData'
+        public:
+          $ref: '#/components/schemas/PublicUserBucketData'
+    ApiContactExternalId:
+      type: object
+      description: Include an individual contact by their unique system ID.
+      properties:
+        type:
+          type: string
+          enum:
+          - ExternalId
+          description: Must be set to `ExternalId`.
+        externalId:
+          type: string
+          description: The unique external ID of the contact.
+      required:
+      - type
+      - externalId
     SemanticQuery:
       allOf:
       - $ref: '#/components/schemas/Command'
@@ -1191,31 +1730,22 @@ components:
         sendToAorSubscriptions:
           type: boolean
           description: If true, include org area-of-responsibility subscriptions. Only applicable to `publicuser` result set.
-    GroupBucketData:
+    ApiRuleId:
       type: object
-      description: Data to be stored in a bucket that supports contact groups.
-      properties:
-        groups:
-          type: array
-          description: A list of contact groups to be included in the bucket.
-          maxItems: 10
-          items:
-            $ref: '#/components/schemas/ApiGroupId'
-    ApiContactExternalId:
-      type: object
-      description: Include an individual contact by their unique system ID.
+      description: Include a set of individual contacts by whether they match a contact rule (filter).
       properties:
         type:
           type: string
           enum:
-          - ExternalId
-          description: Must be set to `ExternalId`.
-        externalId:
-          type: string
-          description: The unique external ID of the contact.
+          - Id
+          description: Must be set to `Id`.
+        ruleId:
+          type: integer
+          format: int64
+          description: The unique system ID of the contact rule (filter).
       required:
       - type
-      - externalId
+      - ruleId
     SummarySubsetCounts:
       type: object
       description: The counts of individual contact groups, rules (filters), and CEM Result Sets within each bucket.
@@ -1236,12 +1766,9 @@ components:
           $ref: '#/components/schemas/SummarySubsetTypes'
         public:
           $ref: '#/components/schemas/SummarySubsetTypes'
-    Geometry:
+    ApiQuerySemanticQuery:
       type: object
-      description: A geojson representation of a map shape.
-    ApiPublicUserSemanticQuery:
-      type: object
-      description: Include a set of public subscribers by a CEM Results `SemanticQuery`.
+      description: Include a set of individual contacts by a CEM Results `SemanticQuery`.
       properties:
         type:
           type: string
@@ -1253,252 +1780,51 @@ components:
       required:
       - type
       - command
-    BucketData:
+    Command:
       type: object
-      description: Data to be stored in a bucket.
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          description: The type of command to execute
+    ResultResponse:
+      type: object
+      description: An object consisting of key-value pairs where the key is the name of the bucket and the value is zero or more CEM Results IDs generated for that bucket.
       properties:
         individual:
-          $ref: '#/components/schemas/ContactBucketData'
+          type: array
+          items:
+            type: string
         group:
-          $ref: '#/components/schemas/GroupBucketData'
+          type: array
+          items:
+            type: string
         rule:
-          $ref: '#/components/schemas/RuleBucketData'
+          type: array
+          items:
+            type: string
         query:
-          $ref: '#/components/schemas/QueryBucketData'
+          type: array
+          items:
+            type: string
         exclusion:
-          $ref: '#/components/schemas/ContactBucketData'
+          type: array
+          items:
+            type: string
         alert:
-          anyOf:
-          - $ref: '#/components/schemas/ContactBucketData'
-          - $ref: '#/components/schemas/GroupBucketData'
-          - $ref: '#/components/schemas/RuleBucketData'
-          - $ref: '#/components/schemas/QueryBucketData'
+          type: array
+          items:
+            type: string
         thread:
-          anyOf:
-          - $ref: '#/components/schemas/ContactBucketData'
-          - $ref: '#/components/schemas/GroupBucketData'
-          - $ref: '#/components/schemas/RuleBucketData'
-          - $ref: '#/components/schemas/QueryBucketData'
-          - $ref: '#/components/schemas/PublicUserBucketData'
+          type: array
+          items:
+            type: string
+          description: Result sets from the `thread` bucket may be copied to the other buckets in the session if `threadSets` was provided. See the documentation for creating a session for more information.
         public:
-          $ref: '#/components/schemas/PublicUserBucketData'
-    QueryResponseItemResultSetCommandFixedSet:
-      type: object
-      description: A `FixedSet` command for basic storage of resolved contacts or public users.
-      properties:
-        type:
-          type: string
-          enum:
-          - FixedSet
-          description: Must be set to `FixedSet`.
-        items:
           type: array
-          items:
-            type: object
-            description: An individual contact or public user.
-            properties:
-              id:
-                type: string
-                description: The unique system identifier of the contact or public user.
-              featureId:
-                type:
-                - string
-                - 'null'
-                description: Not currently used.
-              domain:
-                type: string
-                enum:
-                - contact
-                - publicuser
-                description: The domain of the item, which indicates whether the item is a contact or a public user.
-              properties:
-                type: object
-                description: A map of the item's properties, such as its original source. The properties available vary based on the domain of the item and the features included in the result set.
-              rank:
-                type:
-                - string
-                - 'null'
-                description: Not currently used.
-            required:
-            - id
-            - domain
-          description: The list of CEM Results IDs of the result sets to filter.
-      required:
-      - type
-      - items
-    BaseApiPaginatedResponse:
-      type: object
-      properties:
-        pages:
-          type: object
-          properties:
-            currentPage:
-              type: number
-              description: The requested page number.
-            pageSize:
-              type: number
-              description: The requested page size.
-            pageCount:
-              type: number
-              description: The number of elements in the current page.
-            totalPages:
-              type: number
-              description: The total number of pages available for request.
-            maxSize:
-              type: number
-              description: The maximum size of a single page that is allowed by the API.
-            totalCount:
-              type: number
-              description: The total number of elements across all pages.
-    CemResultsLastKnownLocationType:
-      type: object
-      description: Specifies how to include contacts with "Last Known" location types in CEM Results.
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          description: Must be set to exactly `LastKnown`.
-          enum:
-          - LastKnown
-        locationSourceIds:
-          type: array
-          description: A list of location source IDs.
-          items:
-            type: number
-    CreateSessionRequest:
-      type: object
-      description: Request body to start a new session.
-      properties:
-        data:
-          $ref: '#/components/schemas/BucketData'
-        threadSets:
-          type: object
-          description: A map of bucket names to result set IDs from a previous communication. By intersecting these result sets with the final results from the `thread` bucket, the service can recategorize results into the buckets they belonged to previously.
-          properties:
-            individual:
-              type: array
-              items:
-                type: string
-              description: Result set IDs representing the set of recipients added to a previous communication through the `individual` bucket.
-            group:
-              type: array
-              items:
-                type: string
-              description: Result set IDs representing the set of recipients added to a previous communication through the `group` bucket.
-            rule:
-              type: array
-              items:
-                type: string
-              description: Result set IDs representing the set of recipients added to a previous communication through the `rule` bucket.
-            query:
-              type: array
-              items:
-                type: string
-              description: Result set IDs representing the set of recipients added to a previous communication through the `query` bucket.
-            alert:
-              type: array
-              items:
-                type: string
-              description: Result set IDs representing the set of recipients added to a previous communication through the `alert` bucket.
-            public:
-              type: array
-              items:
-                type: string
-              description: Result set IDs representing the set of recipients added to a previous communication through the `public` bucket.
-    CemResultsTravelLocationType:
-      type: object
-      description: Specifies how to include contacts with travel location types in CEM Results.
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          description: Must be set to exactly `Travel`.
-          enum:
-          - Travel
-        domesticInternationalStatuses:
-          type: array
-          description: A list of domestic international travel statuses.
           items:
             type: string
-        localTravelStatuses:
-          type: array
-          description: A list of local travel statuses.
-          items:
-            type: string
-        travelTypes:
-          type: array
-          description: Depicts whether a contact is arriving, departing, or transitioning to a location.
-          items:
-            type: string
-            enum:
-            - Arrival
-            - Departure
-            - Transit
-        segmentTypes:
-          type: array
-          description: Depicts a contact's mode of transportation to a location.
-          items:
-            type: string
-            enum:
-            - Car
-            - Hotel
-            - Air
-            - Rail
-    CemResultsPropertyQuery:
-      type: object
-      required:
-      - ids
-      properties:
-        ids:
-          type: array
-          description: The IDs of the properties to query by.
-    CemResultsExpectedLocationType:
-      type: object
-      description: Specifies how to include contacts with expected location types in CEM Results.
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          description: Must be set to exactly `Expected`.
-          enum:
-          - Expected
-    ApiQueryResultSet:
-      type: object
-      description: Include a set of individual contacts by a CEM Results ID (Result Set Identifier).
-      properties:
-        type:
-          type: string
-          enum:
-          - ResultSet
-          description: Must be set to `ResultSet`.
-        resultSetId:
-          type: string
-          description: The unique system ID of the CEM Results to include. Only IDs in the `contact` or `resultset` domains are valid.
-          example: evbg+result:contact:my-contacts:1697471720114
-      required:
-      - type
-      - resultSetId
-    RuleBucketData:
-      type: object
-      description: Data to be stored in a bucket that supports contact rules (filters).
-      properties:
-        rules:
-          type: array
-          description: A list of contact rules (filters) to be included in the bucket
-          maxItems: 10
-          items:
-            $ref: '#/components/schemas/ApiRuleId'
-    ModificationRequest:
-      type: object
-      description: Request body to modify an existing session.
-      properties:
-        data:
-          $ref: '#/components/schemas/BucketData'
-      required:
-      - data
     Contact:
       type: object
       properties:
@@ -1525,116 +1851,78 @@ components:
       - id
       - firstName
       - lastName
-    PublicUserBucketData:
+    QueryResponse:
       type: object
-      description: Include a set of public users via subscriptions.
+      description: The CEM Results commands/result set IDs that were generated based on the modifications made to the session.
       properties:
+        individual:
+          $ref: '#/components/schemas/QueryResponseBucket'
+        group:
+          $ref: '#/components/schemas/QueryResponseBucket'
+        rule:
+          $ref: '#/components/schemas/QueryResponseBucket'
+        query:
+          $ref: '#/components/schemas/QueryResponseBucket'
+        exclusion:
+          $ref: '#/components/schemas/QueryResponseBucket'
+        alert:
+          $ref: '#/components/schemas/QueryResponseBucket'
+        thread:
+          $ref: '#/components/schemas/QueryResponseBucket'
         public:
-          type: array
-          description: A list of subscriber queries to be included in the bucket.
-          maxItems: 10
-          items:
-            anyOf:
-            - $ref: '#/components/schemas/ApiPublicUserResultSet'
-            - $ref: '#/components/schemas/ApiPublicUserSemanticQuery'
-    SummaryCounts:
+          $ref: '#/components/schemas/QueryResponseBucket'
+    QueryResponseItemResultSetCommandRecipientsOf:
       type: object
-      description: A summary of the number of contacts within each bucket in a session. A bucket may not be present if it has no contacts.
-      required:
-      - total
-      - buckets
+      description: A `RecipientsOf` command for retrieving recipients directly from the notification report log.
       properties:
-        total:
+        type:
+          type: string
+          enum:
+          - RecipientsOf
+          description: Must be set to `RecipientsOf`.
+        notificationId:
+          type: number
+          description: The ID of the notification to read the report log of.
+          format: int64
+        confirmationStatuses:
+          type: array
+          description: The list of confirmation statuses to include in the results. If empty, then contacts with any confirmation status will be included.
+          items:
+            type: string
+            enum:
+            - Confirmed
+            - Attempted
+            - ConfirmedLate
+            - Unreachable
+            - Duplicate
+            - Dismissed
+        confirmedPathIds:
+          type:
+          - number
+          - 'null'
+          format: int64
+          description: Not currently used.
+      required:
+      - type
+      - notificationId
+    QueryResponseBucket:
+      type: array
+      items:
+        anyOf:
+        - $ref: '#/components/schemas/QueryResponseItemResultSetCommand'
+        - $ref: '#/components/schemas/QueryResponseItemResultSetId'
+    PublicBucketSummary:
+      type: object
+      properties:
+        provisionalCount:
           type: integer
           format: int64
-          description: The total number of contacts across all buckets in the session. The `exclusion` bucket is subtracted from the total.
-        buckets:
-          type: object
-          description: A map of bucket names to the number of contacts in each bucket.
-          properties:
-            individual:
-              type: integer
-              format: int64
-              description: The number of contacts in the "individual" bucket.
-            group:
-              type: integer
-              format: int64
-              description: The number of contacts in the "group" bucket.
-            rule:
-              type: integer
-              format: int64
-              description: The number of contacts in the "rule" bucket.
-            query:
-              type: integer
-              format: int64
-              description: The number of contacts in the "query" bucket.
-            exclusion:
-              type: integer
-              format: int64
-              description: The number of contacts in the "exclusion" bucket.
-            alert:
-              type: integer
-              format: int64
-              description: The number of contacts in the "alert" bucket.
-            thread:
-              type: integer
-              format: int64
-              description: The number of contacts in the "thread" bucket.
-        subsets:
-          $ref: '#/components/schemas/SummarySubsetCounts'
-        public:
-          type: object
-          description: The counts of public users within the session's buckets.
-          properties:
-            provisionalCount:
-              type: integer
-              format: int64
-              description: A provisional count of the total number public users that are a part of this session. The actual number may be lower than this number when the session is ended.
-            subscribedToIds:
-              type: array
-              description: The aggregated list of known subscription IDs that are included in the session.
-              items:
-                type: string
-            buckets:
-              type: object
-              description: A map of bucket names to the number of public users in each bucket.
-              properties:
-                individual:
-                  $ref: '#/components/schemas/PublicBucketSummary'
-                group:
-                  $ref: '#/components/schemas/PublicBucketSummary'
-                rule:
-                  $ref: '#/components/schemas/PublicBucketSummary'
-                query:
-                  $ref: '#/components/schemas/PublicBucketSummary'
-                exclusion:
-                  $ref: '#/components/schemas/PublicBucketSummary'
-                alert:
-                  $ref: '#/components/schemas/PublicBucketSummary'
-                thread:
-                  $ref: '#/components/schemas/PublicBucketSummary'
-                public:
-                  $ref: '#/components/schemas/PublicBucketSummary'
-            subsets:
-              $ref: '#/components/schemas/SummarySubsetCounts'
-    CemResultsStringPropertyQuery:
-      allOf:
-      - $ref: '#/components/schemas/CemResultsPropertyQuery'
-      - type: object
-        required:
-        - type
-        description: Provides querying against string properties in Contacts and Assets.
-        properties:
-          type:
+          description: A provisional count of the number of public users that are in the current bucket. The actual number may be lower than this number when the session is ended.
+        subscribedToIds:
+          type: array
+          description: The list of known subscription IDs that are included in the bucket.
+          items:
             type: string
-            description: Must be set to exactly `String`.
-            enum:
-            - String
-          values:
-            type: array
-            description: The values to match against the properties.
-            items:
-              type: string
     ContactBuilderPreviewResponse:
       allOf:
       - $ref: '#/components/schemas/BaseApiPaginatedResponse'
@@ -1709,352 +1997,64 @@ components:
                   type: string
                   format: date-time
                   description: The date and time when the contact was last modified, in ISO 8601 format.
-    ContactsFromCsvResult:
+    QueryResponseItemResultSetCommandFixedSet:
       type: object
+      description: A `FixedSet` command for basic storage of resolved contacts or public users.
       properties:
-        success:
-          type: boolean
-        resultCode:
-          type: integer
-        message:
-          type:
-          - string
-          - 'null'
-        processedCSVRecordCount:
-          type: integer
-        externalIdCount:
-          type: integer
-        contactCount:
-          type: integer
-        contacts:
+        type:
+          type: string
+          enum:
+          - FixedSet
+          description: Must be set to `FixedSet`.
+        items:
           type: array
           items:
-            $ref: '#/components/schemas/Contact'
-        additionalInfos:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-      required:
-      - success
-      - resultCode
-      - processedCSVRecordCount
-      - externalIdCount
-      - contactCount
-      - contacts
-    SummarySubsetTypes:
-      type: object
-      properties:
-        groups:
-          type: object
-          description: A map of contact group IDs to the number of contacts in each group.
-          additionalProperties:
             type: object
+            description: An individual contact or public user.
             properties:
-              count:
-                type: integer
-                format: int64
-                description: The number of contacts in the session that are a part of this contact group.
-        rules:
-          type: object
-          description: A map of contact rule (filter) IDs to the number of contacts that match the rule.
-          additionalProperties:
-            type: object
-            properties:
-              count:
-                type: integer
-                format: int64
-                description: The number of contacts in the session that match the rule.
-        queries:
-          type: object
-          description: A map of CEM Result Set IDs to the number of contacts in each Result Set.
-          additionalProperties:
-            type: object
-            properties:
-              count:
-                type: integer
-                format: int64
-                description: The number of contacts that are included as a part of the Result Set.
-    CemResultsCompleteName:
-      type: object
-      description: Used to describe a contact's complete name in a CEM Results query.
+              id:
+                type: string
+                description: The unique system identifier of the contact or public user.
+              featureId:
+                type:
+                - string
+                - 'null'
+                description: Not currently used.
+              domain:
+                type: string
+                enum:
+                - contact
+                - publicuser
+                description: The domain of the item, which indicates whether the item is a contact or a public user.
+              properties:
+                type: object
+                description: A map of the item's properties, such as its original source. The properties available vary based on the domain of the item and the features included in the result set.
+              rank:
+                type:
+                - string
+                - 'null'
+                description: Not currently used.
+            required:
+            - id
+            - domain
+          description: The list of CEM Results IDs of the result sets to filter.
       required:
       - type
-      - first
-      - last
-      properties:
-        type:
-          type: string
-          description: Must be set to exactly `Complete`.
-          enum:
-          - Complete
-        first:
-          type: string
-          description: The first name of the contact.
-        last:
-          type: string
-          description: The last name of the contact.
-        middleInitial:
-          type: string
-          description: The middle initial of the contact.
-        suffix:
-          type: string
-          description: The suffix of the contact's name, such as "Jr." or "III".
-    ApiPublicUserResultSet:
+      - items
+    ApiPublicUserSemanticQuery:
       type: object
-      description: Include a set of public subscribers by a CEM Results ID (Result Set Identifier).
+      description: Include a set of public subscribers by a CEM Results `SemanticQuery`.
       properties:
         type:
           type: string
           enum:
-          - ResultSet
-          description: Must be set to `ResultSet`.
-        resultSetId:
-          type: string
-          description: The unique system ID of the CEM Results to include. Only IDs in the `publicuser` or `resultset` domains are valid.
-          example: evbg+result:publicuser:subscriptions:1697471720114
-      required:
-      - type
-      - resultSetId
-    QueryResponse:
-      type: object
-      description: The CEM Results commands/result set IDs that were generated based on the modifications made to the session.
-      properties:
-        individual:
-          $ref: '#/components/schemas/QueryResponseBucket'
-        group:
-          $ref: '#/components/schemas/QueryResponseBucket'
-        rule:
-          $ref: '#/components/schemas/QueryResponseBucket'
-        query:
-          $ref: '#/components/schemas/QueryResponseBucket'
-        exclusion:
-          $ref: '#/components/schemas/QueryResponseBucket'
-        alert:
-          $ref: '#/components/schemas/QueryResponseBucket'
-        thread:
-          $ref: '#/components/schemas/QueryResponseBucket'
-        public:
-          $ref: '#/components/schemas/QueryResponseBucket'
-    CemResultsStaticLocationType:
-      type: object
-      description: Specifies how to include contacts with static location types in CEM Results.
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          description: Must be set to exactly `Static`.
-          enum:
-          - Static
-        locationTypeIds:
-          type: array
-          description: A list of static location type IDs.
-          items:
-            type: number
-        includeMissingLocationTypeId:
-          type: boolean
-          description: If true, include results that do not have a static location type.
-    ApiSession:
-      type: object
-      description: The current session metadata.
-      properties:
-        sessionId:
-          type: string
-          description: The unique identifier for the newly created session.
-          example: 73ef9c42-df40-41c8-9b2d-6618ed5c31c1
-        created:
-          type: string
-          format: date-time
-          description: The created time of the session in ISO 8601 format.
-          example: '2024-07-03T20:06:09.734385Z'
-        expiration:
-          type: string
-          format: date-time
-          description: The expiration time of the session in ISO 8601 format.
-          example: '2024-07-03T20:06:09.734385Z'
-        buckets:
-          type: array
-          description: A list of buckets created in the session.
-          items:
-            type: string
-            description: The unique identifier for each bucket created in the session.
-        status:
-          type: string
-          description: 'The current status of the session.
-
-
-            * `IDLE`: The session is idle and ready for additional modifications to its buckets.
-
-            * `PROCESSING`: The session is currently processing modifications to its buckets.
-
-            * `FINALIZING`: The session is currently generating result sets based on the contents of the buckets. The session will not accept new modifications to its buckets.
-
-            * `COMPLETED`: The session has been completed and no further modifications can be made.
-
-            * `FAILED`: The session failed to create result sets based on the contents of the buckets.'
-          enum:
-          - IDLE
-          - PROCESSING
-          - FINALIZING
-          - COMPLETED
-          - FAILED
-        estimationMode:
-          type: boolean
-          description: 'If `true`, the session is in estimation mode. This implies that the summary may return estimates of the totals instead of exact counts and the contacts returned from the preview may be a subset of the total contacts that match the buckets.
-
-
-            Note that the generated result sets from completing the session are always exact and are not based on estimates, regardless of whether the session is in estimation mode or not.'
-    ApiRuleId:
-      type: object
-      description: Include a set of individual contacts by whether they match a contact rule (filter).
-      properties:
-        type:
-          type: string
-          enum:
-          - Id
-          description: Must be set to `Id`.
-        ruleId:
-          type: integer
-          format: int64
-          description: The unique system ID of the contact rule (filter).
-      required:
-      - type
-      - ruleId
-    CemResultsBooleanPropertyQuery:
-      allOf:
-      - $ref: '#/components/schemas/CemResultsPropertyQuery'
-      - type: object
-        required:
-        - type
-        description: Provides querying against boolean properties in Contacts and Assets.
-        properties:
-          type:
-            type: string
-            description: Must be set to exactly `Boolean`.
-            enum:
-            - Boolean
-          value:
-            type: boolean
-            description: A boolean value to match against the properties.
-    ContactBucketData:
-      type: object
-      description: Data to be stored in a bucket that supports individual contacts.
-      properties:
-        contacts:
-          type: array
-          description: A list of individual contacts to be included in the bucket.
-          maxItems: 5000
-          items:
-            anyOf:
-            - $ref: '#/components/schemas/ApiContactId'
-            - $ref: '#/components/schemas/ApiContactExternalId'
-    QueryResponseItemResultSetCommand:
-      type: object
-      description: The accumulated CEM Results command based on previous modifications to the bucket.
-      properties:
-        type:
-          type: string
-          enum:
-          - ResultSetCommand
-          description: Must be set to `ResultSetCommand`.
-        id:
-          type: string
-          description: The unique system ID of the CEM Results command. The domain of the result set varies based on the `command`; valid domains may be any of `contact`, `publicuser`, `recipient`, or `resultset`. If the domain is `recipient` or `resultset`, then the tag will contain either `contact` or `publicuser` to help differentiate the type of results that will be returned from the command.
-          example: evbg+result:recipient:comms-contact-builder-9e1077f6-91a2-4076-b301-fd9458a4ea3e:thread-notified-contact-0
+          - SemanticQuery
+          description: Must be set to `SemanticQuery`.
         command:
-          type: object
-          description: The CEM Result command body.
-          oneOf:
-          - $ref: '#/components/schemas/SemanticQuery'
-          - $ref: '#/components/schemas/QueryResponseItemResultSetCommandRecipientsOf'
-          - $ref: '#/components/schemas/QueryResponseItemResultSetCommandFilter'
-          - $ref: '#/components/schemas/QueryResponseItemResultSetCommandFixedSet'
+          $ref: '#/components/schemas/SemanticQuery'
       required:
       - type
-      - id
       - command
-    ApiGroupId:
-      type: object
-      description: Include a set of individual contacts by their membership in a contact group.
-      properties:
-        type:
-          type: string
-          enum:
-          - Id
-          description: Must be set to `Id`.
-        groupId:
-          type: integer
-          format: int64
-          description: The unique system ID of the contact group.
-      required:
-      - type
-      - groupId
-    QueryBucketData:
-      type: object
-      description: Data to be stored in a bucket that supports generic queries.
-      properties:
-        query:
-          type: array
-          description: A list of generic queries to be included in the bucket.
-          maxItems: 10
-          items:
-            anyOf:
-            - $ref: '#/components/schemas/ApiQueryResultSet'
-            - $ref: '#/components/schemas/ApiQuerySemanticQuery'
-            - $ref: '#/components/schemas/ApiQueryNotificationReportLog'
-    QueryResponseBucket:
-      type: array
-      items:
-        anyOf:
-        - $ref: '#/components/schemas/QueryResponseItemResultSetCommand'
-        - $ref: '#/components/schemas/QueryResponseItemResultSetId'
-    Command:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          description: The type of command to execute
-    ResultResponse:
-      type: object
-      description: An object consisting of key-value pairs where the key is the name of the bucket and the value is zero or more CEM Results IDs generated for that bucket.
-      properties:
-        individual:
-          type: array
-          items:
-            type: string
-        group:
-          type: array
-          items:
-            type: string
-        rule:
-          type: array
-          items:
-            type: string
-        query:
-          type: array
-          items:
-            type: string
-        exclusion:
-          type: array
-          items:
-            type: string
-        alert:
-          type: array
-          items:
-            type: string
-        thread:
-          type: array
-          items:
-            type: string
-          description: Result sets from the `thread` bucket may be copied to the other buckets in the session if `threadSets` was provided. See the documentation for creating a session for more information.
-        public:
-          type: array
-          items:
-            type: string
   securitySchemes:
     API_Authorizer:
       type: apiKey

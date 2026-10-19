@@ -1,0 +1,124 @@
+openapi: 3.2.0
+info:
+  contact:
+    email: support@everbridge.com
+  description: Integration with Everbridge Incidents, Scenarios and Safety via IPAAS
+  title: Everbridge iPaaS Agent API
+  version: v1
+servers:
+- url: /
+  description: default server url
+security:
+- apiKey: []
+tags:
+- description: Settings and shared operations for all iPaaS integrations
+  name: Agent
+paths:
+  /ipaas/v1/agent/config:
+    get:
+      operationId: getConfiguration
+      responses:
+        '400':
+          content:
+            '*/*':
+              schema:
+                type: object
+          description: Bad Request
+        '404':
+          content:
+            '*/*':
+              schema:
+                type: object
+          description: Not Found
+        '500':
+          content:
+            '*/*':
+              schema:
+                type: object
+          description: Internal error
+      security:
+      - apiKey: []
+      summary: Retrieves the Agent configuration set in the iPaaS UI
+      tags:
+      - Agent
+  /ipaas/v1/agent/heartbeat:
+    get:
+      operationId: getHeartbeatStatus
+      responses:
+        '400':
+          content:
+            '*/*':
+              schema:
+                type: object
+          description: Bad Request
+        '404':
+          content:
+            '*/*':
+              schema:
+                type: object
+          description: Not Found
+        '500':
+          content:
+            '*/*':
+              schema:
+                type: object
+          description: Internal error
+      security:
+      - apiKey: []
+      summary: Retrieves the status of the agent
+      tags:
+      - Agent
+    post:
+      operationId: processHeartbeat
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgentStatus'
+        required: true
+      responses:
+        '200':
+          content:
+            '*/*':
+              schema:
+                type: object
+          description: OK
+      security:
+      - apiKey: []
+      summary: Let the system know the status of the agent
+      tags:
+      - Agent
+components:
+  schemas:
+    AgentStatus:
+      type: object
+      properties:
+        currentState:
+          type: string
+          enum:
+          - RUNNING
+          - STOPPED
+        dateTime:
+          type: integer
+          format: int64
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentError'
+        targetConnectionIsHealthy:
+          type: boolean
+    AgentError:
+      type: object
+      properties:
+        message:
+          type: string
+        title:
+          type: string
+        type:
+          type: string
+  securitySchemes:
+    apiKey:
+      description: Api Key access
+      in: header
+      name: Authentication
+      type: apiKey

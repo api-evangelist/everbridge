@@ -799,6 +799,17 @@ components:
       example: '1536984111644674'
       maxLength: 16
       type: integer
+    postUpdateResponse:
+      properties:
+        baseUri:
+          type: string
+        id:
+          type: integer
+        instanceUri:
+          type: string
+        message:
+          type: string
+      type: object
     organizationId:
       default: '1536984111644674'
       description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
@@ -823,24 +834,6 @@ components:
           type: array
         policyName:
           description: The name of the privacy policy
-          type: string
-      type: object
-    privacyAssignment:
-      properties:
-        assignedRoles:
-          items:
-            properties:
-              roleId:
-                type: integer
-              roleName:
-                type: string
-              roleType:
-                type: string
-            type: object
-          type: array
-        policyId:
-          type: integer
-        policyName:
           type: string
       type: object
     getPrivacyPolicies:
@@ -911,15 +904,22 @@ components:
             type: integer
           type: array
       type: object
-    postUpdateResponse:
+    privacyAssignment:
       properties:
-        baseUri:
-          type: string
-        id:
+        assignedRoles:
+          items:
+            properties:
+              roleId:
+                type: integer
+              roleName:
+                type: string
+              roleType:
+                type: string
+            type: object
+          type: array
+        policyId:
           type: integer
-        instanceUri:
-          type: string
-        message:
+        policyName:
           type: string
       type: object
   securitySchemes:

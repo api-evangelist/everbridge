@@ -50,44 +50,13 @@ paths:
         passthroughBehavior: when_no_match
 components:
   schemas:
-    Service:
+    Category:
       type: object
       properties:
         id:
           type: string
         name:
           type: string
-        category:
-          $ref: '#/components/schemas/ServiceCategory'
-        provider:
-          $ref: '#/components/schemas/ServiceProvider'
-        expose:
-          type: boolean
-        mandatory:
-          type: boolean
-        weatherServices:
-          type: array
-          items:
-            $ref: '#/components/schemas/WeatherService'
-    ServiceProvider:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        services:
-          type: array
-          items:
-            $ref: '#/components/schemas/Service'
-        categories:
-          type: array
-          items:
-            $ref: '#/components/schemas/Category'
-        categoryGroups:
-          type: array
-          items:
-            $ref: '#/components/schemas/CategoryGroup'
     ServiceCategory:
       type: object
       properties:
@@ -111,6 +80,93 @@ components:
           - Events
           - Customized
           - Weather
+    Service:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        category:
+          $ref: '#/components/schemas/ServiceCategory'
+        provider:
+          $ref: '#/components/schemas/ServiceProvider'
+        expose:
+          type: boolean
+        mandatory:
+          type: boolean
+        weatherServices:
+          type: array
+          items:
+            $ref: '#/components/schemas/WeatherService'
+    ServiceGroup:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceCategory'
+    WeatherType:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+          enum:
+          - Warning
+          - Watch
+          - Advisory
+          - Statement
+          - Outlook
+          - Alert
+          - Potentially_Dangerous
+          - Very_Dangerous
+          - Dangerous
+        overridden:
+          type: boolean
+        seq:
+          type: integer
+          format: int32
+        lastModifiedDate:
+          type: string
+          format: date-time
+    ServiceProvider:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        services:
+          type: array
+          items:
+            $ref: '#/components/schemas/Service'
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
+        categoryGroups:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryGroup'
+    CategoryGroup:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
     WeatherService:
       type: object
       properties:
@@ -140,62 +196,6 @@ components:
         lastModifiedDate:
           type: string
           format: date-time
-    Category:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-    WeatherType:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        type:
-          type: string
-          enum:
-          - Warning
-          - Watch
-          - Advisory
-          - Statement
-          - Outlook
-          - Alert
-          - Potentially_Dangerous
-          - Very_Dangerous
-          - Dangerous
-        overridden:
-          type: boolean
-        seq:
-          type: integer
-          format: int32
-        lastModifiedDate:
-          type: string
-          format: date-time
-    ServiceGroup:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        categories:
-          type: array
-          items:
-            $ref: '#/components/schemas/ServiceCategory'
-    CategoryGroup:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        categories:
-          type: array
-          items:
-            $ref: '#/components/schemas/Category'
   securitySchemes:
     API_Authorizer:
       type: apiKey

@@ -82,6 +82,155 @@ paths:
       x-operation-id-original: EBS Get Staff Assigned By Calendar ExternalId
 components:
   schemas:
+    StaffShiftAssignmentsWrapper:
+      properties:
+        externalId:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        middleInitial:
+          type: string
+        shiftAssignments:
+          items:
+            $ref: '#/components/schemas/ShiftAssignmentWrapper'
+          type: array
+        staffId:
+          format: int64
+          type: integer
+        suffix:
+          type: string
+      type: object
+    TimingInterval:
+      properties:
+        from:
+          format: date-time
+          type: string
+        fromDate:
+          format: date-time
+          type: string
+        to:
+          format: date-time
+          type: string
+        toDate:
+          format: date-time
+          type: string
+      type: object
+    Staff:
+      properties:
+        externalId:
+          type: string
+        firstName:
+          type: string
+        id:
+          format: int64
+          type: integer
+        lastName:
+          type: string
+        middleInitial:
+          type: string
+        suffix:
+          type: string
+        unavailable:
+          type: boolean
+      type: object
+    CalendarStaffShiftAssignmentsWrapperInstanceResult:
+      properties:
+        message:
+          type: string
+        result:
+          $ref: '#/components/schemas/CalendarStaffShiftAssignmentsWrapper'
+      type: object
+    CalendarStaffShiftAssignmentsWrapper:
+      properties:
+        calendar:
+          $ref: '#/components/schemas/CalendarWrapper'
+        staffAssignments:
+          items:
+            $ref: '#/components/schemas/StaffShiftAssignmentsWrapper'
+          type: array
+          uniqueItems: true
+      type: object
+    ShiftExceptions:
+      properties:
+        accountId:
+          format: int64
+          type: integer
+        createdAmsRoleId:
+          type: string
+        createdDate:
+          format: date-time
+          type: string
+        createdId:
+          format: int64
+          type: integer
+        createdName:
+          type: string
+        createdProxyName:
+          type: string
+        eventRecurrenceType:
+          enum:
+          - ONCE
+          - RANGE
+          - ROTATION_WEEK
+          type: string
+        eventRecurrenceValue:
+          format: int32
+          type: integer
+        id:
+          format: int64
+          type: integer
+        lastModifiedAmsRoleId:
+          type: string
+        lastModifiedDate:
+          format: date-time
+          type: string
+        lastModifiedId:
+          format: int64
+          type: integer
+        lastModifiedName:
+          type: string
+        lastModifiedProxyName:
+          type: string
+        organizationId:
+          format: int64
+          type: integer
+        resourceBundleId:
+          format: int64
+          type: integer
+        schedulingCalendarId:
+          format: int64
+          type: integer
+        shiftApplicabilityIntervals:
+          items:
+            $ref: '#/components/schemas/TimingInterval'
+          type: array
+        shiftIntervals:
+          items:
+            enum:
+            - MONDAY
+            - TUESDAY
+            - WEDNESDAY
+            - THURSDAY
+            - FRIDAY
+            - SATURDAY
+            - SUNDAY
+            - EVERYDAY
+            type: string
+          type: array
+          uniqueItems: true
+        shortId:
+          type: string
+        staffId:
+          format: int64
+          type: integer
+        status:
+          enum:
+          - A
+          - D
+          type: string
+      type: object
     ShiftAssignmentWrapper:
       properties:
         dayOfShift:
@@ -178,155 +327,6 @@ components:
           enum:
           - A
           - D
-          type: string
-      type: object
-    CalendarStaffShiftAssignmentsWrapper:
-      properties:
-        calendar:
-          $ref: '#/components/schemas/CalendarWrapper'
-        staffAssignments:
-          items:
-            $ref: '#/components/schemas/StaffShiftAssignmentsWrapper'
-          type: array
-          uniqueItems: true
-      type: object
-    TimingInterval:
-      properties:
-        from:
-          format: date-time
-          type: string
-        fromDate:
-          format: date-time
-          type: string
-        to:
-          format: date-time
-          type: string
-        toDate:
-          format: date-time
-          type: string
-      type: object
-    ShiftExceptions:
-      properties:
-        accountId:
-          format: int64
-          type: integer
-        createdAmsRoleId:
-          type: string
-        createdDate:
-          format: date-time
-          type: string
-        createdId:
-          format: int64
-          type: integer
-        createdName:
-          type: string
-        createdProxyName:
-          type: string
-        eventRecurrenceType:
-          enum:
-          - ONCE
-          - RANGE
-          - ROTATION_WEEK
-          type: string
-        eventRecurrenceValue:
-          format: int32
-          type: integer
-        id:
-          format: int64
-          type: integer
-        lastModifiedAmsRoleId:
-          type: string
-        lastModifiedDate:
-          format: date-time
-          type: string
-        lastModifiedId:
-          format: int64
-          type: integer
-        lastModifiedName:
-          type: string
-        lastModifiedProxyName:
-          type: string
-        organizationId:
-          format: int64
-          type: integer
-        resourceBundleId:
-          format: int64
-          type: integer
-        schedulingCalendarId:
-          format: int64
-          type: integer
-        shiftApplicabilityIntervals:
-          items:
-            $ref: '#/components/schemas/TimingInterval'
-          type: array
-        shiftIntervals:
-          items:
-            enum:
-            - MONDAY
-            - TUESDAY
-            - WEDNESDAY
-            - THURSDAY
-            - FRIDAY
-            - SATURDAY
-            - SUNDAY
-            - EVERYDAY
-            type: string
-          type: array
-          uniqueItems: true
-        shortId:
-          type: string
-        staffId:
-          format: int64
-          type: integer
-        status:
-          enum:
-          - A
-          - D
-          type: string
-      type: object
-    Staff:
-      properties:
-        externalId:
-          type: string
-        firstName:
-          type: string
-        id:
-          format: int64
-          type: integer
-        lastName:
-          type: string
-        middleInitial:
-          type: string
-        suffix:
-          type: string
-        unavailable:
-          type: boolean
-      type: object
-    CalendarStaffShiftAssignmentsWrapperInstanceResult:
-      properties:
-        message:
-          type: string
-        result:
-          $ref: '#/components/schemas/CalendarStaffShiftAssignmentsWrapper'
-      type: object
-    StaffShiftAssignmentsWrapper:
-      properties:
-        externalId:
-          type: string
-        firstName:
-          type: string
-        lastName:
-          type: string
-        middleInitial:
-          type: string
-        shiftAssignments:
-          items:
-            $ref: '#/components/schemas/ShiftAssignmentWrapper'
-          type: array
-        staffId:
-          format: int64
-          type: integer
-        suffix:
           type: string
       type: object
   securitySchemes:

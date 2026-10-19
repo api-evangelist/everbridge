@@ -1,0 +1,12 @@
+{
+ "url": "https://ipaas-ingestion.everbridge.net/v3/api-docs",
+ "final": "https://ipaas-ingestion.everbridge.net/v3/api-docs",
+ "status": 200,
+ "content_type": "application/json",
+ "bytes": 14110,
+ "sha256": "a96041e1a763df34d623bba4f26b656b303ae4ee6f37e8de2df28bc64ce1c67c",
+ "fetched_at": "2026-10-19",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "byte-identical",
+ "note": "re-archived: the provider's current document replaced a stale archive (roadmap#793); the old files are in openapi/_superseded/2026-10-19-stale"
+}

@@ -86,55 +86,6 @@ components:
             $ref: '#/components/schemas/SearchShapeWrapper'
           type: array
       type: object
-    GeoShapeWrapper:
-      properties:
-        points:
-          items:
-            $ref: '#/components/schemas/GeoPointWrapper'
-          type: array
-      type: object
-    UmsUploadWrapper:
-      properties:
-        pattern:
-          type: string
-        values:
-          items:
-            additionalProperties:
-              type: string
-            type: object
-          type: array
-      type: object
-    ResidentPropertyFilterWrapper:
-      properties:
-        field:
-          type: string
-        values:
-          items:
-            type: string
-          type: array
-      type: object
-    JsonResult:
-      properties:
-        data:
-          type: object
-        message:
-          type: string
-        resultCode:
-          type: string
-        success:
-          type: boolean
-        type:
-          type: string
-      type: object
-    GeoPointWrapper:
-      properties:
-        x:
-          format: double
-          type: number
-        y:
-          format: double
-          type: number
-      type: object
     SearchShapeWrapper:
       properties:
         boundaryId:
@@ -167,6 +118,39 @@ components:
         shape:
           $ref: '#/components/schemas/GeoShapeWrapper'
       type: object
+    ResidentPropertyFilterWrapper:
+      properties:
+        field:
+          type: string
+        values:
+          items:
+            type: string
+          type: array
+      type: object
+    JsonResult:
+      properties:
+        data:
+          type: object
+        message:
+          type: string
+        resultCode:
+          type: string
+        success:
+          type: boolean
+        type:
+          type: string
+      type: object
+    UmsUploadWrapper:
+      properties:
+        pattern:
+          type: string
+        values:
+          items:
+            additionalProperties:
+              type: string
+            type: object
+          type: array
+      type: object
     UmsContactsWrapper:
       properties:
         properties:
@@ -179,6 +163,22 @@ components:
           items:
             $ref: '#/components/schemas/UmsUploadWrapper'
           type: array
+      type: object
+    GeoShapeWrapper:
+      properties:
+        points:
+          items:
+            $ref: '#/components/schemas/GeoPointWrapper'
+          type: array
+      type: object
+    GeoPointWrapper:
+      properties:
+        x:
+          format: double
+          type: number
+        y:
+          format: double
+          type: number
       type: object
   securitySchemes:
     API_Authorizer:

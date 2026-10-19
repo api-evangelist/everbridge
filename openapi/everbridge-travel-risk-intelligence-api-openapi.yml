@@ -272,18 +272,15 @@ paths:
         connectionType: VPC_LINK
 components:
   schemas:
-    CityRiskRating:
+    CountryRiskRating:
       type: object
       properties:
         countryCode:
           type: string
           description: ISO 3166-1 alpha-2 country code.
-        cityName:
+        countryName:
           type: string
-          description: City name.
-        stateProvince:
-          type: string
-          description: State or province when available.
+          description: Country name.
         rating:
           type: string
           description: Risk rating score from 1 (low) to 5 (high).
@@ -291,31 +288,6 @@ components:
           type: string
           description: UTC timestamp string in ISO 8601 format.
           example: '2026-03-08T08:30:06.032Z'
-    CityRiskRatingResponse:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/CityRiskRating'
-    CountryRiskRatingByCodeResponse:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          $ref: '#/components/schemas/CountryRiskRating'
-    CountryRiskRatingResponse:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/CountryRiskRating'
     ErrorResponse:
       type: object
       required:
@@ -340,15 +312,43 @@ components:
           type: string
           description: Error detail message.
           example: Authorization failure.
-    CountryRiskRating:
+    CountryRiskRatingByCodeResponse:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          $ref: '#/components/schemas/CountryRiskRating'
+    CityRiskRatingResponse:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CityRiskRating'
+    CountryRiskRatingResponse:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CountryRiskRating'
+    CityRiskRating:
       type: object
       properties:
         countryCode:
           type: string
           description: ISO 3166-1 alpha-2 country code.
-        countryName:
+        cityName:
           type: string
-          description: Country name.
+          description: City name.
+        stateProvince:
+          type: string
+          description: State or province when available.
         rating:
           type: string
           description: Risk rating score from 1 (low) to 5 (high).

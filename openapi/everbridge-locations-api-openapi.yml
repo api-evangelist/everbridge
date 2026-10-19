@@ -298,25 +298,19 @@ paths:
       x-operation-id-original: EBS Get Location Source Data
 components:
   schemas:
-    LocationSourceDataInstanceResult:
-      properties:
-        message:
-          type: string
-        result:
-          $ref: '#/components/schemas/LocationSourceDataWrapper'
-      type: object
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
     LocationSourceDataCollectionResult:
       properties:
         locationSources:
           items:
             $ref: '#/components/schemas/LocationSourceDataWrapper'
           type: array
+      type: object
+    LocationSourceDataInstanceResult:
+      properties:
+        message:
+          type: string
+        result:
+          $ref: '#/components/schemas/LocationSourceDataWrapper'
       type: object
     LocationSourceDataParameterModel:
       description: Array object of the Location ID.
@@ -327,6 +321,12 @@ components:
             type: integer
           type: array
       type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
     LocationSourceDataWrapper:
       properties:
         address:

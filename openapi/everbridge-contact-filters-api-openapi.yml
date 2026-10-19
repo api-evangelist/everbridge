@@ -741,24 +741,6 @@ paths:
       x-operation-id-original: EBS Update Contact Filter
 components:
   schemas:
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
-    ContactFilterResponseRuleWrapper:
-      properties:
-        baseUri:
-          type: string
-        id:
-          format: int64
-          type: integer
-        instanceUri:
-          type: string
-        message:
-          type: string
-      type: object
     ContactFilterRequestRuleWrapper:
       properties:
         contactFilterRules:
@@ -820,88 +802,6 @@ components:
       required:
       - name
       - contactFilterRules
-      type: object
-    ContactFilterGetResponseRuleWrapper:
-      properties:
-        message:
-          type: string
-        result:
-          properties:
-            accountId:
-              type: number
-            contactFilterRules:
-              items:
-                properties:
-                  columnName:
-                    type: string
-                  columnValue:
-                    type: number
-                  contactFieldId:
-                    type: number
-                  dataType:
-                    type: string
-                  type:
-                    type: string
-                required:
-                - contactFieldId
-                - type
-                - dataType
-                - columnName
-                - columnValue
-                type: object
-              type: array
-            contactFilterType:
-              type: string
-            createdDate:
-              type: number
-            createdId:
-              type: number
-            createdName:
-              type: string
-            dirty:
-              type: boolean
-            id:
-              type: number
-            lastModifiedDate:
-              type: number
-            lastModifiedId:
-              type: number
-            lastModifiedName:
-              type: string
-            lastModifiedTime:
-              type: number
-            lastSynchronizedTime:
-              type: number
-            name:
-              type: string
-            organizationId:
-              type: number
-            resourceBundleId:
-              type: number
-            status:
-              type: string
-          required:
-          - createdName
-          - lastModifiedTime
-          - accountId
-          - status
-          - resourceBundleId
-          - contactFilterType
-          - organizationId
-          - id
-          - name
-          - lastModifiedDate
-          - lastModifiedId
-          - createdId
-          - createdDate
-          - lastSynchronizedTime
-          - lastModifiedName
-          - contactFilterRules
-          - dirty
-          type: object
-      required:
-      - message
-      - result
       type: object
     ContactFilterListResponseRuleWrapper:
       properties:
@@ -1003,6 +903,106 @@ components:
       - firstPageUri
       - lastPageUri
       - page
+      type: object
+    ContactFilterGetResponseRuleWrapper:
+      properties:
+        message:
+          type: string
+        result:
+          properties:
+            accountId:
+              type: number
+            contactFilterRules:
+              items:
+                properties:
+                  columnName:
+                    type: string
+                  columnValue:
+                    type: number
+                  contactFieldId:
+                    type: number
+                  dataType:
+                    type: string
+                  type:
+                    type: string
+                required:
+                - contactFieldId
+                - type
+                - dataType
+                - columnName
+                - columnValue
+                type: object
+              type: array
+            contactFilterType:
+              type: string
+            createdDate:
+              type: number
+            createdId:
+              type: number
+            createdName:
+              type: string
+            dirty:
+              type: boolean
+            id:
+              type: number
+            lastModifiedDate:
+              type: number
+            lastModifiedId:
+              type: number
+            lastModifiedName:
+              type: string
+            lastModifiedTime:
+              type: number
+            lastSynchronizedTime:
+              type: number
+            name:
+              type: string
+            organizationId:
+              type: number
+            resourceBundleId:
+              type: number
+            status:
+              type: string
+          required:
+          - createdName
+          - lastModifiedTime
+          - accountId
+          - status
+          - resourceBundleId
+          - contactFilterType
+          - organizationId
+          - id
+          - name
+          - lastModifiedDate
+          - lastModifiedId
+          - createdId
+          - createdDate
+          - lastSynchronizedTime
+          - lastModifiedName
+          - contactFilterRules
+          - dirty
+          type: object
+      required:
+      - message
+      - result
+      type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
+    ContactFilterResponseRuleWrapper:
+      properties:
+        baseUri:
+          type: string
+        id:
+          format: int64
+          type: integer
+        instanceUri:
+          type: string
+        message:
+          type: string
       type: object
   securitySchemes:
     API_Authorizer:

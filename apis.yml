@@ -4456,6 +4456,39 @@ apis:
   - type: GettingStarted
     url: >-
       https://support.snapcomms.com/hc/en-us/articles/19361020051867-Integration-Through-API-Overview
+- aid: everbridge:everbridge-access-control-api
+  name: Everbridge Access Control API
+  description: Operations for integrations with access control systems
+  humanURL: >-
+    https://www.everbridge.com/products/it-alerting/integrations/ipaas-self-service-integration-guide/
+  baseURL: https://ipaas-ingestion.everbridge.net
+  tags:
+  - Access Control
+  properties:
+  - type: OpenAPI
+    url: openapi/everbridge-access-control-api-openapi.yml
+- aid: everbridge:everbridge-agent-api
+  name: Everbridge Agent API
+  description: Settings and shared operations for all iPaaS integrations
+  humanURL: >-
+    https://www.everbridge.com/products/it-alerting/integrations/ipaas-self-service-integration-guide/
+  baseURL: https://ipaas-ingestion.everbridge.net
+  tags:
+  - Agent
+  properties:
+  - type: OpenAPI
+    url: openapi/everbridge-agent-api-openapi.yml
+- aid: everbridge:everbridge-ita-api
+  name: Everbridge ITA API
+  description: Operations for integrations with IT systems
+  humanURL: >-
+    https://www.everbridge.com/products/it-alerting/integrations/ipaas-self-service-integration-guide/
+  baseURL: https://ipaas-ingestion.everbridge.net
+  tags:
+  - ITA
+  properties:
+  - type: OpenAPI
+    url: openapi/everbridge-ita-api-openapi.yml
 common:
 - type: FinOps
   url: finops/everbridge-finops.yml

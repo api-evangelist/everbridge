@@ -1,0 +1,208 @@
+openapi: 3.2.0
+info:
+  contact:
+    email: support@everbridge.com
+  description: Integration with Everbridge Incidents, Scenarios and Safety via IPAAS
+  title: Everbridge iPaaS Access Control API
+  version: v1
+servers:
+- url: /
+  description: default server url
+security:
+- apiKey: []
+tags:
+- description: Operations for integrations with access control systems
+  name: Access Control
+paths:
+  /ipaas/v1/ingestion/safety:
+    post:
+      description: ITSM Safety message
+      operationId: safety
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DynamicLocations'
+        required: true
+      responses:
+        '200':
+          content:
+            '*/*':
+              schema:
+                type: object
+          description: OK
+      security:
+      - apiKey: []
+      summary: Post Safety DynamicLocations
+      tags:
+      - Access Control
+  /ipaas/v1/ingestion/safety/readersmapping:
+    delete:
+      operationId: deleteReaders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SafetySystemReaders'
+        required: true
+      responses:
+        '400':
+          content:
+            '*/*':
+              schema:
+                type: object
+          description: Bad Request
+        '404':
+          content:
+            '*/*':
+              schema:
+                type: object
+          description: Not Found
+        '500':
+          content:
+            '*/*':
+              schema:
+                type: object
+          description: Internal error
+      security:
+      - apiKey: []
+      summary: DELETE reader information for safety events
+      tags:
+      - Access Control
+    get:
+      operationId: getInternalReaderes
+      responses:
+        '400':
+          content:
+            '*/*':
+              schema:
+                type: object
+          description: Bad Request
+        '404':
+          content:
+            '*/*':
+              schema:
+                type: object
+          description: Not Found
+        '500':
+          content:
+            '*/*':
+              schema:
+                type: object
+          description: Internal error
+      security:
+      - apiKey: []
+      summary: GET reader information for safety events
+      tags:
+      - Access Control
+    post:
+      operationId: postReaders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SafetySystemReaders'
+        required: true
+      responses:
+        '400':
+          content:
+            '*/*':
+              schema:
+                type: object
+          description: Bad Request
+        '403':
+          content:
+            '*/*':
+              schema:
+                type: object
+          description: Too many items requested to add or result is too large. Maximum items are 100,000.
+        '404':
+          content:
+            '*/*':
+              schema:
+                type: object
+          description: Not Found
+        '500':
+          content:
+            '*/*':
+              schema:
+                type: object
+          description: Internal error
+      security:
+      - apiKey: []
+      summary: POST reader information for safety events
+      tags:
+      - Access Control
+components:
+  schemas:
+    SafetySystemReaders:
+      type: object
+      properties:
+        readerList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Reader'
+    DynamicLocation:
+      type: object
+      properties:
+        arrivalTime:
+          type: string
+          format: date-time
+        badgeId:
+          type: string
+        direction:
+          type: string
+          enum:
+          - INBOUND
+          - OUTBOUND
+        id:
+          type: string
+        readerId:
+          type: string
+        source:
+          type: string
+        type:
+          type: string
+    DynamicLocations:
+      type: object
+      properties:
+        header:
+          $ref: '#/components/schemas/MessageHeader'
+        locations:
+          type: array
+          items:
+            $ref: '#/components/schemas/DynamicLocation'
+    Reader:
+      type: object
+      properties:
+        assetId:
+          type: string
+        assetName:
+          type: string
+        description:
+          type: string
+        id:
+          type: string
+    MessageHeader:
+      type: object
+      properties:
+        creationDate:
+          type: string
+          description: UTC time/date of message
+        requestId:
+          type: string
+          description: ID of the request - must be unique within organization
+        sourceAddress:
+          type: string
+          description: Source address of message
+        sourceSystemType:
+          type: string
+          description: Source System Type
+      required:
+      - creationDate
+  securitySchemes:
+    apiKey:
+      description: Api Key access
+      in: header
+      name: Authentication
+      type: apiKey

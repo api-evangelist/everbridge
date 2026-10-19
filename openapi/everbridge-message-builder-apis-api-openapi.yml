@@ -90,6 +90,88 @@ paths:
         connectionType: VPC_LINK
 components:
   schemas:
+    ProblemDetail:
+      type: object
+      description: An RFC-7807 compliant model for error details.
+      properties:
+        type:
+          type: string
+          description: A URI that identifies the problem type.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem type.
+        status:
+          type: integer
+          description: The HTTP response status code describing the error.
+        detail:
+          type: string
+          description: A human-readable explanation of the specific problem.
+        instance:
+          type: string
+          description: A URI that identifies the specific problem.
+    GenerateMessageResponse:
+      type: object
+      properties:
+        content:
+          type: string
+          description: The final content.
+        sessionId:
+          type: string
+          description: A unique session identifier used to maintain conversation state across multiple interactions。
+    GenerateMessageRequest:
+      type: object
+      required:
+      - operations
+      properties:
+        sourceContent:
+          type: string
+          description: The source input content to process.
+        contentType:
+          type: string
+          default: text/plain
+          description: Content type of the source content
+        contentChunkIndex:
+          type: integer
+          description: The chunk index. 0 is first chunk.-1 is the last chunk
+        operations:
+          type: array
+          items:
+            $ref: '#/components/schemas/GenerateMessageOperation'
+          description: Operations to apply to the source content
+        messageContext:
+          $ref: '#/components/schemas/GenerateMessageContext'
+        maxChars:
+          type: integer
+          description: Maximum character limit for the generated message
+        sessionId:
+          type: string
+          description: A unique session identifier used to maintain conversation state across multiple interactions。
+    LengthOperation:
+      type: object
+      required:
+      - type
+      - value
+      properties:
+        type:
+          type: string
+          enum:
+          - Length
+        value:
+          type: string
+          enum:
+          - Shortest
+          - Shorter
+          - Same
+          - Longer
+          - Longest
+          description: Value for length adjustment
+    GenerateMessageOperation:
+      type: object
+      description: An operation to apply to the source content
+      oneOf:
+      - $ref: '#/components/schemas/ToneOperation'
+      - $ref: '#/components/schemas/RectifyOperation'
+      - $ref: '#/components/schemas/LengthOperation'
     GenerateMessageContext:
       type: object
       properties:
@@ -136,51 +218,6 @@ components:
               maxItems: 1
               items:
                 type: string
-    ProblemDetail:
-      type: object
-      description: An RFC-7807 compliant model for error details.
-      properties:
-        type:
-          type: string
-          description: A URI that identifies the problem type.
-        title:
-          type: string
-          description: A short, human-readable summary of the problem type.
-        status:
-          type: integer
-          description: The HTTP response status code describing the error.
-        detail:
-          type: string
-          description: A human-readable explanation of the specific problem.
-        instance:
-          type: string
-          description: A URI that identifies the specific problem.
-    LengthOperation:
-      type: object
-      required:
-      - type
-      - value
-      properties:
-        type:
-          type: string
-          enum:
-          - Length
-        value:
-          type: string
-          enum:
-          - Shortest
-          - Shorter
-          - Same
-          - Longer
-          - Longest
-          description: Value for length adjustment
-    GenerateMessageOperation:
-      type: object
-      description: An operation to apply to the source content
-      oneOf:
-      - $ref: '#/components/schemas/ToneOperation'
-      - $ref: '#/components/schemas/RectifyOperation'
-      - $ref: '#/components/schemas/LengthOperation'
     RectifyOperation:
       type: object
       required:
@@ -208,43 +245,6 @@ components:
           - Informational
           - Reassuring
           description: The tone to apply
-    GenerateMessageResponse:
-      type: object
-      properties:
-        content:
-          type: string
-          description: The final content.
-        sessionId:
-          type: string
-          description: A unique session identifier used to maintain conversation state across multiple interactions。
-    GenerateMessageRequest:
-      type: object
-      required:
-      - operations
-      properties:
-        sourceContent:
-          type: string
-          description: The source input content to process.
-        contentType:
-          type: string
-          default: text/plain
-          description: Content type of the source content
-        contentChunkIndex:
-          type: integer
-          description: The chunk index. 0 is first chunk.-1 is the last chunk
-        operations:
-          type: array
-          items:
-            $ref: '#/components/schemas/GenerateMessageOperation'
-          description: Operations to apply to the source content
-        messageContext:
-          $ref: '#/components/schemas/GenerateMessageContext'
-        maxChars:
-          type: integer
-          description: Maximum character limit for the generated message
-        sessionId:
-          type: string
-          description: A unique session identifier used to maintain conversation state across multiple interactions。
   securitySchemes:
     API_Authorizer:
       type: apiKey

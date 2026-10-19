@@ -633,12 +633,6 @@ paths:
       url: https://api.snapcomms.com/mock
 components:
   schemas:
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
     DataPageObject:
       properties:
         currentPageNo:
@@ -668,6 +662,12 @@ components:
           type: integer
       title: DataPage«object»
       type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
     RestfulCollectionResult:
       properties:
         currentPageUri:
@@ -686,54 +686,6 @@ components:
           type: string
       title: RestfulCollectionResult
       type: object
-    ReportQuestionnaireResponsesResponse:
-      type: object
-      properties:
-        responses:
-          type: array
-          items:
-            required:
-            - version
-            - questionNo
-            - questionText
-            - submissionTime
-            - completionTime
-            - consumerId
-            - userName
-            - fullName
-            - response
-            - score
-            - type
-            type: object
-            properties:
-              version:
-                type: string
-              questionNo:
-                type: string
-              questionText:
-                type: string
-              submissionTime:
-                type: string
-              completionTime:
-                type: string
-              consumerId:
-                type: string
-              userName:
-                type: string
-              fullName:
-                type: string
-              response:
-                type: string
-              score:
-                type: string
-              type:
-                type: string
-        version:
-          type: string
-        startDate:
-          type: string
-        endDate:
-          type: string
     ReportPublishingStatisticsResponse:
       type: object
       properties:
@@ -1009,6 +961,54 @@ components:
                     submissionTime: {}
         version:
           type: integer
+        startDate:
+          type: string
+        endDate:
+          type: string
+    ReportQuestionnaireResponsesResponse:
+      type: object
+      properties:
+        responses:
+          type: array
+          items:
+            required:
+            - version
+            - questionNo
+            - questionText
+            - submissionTime
+            - completionTime
+            - consumerId
+            - userName
+            - fullName
+            - response
+            - score
+            - type
+            type: object
+            properties:
+              version:
+                type: string
+              questionNo:
+                type: string
+              questionText:
+                type: string
+              submissionTime:
+                type: string
+              completionTime:
+                type: string
+              consumerId:
+                type: string
+              userName:
+                type: string
+              fullName:
+                type: string
+              response:
+                type: string
+              score:
+                type: string
+              type:
+                type: string
+        version:
+          type: string
         startDate:
           type: string
         endDate:

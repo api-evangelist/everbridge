@@ -948,43 +948,6 @@ paths:
       x-operation-id-original: EBS Update Itinerary
 components:
   schemas:
-    GisLocationWrapper:
-      properties:
-        lat:
-          format: double
-          type: number
-        lon:
-          format: double
-          type: number
-      type: object
-    DataPageExpectedLocationWrapper:
-      properties:
-        currentPageNo:
-          format: int32
-          type: integer
-        data:
-          items:
-            $ref: '#/components/schemas/ExpectedLocationWrapper'
-          type: array
-        dataPageList:
-          items:
-            $ref: '#/components/schemas/DataPageExpectedLocationWrapper'
-          type: array
-        pageSize:
-          format: int32
-          type: integer
-        scrollId:
-          type: string
-        start:
-          format: int32
-          type: integer
-        totalCount:
-          format: int64
-          type: integer
-        totalPageCount:
-          format: int32
-          type: integer
-      type: object
     ContactAddressWrapper:
       properties:
         arriveDate:
@@ -1048,53 +1011,6 @@ components:
           type: string
       title: RestfulModificationResult
       type: object
-    ItineraryBatchDeleteResult:
-      properties:
-        code:
-          format: int32
-          type: integer
-        message:
-          type: string
-      required:
-      - message
-      - code
-      title: ItineraryBatchDeleteResult
-      type: object
-    ItineraryQueryResponseWrapper:
-      description: Response wrapper for itinerary query results
-      properties:
-        firstPageUri:
-          type: string
-        lastPageUri:
-          type: string
-        message:
-          type: string
-        page:
-          properties:
-            currentPageNo:
-              format: int32
-              type: integer
-            data:
-              items:
-                properties:
-                  id:
-                    type: string
-                type: object
-              type: array
-            pageSize:
-              format: int32
-              type: integer
-            start:
-              format: int32
-              type: integer
-            totalCount:
-              format: int64
-              type: integer
-            totalPageCount:
-              format: int32
-              type: integer
-          type: object
-      type: object
     ExpectedLocationWrapper:
       properties:
         address:
@@ -1137,32 +1053,21 @@ components:
       required:
       - contactId
       type: object
-    ExpectedLocationWrapperCollectionResult:
+    ItineraryResponseWrapper:
       properties:
-        currentPageUri:
+        baseUri:
           type: string
-        firstPageUri:
-          type: string
-        lastPageUri:
+        id:
+          type: number
+        instanceUri:
           type: string
         message:
           type: string
-        nextPageUri:
-          type: string
-        page:
-          $ref: '#/components/schemas/DataPageExpectedLocationWrapper'
-        previousPageUri:
-          type: string
-      type: object
-    ItinerarySearchCriteria:
-      description: JSON object of SearchCriteria
-      properties:
-        fieldName:
-          type: string
-        fieldValues:
-          items:
-            type: string
-          type: array
+      required:
+      - message
+      - id
+      - baseUri
+      - instanceUri
       type: object
     ItineraryRequestWrapper:
       properties:
@@ -1290,21 +1195,116 @@ components:
       - segments
       - passengers
       type: object
-    ItineraryResponseWrapper:
+    DataPageExpectedLocationWrapper:
       properties:
-        baseUri:
+        currentPageNo:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/ExpectedLocationWrapper'
+          type: array
+        dataPageList:
+          items:
+            $ref: '#/components/schemas/DataPageExpectedLocationWrapper'
+          type: array
+        pageSize:
+          format: int32
+          type: integer
+        scrollId:
           type: string
-        id:
-          type: number
-        instanceUri:
-          type: string
+        start:
+          format: int32
+          type: integer
+        totalCount:
+          format: int64
+          type: integer
+        totalPageCount:
+          format: int32
+          type: integer
+      type: object
+    ItineraryBatchDeleteResult:
+      properties:
+        code:
+          format: int32
+          type: integer
         message:
           type: string
       required:
       - message
-      - id
-      - baseUri
-      - instanceUri
+      - code
+      title: ItineraryBatchDeleteResult
+      type: object
+    ItineraryQueryResponseWrapper:
+      description: Response wrapper for itinerary query results
+      properties:
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        page:
+          properties:
+            currentPageNo:
+              format: int32
+              type: integer
+            data:
+              items:
+                properties:
+                  id:
+                    type: string
+                type: object
+              type: array
+            pageSize:
+              format: int32
+              type: integer
+            start:
+              format: int32
+              type: integer
+            totalCount:
+              format: int64
+              type: integer
+            totalPageCount:
+              format: int32
+              type: integer
+          type: object
+      type: object
+    GisLocationWrapper:
+      properties:
+        lat:
+          format: double
+          type: number
+        lon:
+          format: double
+          type: number
+      type: object
+    ExpectedLocationWrapperCollectionResult:
+      properties:
+        currentPageUri:
+          type: string
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        nextPageUri:
+          type: string
+        page:
+          $ref: '#/components/schemas/DataPageExpectedLocationWrapper'
+        previousPageUri:
+          type: string
+      type: object
+    ItinerarySearchCriteria:
+      description: JSON object of SearchCriteria
+      properties:
+        fieldName:
+          type: string
+        fieldValues:
+          items:
+            type: string
+          type: array
       type: object
   securitySchemes:
     API_Authorizer:

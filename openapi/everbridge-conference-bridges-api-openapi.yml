@@ -585,12 +585,29 @@ paths:
       x-operation-id-original: EBS Update Conference Bridge
 components:
   schemas:
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
+    ConferenceBridgeUpdateRequestSchema:
+      properties:
+        countryCode:
+          type: string
+        countryName:
+          type: string
+        name:
+          type: string
+        number:
+          type: string
+        steps:
+          items:
+            properties:
+              type:
+                type: string
+              value:
+                type: string
+            required:
+            - type
+            - value
+            type: object
+          type: array
+      type: object
     ConferenceBridgePostResponseSchema:
       properties:
         baseUri:
@@ -602,6 +619,12 @@ components:
         message:
           type: string
       type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
     ConferenceBridgeResponseSchema:
       properties:
         firstPageUri:
@@ -716,29 +739,6 @@ components:
       - countryCode
       - number
       - name
-      type: object
-    ConferenceBridgeUpdateRequestSchema:
-      properties:
-        countryCode:
-          type: string
-        countryName:
-          type: string
-        name:
-          type: string
-        number:
-          type: string
-        steps:
-          items:
-            properties:
-              type:
-                type: string
-              value:
-                type: string
-            required:
-            - type
-            - value
-            type: object
-          type: array
       type: object
   securitySchemes:
     API_Authorizer:

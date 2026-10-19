@@ -60,6 +60,21 @@ paths:
         passthroughBehavior: when_no_match
 components:
   schemas:
+    ResponseToken:
+      required:
+      - expireDate
+      - grantDate
+      - value
+      type: object
+      properties:
+        grantDate:
+          type: string
+          format: date-time
+        expireDate:
+          type: string
+          format: date-time
+        value:
+          type: string
     AuthorizeV2Response:
       required:
       - accessToken
@@ -80,21 +95,6 @@ components:
           type: string
           description: Organization id
           example: '295910361798625'
-    ResponseToken:
-      required:
-      - expireDate
-      - grantDate
-      - value
-      type: object
-      properties:
-        grantDate:
-          type: string
-          format: date-time
-        expireDate:
-          type: string
-          format: date-time
-        value:
-          type: string
   securitySchemes:
     API_Authorizer:
       type: apiKey

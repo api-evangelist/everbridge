@@ -212,19 +212,6 @@ paths:
         connectionType: VPC_LINK
 components:
   schemas:
-    Tag:
-      type: string
-      description: A value used to contain a simple categorization.
-      example: eventType:hurricane
-    CommNoteRequest:
-      type: object
-      properties:
-        note:
-          type: string
-          description: The note may include HTML tags. The maximum length is limited to 1000 characters, excluding the HTML tags.
-          example: <body>a <strong>test</strong> note</body>
-      required:
-      - note
     ProblemDetail:
       type: object
       description: An RFC-7807 compliant model for error details.
@@ -255,63 +242,6 @@ components:
               $ref: '#/components/schemas/CommNote'
         required:
         - data
-    AbstractApiPaginatedResponse:
-      type: object
-      description: A page of data from an endpoint.
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/CommData'
-        pages:
-          type: object
-          properties:
-            currentPage:
-              type: number
-              description: The requested page number.
-            pageSize:
-              type: number
-              description: The requested page size.
-            pageCount:
-              type: number
-              description: The number of elements in the current page.
-            totalPages:
-              type: number
-              description: The total number of pages available for request.
-            maxSize:
-              type: number
-              description: The maximum size of a single page that is allowed by the API.
-            totalCount:
-              type: number
-              description: The total number of elements across all pages.
-    ConfirmationSummary:
-      description: A list of summaries associated with the communication. - STILL IN DEVELOPMENT
-      type: object
-      properties:
-        totalCount:
-          description: Total count of notifications sent
-          type: integer
-          example: '8'
-        totalPublicCount:
-          description: Total count of public users sent
-          type: integer
-          example: '3'
-        confirmedCount:
-          description: Count of confirmations received
-          type: integer
-          example: '3'
-        pendingConfirmedCount:
-          description: Count of confirmations pending
-          type: integer
-          example: '4'
-        unreachableCount:
-          description: Count of unreachable contacts
-          type: integer
-          example: '1'
-        confirmedLateCount:
-          description: Confirmations received after the expiration time
-          type: integer
-          example: '0'
     UserReference:
       description: The person who launched the communication and thus created the activity.
       type: object
@@ -360,6 +290,35 @@ components:
           description: ISO 8601-compliant value for when the communication is created
           type: string
           example: '2024-10-17T01:51:39.721617Z'
+    AbstractApiPaginatedResponse:
+      type: object
+      description: A page of data from an endpoint.
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommData'
+        pages:
+          type: object
+          properties:
+            currentPage:
+              type: number
+              description: The requested page number.
+            pageSize:
+              type: number
+              description: The requested page size.
+            pageCount:
+              type: number
+              description: The number of elements in the current page.
+            totalPages:
+              type: number
+              description: The total number of pages available for request.
+            maxSize:
+              type: number
+              description: The maximum size of a single page that is allowed by the API.
+            totalCount:
+              type: number
+              description: The total number of elements across all pages.
     CommData:
       type: object
       properties:
@@ -461,6 +420,47 @@ components:
         planId:
           type: string
           description: The ID of the plan that launched the with communication, if any.
+    CommNoteRequest:
+      type: object
+      properties:
+        note:
+          type: string
+          description: The note may include HTML tags. The maximum length is limited to 1000 characters, excluding the HTML tags.
+          example: <body>a <strong>test</strong> note</body>
+      required:
+      - note
+    Tag:
+      type: string
+      description: A value used to contain a simple categorization.
+      example: eventType:hurricane
+    ConfirmationSummary:
+      description: A list of summaries associated with the communication. - STILL IN DEVELOPMENT
+      type: object
+      properties:
+        totalCount:
+          description: Total count of notifications sent
+          type: integer
+          example: '8'
+        totalPublicCount:
+          description: Total count of public users sent
+          type: integer
+          example: '3'
+        confirmedCount:
+          description: Count of confirmations received
+          type: integer
+          example: '3'
+        pendingConfirmedCount:
+          description: Count of confirmations pending
+          type: integer
+          example: '4'
+        unreachableCount:
+          description: Count of unreachable contacts
+          type: integer
+          example: '1'
+        confirmedLateCount:
+          description: Confirmations received after the expiration time
+          type: integer
+          example: '0'
   securitySchemes:
     API_Authorizer:
       type: apiKey

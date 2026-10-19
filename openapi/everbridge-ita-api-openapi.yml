@@ -1,0 +1,441 @@
+openapi: 3.2.0
+info:
+  contact:
+    email: support@everbridge.com
+  description: Integration with Everbridge Incidents, Scenarios and Safety via IPAAS
+  title: Everbridge iPaaS ITA API
+  version: v1
+servers:
+- url: /
+  description: default server url
+security:
+- apiKey: []
+tags:
+- description: Operations for integrations with IT systems
+  name: ITA
+paths:
+  /ipaas/v1/ingestion/itsm:
+    post:
+      description: Handles new or updated ITSM incident
+      operationId: itsm
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Incident'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MessageInfo'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MessageInfo'
+          description: Bad Request
+      security:
+      - apiKey: []
+      summary: Post ITSM incident
+      tags:
+      - ITA
+  /ipaas/v1/ingestion/itsm/close:
+    post:
+      description: Handles close for ITSM incident
+      operationId: itsmClose
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Incident'
+        required: true
+      responses:
+        '200':
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MessageInfo'
+          description: OK
+        '400':
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MessageInfo'
+          description: Bad Request
+      security:
+      - apiKey: []
+      summary: Post ITSM incident close
+      tags:
+      - ITA
+  /ipaas/v1/ingestion/itsm/fieldnamevalue:
+    get:
+      operationId: getItsmFieldNameValues
+      responses:
+        '200':
+          content:
+            '*/*':
+              schema:
+                type: object
+          description: OK
+      security:
+      - apiKey: []
+      summary: Get the field/name value(s)
+      tags:
+      - ITA
+    post:
+      operationId: createItsmFieldNameValues
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItsmFieldNameValuePairs'
+        required: true
+      responses:
+        '200':
+          content:
+            '*/*':
+              schema:
+                type: object
+          description: OK
+      security:
+      - apiKey: []
+      summary: Set the field/name value(s)
+      tags:
+      - ITA
+  /ipaas/v1/ingestion/itsm/status:
+    get:
+      operationId: itsmStatusList
+      parameters:
+      - in: query
+        name: identifiers
+        required: true
+        schema:
+          type: string
+      responses:
+        '500':
+          content:
+            '*/*':
+              schema:
+                type: object
+          description: Internal error
+      security:
+      - apiKey: []
+      summary: Retrieve basic information about multiple events
+      tags:
+      - ITA
+  /ipaas/v1/ingestion/itsm/status/{incidentID}:
+    get:
+      operationId: itsmStatus
+      parameters:
+      - in: path
+        name: incidentID
+        required: true
+        schema:
+          type: string
+      responses:
+        '400':
+          content:
+            '*/*':
+              schema:
+                type: object
+          description: Bad Request
+        '404':
+          content:
+            '*/*':
+              schema:
+                type: object
+          description: Not Found
+        '500':
+          content:
+            '*/*':
+              schema:
+                type: object
+          description: Internal error
+      security:
+      - apiKey: []
+      summary: Retrieve basic information about an event
+      tags:
+      - ITA
+  /ipaas/v1/ingestion/messageinfo/{messageID}:
+    get:
+      operationId: messageInformation
+      parameters:
+      - in: path
+        name: messageID
+        required: true
+        schema:
+          type: string
+      responses:
+        '400':
+          content:
+            '*/*':
+              schema:
+                type: object
+          description: Bad Request
+        '404':
+          content:
+            '*/*':
+              schema:
+                type: object
+          description: Not Found
+        '500':
+          content:
+            '*/*':
+              schema:
+                type: object
+          description: Internal error
+      security:
+      - apiKey: []
+      summary: Retrieve basic message information
+      tags:
+      - ITA
+components:
+  schemas:
+    Incident:
+      type: object
+      properties:
+        header:
+          $ref: '#/components/schemas/MessageHeader'
+        incidentDetails:
+          type: object
+          additionalProperties:
+            type: string
+          description: Mapping of key/value pairs representing incident data fields
+        incidentDetailsArray:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          description: 'Mapping of key/value pairs representing incident data fields. Is combined with Incident Details but supports array values. This should be used if interacting with variables such as Groups, Calendars and Multi-Select lists which support arrays. '
+        incidentOwnerUsername:
+          type: string
+          description: Optional Incident Owner
+        overrideRecipients:
+          $ref: '#/components/schemas/MessageRecipients'
+          description: Optionally override which contacts or groups will be notified.
+        sourceSystemIncidentInfo:
+          $ref: '#/components/schemas/SourceSystemIncidentInfo'
+          description: Intent of this incident notification.  Not used currently.
+    SourceSystemIncidentInfo:
+      type: object
+      properties:
+        incidentID:
+          type: string
+        incidentIdIdentifier:
+          type: string
+          deprecated: true
+          description: ID of the incident in the ITSM system
+        incidentMetadata:
+          type: string
+      required:
+      - incidentIdIdentifier
+    ItsmFieldNameValuePairs:
+      type: object
+      properties:
+        fieldNameList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItsmFieldName'
+    ExternalCallLogEntry:
+      type: object
+      properties:
+        callDateTime:
+          type: string
+          format: date-time
+        callURL:
+          type: string
+        requestBody:
+          type: string
+        response:
+          type: string
+        responseCode:
+          type: integer
+          format: int32
+    MessageHeader:
+      type: object
+      properties:
+        creationDate:
+          type: string
+          description: UTC time/date of message
+        requestId:
+          type: string
+          description: ID of the request - must be unique within organization
+        sourceAddress:
+          type: string
+          description: Source address of message
+        sourceSystemType:
+          type: string
+          description: Source System Type
+      required:
+      - creationDate
+    ItsmFieldName:
+      type: object
+      properties:
+        displayName:
+          type: string
+        fieldValueList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItsmFieldValue'
+        fieldValueType:
+          type: string
+          enum:
+          - STRING
+          - SELECTOR
+        internalName:
+          type: string
+    MessageEvent:
+      type: object
+      properties:
+        elementPath:
+          type: string
+        errorDetail:
+          type: string
+        errorType:
+          type: string
+    MessageInfo:
+      type: object
+      properties:
+        apiKey:
+          type: string
+          description: API key used to send the message
+        creationDate:
+          type: string
+          description: UTC time/date of message
+        ebIncidentIdentifier:
+          type: string
+          description: For ITSM the ID of the created EB incident
+        eventCount:
+          type: integer
+          format: int64
+          description: For SAFETY count of location events, for ITSM always 1
+        events:
+          type: array
+          description: Array of events generated from the processing of the message.  Is message type dependent
+          items:
+            $ref: '#/components/schemas/MessageEvent'
+        externalCallLog:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExternalCallLogEntry'
+        incidentOwnerUsername:
+          type: string
+        info:
+          type: array
+          items:
+            $ref: '#/components/schemas/MessageEventInfo'
+        infoCount:
+          type: integer
+          format: int64
+        itsmclose:
+          type: boolean
+        itsmincidentID:
+          type: string
+          description: For ITSM the original ITSM incident ID
+        lastUpdateDate:
+          type: string
+          description: UTC time/date of message last update
+        matchConditionId:
+          type: string
+          description: Internal identifier matched for condition processing.
+        messageType:
+          type: string
+          description: Type of message this info is associated with.
+          enum:
+          - SAFETY
+          - SAFETYREADERS
+          - ITSM
+        organizationId:
+          type: string
+          description: Everbridge organization ID associated with the message
+        requestId:
+          type: string
+          description: Request ID of the message - must be unique within an organization
+        retryCount:
+          type: integer
+          format: int32
+          description: Internal message retry count
+        sourceAddress:
+          type: string
+          description: Source address of message as specified from the header
+        sourceSystemType:
+          type: string
+          description: Source system type of message as specified from the header
+        status:
+          type: string
+          description: Current status of the message.
+          enum:
+          - INPROGRESS
+          - SUCCESS
+          - FAIL
+          - RETRYING
+        step:
+          type: string
+          description: Logical processing step the message last passed through.  Used for debugging.
+      required:
+      - apiKey
+      - creationDate
+      - eventCount
+      - messageType
+      - organizationId
+      - requestId
+      - status
+      - step
+    MessageEventInfo:
+      type: object
+      properties:
+        infoDetail:
+          type: string
+        infoPath:
+          type: string
+        infoType:
+          type: string
+    ItsmFieldValue:
+      type: object
+      properties:
+        displayValue:
+          type: string
+        internalValue:
+          type: string
+    MessageRecipients:
+      type: object
+      properties:
+        contactType:
+          type: string
+          description: Override contacts by the specified field type.
+          enum:
+          - ID
+          - EXTERNAL_ID
+        contacts:
+          type: array
+          description: Override the default contacts using the specified contact or external IDs. If left blank, the contacts defined on the associated template will be used.
+          items:
+            type: string
+        groupType:
+          type: string
+          description: Override groups by the specified field type.
+          enum:
+          - ID
+        groups:
+          type: array
+          description: Override the default groups using the specified group name or IDs. If left blank, the groups defined on the associated template will be used.
+          items:
+            type: string
+  securitySchemes:
+    apiKey:
+      description: Api Key access
+      in: header
+      name: Authentication
+      type: apiKey

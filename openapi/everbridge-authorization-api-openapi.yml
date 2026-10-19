@@ -199,21 +199,6 @@ paths:
         passthroughBehavior: when_no_match
 components:
   schemas:
-    ResponseToken:
-      required:
-      - expireDate
-      - grantDate
-      - value
-      type: object
-      properties:
-        grantDate:
-          type: string
-          format: date-time
-        expireDate:
-          type: string
-          format: date-time
-        value:
-          type: string
     ServerClientAuthorizeRequest:
       required:
       - clientId
@@ -247,6 +232,46 @@ components:
           type: string
           description: The External Attribute value. This value should be unique for each Contact across the Organization.If the External Attribute Name parameter is blank or not provided then the External ID attribute will be used to search for the contact.
           example: uuid
+    ServerClientAuthorizeResponse:
+      required:
+      - accessToken
+      - clientId
+      - individualAccountId
+      - refreshToken
+      type: object
+      properties:
+        clientId:
+          type: string
+        accessToken:
+          $ref: '#/components/schemas/ResponseToken'
+        refreshToken:
+          $ref: '#/components/schemas/ResponseToken'
+        individualAccountId:
+          type: string
+    LogoutResponse:
+      required:
+      - individualAccountId
+      type: object
+      properties:
+        individualAccountId:
+          type: string
+          description: Individual account ID
+          example: '1843747855794178'
+    ResponseToken:
+      required:
+      - expireDate
+      - grantDate
+      - value
+      type: object
+      properties:
+        grantDate:
+          type: string
+          format: date-time
+        expireDate:
+          type: string
+          format: date-time
+        value:
+          type: string
     AuthorizeV2Response:
       required:
       - accessToken
@@ -292,31 +317,6 @@ components:
         organizationId:
           type: string
           description: The user's organization id.
-    LogoutResponse:
-      required:
-      - individualAccountId
-      type: object
-      properties:
-        individualAccountId:
-          type: string
-          description: Individual account ID
-          example: '1843747855794178'
-    ServerClientAuthorizeResponse:
-      required:
-      - accessToken
-      - clientId
-      - individualAccountId
-      - refreshToken
-      type: object
-      properties:
-        clientId:
-          type: string
-        accessToken:
-          $ref: '#/components/schemas/ResponseToken'
-        refreshToken:
-          $ref: '#/components/schemas/ResponseToken'
-        individualAccountId:
-          type: string
   securitySchemes:
     API_Authorizer:
       type: apiKey

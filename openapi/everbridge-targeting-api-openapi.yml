@@ -66,22 +66,6 @@ paths:
           description: Failed - Rate limit is exceeded
 components:
   schemas:
-    TargetingAttribute:
-      properties:
-        id:
-          type: string
-          description: Unique identifier for the attribute
-          example: d300f1ee-6c54-4b01-90e6-d701748f0843
-        name:
-          type: string
-          description: Attribute Name
-          example: Department
-        type:
-          type: string
-          description: Type of attribute
-          enum:
-          - User
-          - Machine
     Group:
       properties:
         id:
@@ -110,6 +94,22 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Group'
+    TargetingAttribute:
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the attribute
+          example: d300f1ee-6c54-4b01-90e6-d701748f0843
+        name:
+          type: string
+          description: Attribute Name
+          example: Department
+        type:
+          type: string
+          description: Type of attribute
+          enum:
+          - User
+          - Machine
   securitySchemes:
     bearerAuth:
       type: http

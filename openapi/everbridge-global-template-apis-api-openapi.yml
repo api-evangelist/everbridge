@@ -323,31 +323,6 @@ paths:
         connectionType: VPC_LINK
 components:
   schemas:
-    GlobalTemplateImportStatusResponse:
-      type: object
-      description: Import status of a global template in the current org.
-      properties:
-        alreadyImported:
-          type: boolean
-          description: Whether this global template has been imported into the current org.
-        importCount:
-          type: integer
-          description: Number of times this global template has been imported.
-        existingTemplates:
-          type: array
-          items:
-            type: object
-            properties:
-              id:
-                type: string
-                format: uuid
-              name:
-                type: string
-          description: List of existing org templates created from this global template.
-      required:
-      - alreadyImported
-      - importCount
-      - existingTemplates
     GlobalTemplateImportToOrgResponse:
       type: object
       description: Response after importing a global template to an org.
@@ -389,6 +364,31 @@ components:
       required:
       - globalTemplateId
       - category
+    GlobalTemplateImportStatusResponse:
+      type: object
+      description: Import status of a global template in the current org.
+      properties:
+        alreadyImported:
+          type: boolean
+          description: Whether this global template has been imported into the current org.
+        importCount:
+          type: integer
+          description: Number of times this global template has been imported.
+        existingTemplates:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+              name:
+                type: string
+          description: List of existing org templates created from this global template.
+      required:
+      - alreadyImported
+      - importCount
+      - existingTemplates
     GlobalTemplateImportRequest:
       type: object
       description: Request to publish/create a global template from an org template.

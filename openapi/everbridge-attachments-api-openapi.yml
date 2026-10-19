@@ -149,35 +149,6 @@ paths:
       x-operation-id-original: EBS Get Attachment
 components:
   schemas:
-    organizationId:
-      default: '1536984111644674'
-      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
-      example: '1536984111644674'
-      maxLength: 16
-      type: integer
-    AttachmentRestfulModificationResult:
-      properties:
-        fileId:
-          type: string
-        fileName:
-          type: string
-        image:
-          type: boolean
-        message:
-          type: string
-        mimeType:
-          type: string
-        size:
-          format: int64
-          type: integer
-      type: object
-    FileAttachmentWrapperInstanceResult:
-      properties:
-        message:
-          type: string
-        result:
-          $ref: '#/components/schemas/FileAttachmentWrapper'
-      type: object
     FileAttachmentWrapper:
       properties:
         base64DataValue:
@@ -199,6 +170,35 @@ components:
           format: int64
           type: integer
       type: object
+    FileAttachmentWrapperInstanceResult:
+      properties:
+        message:
+          type: string
+        result:
+          $ref: '#/components/schemas/FileAttachmentWrapper'
+      type: object
+    AttachmentRestfulModificationResult:
+      properties:
+        fileId:
+          type: string
+        fileName:
+          type: string
+        image:
+          type: boolean
+        message:
+          type: string
+        mimeType:
+          type: string
+        size:
+          format: int64
+          type: integer
+      type: object
+    organizationId:
+      default: '1536984111644674'
+      description: Everbridge Organization id.  Available on manager portal (Settings --> Organization --> Base Information)
+      example: '1536984111644674'
+      maxLength: 16
+      type: integer
   securitySchemes:
     API_Authorizer:
       description: oAuth Token

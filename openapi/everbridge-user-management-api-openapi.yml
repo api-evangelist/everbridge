@@ -190,59 +190,6 @@ paths:
                   $ref: '#/components/schemas/UserModel'
 components:
   schemas:
-    ConsumerStatus:
-      type: integer
-      description: ''
-      x-enumNames:
-      - Active
-      - Inactive
-      - Deleted
-      - Disabled
-      enum:
-      - 1
-      - 2
-      - 3
-      - 4
-    GroupBaseModel:
-      type: object
-      additionalProperties: false
-      properties:
-        groupName:
-          type:
-          - string
-          - 'null'
-        comment:
-          type:
-          - string
-          - 'null'
-        corporateGroupKindId:
-          $ref: '#/components/schemas/ConsumerKind'
-    UserBaseModel:
-      type: object
-      additionalProperties: false
-      properties:
-        consumerId:
-          type: string
-          format: uuid
-        organisationId:
-          type: string
-          format: uuid
-        userName:
-          type:
-          - string
-          - 'null'
-        domainName:
-          type:
-          - string
-          - 'null'
-        fullName:
-          type:
-          - string
-          - 'null'
-        email:
-          type:
-          - string
-          - 'null'
     GroupMemberModel:
       type: object
       additionalProperties: false
@@ -314,60 +261,27 @@ components:
           type:
           - string
           - 'null'
-    ConsumerKind:
-      type: integer
-      description: ''
-      x-enumNames:
-      - User
-      - Machine
-      enum:
-      - 0
-      - 1
-    MachineBaseModel:
+    GetDataModel:
       type: object
       additionalProperties: false
       properties:
-        status:
-          $ref: '#/components/schemas/ConsumerStatus'
-        deleted:
-          type: boolean
-        consumerId:
-          type: string
-          format: uuid
-        machineName:
+        filters:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: array
+            items: {}
+        searchTerm:
           type:
           - string
           - 'null'
-        fullName:
-          type:
-          - string
-          - 'null'
-        organisationId:
-          type: string
-          format: uuid
-        domainName:
-          type:
-          - string
-          - 'null'
-        userNotes:
-          type:
-          - string
-          - 'null'
-        autoCreated:
-          type: boolean
-    GetDataResponseModelOfGroupMemberModel:
-      type: object
-      additionalProperties: false
-      properties:
-        results:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/GroupMemberModel'
-        total:
-          type: integer
-          format: int32
+        pagination:
+          oneOf:
+          - $ref: '#/components/schemas/PaginationModel'
+        sorter:
+          oneOf:
+          - $ref: '#/components/schemas/SorterModel'
     UserModel:
       allOf:
       - $ref: '#/components/schemas/UserBaseModel'
@@ -505,6 +419,104 @@ components:
           numberOfMembers:
             type: integer
             format: int32
+    GetDataResponseModelOfGroupMemberModel:
+      type: object
+      additionalProperties: false
+      properties:
+        results:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/GroupMemberModel'
+        total:
+          type: integer
+          format: int32
+    ConsumerStatus:
+      type: integer
+      description: ''
+      x-enumNames:
+      - Active
+      - Inactive
+      - Deleted
+      - Disabled
+      enum:
+      - 1
+      - 2
+      - 3
+      - 4
+    GroupBaseModel:
+      type: object
+      additionalProperties: false
+      properties:
+        groupName:
+          type:
+          - string
+          - 'null'
+        comment:
+          type:
+          - string
+          - 'null'
+        corporateGroupKindId:
+          $ref: '#/components/schemas/ConsumerKind'
+    UserBaseModel:
+      type: object
+      additionalProperties: false
+      properties:
+        consumerId:
+          type: string
+          format: uuid
+        organisationId:
+          type: string
+          format: uuid
+        userName:
+          type:
+          - string
+          - 'null'
+        domainName:
+          type:
+          - string
+          - 'null'
+        fullName:
+          type:
+          - string
+          - 'null'
+        email:
+          type:
+          - string
+          - 'null'
+    MachineBaseModel:
+      type: object
+      additionalProperties: false
+      properties:
+        status:
+          $ref: '#/components/schemas/ConsumerStatus'
+        deleted:
+          type: boolean
+        consumerId:
+          type: string
+          format: uuid
+        machineName:
+          type:
+          - string
+          - 'null'
+        fullName:
+          type:
+          - string
+          - 'null'
+        organisationId:
+          type: string
+          format: uuid
+        domainName:
+          type:
+          - string
+          - 'null'
+        userNotes:
+          type:
+          - string
+          - 'null'
+        autoCreated:
+          type: boolean
     GroupModel:
       allOf:
       - $ref: '#/components/schemas/GroupDetailModel'
@@ -523,27 +535,15 @@ components:
             type:
             - string
             - 'null'
-    GetDataModel:
-      type: object
-      additionalProperties: false
-      properties:
-        filters:
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            type: array
-            items: {}
-        searchTerm:
-          type:
-          - string
-          - 'null'
-        pagination:
-          oneOf:
-          - $ref: '#/components/schemas/PaginationModel'
-        sorter:
-          oneOf:
-          - $ref: '#/components/schemas/SorterModel'
+    ConsumerKind:
+      type: integer
+      description: ''
+      x-enumNames:
+      - User
+      - Machine
+      enum:
+      - 0
+      - 1
     MachineModel:
       allOf:
       - $ref: '#/components/schemas/MachineBaseModel'

@@ -220,19 +220,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    UpdateCheckTemplateRequest:
-      type: object
-      properties:
-        sourceId:
-          type: string
-        sourceName:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-        path:
-          type: string
     CheckTemplate:
       type: object
       properties:
@@ -255,6 +242,19 @@ components:
           type: string
           format: date-time
     CreateCheckTemplateRequest:
+      type: object
+      properties:
+        sourceId:
+          type: string
+        sourceName:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        path:
+          type: string
+    UpdateCheckTemplateRequest:
       type: object
       properties:
         sourceId:

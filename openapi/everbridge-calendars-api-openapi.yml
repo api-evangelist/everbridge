@@ -123,23 +123,6 @@ components:
           - D
           type: string
       type: object
-    CalendarWrapperCollectionResult:
-      properties:
-        currentPageUri:
-          type: string
-        firstPageUri:
-          type: string
-        lastPageUri:
-          type: string
-        message:
-          type: string
-        nextPageUri:
-          type: string
-        page:
-          $ref: '#/components/schemas/DataPageCalendarWrapper'
-        previousPageUri:
-          type: string
-      type: object
     DataPageCalendarWrapper:
       properties:
         currentPageNo:
@@ -167,6 +150,23 @@ components:
         totalPageCount:
           format: int32
           type: integer
+      type: object
+    CalendarWrapperCollectionResult:
+      properties:
+        currentPageUri:
+          type: string
+        firstPageUri:
+          type: string
+        lastPageUri:
+          type: string
+        message:
+          type: string
+        nextPageUri:
+          type: string
+        page:
+          $ref: '#/components/schemas/DataPageCalendarWrapper'
+        previousPageUri:
+          type: string
       type: object
   securitySchemes:
     API_Authorizer:
