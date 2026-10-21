@@ -1,4 +1,40 @@
 edges:
+- partner_name: Microsoft Teams (own)
+  partner: microsoft-teams
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://appsource.microsoft.com/en-us/product/office/WA200007009
+  mirror_of: microsoft-teams/integrations/microsoft-teams-integration-edges.yml
+  apps:
+  - Everbridge
+  listing_count: 1
+  detected: '2026-10-18'
+  detected_by: mirror-platform-listings.py
+  category: Microsoft Teams app
+  publisher_verified:
+  - Microsoft 365 Certified
+- partner_name: Slack (own)
+  partner: slack
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://slack.com/marketplace/A07JEH4GN3A-everbridge
+  mirror_of: slack/integrations/slack-integration-edges.yml
+  apps:
+  - Everbridge
+  listing_count: 1
+  detected: '2026-10-18'
+  detected_by: mirror-platform-listings.py
+  category: Slack app
 - partner_name: FedRAMP
   partner: null
   partner_match: register
@@ -38,42 +74,61 @@ edges:
       latest_authorization: '2018-06-07'
   detected_by: sweep-gov-cloud.py
   first_seen: '2026-10-15'
-- partner_name: Microsoft Teams (own)
-  partner: microsoft-teams
+- partner_name: FirstNet App Catalog (AT&T)
+  partner: att
   partner_match: mirror
   mirror_match: domain
   type: marketplace
   relationship: platform-app
   direction: third-party
   channel: partner-built
-  marketplace: own
-  evidence: https://appsource.microsoft.com/en-us/product/office/WA200007009
-  mirror_of: microsoft-teams/integrations/microsoft-teams-integration-edges.yml
+  marketplace: firstnet-app-catalog
+  evidence: https://www.firstnet.com/content/dam/firstnet/white-papers/firstnet-app-catalog-booklet.pdf
+  mirror_of: att/integrations/att-integration-edges.yml
   apps:
-  - Everbridge
-  listing_count: 1
-  detected: '2026-10-18'
-  detected_by: mirror-platform-listings.py
-  category: Microsoft Teams app
-  publisher_verified:
-  - Microsoft 365 Certified
-- partner_name: Slack (own)
-  partner: slack
-  partner_match: mirror
-  mirror_match: domain
-  type: marketplace
-  relationship: platform-app
-  direction: third-party
-  channel: partner-built
-  marketplace: own
-  evidence: https://slack.com/marketplace/A07JEH4GN3A-everbridge
-  mirror_of: slack/integrations/slack-integration-edges.yml
-  apps:
-  - Everbridge
-  listing_count: 1
-  detected: '2026-10-18'
-  detected_by: mirror-platform-listings.py
-  category: Slack app
+  - ManageBridge
+  badges:
+  - FirstNet Verified
+  as_of: '2023-03-08'
+  detected: '2026-10-20'
+  detected_by: sweep-public-safety-ng911.py
+  identity: wikidata Q16957455 'Everbridge' P856 http://everbridge.com
+  identity_source: wikidata P856 (labelled provenance step; Kin 2026-10-15 decision 1)
+- partner_name: FirstNet App Evaluation (Verified / Certified)
+  partner: null
+  partner_match: register
+  type: register
+  channel: standard-directory
+  relationship: standard-participant
+  direction: partner-built
+  evidence: https://www.firstnet.com/content/dam/firstnet/white-papers/firstnet-app-catalog-booklet.pdf
+  category: FirstNet evaluated public-safety apps
+  contract_reference:
+    register: FirstNet App Catalog booklet (firstnet.com, issue 03.08.2023)
+    standard: FirstNet App Evaluation
+    spec_file: null
+    role: firstnet-evaluated-publisher
+    registered_name: Everbridge, Inc.
+    matched_domain: everbridge.com
+    matched_by: domain
+    certified_products:
+    - product: FirstNet Verified app
+      product_type: FirstNet Verified app
+      lapsed: false
+      as_of: '2023-03-08'
+      apps:
+      - ManageBridge
+      currency_note: booklet issue 2023-03-08 is the latest public issue; the live catalog is behind a login, so
+        currency after that date is unverified (not assumed lapsed)
+    signal_note: 'certified_products = one entry per FirstNet designation held (Verified: security, relevance, 99.9%
+      availability; Certified: adds resiliency / scalability and 99.99%), never per app or OS; app names are context,
+      never counted'
+    detected_by: sweep-public-safety-ng911.py
+    detected: '2026-10-20'
+    identity: wikidata Q16957455 'Everbridge' P856 http://everbridge.com
+    identity_source: wikidata P856 (labelled provenance step; Kin 2026-10-15 decision 1)
+  detected_by: sweep-public-safety-ng911.py
+  first_seen: '2026-10-20'
 generated: '2026-10-15'
 method: searched
 source:
@@ -86,3 +141,11 @@ checked:
 - https://www.applytosupply.digitalmarketplace.service.gov.uk/g-cloud-15/suppliers
 - microsoft-teams/integrations/microsoft-teams-integration-edges.yml
 - slack/integrations/slack-integration-edges.yml
+- https://appcomm.org/
+- https://apps.firstnet.att.com/
+- https://cbi.colorado.gov/criminal-justice/cjis-security/cjis-vendor-management-program/vendor-directory
+- https://www.dps.texas.gov/section/infrastructure-operations/vendor-forms
+- https://www.firstnet.com/apps.html
+- https://www.firstnet.com/content/dam/firstnet/white-papers/firstnet-app-catalog-booklet.pdf
+- https://www.ijis.org/
+- https://www.nena.org/
