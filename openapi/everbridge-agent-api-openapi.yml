@@ -122,3 +122,9 @@ components:
       in: header
       name: Authentication
       type: apiKey
+x-provenance:
+  method: harvested
+  publisher: Everbridge
+  source: https://ipaas-ingestion.everbridge.net/v3/api-docs
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
